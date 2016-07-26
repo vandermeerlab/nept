@@ -6,8 +6,6 @@ import vdmlab as vdm
 from tuning_curves_functions import get_tc
 from plotting_functions import plot_fields
 
-thisdir = os.path.dirname(os.path.realpath(__file__))
-
 import info.R063d2_info as r063d2
 import info.R063d3_info as r063d3
 import info.R063d4_info as r063d4
