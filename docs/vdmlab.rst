@@ -1,8 +1,6 @@
 vdmlab package
 ==============
 
-Submodules
-----------
 
 vdmlab.co_occurrence module
 ---------------------------
