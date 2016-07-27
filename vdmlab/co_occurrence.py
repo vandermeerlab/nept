@@ -2,11 +2,11 @@ import numpy as np
 
 
 def spike_counts(spike_times, interval_times, window=None):
-    """ Get spike counts for specific interval.
+    """Get spike counts for specific interval.
 
     Parameters
     ----------
-    spike_times :
+    spike_times : list
     interval_times : dict
         With start(int or float), stop(int or float) as keys
     window : float
@@ -37,7 +37,7 @@ def spike_counts(spike_times, interval_times, window=None):
 
 
 def cooccur_probabilities(count_matrix, shuffle=10000):
-    """ Obtain expected and observed co-occurrence probabilities
+    """Obtain expected and observed co-occurrence probabilities
 
     Parameters
     ----------
@@ -52,22 +52,24 @@ def cooccur_probabilities(count_matrix, shuffle=10000):
     output : dict
         Where the keys are p0, p1, p2, p3, p4, p5. P1 through p4 are
         np.arrays of length num_neurons
+    output['p0'] : np.array
+        Probability (fraction of time bins) each neuron is active.
+    output['p1'] : np.array
+        Expected co-occurrence under independence assumption. :math:`p(x,y) = p(x) * p(y)`
+    output['p2'] : np.array
+        Observed conditional probability. :math:`p(x|y)`
+    output['p3'] : np.array
+        Observed co-occurrence (joint) probability. :math:`p(x,y)`
+    output['p4'] : np.array
+        Z-score of p3 against shuffled data
+    output['p5'] : np.array
+        Observed co-occurrence (joint) probability of shuffled data. :math:`p(x,y)`
 
     Notes
     -----
     Adapted from Generate_CoOccur.m
-    p0 : probability (fraction of time bins) each neuron is active.
-    p1 : expected co-occurrence under independence assumption
-        .. math:: p(x,y) = p(x) * p(y)
-    p2 : Observed conditional probability
-        .. math:: p(x|y)
-    p3 : Observed co-occurrence (joint) probability
-        .. math:: p(x,y)
-    p4 : z-score of p3 against shuffled data
-    p5 : Observed co-occurrence (joint) probability of shuffled data
-        .. math:: p(x,y)
 
-        """
+    """
     # Boolean for if at least on spike happened in this time bin
     count_matrix[count_matrix > 1] = 1
 

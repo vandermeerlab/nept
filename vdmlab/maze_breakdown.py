@@ -24,7 +24,7 @@ def expand_line(start_pt, stop_pt, line, expand_by=6):
 
 
 def save_spike_position(spike_position, savepath):
-    """ Saves spikes by position as a *.mat for use in matlab
+    """Saves spikes by position as a .mat for use in matlab
 
     Parameters
     ----------
@@ -34,7 +34,6 @@ def save_spike_position(spike_position, savepath):
         position.
     savepath : str
         Entire path for saving this data.
-        Eg. 'E:\\code\\vandermeerlab\\code-python\\examples\\emily\\output\\matlab\\r066d1_pedestal_spikes.mat
 
     """
     for key in spike_position:
