@@ -103,12 +103,25 @@ shortcut_trajectory = [path_pts['shortcut1'], path_pts['point13'], path_pts['poi
 novel_trajectory = [path_pts['novel1'], path_pts['point20'], path_pts['point21'],
                     path_pts['point22'], path_pts['novel2']]
 
+sequence = dict(u=dict(), shortcut=dict())
+sequence['u']['swr_start'] = [9692.2, 9735.65]
+sequence['u']['swr_stop'] = [9692.5, 9736.1]
+sequence['u']['run_start'] = [2950, 3285]
+sequence['u']['run_stop'] = [2975, 3315]
+sequence['u']['ms'] = 15
+sequence['u']['loc'] = 2
+sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
+                            '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
+                            '#1d91c0']
 
-sequence = dict()
-sequence['swr_start'] = [8891.60441, 5377.22991]
-sequence['swr_stop'] = [8891.75241, 5377.25541]
-sequence['run_start'] = [2926.2, 3026.2]
-sequence['run_stop'] = [2956.2, 3056.2]
-sequence['ms'] = 20
-sequence['loc'] = 1
-sequence['colours'] = ['#bd0026', '#fe9929', '#41ab5d', '#1d91c0']
+sequence['shortcut']['swr_start'] = [9692.2, 9450.01, 9735.75]
+sequence['shortcut']['swr_stop'] = [9692.7, 9450.4, 9736.1]
+sequence['shortcut']['run_start'] = [8000, 7950, 8035]
+sequence['shortcut']['run_stop'] = [8030, 7980, 8065]
+sequence['shortcut']['ms'] = 10
+sequence['shortcut']['loc'] = 1
+sequence['shortcut']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
+                                   '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
+                                   '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
+                                   '#dd3497', '#f768a1', '#fcbba1', '#fc9272', '#fb6a4a',
+                                   '#e31a1c', '#fb6a4a', '#993404', '#b30000', '#800026']

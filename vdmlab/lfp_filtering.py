@@ -131,4 +131,4 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
 
     print('Number of SWR events found: ', str(len(swr_idx['start'])))
 
-    return swr_times, swr_idx
+    return swr_times, swr_idx, filtered_butter
