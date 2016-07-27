@@ -1,6 +1,9 @@
 vdmlab package
 ==============
 
+This is where all of the shared modules and their
+documentation can be found.
+
 
 vdmlab.co_occurrence module
 ---------------------------
@@ -46,15 +49,6 @@ vdmlab.utils module
 -------------------
 
 .. automodule:: vdmlab.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: vdmlab
     :members:
     :undoc-members:
     :show-inheritance:

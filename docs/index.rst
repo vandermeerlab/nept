@@ -1,22 +1,31 @@
-.. vdmlab documentation master file, created by
-   sphinx-quickstart on Sat Jul 23 08:41:03 2016.
-   You can adapt this file completely to your liking, but it should at least
+.. This file should at least
    contain the root `toctree` directive.
 
-Welcome to vdmlab's documentation!
-==================================
+vdmlab
+======
 
-Contents:
+vdmlab is a package that we use in the
+`van der Meer lab <http://www.vandermeerlab.org/>`_
+at Dartmouth College for analyzing neural electrophysiological
+recording data and associated behaviors.
+
+Documentation
+-------------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
+
+   getting_started
+
+.. toctree::
+   :maxdepth: 2
 
    modules
 
-Indices and tables
-==================
-
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
+License
+-------
+
+The vdmlab codebase free software,
+distributed under a MIT license.

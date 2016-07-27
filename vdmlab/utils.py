@@ -7,7 +7,7 @@ def find_nearest_idx(array, val):
 
     Parameters
     ----------
-    array : numpy array
+    array : np.array
     val : float
 
     Returns
@@ -23,7 +23,7 @@ def time_slice(spikes, t_start, t_stop):
 
     Parameters
     ----------
-    spikes : list of lists
+    spikes : list of np.arrays
         Where each inner list contains the spike times for an
         individual neuron. And len(spikes) is the total number
         of neurons.
@@ -35,7 +35,7 @@ def time_slice(spikes, t_start, t_stop):
 
     Returns
     -------
-    sliced_spikes : list of lists
+    sliced_spikes : list of np.arrays
         Where each inner list contains the spike times of interest
         for an individual neuron.
 
@@ -53,7 +53,7 @@ def time_slice(spikes, t_start, t_stop):
     sliced_spikes = []
     for neuron_spikes in spikes:
         indices = (neuron_spikes >= t_start) & (neuron_spikes <= t_stop)
-        sliced_spikes.append(neuron_spikes[indices])
+        sliced_spikes.append(np.array(neuron_spikes[indices]))
 
     assert(len(spikes) == len(sliced_spikes))
 
@@ -68,13 +68,13 @@ def idx_in_pos(position, index):
     Parameters
     ----------
     position : dict
-        With x, y, time keys
+        With x, y, time (np.arrays) keys
     index : int
 
     Returns
     -------
     pos : dict
-        With x, y, time keys
+        With x, y, time (np.arrays) keys
 
     """
     pos = dict()
@@ -162,16 +162,19 @@ class AnchoredScaleBar(AnchoredOffsetbox):
                                        child=bars, prop=prop, frameon=False, **kwargs)
 
 def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, **kwargs):
-    """ Add scalebars to axes
+    """Add scalebars to axes
     Adds a set of scale bars to *ax*, matching the size to the ticks of the
     plot and optionally hiding the x and y axes
 
     Parameters
     ----------
-    ax : the axis to attach ticks to
-    matchx, matchy : if True, set size of scale bars to spacing between ticks
-                    if False, size should be set using sizex and sizey params
-    hidex, hidey : if True, hide x-axis and y-axis of parent
+    ax :
+        The axis to attach ticks to
+    matchx, matchy : boolean
+        If True (default), set size of scale bars to spacing between ticks
+        If False, size should be set using sizex and sizey params
+    hidex, hidey : boolean
+        If True, hide x-axis and y-axis of parent
     **kwargs : additional arguments passed to AnchoredScaleBars
 
     Returns created scalebar object

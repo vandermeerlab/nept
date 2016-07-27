@@ -6,7 +6,7 @@ def spike_counts(spike_times, interval_times, window=None):
 
     Parameters
     ----------
-    spike_times : list
+    spike_times : np.array
     interval_times : dict
         With start(int or float), stop(int or float) as keys
     window : float

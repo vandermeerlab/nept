@@ -49,14 +49,14 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
     highcut : float
         The default is set to 250.0
     z_thres : int or float
-        The default is set to 5
+        The default is set to 3
     power_thres : int or float
-        The default is set to 4
+        The default is set to 3
     merge_thres : int or float
-        The default is set to 0.0
+        The default is set to 0.02
     min_length : float
         Any sequence less than this amount is not considered a sharp-wave ripple.
-        The default is set to 0.02.
+        The default is set to 0.01.
 
     Returns
     -------

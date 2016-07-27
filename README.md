@@ -1,6 +1,8 @@
-## Tools used for the analysis of neural recording data
+Tools used for the analysis of neural recording data
+====================================================
 
-## Getting started
+Getting started
+===============
 
 * Download Miniconda from
   [Continuum Analytics](http://conda.pydata.org/miniconda.html).
@@ -22,29 +24,49 @@
   (must be in the directory where this .whl is located).
 
   ```
-  conda install numpy scipy shapely pytest matplotlib sphinx numpydoc
+  conda install numpy scipy shapely matplotlib
   ```
 
 * Clone the analysis code from Github and developer installation.
 
   ```
-  git clone https://github.com/mvdm/vandermeerlab.git
-  cd vandermeerlab/code-python
+  git clone https://github.com/vandermeerlab/python-vdmlab.git
+  cd python-vdmlab
   python setup.py develop
   ```
 
 * **All set!**
 
-## Documentation
+Documentation
+=============
 
-Build documentation (eg. from docstrings) using 
+Users
+-----
+
+The latest version of the vdmlab documentation is available
+[here](http://python-vdmlab.readthedocs.io/en/latest/index.html).
+
+Developers
+----------
+
+```
+conda install sphinx numpydoc mock
+```
+
+Build latest version of the documentation using 
 `python setup.py build_sphinx` in the vdmlab directory.
 
-## Testing
+Testing
+=======
 
 Run tests with [pytest](http://docs.pytest.org/en/latest/usage.html).
 
-## License
+```
+conda install pytest
+```
+
+License
+=======
 
 The vdmlab codebase is made available under made available 
 under the [MIT license](LICENSE.md) 
