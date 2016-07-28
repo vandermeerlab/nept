@@ -93,8 +93,6 @@ def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, fi
 
     if filter_type == 'gaussian':
         out_tc = []
-        filtering_val = 6
-        # Normalizing gaussian filter
         gaussian_filter = signal.get_window(('gaussian', gaussian_std), gaussian_std)
         normalized_gaussian = gaussian_filter / np.sum(gaussian_filter)
         for firing_rate in tc:

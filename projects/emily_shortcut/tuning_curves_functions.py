@@ -8,7 +8,7 @@ import vdmlab as vdm
 from maze_functions import spikes_by_position
 
 
-def linearize(info, pos, t_start, t_stop, expand_by=6):
+def linearize(info, pos, expand_by=6):
     """Finds linear and zones for ideal trajectories.
 
         Parameters
@@ -17,8 +17,6 @@ def linearize(info, pos, t_start, t_stop, expand_by=6):
             Contains session-specific information.
         pos : dict
             With x, y, time as keys. Each value is a np.array.
-        t_start : float
-        t_stop : float
         expand_by : int or float
             This is how much you wish to expand the line to fit
             the animal's actual movements. Default is set to 6.
@@ -35,6 +33,9 @@ def linearize(info, pos, t_start, t_stop, expand_by=6):
 
         """
     # Slicing position to only Phase 3
+    t_start = info.task_times['phase3'][0]
+    t_stop = info.task_times['phase3'][1]
+
     t_start_idx = vdm.find_nearest_idx(pos['time'], t_start)
     t_end_idx = vdm.find_nearest_idx(pos['time'], t_stop)
     sliced_pos = dict()
@@ -129,7 +130,7 @@ def get_tc(info, pos, pickle_filepath):
 
         spikes = info.get_spikes()
 
-        linear, zone = linearize(info, pos, t_start, t_stop)
+        linear, zone = linearize(info, pos)
 
         spike_pos_filename = info.session_id + '_spike_position_phase3.pkl'
         pickled_spike_pos = os.path.join(pickle_filepath, spike_pos_filename)
