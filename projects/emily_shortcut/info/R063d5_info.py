@@ -97,12 +97,28 @@ shortcut_trajectory = [path_pts['shortcut1'], path_pts['point13'], path_pts['poi
 novel_trajectory = [path_pts['novel1'], path_pts['point19'], path_pts['point20'],
                     path_pts['point21'], path_pts['novel2']]
 
-sequence = dict()
-sequence['swr_start'] = [5730.325233, 6376.529733, 6967.243733]
-sequence['swr_stop'] = [5730.413733, 6376.624233, 6967.307233]
-sequence['run_start'] = [3997.6, 4062.6, 3892.6]
-sequence['run_stop'] = [4027.6, 4092.6, 3922.6]
-sequence['ms'] = 10
-sequence['loc'] = 1
-sequence['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929', '#78c679',
-                       '#41ab5d', '#238443', '#66c2a4', '#41b6c4', '#1d91c0']
+
+sequence = dict(u=dict(), shortcut=dict())
+sequence['u']['swr_start'] = [10421.9, 10522.2]
+sequence['u']['swr_stop'] = [10422.4, 10523.2]
+sequence['u']['run_start'] = [7325, 4885]
+sequence['u']['run_stop'] = [7350, 4915]
+sequence['u']['ms'] = 7
+sequence['u']['loc'] = 2
+sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
+                            '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
+                            '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
+                            '#dd3497', '#f768a1', '#fcbba1', '#fc9272', '#fb6a4a',
+                            '#e31a1c', '#fb6a4a', '#993404', '#b30000', '#800026',
+                            '#bd0026', '#fc4e2a', '#fb6a4a', '#ef3b2c', '#ec7014',
+                            '#fe9929', '#78c679', '#41ab5d', '#238443', '#66c2a4']
+
+sequence['shortcut']['swr_start'] = [10255.65, 9859.7]
+sequence['shortcut']['swr_stop'] = [10256.3, 9860.5]
+sequence['shortcut']['run_start'] = [7303, 9165]
+sequence['shortcut']['run_stop'] = [7333, 9195]
+sequence['shortcut']['ms'] = 10
+sequence['shortcut']['loc'] = 1
+sequence['shortcut']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
+                                   '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
+                                   '#1d91c0', '#8c6bb1']

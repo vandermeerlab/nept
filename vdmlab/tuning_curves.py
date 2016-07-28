@@ -31,10 +31,11 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
     pos_trial['time'] = pos['time'][t_start_idx:t_end_idx]
 
     z = dict(position=[])
-    z['time'] = pos_trial['time']
+    z['time'] = np.array(pos_trial['time'])
     for point in list(range(len(pos_trial['x']))):
         position = Point(pos_trial['x'][point], pos_trial['y'][point])
         z['position'].append(ideal_path.project(position))
+    z['position'] = np.array(z['position'])
     return z
 
 

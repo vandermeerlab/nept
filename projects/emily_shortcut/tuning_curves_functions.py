@@ -133,7 +133,6 @@ def get_tc(info, pos, pickle_filepath):
 
         spike_pos_filename = info.session_id + '_spike_position_phase3.pkl'
         pickled_spike_pos = os.path.join(pickle_filepath, spike_pos_filename)
-        print(pickled_spike_pos)
         if os.path.isfile(pickled_spike_pos):
             with open(pickled_spike_pos, 'rb') as fileobj:
                 spike_position = pickle.load(fileobj)
@@ -153,8 +152,8 @@ def get_tc(info, pos, pickle_filepath):
     return tc
 
 
-def get_odd_firing_idx(tuning_curve, max_mean_firing=10):
-    """Find indices where neuron is firing too much to be condidered a place cell
+def get_odd_firing_idx(tuning_curve, max_mean_firing=8):
+    """Find indices where neuron is firing too much to be considered a place cell
 
     Parameters
     ----------
