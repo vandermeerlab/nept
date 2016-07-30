@@ -55,7 +55,7 @@ for info in infos:
 
         t_start = info.task_times['prerecord'][0]
         t_stop = info.task_times['postrecord'][1]
-        linear, zone = linearize(info, pos, t_start, t_stop)
+        linear, zone = linearize(info, pos)
 
         # swr_times, swr_idx, filtered_butter = vdm.detect_swr_hilbert(csc, fs=info.fs)
 
