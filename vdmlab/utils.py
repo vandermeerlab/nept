@@ -69,7 +69,7 @@ def idx_in_pos(position, index):
     ----------
     position : dict
         With x, y, time (np.arrays) keys
-    index : int
+    index : int, np.array or list of ints
 
     Returns
     -------

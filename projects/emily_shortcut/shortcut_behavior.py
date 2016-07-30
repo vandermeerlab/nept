@@ -46,12 +46,16 @@ for info in infos:
 
     # Slicing events to only Phase 3
     events = info.get_events()
-    sliced_events = dict()
-    sliced_events['feeder1'] = vdm.time_slice(events['feeder1'], t_start, t_stop)
-    sliced_events['feeder2'] = vdm.time_slice(events['feeder2'], t_start, t_stop)
 
-    feeder1_times = sliced_events['feeder1']
-    feeder2_times = sliced_events['feeder2']
+    feeder1_times = []
+    for feeder1 in events['feeder1']:
+        if t_start < feeder1 < t_stop:
+            feeder1_times.append(feeder1)
+
+    feeder2_times = []
+    for feeder2 in events['feeder2']:
+        if t_start < feeder2 < t_stop:
+            feeder2_times.append(feeder2)
 
     spike_pos = get_zones(info, sliced_pos)
 
