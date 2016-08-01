@@ -10,6 +10,7 @@ import info.R063d4_info as r063d4
 import info.R063d5_info as r063d5
 import info.R063d6_info as r063d6
 import info.R066d1_info as r066d1
+import info.R066d3_info as r066d3
 import info.R066d2_info as r066d2
 import info.R066d4_info as r066d4
 
@@ -19,8 +20,8 @@ thisdir = os.path.dirname(os.path.realpath(__file__))
 pickle_filepath = os.path.join(thisdir, 'cache', 'pickled')
 output_filepath = os.path.join(thisdir, 'plots', 'cooccur')
 
-# info = R063d3
-infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d4]
+infos = [r066d3]
+# infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d4]
 
 exp_times = ['pauseA', 'pauseB']
 for info in infos:
@@ -39,7 +40,7 @@ for info in infos:
         sliced_csc['time'] = csc['time'][t_start_idx:t_end_idx]
         sliced_csc['data'] = csc['data'][t_start_idx:t_end_idx]
 
-        swr_times, swr_idx = vdm.detect_swr_hilbert(sliced_csc, fs=info.fs, power_thres=5)
+        swr_times, swr_idx, filtered_butter = vdm.detect_swr_hilbert(sliced_csc, fs=info.fs, power_thres=5)
 
         tc = get_tc(info, pos, pickle_filepath)
 

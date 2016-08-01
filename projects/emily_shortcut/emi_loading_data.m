@@ -1,8 +1,8 @@
 % Change this filepath to where this data is located on your computer.
 % Below works only on Emily's laptop.
-path = 'R042-2013-08-18';
+path = 'R066-2014-11-29_recording';
 filepath = 'C:\Users\Emily\Desktop';
-savepath = 'C:\Users\Emily\Desktop\R042-2013-08-18\analysis';
+savepath = 'C:\Users\Emily\Code\python-vdmlab\projects\emily_shortcut\cache\data\';
 % savepath = 'C:\Users\Emily\Code\Shortcut\analysis';
 % cd('C:\Users\Emily\Code\Shortcut\analysis\expkeys');
 % LoadExpKeys;
@@ -10,7 +10,7 @@ savepath = 'C:\Users\Emily\Desktop\R042-2013-08-18\analysis';
 %% input_csc
 cd([filepath, '\', path]);
 cfg_csc = [];
-cfg_csc.fc = {'R042-2013-08-18-CSC11a.ncs'};
+cfg_csc.fc = {'R066-2014-11-29-CSC11d.ncs'};
 csc = LoadCSC(cfg_csc);
 
 csc_type = csc.type;
@@ -18,7 +18,7 @@ csc_tvec = csc.tvec;
 csc_data = csc.data;
 csc_label = csc.label;
 
-save([savepath,'\cscs\', path(1:15), '-csc'], ...
+save([savepath, path(1:15), '-csc'], ...
     'csc_data', 'csc_tvec', 'csc_type', 'csc_label');
 
 
@@ -76,7 +76,7 @@ evt_feeder2id = evt.t{8};
 evt_feederoff = evt.t{9};
 evt_label = evt.label;
 
-save([savepath,'\events\', path(1:15), '-event'], ...
+save([savepath, path(1:15), '-event'], ...
      'evt_led1id', 'evt_led2id', 'evt_ledoff', 'evt_pb1id', 'evt_pb2id', ...
      'evt_pboff', 'evt_feeder1id', 'evt_feeder2id', 'evt_feederoff', ...
      'evt_type', 'evt_label');
@@ -95,5 +95,5 @@ spikes_type = spikes.type;
 spikes_times = spikes.t;
 spikes_label = spikes.label;
 
-save([savepath,'\spikes\', path(1:15), '-spike'], ...
+save([savepath, path(1:15), '-spike'], ...
     'spikes_times', 'spikes_label', 'spikes_type');

@@ -356,7 +356,7 @@ def plot_cooccur(probs, savepath, savefig=True):
     # plt.tight_layout()
 
     if savefig:
-        plt.savefig(savepath, dpi=300, bbox_inches='tight')
+        plt.savefig(savepath, dpi=300)
         plt.close()
     else:
         plt.show()

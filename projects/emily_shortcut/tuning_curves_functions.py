@@ -8,7 +8,7 @@ import vdmlab as vdm
 from maze_functions import spikes_by_position
 
 
-def linearize(info, pos, expand_by=6):
+def linearize(info, pos, t_start=None, t_stop=None, expand_by=6):
     """Finds linear and zones for ideal trajectories.
 
         Parameters
@@ -32,9 +32,12 @@ def linearize(info, pos, expand_by=6):
             Each value is a unique Shapely Polygon object.
 
         """
-    # Slicing position to only Phase 3
-    t_start = info.task_times['phase3'][0]
-    t_stop = info.task_times['phase3'][1]
+    if t_start == None and t_stop == None:
+        # Slicing position to only Phase 3
+        t_start = info.task_times['phase3'][0]
+        t_stop = info.task_times['phase3'][1]
+    elif t_start == None or t_stop == None:
+        print('Start and Stop time are both needed.')
 
     t_start_idx = vdm.find_nearest_idx(pos['time'], t_start)
     t_end_idx = vdm.find_nearest_idx(pos['time'], t_stop)
