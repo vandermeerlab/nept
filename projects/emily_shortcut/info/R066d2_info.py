@@ -12,11 +12,6 @@ behavior = 'shortcut'
 target = 'dCA1'
 experimenter = 'Emily Irvine'
 
-species = 'rat'
-behavior = 'shortcut'
-target = 'dCA1'
-experimenter = 'Emily Irvine'
-
 
 def get_csc():
     return load_csc(os.path.join(dataloc, 'R066-2014-11-28-csc.mat'))
