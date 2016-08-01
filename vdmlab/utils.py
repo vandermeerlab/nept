@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import signal
 from matplotlib.offsetbox import AnchoredOffsetbox
 
 
@@ -16,6 +17,28 @@ def find_nearest_idx(array, val):
 
     """
     return (np.abs(array-val)).argmin()
+
+
+def find_nearest_indices(array, vals):
+    """Finds nearest index in array to value.
+
+    Parameters
+    ----------
+    array : np.array
+        This is the array you wish to index into.
+    vals : np.array
+        This is the array that you are getting your indices from.
+
+    Returns
+    -------
+    Indices into array that is closest to vals.
+
+    Notes
+    -----
+    Wrapper around find_nearest_idx().
+
+    """
+    return np.array([find_nearest_idx(array, val) for val in vals], dtype=int)
 
 
 def time_slice(spikes, t_start, t_stop):
@@ -196,3 +219,46 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, **kwargs)
     ax.add_artist(scalebar)
 
     return scalebar
+
+
+def get_counts(spikes, edges, gaussian_std=0.02, gaussian_window=1.0):
+    """Finds the number of spikes in each bin.
+
+    Parameters
+    ----------
+    spikes : np.array
+        Where each inner array contains the spike times (floats) for an individual neuron.
+    edges : np.array
+        Bin edges for computing spike counts.
+    gaussian_std : float
+        Standard deviation for gaussian filter. Default set to 0.02. Normalized by bin size (dt).
+        Only uses filter if this value is greater than dt.
+    gaussian_window : float
+        Window for gaussian filter. Default set to 1.0. Normalized by bin size (dt).
+        Only uses filter if gaussian_std is greater than dt.
+
+    Returns
+    -------
+    counts : np.array
+        Where each inner array is the number of spikes (int) in each bin for an individual neuron.
+
+    """
+    dt = np.median(np.diff(edges))
+
+    apply_filter = False
+    gaussian_std /= dt
+    gaussian_window /= dt
+
+    if gaussian_std > dt:
+        apply_filter = True
+
+    if apply_filter:
+        gaussian_filter = signal.gaussian(gaussian_window, gaussian_std)
+        gaussian_filter /= np.sum(gaussian_filter)
+
+    counts = np.zeros((int(len(spikes)), int(len(edges)-1)))
+    for idx, neuron_spikes in enumerate(spikes):
+        counts[idx] = np.histogram(neuron_spikes, bins=edges)[0]
+        if apply_filter:
+            counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
+    return counts
