@@ -54,44 +54,43 @@ good_theta = ['']
 path_pts = dict()
 path_pts['feeder1'] = [552, 461]
 path_pts['point1'] = [551, 409]
-path_pts['point2'] = [547, 388]
-path_pts['point3'] = [535, 383]
-path_pts['point4'] = [479, 381]
-path_pts['point5'] = [370, 400]
-path_pts['point6'] = [249, 371]
-path_pts['point7'] = [206, 378]
-path_pts['point8'] = [219, 325]
-path_pts['point9'] = [234, 98]
-path_pts['point10'] = [244, 66]
-path_pts['point11'] = [275, 51]
-path_pts['point12'] = [334, 46]
+path_pts['turn1'] = [547, 388]
+path_pts['point2'] = [535, 383]
+path_pts['point3'] = [479, 381]
+path_pts['point4'] = [370, 400]
+path_pts['point5'] = [274, 384]
+path_pts['turn2'] = [220, 377]
+path_pts['point6'] = [219, 325]
+path_pts['point7'] = [234, 98]
+path_pts['turn3'] = [244, 66]
+path_pts['point8'] = [275, 51]
+path_pts['point9'] = [334, 46]
 path_pts['feeder2'] = [662, 55]
 path_pts['shortcut1'] = [546, 387]
-path_pts['point13'] = [620, 373]
-path_pts['point14'] = [648, 390]
-path_pts['point15'] = [659, 355]
-path_pts['point16'] = [661, 150]
+path_pts['spt1'] = [620, 373]
+path_pts['spt2'] = [657, 368]
+path_pts['spt3'] = [665, 313]
+path_pts['spt4'] = [661, 150]
 path_pts['shortcut2'] = [662, 55]
 path_pts['novel1'] = [331, 392]
-path_pts['point17'] = [324, 460]
-path_pts['point18'] = [316, 471]
-path_pts['point19'] = [289, 478]
+path_pts['npt1'] = [324, 460]
+path_pts['npt2'] = [316, 471]
+path_pts['npt3'] = [289, 478]
 path_pts['novel2'] = [113, 470]
 path_pts['pedestal'] = [412, 203]
 
 path_pts = convert_to_cm(path_pts, pxl_to_cm)
 
-u_trajectory = [path_pts['feeder1'], path_pts['point1'], path_pts['point2'],
-                path_pts['point3'], path_pts['point4'], path_pts['point5'],
-                path_pts['point6'], path_pts['point7'], path_pts['point8'],
-                path_pts['point9'], path_pts['point10'], path_pts['point11'],
-                path_pts['point12'], path_pts['feeder2']]
+u_trajectory = [path_pts['feeder1'], path_pts['point1'], path_pts['turn1'], path_pts['point2'],
+                path_pts['point3'], path_pts['point4'], path_pts['point5'], path_pts['turn2'],
+                path_pts['point6'], path_pts['point7'], path_pts['turn3'], path_pts['point8'],
+                path_pts['point9'], path_pts['feeder2']]
 
-shortcut_trajectory = [path_pts['shortcut1'], path_pts['point13'], path_pts['point14'],
-                       path_pts['point15'], path_pts['point16'], path_pts['shortcut2']]
+shortcut_trajectory = [path_pts['shortcut1'], path_pts['spt1'], path_pts['spt2'],
+                       path_pts['spt3'], path_pts['spt4'], path_pts['shortcut2']]
 
-novel_trajectory = [path_pts['novel1'], path_pts['point17'], path_pts['point18'],
-                    path_pts['point19'], path_pts['novel2']]
+novel_trajectory = [path_pts['novel1'], path_pts['npt1'], path_pts['npt2'],
+                    path_pts['npt3'], path_pts['novel2']]
 
 
 sequence = dict(u=dict(), shortcut=dict())

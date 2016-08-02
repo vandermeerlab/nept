@@ -27,7 +27,7 @@ sns.set_style('white')
 sns.set_style('ticks')
 
 
-infos = [r066d3]
+infos = [r066d1]
 # infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
 
 for info in infos:
