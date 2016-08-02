@@ -18,8 +18,8 @@ import info.R066d4_info as r066d4
 thisdir = os.path.dirname(os.path.realpath(__file__))
 
 
-infos = [r066d3]
-# infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d4]
+infos = [r063d2]
+# infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
 
 pickle_filepath = os.path.join(thisdir, 'cache', 'pickled')
 output_filepath = os.path.join(thisdir, 'plots', 'tuning')

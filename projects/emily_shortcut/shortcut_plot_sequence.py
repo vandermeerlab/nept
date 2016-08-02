@@ -27,7 +27,7 @@ sns.set_style('white')
 sns.set_style('ticks')
 
 
-infos = [r066d1]
+infos = [r063d2]
 # infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
 
 for info in infos:
@@ -76,6 +76,7 @@ for info in infos:
         # novel_fields_unique = vdm.unique_fields(all_novel_fields, u_compare, shortcut_compare)
 
         fields_size = vdm.sized_fields(all_fields, max_length=15)
+
         with_fields = vdm.get_single_field(fields_size)
 
         sequence = info.sequence[trajectory]
@@ -97,56 +98,87 @@ for info in infos:
                                                                                        sequence['run_stop'],
                                                                                        sequence['swr_start'],
                                                                                        sequence['swr_stop'])):
-            spike_loc = 2
-
-            rows = len(field_spikes)+1
-            cols = 7
             lfp_pos_y = 2
-            fig = plt.figure()
-            ax1 = plt.subplot2grid((rows, cols), (0, 1), rowspan=rows, colspan=4)
-            ax2 = plt.subplot2grid((rows, cols), (0, 5), rowspan=rows, colspan=2)
+            rows = len(field_spikes) + lfp_pos_y + 1
+            cols = 7
 
+            spike_loc = lfp_pos_y + 1/rows
+
+            fig = plt.figure()
+
+            ax1 = plt.subplot2grid((rows, cols), (rows-lfp_pos_y, 1),  colspan=4)
             max_position = np.zeros(len(this_linear['time']))
-            max_position.fill(np.max(this_linear['position']/90))
+            #         this_linear['position'] *= (1.0/np.max(this_linear['position']))
+            max_position.fill(np.max(this_linear['position']))
             ax1.plot(this_linear['time'], max_position, color='#bdbdbd', lw=1)
-            ax1.plot(this_linear['time'], this_linear['position']/90, 'k', lw=1)
-            for idx, neuron_spikes in enumerate(field_spikes):
-                ax1.plot(neuron_spikes, np.ones(len(neuron_spikes))+(idx*spike_loc+lfp_pos_y), '|',
-                         color=sequence['colours'][int(np.floor((idx*spike_loc+1)/spike_loc))],
-                         ms=sequence['ms'], mew=1)
+
+            ax1.plot(this_linear['time'], this_linear['position'], 'k', lw=1)
             ax1.set_xlim([start_time, stop_time])
-            ax1.set_ylim([0, len(field_spikes)*spike_loc+3])
-            vdm.add_scalebar(ax1, matchy=False, loc=sequence['loc'])
+            plt.subplots_adjust(hspace=0)
+            # plt.subplots_adjust(hspace=0.01)
+            vdm.add_scalebar(ax1, matchy=False, loc=9)
             plt.setp(ax1, xticks=[], xticklabels=[], yticks=[])
 
-            plt.plot(csc['time'], csc['data']*1000+1.25, 'k', lw=1)
-            # plt.plot(csc['time'], filtered_butter*1000+0.5, 'b', lw=1)
-            for swr_idx, neuron_spikes in enumerate(field_spikes):
-                ax2.plot(neuron_spikes, np.ones(len(neuron_spikes))+(swr_idx*spike_loc+lfp_pos_y), '|',
-                         color=sequence['colours'][int(np.floor((swr_idx*spike_loc+1)/spike_loc))],
-                         ms=sequence['ms'], mew=1)
+            for ax_loc in range(0, rows-lfp_pos_y-1):
+                ax = plt.subplot2grid((rows, cols), (ax_loc, 1), colspan=4, sharex=ax1)
+                spike_y = (ax_loc * spike_loc + lfp_pos_y)
+                ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc]))+spike_y, '|',
+                         color=sequence['colours'][ax_loc], ms=sequence['ms'], mew=1)
+                ax.set_xlim([start_time, stop_time])
+                plt.subplots_adjust(hspace=0)
+            #     ax.axes.get_yaxis().set_visible(False)
+            #     ax.axes.get_xaxis().set_visible(False)
+            #     ax.axes.set_xticks([])
+                plt.setp(ax, xticks=[], xticklabels=[], yticks=[])
+
+            ax2 = plt.subplot2grid((rows, cols), (rows-lfp_pos_y, 5), colspan=2)
+            ax2.plot(csc['time'], csc['data']*1000+1.25, 'k', lw=1)
             ax2.set_xlim([start_time_swr, stop_time_swr])
-            ax2.set_ylim([0, len(field_spikes)*spike_loc+3])
-            vdm.add_scalebar(ax2, matchy=False, loc=sequence['loc'])
+            # plt.subplots_adjust(hspace=0.01)
+            vdm.add_scalebar(ax2, matchy=False, loc=4)
+            # plt.plot(csc['time'], filtered_butter*1000+0.5, 'b', lw=1)
             plt.setp(ax2, xticks=[], xticklabels=[], yticks=[])
 
-            x = list(range(0, len(field_tc[0])))
+            for ax_loc in range(0, rows-lfp_pos_y-1):
+                ax = plt.subplot2grid((rows, cols), (ax_loc, 5), colspan=2, sharex=ax2)
+                spike_y = (ax_loc * spike_loc + lfp_pos_y)
+                ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc]))+spike_y, '|',
+                         color=sequence['colours'][ax_loc],
+                         ms=sequence['ms'], mew=1)
+                ax.set_xlim([start_time_swr, stop_time_swr])
+                plt.subplots_adjust(hspace=0)
+                ax.axes.get_yaxis().set_visible(False)
+            #     plt.setp(ax, xticks=[], xticklabels=[], yticks=[], frame_on=False)
 
-            for ax_loc in range(0, rows-1):
+            x = list(range(0, np.shape(field_tc)[1]))
+
+            for ax_loc in range(0, rows-lfp_pos_y-1):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 0))
-
-                idx = rows - ax_loc - 1
-                ax.plot(field_tc[idx-1], color=sequence['colours'][idx-1])
-                ax.fill_between(x, 0, field_tc[idx-1], facecolor=sequence['colours'][idx-1])
-                max_loc = np.where(field_tc[idx-1] == np.max(field_tc[idx-1]))[0][0]
-                ax.text(max_loc-3, 1, str(int(np.ceil(np.max(field_tc[idx-1])))), fontsize=8)
+                ax.plot(field_tc[ax_loc], color=sequence['colours'][ax_loc])
+                ax.fill_between(x, 0, field_tc[ax_loc], facecolor=sequence['colours'][ax_loc])
+                max_loc = np.where(field_tc[ax_loc] == np.max(field_tc[ax_loc]))[0][0]
+                ax.text(max_loc-3, 1, str(int(np.ceil(np.max(field_tc[ax_loc])))), fontsize=8)
                 ax.spines['right'].set_visible(False)
                 ax.spines['top'].set_visible(False)
                 plt.setp(ax, xticks=[], xticklabels=[], yticks=[])
 
+            ax3 = plt.subplot2grid((rows, cols), (rows-lfp_pos_y+1, 1), colspan=4, sharex=ax1)
+            # ax3.plot(this_linear['time'], np.zeros(len(this_linear['time'])), color='#edf8b1', lw=1)
+            ax3.set_xlim([start_time, stop_time])
+            plt.subplots_adjust(hspace=0)
+            # vdm.add_scalebar(ax1, matchy=False, loc=1)
+            plt.setp(ax3, xticks=[], xticklabels=[], yticks=[], frame_on=False)
+
+            ax4 = plt.subplot2grid((rows, cols), (rows-lfp_pos_y+1, 5), colspan=2, sharex=ax2)
+            ax4.set_xlim([start_time_swr, stop_time_swr])
+            # vdm.add_scalebar(ax4, matchy=False, loc=1)
+            plt.setp(ax4, xticks=[], xticklabels=[], yticks=[], frame_on=False)
+
+            # plt.tight_layout()
+            fig.subplots_adjust(hspace=0, wspace=0.1)
             sns.despine()
-            # plt.show()
-            filename = info.session_id + '_sequence-' + trajectory + str(i) + '.png'
-            savepath = os.path.join(output_filepath, filename)
-            plt.savefig(savepath, dpi=300, bbox_inches='tight')
-            plt.close()
+            plt.show()
+            # filename = info.session_id + '_sequence-' + trajectory + str(i) + '.png'
+            # savepath = os.path.join(output_filepath, filename)
+            # plt.savefig(savepath, dpi=300, bbox_inches='tight')
+            # plt.close()
