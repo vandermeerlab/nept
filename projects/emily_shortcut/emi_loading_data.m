@@ -1,26 +1,39 @@
 % Change this filepath to where this data is located on your computer.
+path = 'R066-2014-12-01_recording';
+
 % Below works only on Emily's laptop.
-path = 'R066-2014-11-29_recording';
-filepath = 'C:\Users\Emily\Desktop';
-savepath = 'C:\Users\Emily\Code\python-vdmlab\projects\emily_shortcut\cache\data\';
+% filepath = 'C:\Users\Emily\Desktop';
+% savepath = 'C:\Users\Emily\Code\python-vdmlab\projects\emily_shortcut\cache\data\';
+
 % savepath = 'C:\Users\Emily\Code\Shortcut\analysis';
 % cd('C:\Users\Emily\Code\Shortcut\analysis\expkeys');
 % LoadExpKeys;
 
+% Below works on Emily's work computer
+filepath = 'E:\data-shortcut\data-working\Shortcut-20150727\';
+% savepath = 'E:\code\python-vdmlab\projects\emily_shortcut\cache\data\';
+savepath = 'C:\Users\EmilyWork\Desktop\lfps\';
+
+
 %% input_csc
-cd([filepath, '\', path]);
+cd([filepath, path(1:4), '_EI\', path]);
 cfg_csc = [];
-cfg_csc.fc = {'R066-2014-11-29-CSC11d.ncs'};
-csc = LoadCSC(cfg_csc);
+% tetrodes = {'01', '02', '03', '04', '05', '06', '07', '08', ...
+%             '09', '10', '11', '12', '13', '14', '15', '16'};
+tetrodes = {'01', '02', '03', '05', '06', '07', '08', ...
+            '09', '10', '11', '12', '13', '15'};
+for this_tt = 1:length(tetrodes)
+    cfg_csc.fc = {[path(1:15), '-CSC', tetrodes{this_tt}, 'c.ncs']};
+    csc = LoadCSC(cfg_csc);
 
-csc_type = csc.type;
-csc_tvec = csc.tvec;
-csc_data = csc.data;
-csc_label = csc.label;
+    csc_type = csc.type;
+    csc_tvec = csc.tvec;
+    csc_data = csc.data;
+    csc_label = csc.label;
 
-save([savepath, path(1:15), '-csc'], ...
-    'csc_data', 'csc_tvec', 'csc_type', 'csc_label');
-
+    save([savepath, path(1:15), '-csc', tetrodes{this_tt}], ...
+        'csc_data', 'csc_tvec', 'csc_type', 'csc_label');
+end
 
 %% input_positions
 cd([filepath, '\', path]);

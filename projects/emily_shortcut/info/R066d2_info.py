@@ -13,8 +13,8 @@ target = 'dCA1'
 experimenter = 'Emily Irvine'
 
 
-def get_csc():
-    return load_csc(os.path.join(dataloc, 'R066-2014-11-28-csc.mat'))
+def get_csc(lfp_mat):
+    return load_csc(os.path.join(dataloc, lfp_mat))
 
 
 def get_pos(pxl_to_cm):
@@ -49,9 +49,9 @@ pxl_to_cm = (7.5460, 7.2192)
 
 fs = 2000
 
-good_lfp = ['R066-2014-11-28-CSC11d.ncs']
-good_swr = ['']
-good_theta = ['']
+good_lfp = ['R066-2014-11-28-CSC02c.ncs']
+good_swr = ['R066-2014-11-28-CSC02.mat']
+good_theta = ['R066-2014-11-28-CSC07.mat']
 
 # Session-specific path trajectory points
 path_pts = dict()

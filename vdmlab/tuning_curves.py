@@ -39,7 +39,7 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
     return z
 
 
-def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, filter_type='gaussian', gaussian_std=18):
+def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, filter_type='gaussian', gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -92,8 +92,9 @@ def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, fi
         tc.append(firing_rate)
 
     if filter_type == 'gaussian':
+        filter_multiplier = 6
         out_tc = []
-        gaussian_filter = signal.get_window(('gaussian', gaussian_std), gaussian_std)
+        gaussian_filter = signal.get_window(('gaussian', gaussian_std), gaussian_std*filter_multiplier)
         normalized_gaussian = gaussian_filter / np.sum(gaussian_filter)
         for firing_rate in tc:
             out_tc.append(np.convolve(firing_rate, normalized_gaussian, mode='same'))

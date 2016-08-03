@@ -13,8 +13,8 @@ target = 'dCA1'
 experimenter = 'Emily Irvine'
 
 
-def get_csc():
-    return load_csc(os.path.join(dataloc, 'R063-2015-03-20-csc.mat'))
+def get_csc(lfp_mat):
+    return load_csc(os.path.join(dataloc, lfp_mat))
 
 
 def get_pos(pxl_to_cm):
@@ -48,9 +48,9 @@ pxl_to_cm = (8.8346, 7.1628)
 
 fs = 2000
 
-good_lfp = ['R063-2015-03-20-CSC13d.ncs']
-good_swr = ['']
-good_theta = ['']
+good_lfp = ['R063-2015-03-20-CSC15a.ncs']
+good_swr = ['R063-2015-03-20-CSC15.mat']
+good_theta = ['R063-2015-03-20-CSC10.mat']
 
 # Session-specific path trajectory points
 path_pts = dict()
@@ -103,7 +103,7 @@ sequence['u']['ms'] = 15
 sequence['u']['loc'] = 1
 sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
                             '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                            '#1d91c0', '#8c6bb1', '#225ea8']
+                            '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e']
 
 sequence['shortcut']['swr_start'] = [9024.7, 9040.05, 9089.1]
 sequence['shortcut']['swr_stop'] = [9025.3, 9040.65, 9089.9]

@@ -156,7 +156,7 @@ def get_tc(info, pos, pickle_filepath):
     return tc
 
 
-def get_odd_firing_idx(tuning_curve, max_mean_firing=8):
+def get_odd_firing_idx(tuning_curve, max_mean_firing=6):
     """Find indices where neuron is firing too much to be considered a place cell
 
     Parameters
