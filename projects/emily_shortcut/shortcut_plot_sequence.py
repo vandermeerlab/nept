@@ -27,7 +27,7 @@ sns.set_style('white')
 sns.set_style('ticks')
 
 
-infos = [r066d2]
+infos = [r063d4]
 # infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
 
 colours = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
@@ -53,8 +53,7 @@ for info in infos:
 
         speed = vdm.get_speed(pos)
 
-        run_threshold = 0.45
-        t_run = speed['time'][speed['smoothed'] >= run_threshold]
+        t_run = speed['time'][speed['smoothed'] >= info.run_threshold]
 
         run_idx = np.zeros(pos['time'].shape, dtype=bool)
         for idx in t_run:
@@ -65,7 +64,7 @@ for info in infos:
         run_pos['y'] = pos['y'][run_idx]
         run_pos['time'] = pos['time'][run_idx]
 
-        tc = get_tc(info, run_pos, pickle_filepath)
+        tc = get_tc(info, pos, pickle_filepath, expand_by=2)
 
         # filename = info.session_id + '_spike_heatmaps.pkl'
         # pickled_spike_heatmaps = os.path.join(pickle_filepath, filename)
@@ -82,7 +81,7 @@ for info in infos:
 
         t_start = info.task_times['prerecord'][0]
         t_stop = info.task_times['postrecord'][1]
-        linear, zone = linearize(info, run_pos, t_start, t_stop)
+        linear, zone = linearize(info, run_pos, t_start, t_stop, expand_by=2)
 
         # swr_times, swr_idx, filtered_butter = vdm.detect_swr_hilbert(csc, fs=info.fs)
 
@@ -116,44 +115,44 @@ for info in infos:
                                                                                        sequence['run_stop'],
                                                                                        sequence['swr_start'],
                                                                                        sequence['swr_stop'])):
-            rows = len(field_spikes) + 1
+            rows = len(field_spikes) + 2
             cols = 7
             fig = plt.figure()
 
-            ax1 = plt.subplot2grid((rows, cols), (rows-1, 1), colspan=4)
+            ax1 = plt.subplot2grid((rows, cols), (rows-2, 1), rowspan=2, colspan=4)
             ax1.plot(this_linear['time'], np.zeros(len(this_linear['time'])), color='#bdbdbd', lw=1)
-            ax1.plot(this_linear['time'], -this_linear['position'], 'b', lw=1)
+            ax1.plot(this_linear['time'], -this_linear['position'], 'b.', ms=3)
             ax1.set_xlim([start_time, stop_time])
             plt.setp(ax1, xticks=[], xticklabels=[], yticks=[])
             sns.despine(ax=ax1)
 
-            for ax_loc in range(0, rows-2):
+            for ax_loc in range(len(field_spikes)):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 1), colspan=4, sharex=ax1)
                 ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc])), '|',
-                        color=colours[ax_loc], ms=sequence['ms'], mew=1.5)
+                        color=colours[ax_loc], ms=sequence['ms'], mew=1.1)
                 ax.set_xlim([start_time, stop_time])
                 if ax_loc == 0:
                     vdm.add_scalebar(ax, matchy=False, bbox_transform=ax.transAxes, bbox_to_anchor=(0.9, 1.1))
-                if ax_loc == rows-3:
+                if ax_loc == len(field_spikes)-1:
                     sns.despine(ax=ax)
                 else:
                     sns.despine(ax=ax, bottom=True)
                 plt.setp(ax, xticks=[], xticklabels=[], yticks=[])
 
-            ax2 = plt.subplot2grid((rows, cols), (rows-1, 5), colspan=2)
+            ax2 = plt.subplot2grid((rows, cols), (rows-2, 5), rowspan=2, colspan=2)
             ax2.plot(csc['time'], csc['data'], 'k', lw=1)
             ax2.set_xlim([start_time_swr, stop_time_swr])
             plt.setp(ax2, xticks=[], xticklabels=[], yticks=[])
             sns.despine(ax=ax2)
 
-            for ax_loc in range(0, rows-2):
+            for ax_loc in range(len(field_spikes)):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 5), colspan=2, sharex=ax2)
                 ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc])), '|',
-                        color=colours[ax_loc], ms=sequence['ms'], mew=1.5)
+                        color=colours[ax_loc], ms=sequence['ms'], mew=1.1)
                 ax.set_xlim([start_time_swr, stop_time_swr])
                 if ax_loc == 0:
                     vdm.add_scalebar(ax, matchy=False, bbox_transform=ax.transAxes, bbox_to_anchor=(0.9, 1.1))
-                if ax_loc == rows-3:
+                if ax_loc == len(field_spikes)-1:
                     sns.despine(ax=ax)
                 else:
                     sns.despine(ax=ax, bottom=True)
@@ -161,7 +160,7 @@ for info in infos:
 
             x = list(range(0, np.shape(field_tc)[1]))
 
-            for ax_loc in range(0, rows-2):
+            for ax_loc in range(len(field_spikes)):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 0))
                 ax.plot(field_tc[ax_loc], color=colours[ax_loc])
                 ax.fill_between(x, 0, field_tc[ax_loc], facecolor=colours[ax_loc])

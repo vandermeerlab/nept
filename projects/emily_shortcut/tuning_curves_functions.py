@@ -96,14 +96,23 @@ def linearize(info, pos, t_start=None, t_stop=None, expand_by=6):
     other_pos = vdm.idx_in_pos(sliced_pos, other_idx)
 
     linear = dict()
-    linear['u'] = vdm.linear_trajectory(u_pos, u_line, t_start, t_stop)
-    linear['shortcut'] = vdm.linear_trajectory(shortcut_pos, shortcut_line, t_start, t_stop)
-    linear['novel'] = vdm.linear_trajectory(novel_pos, novel_line, t_start, t_stop)
+    if len(u_pos) > 0:
+        linear['u'] = vdm.linear_trajectory(u_pos, u_line, t_start, t_stop)
+    else:
+        linear['u'] = dict(position=[], time=[])
+    if len(shortcut_pos) > 0:
+        linear['shortcut'] = vdm.linear_trajectory(shortcut_pos, shortcut_line, t_start, t_stop)
+    else:
+        linear['shortcut'] = dict(position=[], time=[])
+    if len(novel_pos) > 0:
+        linear['novel'] = vdm.linear_trajectory(novel_pos, novel_line, t_start, t_stop)
+    else:
+        linear['novel'] = dict(position=[], time=[])
 
     return linear, zone
 
 
-def get_tc(info, pos, pickle_filepath):
+def get_tc(info, pos, pickle_filepath, expand_by=6):
     """Loads saved tuning curve if it exists, otherwise computes tuning curve.
 
         Parameters
@@ -146,7 +155,7 @@ def get_tc(info, pos, pickle_filepath):
 
         spikes = info.get_spikes()
 
-        linear, zone = linearize(info, run_pos, t_start, t_stop)
+        linear, zone = linearize(info, run_pos, t_start, t_stop, expand_by=expand_by)
 
         spike_pos_filename = info.session_id + '_spike_position_phase3.pkl'
         pickled_spike_pos = os.path.join(pickle_filepath, spike_pos_filename)
@@ -160,11 +169,21 @@ def get_tc(info, pos, pickle_filepath):
                 pickle.dump(spike_position, fileobj)
 
         tc = dict()
-        tc['u'] = vdm.tuning_curve(linear['u'], spike_position['u'], num_bins=47)
-        tc['shortcut'] = vdm.tuning_curve(linear['shortcut'], spike_position['shortcut'], num_bins=47)
-        tc['novel'] = vdm.tuning_curve(linear['novel'], spike_position['novel'], num_bins=47)
-        with open(pickled_tc, 'wb') as fileobj:
-            pickle.dump(tc, fileobj)
+        if len(linear['u']['position']) > 0:
+            tc['u'] = vdm.tuning_curve(linear['u'], spike_position['u'], num_bins=47)
+        else:
+            tc['u'] = []
+        if len(linear['shortcut']['position']) > 0:
+            tc['shortcut'] = vdm.tuning_curve(linear['shortcut'], spike_position['shortcut'], num_bins=47)
+        else:
+            tc['shortcut'] = []
+        if len(linear['novel']['position']) > 0:
+            tc['novel'] = vdm.tuning_curve(linear['novel'], spike_position['novel'], num_bins=47)
+        else:
+            tc['novel'] = []
+
+        # with open(pickled_tc, 'wb') as fileobj:
+        #     pickle.dump(tc, fileobj)
 
     return tc
 

@@ -110,20 +110,10 @@ sequence['u']['swr_start'] = [9692.2, 9735.65]
 sequence['u']['swr_stop'] = [9692.5, 9736.1]
 sequence['u']['run_start'] = [2950, 3285]
 sequence['u']['run_stop'] = [2975, 3315]
-sequence['u']['ms'] = 15
-sequence['u']['loc'] = 2
-sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                            '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                            '#1d91c0']
+sequence['u']['ms'] = 10
 
 sequence['shortcut']['swr_start'] = [9692.2, 9450.01, 9735.75]
 sequence['shortcut']['swr_stop'] = [9692.7, 9450.4, 9736.1]
 sequence['shortcut']['run_start'] = [8000, 7950, 8035]
 sequence['shortcut']['run_stop'] = [8030, 7980, 8065]
 sequence['shortcut']['ms'] = 10
-sequence['shortcut']['loc'] = 1
-sequence['shortcut']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                                   '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                                   '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
-                                   '#dd3497', '#f768a1', '#fcbba1', '#fc9272', '#fb6a4a',
-                                   '#e31a1c', '#fb6a4a', '#993404', '#b30000', '#800026']

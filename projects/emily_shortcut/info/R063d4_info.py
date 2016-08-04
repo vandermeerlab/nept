@@ -61,7 +61,7 @@ path_pts['point2'] = [535, 383]
 path_pts['point3'] = [479, 381]
 path_pts['point4'] = [370, 400]
 path_pts['point5'] = [274, 384]
-path_pts['turn2'] = [220, 377]
+path_pts['turn2'] = [230, 370]
 path_pts['point6'] = [219, 325]
 path_pts['point7'] = [234, 98]
 path_pts['turn3'] = [244, 66]
@@ -70,8 +70,8 @@ path_pts['point9'] = [334, 46]
 path_pts['feeder2'] = [662, 55]
 path_pts['shortcut1'] = [546, 387]
 path_pts['spt1'] = [620, 373]
-path_pts['spt2'] = [657, 368]
-path_pts['spt3'] = [665, 313]
+path_pts['spt2'] = [652, 358]
+path_pts['spt3'] = [662, 313]
 path_pts['spt4'] = [661, 150]
 path_pts['shortcut2'] = [662, 55]
 path_pts['novel1'] = [331, 392]
@@ -96,24 +96,14 @@ novel_trajectory = [path_pts['novel1'], path_pts['npt1'], path_pts['npt2'],
 
 
 sequence = dict(u=dict(), shortcut=dict())
-sequence['u']['swr_start'] = [8876.4, 8855.0]
-sequence['u']['swr_stop'] = [8876.7, 8855.4]
-sequence['u']['run_start'] = [2577, 2668]
-sequence['u']['run_stop'] = [2607, 2698]
+sequence['u']['swr_start'] = [8876.4, 8855.0, 8965.4]
+sequence['u']['swr_stop'] = [8876.7, 8855.4, 8966.0]
+sequence['u']['run_start'] = [2577, 2668.0, 3632.0]
+sequence['u']['run_stop'] = [2607, 2698.0, 3667.0]
 sequence['u']['ms'] = 10
-sequence['u']['loc'] = 1
-sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                            '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                            '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
-                            '#dd3497', '#f768a1', '#fcbba1', '#fc9272', '#fb6a4a',
-                            '#e31a1c', '#fb6a4a', '#993404', '#b30000']
 
-sequence['shortcut']['swr_start'] = [8872.65, 8578.9]
-sequence['shortcut']['swr_stop'] = [8873.15, 8579.5]
-sequence['shortcut']['run_start'] = [5760, 6214]
-sequence['shortcut']['run_stop'] = [5790, 6244]
-sequence['shortcut']['ms'] = 15
-sequence['shortcut']['loc'] = 2
-sequence['shortcut']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                                   '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                                   '#1d91c0']
+sequence['shortcut']['swr_start'] = [8872.65, 8578.9, 8575.37, 8119.5, 8206.82]
+sequence['shortcut']['swr_stop'] = [8873.15, 8579.5, 8575.55, 8119.8, 8207.38]
+sequence['shortcut']['run_start'] = [5760.0, 6214.0, 5900.0, 6460.0, 6510.0]
+sequence['shortcut']['run_stop'] = [5790.0, 6244.0, 5945.0, 6490.0, 6550.0]
+sequence['shortcut']['ms'] = 10
