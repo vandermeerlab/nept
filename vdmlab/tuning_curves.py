@@ -103,3 +103,34 @@ def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, fi
         out_tc = tc
 
     return out_tc
+
+
+def get_speed(pos, smooth=True, t_smooth=0.5):
+    """Finds the velocity of the animal from 2D position.
+
+    Parameters
+    ----------
+    pos : dict
+        With x, y, time as keys.
+    smooth : bool
+        Whether smoothing occurs. Default is True.
+    t_smooth : float
+        Range over which smoothing occurs in seconds. Default is 0.5 seconds.
+
+    Returns
+    -------
+    speed : dict
+        With time (floats), velocity (floats) as keys.
+
+    """
+    speed = dict()
+    speed['time'] = pos['time']
+    speed['velocity'] = np.sqrt((pos['x'][1:] - pos['x'][:-1]) ** 2 + (pos['y'][1:] - pos['y'][:-1]) ** 2)
+    speed['velocity'] = np.hstack(([0], speed['velocity']))
+
+    dt = np.median(np.diff(speed['time']))
+
+    filter_length = np.ceil(t_smooth/dt)
+    speed['smoothed'] = np.convolve(speed['velocity'], np.ones(int(filter_length))/filter_length, 'same')
+
+    return speed
