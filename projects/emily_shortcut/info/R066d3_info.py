@@ -49,6 +49,8 @@ pxl_to_cm = (7.2599, 7.2286)
 
 fs = 2000
 
+run_threshold = 0.35
+
 good_lfp = ['R066-2014-11-29-CSC12c.ncs']
 good_swr = ['R066-2014-11-29-CSC12.mat']
 good_theta = ['R066-2014-11-29-CSC07.mat']

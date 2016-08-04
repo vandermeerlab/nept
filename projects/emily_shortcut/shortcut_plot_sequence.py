@@ -27,8 +27,20 @@ sns.set_style('white')
 sns.set_style('ticks')
 
 
-# infos = [r063d5, r063d6]
-infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
+infos = [r066d2]
+# infos = [r063d2, r063d3, r063d4, r063d5, r063d6, r066d1, r066d2, r066d3, r066d4]
+
+colours = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
+           '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
+           '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
+           '#dd3497', '#f768a1', '#fcbba1', '#fc9272', '#fb6a4a',
+           '#e31a1c', '#fb6a4a', '#993404', '#b30000', '#800026',
+           '#bd0026', '#fc4e2a', '#fb6a4a', '#ef3b2c', '#ec7014',
+           '#fe9929', '#78c679', '#41ab5d', '#238443', '#66c2a4',
+           '#41b6c4', '#1d91c0', '#8c6bb1', '#225ea8', '#88419d',
+           '#ae017e', '#dd3497', '#f768a1', '#fcbba1', '#fc9272',
+           '#fb6a4a', '#e31a1c', '#fb6a4a', '#993404', '#b30000',
+           '#800026', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k']
 
 for info in infos:
 
@@ -39,24 +51,38 @@ for info in infos:
         csc = info.get_csc(info.good_swr[0])
         spikes = info.get_spikes()
 
-        tc = get_tc(info, pos, pickle_filepath)
+        speed = vdm.get_speed(pos)
 
-        filename = info.session_id + '_spike_heatmaps.pkl'
-        pickled_spike_heatmaps = os.path.join(pickle_filepath, filename)
-        if os.path.isfile(pickled_spike_heatmaps):
-            with open(pickled_spike_heatmaps, 'rb') as fileobj:
-                spike_heatmaps = pickle.load(fileobj)
-        else:
-            spikes = info.get_spikes()
+        run_threshold = 0.45
+        t_run = speed['time'][speed['smoothed'] >= run_threshold]
 
-            all_neurons = list(range(1, len(spikes['time'])))
-            spike_heatmaps = vdm.get_heatmaps(all_neurons, spikes, pos)
-            with open(pickled_spike_heatmaps, 'wb') as fileobj:
-                pickle.dump(spike_heatmaps, fileobj)
+        run_idx = np.zeros(pos['time'].shape, dtype=bool)
+        for idx in t_run:
+            run_idx |= (pos['time'] == idx)
+
+        run_pos = dict()
+        run_pos['x'] = pos['x'][run_idx]
+        run_pos['y'] = pos['y'][run_idx]
+        run_pos['time'] = pos['time'][run_idx]
+
+        tc = get_tc(info, run_pos, pickle_filepath)
+
+        # filename = info.session_id + '_spike_heatmaps.pkl'
+        # pickled_spike_heatmaps = os.path.join(pickle_filepath, filename)
+        # if os.path.isfile(pickled_spike_heatmaps):
+        #     with open(pickled_spike_heatmaps, 'rb') as fileobj:
+        #         spike_heatmaps = pickle.load(fileobj)
+        # else:
+        #     spikes = info.get_spikes()
+        #
+        #     all_neurons = list(range(1, len(spikes['time'])))
+        #     spike_heatmaps = vdm.get_heatmaps(all_neurons, spikes, run_pos)
+        #     with open(pickled_spike_heatmaps, 'wb') as fileobj:
+        #         pickle.dump(spike_heatmaps, fileobj)
 
         t_start = info.task_times['prerecord'][0]
         t_stop = info.task_times['postrecord'][1]
-        linear, zone = linearize(info, pos, t_start, t_stop)
+        linear, zone = linearize(info, run_pos, t_start, t_stop)
 
         # swr_times, swr_idx, filtered_butter = vdm.detect_swr_hilbert(csc, fs=info.fs)
 
@@ -66,14 +92,6 @@ for info in infos:
 
 
         all_fields = vdm.find_fields(tc[trajectory])
-
-        # u_compare = vdm.find_fields(tc['u'], hz_thres=3)
-        # shortcut_compare = vdm.find_fields(tc['shortcut'], hz_thres=3)
-        # novel_compare = vdm.find_fields(tc['novel'], hz_thres=3)
-        #
-        # u_fields_unique = vdm.unique_fields(all_u_fields, shortcut_compare, novel_compare)
-        # shortcut_fields_unique = vdm.unique_fields(all_shortcut_fields, u_compare, novel_compare)
-        # novel_fields_unique = vdm.unique_fields(all_novel_fields, u_compare, shortcut_compare)
 
         fields_size = vdm.sized_fields(all_fields, max_length=15)
 
@@ -85,7 +103,6 @@ for info in infos:
         these_fields = []
         for key in with_fields:
             these_fields.append(key)
-
 
         field_spikes = []
         field_tc = []
@@ -104,8 +121,6 @@ for info in infos:
             fig = plt.figure()
 
             ax1 = plt.subplot2grid((rows, cols), (rows-1, 1), colspan=4)
-            # max_position = np.zeros(len(this_linear['time']))
-            # max_position.fill(np.max(this_linear['position']))
             ax1.plot(this_linear['time'], np.zeros(len(this_linear['time'])), color='#bdbdbd', lw=1)
             ax1.plot(this_linear['time'], -this_linear['position'], 'b', lw=1)
             ax1.set_xlim([start_time, stop_time])
@@ -114,9 +129,8 @@ for info in infos:
 
             for ax_loc in range(0, rows-2):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 1), colspan=4, sharex=ax1)
-                # spike_y = (ax_loc * spike_loc + lfp_pos_y)
                 ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc])), '|',
-                        color=sequence['colours'][ax_loc], ms=sequence['ms'], mew=1)
+                        color=colours[ax_loc], ms=sequence['ms'], mew=1.5)
                 ax.set_xlim([start_time, stop_time])
                 if ax_loc == 0:
                     vdm.add_scalebar(ax, matchy=False, bbox_transform=ax.transAxes, bbox_to_anchor=(0.9, 1.1))
@@ -135,8 +149,7 @@ for info in infos:
             for ax_loc in range(0, rows-2):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 5), colspan=2, sharex=ax2)
                 ax.plot(field_spikes[ax_loc], np.ones(len(field_spikes[ax_loc])), '|',
-                        color=sequence['colours'][ax_loc],
-                        ms=sequence['ms'], mew=1)
+                        color=colours[ax_loc], ms=sequence['ms'], mew=1.5)
                 ax.set_xlim([start_time_swr, stop_time_swr])
                 if ax_loc == 0:
                     vdm.add_scalebar(ax, matchy=False, bbox_transform=ax.transAxes, bbox_to_anchor=(0.9, 1.1))
@@ -150,8 +163,8 @@ for info in infos:
 
             for ax_loc in range(0, rows-2):
                 ax = plt.subplot2grid((rows, cols), (ax_loc, 0))
-                ax.plot(field_tc[ax_loc], color=sequence['colours'][ax_loc])
-                ax.fill_between(x, 0, field_tc[ax_loc], facecolor=sequence['colours'][ax_loc])
+                ax.plot(field_tc[ax_loc], color=colours[ax_loc])
+                ax.fill_between(x, 0, field_tc[ax_loc], facecolor=colours[ax_loc])
                 max_loc = np.where(field_tc[ax_loc] == np.max(field_tc[ax_loc]))[0][0]
                 ax.text(max_loc, 1, str(int(np.ceil(np.max(field_tc[ax_loc])))), fontsize=8)
                 plt.setp(ax, xticks=[], xticklabels=[], yticks=[])

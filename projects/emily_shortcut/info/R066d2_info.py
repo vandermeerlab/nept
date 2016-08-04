@@ -49,6 +49,8 @@ pxl_to_cm = (7.5460, 7.2192)
 
 fs = 2000
 
+run_threshold = 0.45
+
 good_lfp = ['R066-2014-11-28-CSC02c.ncs']
 good_swr = ['R066-2014-11-28-CSC02.mat']
 good_theta = ['R066-2014-11-28-CSC07.mat']
@@ -100,24 +102,16 @@ shortcut_trajectory = [path_pts['shortcut1'], path_pts['spt1'], path_pts['spt2']
 novel_trajectory = [path_pts['novel1'], path_pts['npt1'], path_pts['novel2']]
 
 sequence = dict(u=dict(), shortcut=dict())
-sequence['u']['swr_start'] = [19612.9, 19720.1]
-sequence['u']['swr_stop'] = [19613.4,  19720.4]
-sequence['u']['run_start'] = [12710.0, 13864.0]
-sequence['u']['run_stop'] = [12740.0, 13894.0]
-sequence['u']['ms'] = 10
+sequence['u']['swr_start'] = [19482.6, 19613.0, 19719.95]
+sequence['u']['swr_stop'] = [19483.0,  19613.4, 19720.5]
+sequence['u']['run_start'] = [19220.0, 14370.0, 14130.0]
+sequence['u']['run_stop'] = [19260.0, 14440.0, 14160.0]
+sequence['u']['ms'] = 20
 sequence['u']['loc'] = 1
-sequence['u']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                            '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                            '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
-                            '#dd3497', '#f768a1']
 
-sequence['shortcut']['swr_start'] = [19720.1, 19355.0]
-sequence['shortcut']['swr_stop'] = [19720.4, 19355.5]
-sequence['shortcut']['run_start'] = [16784.0, 19328.0]
-sequence['shortcut']['run_stop'] = [16814.0, 19358.0]
-sequence['shortcut']['ms'] = 10
+sequence['shortcut']['swr_start'] = [19710.0, 16584.8]
+sequence['shortcut']['swr_stop'] = [19710.6, 16585.2]
+sequence['shortcut']['run_start'] = [17960.0, 18800.0]
+sequence['shortcut']['run_stop'] = [17990.0, 18830.0]
+sequence['shortcut']['ms'] = 20
 sequence['shortcut']['loc'] = 1
-sequence['shortcut']['colours'] = ['#bd0026', '#fc4e2a', '#ef3b2c', '#ec7014', '#fe9929',
-                                   '#78c679', '#41ab5d', '#238443', '#66c2a4', '#41b6c4',
-                                   '#1d91c0', '#8c6bb1', '#225ea8', '#88419d', '#ae017e',
-                                   '#dd3497', '#f768a1']

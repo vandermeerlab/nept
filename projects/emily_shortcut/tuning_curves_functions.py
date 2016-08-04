@@ -121,7 +121,20 @@ def get_tc(info, pos, pickle_filepath):
             With u, shortcut, novel keys. Each value is a list of list, where
             each inner list represents an individual neuron's tuning curve.
 
-        """
+    """
+    speed = vdm.get_speed(pos)
+
+    t_run = speed['time'][speed['smoothed'] >= info.run_threshold]
+
+    run_idx = np.zeros(pos['time'].shape, dtype=bool)
+    for idx in t_run:
+        run_idx |= (pos['time'] == idx)
+
+    run_pos = dict()
+    run_pos['x'] = pos['x'][run_idx]
+    run_pos['y'] = pos['y'][run_idx]
+    run_pos['time'] = pos['time'][run_idx]
+
     tc_filename = info.session_id + '_tuning_curves_phase3.pkl'
     pickled_tc = os.path.join(pickle_filepath, tc_filename)
     if os.path.isfile(pickled_tc):
@@ -133,7 +146,7 @@ def get_tc(info, pos, pickle_filepath):
 
         spikes = info.get_spikes()
 
-        linear, zone = linearize(info, pos)
+        linear, zone = linearize(info, run_pos, t_start, t_stop)
 
         spike_pos_filename = info.session_id + '_spike_position_phase3.pkl'
         pickled_spike_pos = os.path.join(pickle_filepath, spike_pos_filename)
@@ -142,7 +155,7 @@ def get_tc(info, pos, pickle_filepath):
                 spike_position = pickle.load(fileobj)
         else:
             sliced_spikes = vdm.time_slice(spikes['time'], t_start, t_stop)
-            spike_position = spikes_by_position(sliced_spikes, zone, pos['time'], pos['x'], pos['y'])
+            spike_position = spikes_by_position(sliced_spikes, zone, run_pos['time'], run_pos['x'], run_pos['y'])
             with open(pickled_spike_pos, 'wb') as fileobj:
                 pickle.dump(spike_position, fileobj)
 
