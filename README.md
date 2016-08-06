@@ -71,3 +71,8 @@ License
 The vdmlab codebase is made available under made available 
 under the [MIT license](LICENSE.md) 
 that allows using, copying, and sharing.
+
+Projects using vdmlab
+=====================
+
+* [emi_shortcut](https://github.com/vandermeerlab/emi_shortcut)
