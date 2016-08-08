@@ -39,56 +39,57 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
     return z
 
 
-def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, filter_type='gaussian', gaussian_std=3):
+def tuning_curve(linear, spikes, sampling_rate, binsize=3, filter_type='gaussian', gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
     ----------
-    position_z : dict
+    linear : dict
         With position, time as keys
-    spike_times : list of lists
-        Where each inner list contains the spike times for an
-        individual neuron.
-    num_bins : int
-        Defaults to 100 if not specified
+    spike_times : dict
+        With time, label as keys. For time, each inner list contains the spike
+        times for an individual neuron.
     sampling_rate : float
-        Defaults to 1/30. if not specified.
+    binsize : int
+        Defaults to 3 if not specified
     filter_type : str, optional
         Defaults to 'gaussian' to smooth with a gaussian filter.
         No smoothing if None.
     gaussian_std : int
-        Defaults to 18.
+        Defaults to 3.
 
     Returns
     -------
-    out_tc : list of lists
+    out_tc : array of lists
         Where each inner list contains the tuning curves for an
         individual neuron.
 
     Notes
     -----
-    Input position_z and spike_times should be from the same time
+    Input linear and spikes should be from the same time
     period. Eg. when the animal is running on the track.
 
     """
-    linear_start = np.min(position_z['position'])
-    linear_stop = np.max(position_z['position'])
-    bin_edges = np.linspace(linear_start, linear_stop, num=num_bins)
-    bin_centers = np.array((bin_edges[1:] + bin_edges[:-1]) / 2.)
+    linear_start = np.min(linear['position'])
+    linear_stop = np.max(linear['position'])
+    edges = np.arange(linear_start, linear_stop, binsize)
+    if edges[-1] < linear_stop:
+        edges = np.hstack([edges, linear_stop])
+
+    position_counts = np.histogram(linear['position'], bins=edges)[0]
+    position_counts *= sampling_rate
+    occupied_idx = position_counts > 0
+
     tc = []
-    occupancy = np.zeros(len(bin_centers))
-    for position in position_z['position']:
-        pos_idx = find_nearest_idx(bin_centers, position)
-        occupancy[pos_idx] += sampling_rate
-    occupied_idx = occupancy > 0
-    for neuron_spikes in spike_times:
-        spike_z = np.zeros(len(bin_centers))
+    for idx, neuron_spikes in enumerate(spikes['time']):
+        counts_idx = []
         for spike_time in neuron_spikes:
-            bin_idx = find_nearest_idx(position_z['time'], spike_time)
-            which_bin = find_nearest_idx(bin_centers, position_z['position'][bin_idx])
-            spike_z[which_bin] += 1
-        firing_rate = np.zeros(len(bin_centers))
-        firing_rate[occupied_idx] = spike_z[occupied_idx] / occupancy[occupied_idx]
+            bin_idx = find_nearest_idx(linear['time'], spike_time)
+            counts_idx.append(linear['position'][bin_idx])
+        spike_counts = np.histogram(counts_idx, bins=edges)[0]
+
+        firing_rate = np.zeros(len(edges)-1)
+        firing_rate[occupied_idx] = spike_counts[occupied_idx] / position_counts[occupied_idx]
         tc.append(firing_rate)
 
     if filter_type == 'gaussian':
