@@ -1,9 +1,7 @@
 import numpy as np
 from scipy import signal
 import scipy.stats as stats
-from scipy.signal.signaltools import _next_regular
 
-import matplotlib.pyplot as plt
 
 def butter_bandpass(lowcut, highcut, fs, lfp, order=4):
     """ Filters signal using butterworth filter
@@ -76,7 +74,7 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
     # Get LFP power (using Hilbert) and z-score the power
     # Zero padding to nearest regular number to speed up fast fourier transforms (FFT) computed in the hilbert function.
     # Regular numbers are composites of the prime factors 2, 3, and 5.
-    hilbert_n = _next_regular(n_samples)
+    hilbert_n = next_regular(n_samples)
     power_lfp = np.abs(signal.hilbert(filtered_butter, N=hilbert_n))
     power_lfp = power_lfp[:n_samples]  # removing the zero padding now that the power is computed
     zpower_lfp = stats.zscore(power_lfp)
@@ -132,3 +130,64 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
     print('Number of SWR events found: ', str(len(swr_idx['start'])))
 
     return swr_times, swr_idx, filtered_butter
+
+
+def next_regular(target):
+    """
+    Find the next regular number greater than or equal to target.
+    Regular numbers are composites of the prime factors 2, 3, and 5.
+    Also known as 5-smooth numbers or Hamming numbers, these are the optimal
+    size for inputs to fast-fourier transforms (FFTPACK).
+
+    Parameters
+    ----------
+    target : positive int
+
+    Returns
+    -------
+    match : int
+
+    Notes
+    -----
+    This function was taken from the scipy.signal.signaltools module.
+    See http://scipy.org/scipylib/
+    """
+    if target <= 6:
+        return target
+
+    # Quickly check if it's already a power of 2
+    if not (target & (target-1)):
+        return target
+
+    match = float('inf')  # Anything found will be smaller
+    p5 = 1
+    while p5 < target:
+        p35 = p5
+        while p35 < target:
+            # Ceiling integer division, avoiding conversion to float
+            # (quotient = ceil(target / p35))
+            quotient = -(-target // p35)
+
+            # Quickly find next power of 2 >= quotient
+            try:
+                p2 = 2**((quotient - 1).bit_length())
+            except AttributeError:
+                # Fallback for Python <2.7
+                p2 = 2**(len(bin(quotient - 1)) - 2)
+
+            N = p2 * p35
+            if N == target:
+                return N
+            elif N < match:
+                match = N
+            p35 *= 3
+            if p35 == target:
+                return p35
+        if p35 < match:
+            match = p35
+        p5 *= 5
+        if p5 == target:
+            return p5
+    if p5 < match:
+        match = p5
+    return match
