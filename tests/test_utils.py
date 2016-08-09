@@ -5,6 +5,7 @@ import vdmlab as vdm
 
 toy_array = np.array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
 
+
 def test_find_nearest_idx():
     assert vdm.find_nearest_idx(toy_array, 13) == 3
     assert vdm.find_nearest_idx(toy_array, 11.49) == 1
@@ -12,6 +13,26 @@ def test_find_nearest_idx():
     assert vdm.find_nearest_idx(toy_array, 25) == 10
     assert vdm.find_nearest_idx(toy_array, 1) == 0
 
+
 def test_find_nearest_indices():
     assert np.allclose(vdm.find_nearest_indices(toy_array, np.array([13.2])), np.array([3]))
     assert np.allclose(vdm.find_nearest_indices(toy_array, np.array([10, 20])), np.array([0, 10]))
+
+
+def test_time_slice():
+    spikes_a = np.arange(1, 100, 5)
+    spikes_b = np.arange(24, 62, 1)
+    spikes_c = np.hstack((np.arange(0, 24, 3), np.arange(61, 100, 3)))
+
+    t_start = 25
+    t_stop = 60
+
+    sliced_spikes_a = vdm.time_slice([spikes_a], t_start, t_stop)
+    sliced_spikes_b = vdm.time_slice([spikes_b], t_start, t_stop)
+    sliced_spikes_c = vdm.time_slice([spikes_c], t_start, t_stop)
+
+    assert np.allclose(sliced_spikes_a, [26, 31, 36, 41, 46, 51, 56])
+    assert np.allclose(sliced_spikes_b, [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+                                         37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+                                         49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60])
+    assert np.allclose(sliced_spikes_c, [])
