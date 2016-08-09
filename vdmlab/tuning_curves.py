@@ -32,9 +32,8 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
 
     z = dict(position=[])
     z['time'] = np.array(pos_trial['time'])
-    for point in list(range(len(pos_trial['x']))):
-        position = Point(pos_trial['x'][point], pos_trial['y'][point])
-        z['position'].append(ideal_path.project(position))
+    for point_x, point_y in zip(pos_trial['x'], pos_trial['y']):
+        z['position'].append(ideal_path.project(Point(point_x, point_y)))
     z['position'] = np.array(z['position'])
     return z
 
