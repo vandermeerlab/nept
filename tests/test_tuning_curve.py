@@ -14,7 +14,7 @@ def test_simple_tc():
     for time in times:
         spikes['time'].append([time])
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    tuning = vdm.tuning_curve(linear, spikes['time'], binsize=3, sampling_rate=1., filter_type=None)
 
     assert np.allclose(tuning, ([1., 0., 0., 0.], [0., 1., 0., 0.], [0., 0., 1., 0.]))
 
@@ -30,7 +30,7 @@ def test_simple_tc1():
     for time in times:
         spikes['time'].append([time])
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    tuning = vdm.tuning_curve(linear, spikes['time'], binsize=3, sampling_rate=1., filter_type=None)
 
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 

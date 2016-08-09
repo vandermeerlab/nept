@@ -61,7 +61,7 @@ def test_sort_idx():
     for time in times:
         spikes['time'].append([time])
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    tuning = vdm.tuning_curve(linear, spikes['time'], sampling_rate=1, binsize=3, filter_type=None)
     sort_idx = vdm.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 0, 2])
@@ -77,7 +77,7 @@ def test_sort_idx1():
     for time in times:
         spikes['time'].append([time])
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    tuning = vdm.tuning_curve(linear, spikes['time'], sampling_rate=1, binsize=3, filter_type=None)
     sort_idx = vdm.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 3, 0, 2])

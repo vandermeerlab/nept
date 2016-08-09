@@ -38,17 +38,17 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
     return z
 
 
-def tuning_curve(linear, spikes, sampling_rate, binsize=3, filter_type='gaussian', gaussian_std=3):
+def tuning_curve(linear, spike_times, binsize, sampling_rate=1/30., filter_type='gaussian', gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
     ----------
     linear : dict
         With position, time as keys
-    spike_times : dict
-        With time, label as keys. For time, each inner list contains the spike
-        times for an individual neuron.
-    sampling_rate : float
+    spike_times : list of arrays
+        Each inner array contains the spike times (floats) for an individual neuron.
+    sampling_rate : int
+        Default set to 1/30.
     binsize : int
         Defaults to 3 if not specified
     filter_type : str, optional
@@ -76,11 +76,12 @@ def tuning_curve(linear, spikes, sampling_rate, binsize=3, filter_type='gaussian
         edges = np.hstack([edges, linear_stop])
 
     position_counts = np.histogram(linear['position'], bins=edges)[0]
+    position_counts = position_counts.astype(float)
     position_counts *= sampling_rate
     occupied_idx = position_counts > 0
 
     tc = []
-    for idx, neuron_spikes in enumerate(spikes['time']):
+    for idx, neuron_spikes in enumerate(spike_times):
         counts_idx = []
         for spike_time in neuron_spikes:
             bin_idx = find_nearest_idx(linear['time'], spike_time)
