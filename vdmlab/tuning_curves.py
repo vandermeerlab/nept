@@ -59,8 +59,8 @@ def tuning_curve(linear, spikes, sampling_rate, binsize=3, filter_type='gaussian
 
     Returns
     -------
-    out_tc : array of lists
-        Where each inner list contains the tuning curves for an
+    out_tc : list of np.arrays
+        Where each inner array contains the tuning curves for an
         individual neuron.
 
     Notes
