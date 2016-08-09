@@ -81,3 +81,13 @@ def test_sort_idx1():
     sort_idx = vdm.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 3, 0, 2])
+
+
+def test_get_counts():
+    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
+    spikes = [np.sort(spikes)]
+
+    edges = [0, 2, 4, 6, 8, 10]
+    counts = vdm.get_counts(spikes, edges, apply_filter=False)
+
+    assert np.allclose(counts, [9., 7., 5., 1., 2.])

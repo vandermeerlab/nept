@@ -224,7 +224,7 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize=
     return scalebar
 
 
-def get_counts(spikes, edges, gaussian_std=0.02, gaussian_window=1.0):
+def get_counts(spikes, edges, apply_filter=True, gaussian_std=0.02, gaussian_window=1.0):
     """Finds the number of spikes in each bin.
 
     Parameters
@@ -248,20 +248,18 @@ def get_counts(spikes, edges, gaussian_std=0.02, gaussian_window=1.0):
     """
     dt = np.median(np.diff(edges))
 
-    apply_filter = False
     gaussian_std /= dt
     gaussian_window /= dt
 
-    if gaussian_std > dt:
-        apply_filter = True
-
-    if apply_filter:
+    if apply_filter and gaussian_std > dt:
         gaussian_filter = signal.gaussian(gaussian_window, gaussian_std)
         gaussian_filter /= np.sum(gaussian_filter)
+    elif apply_filter:
+        print('No gaussian filter applied. Check that gaussian_std > dt if filter desired.')
 
     counts = np.zeros((int(len(spikes)), int(len(edges)-1)))
     for idx, neuron_spikes in enumerate(spikes):
         counts[idx] = np.histogram(neuron_spikes, bins=edges)[0]
-        if apply_filter:
+        if apply_filter and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts
