@@ -67,6 +67,7 @@ def time_slice(spikes, t_start, t_stop):
     AssertionError
     When that len(spikes) != len(sliced_spikes) (eg. the number
     of neurons stays the same.
+
     """
     if t_start is None:
         t_start = -np.inf
@@ -84,7 +85,7 @@ def time_slice(spikes, t_start, t_stop):
 
 
 def idx_in_pos(position, index):
-    """ Indexes into position data.
+    """Indexes into position data.
 
     Keeps x, y, time consistent.
 
@@ -108,7 +109,7 @@ def idx_in_pos(position, index):
 
 
 def get_sort_idx(tuning_curves):
-    """ Finds indices to sort neurons by max firing in tuning curve.
+    """Finds indices to sort neurons by max firing in tuning curve.
 
     Parameters
     ----------

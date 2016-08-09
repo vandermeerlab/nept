@@ -28,7 +28,7 @@ setup(
         "shapely",
         "matplotlib"
     ],
-    #setup_requires=["numpy"],
+    setup_requires=["numpy"],
     tests_require=["pytest"],
     extras_require={
         'docs': ["sphinx", "numpydoc", "mock"],

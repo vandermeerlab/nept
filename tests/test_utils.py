@@ -36,3 +36,48 @@ def test_time_slice():
                                          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
                                          49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60])
     assert np.allclose(sliced_spikes_c, [])
+
+
+def test_idx_in_pos():
+    position = dict()
+    position['x'] = [0, 1, 2]
+    position['y'] = [9, 7, 5]
+    position['time'] = [10, 11, 12]
+
+    pos = vdm.idx_in_pos(position, 1)
+
+    assert np.allclose(pos['x'], 1)
+    assert np.allclose(pos['y'], 7)
+    assert np.allclose(pos['time'], 11)
+
+
+def test_sort_idx():
+    linear = dict()
+    linear['position'] = np.linspace(0, 10, 4)
+    linear['time'] = np.linspace(0, 3, 4)
+
+    times = [1.5, 0.5, 2.5]
+    spikes = dict(time=[])
+    for time in times:
+        spikes['time'].append([time])
+
+    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    sort_idx = vdm.get_sort_idx(tuning)
+
+    assert np.allclose(sort_idx, [1, 0, 2])
+
+
+def test_sort_idx1():
+    linear = dict()
+    linear['position'] = np.linspace(0, 9, 4)
+    linear['time'] = np.linspace(0, 3, 4)
+
+    times = [2.5, 0.0, 2.0, 1.0]
+    spikes = dict(time=[])
+    for time in times:
+        spikes['time'].append([time])
+
+    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, filter_type=None)
+    sort_idx = vdm.get_sort_idx(tuning)
+
+    assert np.allclose(sort_idx, [1, 3, 0, 2])
