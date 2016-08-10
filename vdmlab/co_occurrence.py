@@ -210,7 +210,7 @@ def shuffle_cooccur(activity_matrix, num_shuffles):
     prob_shuffle : np.array
 
     """
-    shuffled_matrix = activity_matrix
+    shuffled_matrix = np.array(activity_matrix)
 
     num_rows = shuffled_matrix.shape[0]
     num_col = shuffled_matrix.shape[1]
