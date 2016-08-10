@@ -264,3 +264,5 @@ def get_counts(spikes, edges, gaussian_std=0.02, gaussian_window=1.0):
         if apply_filter:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts
+
+
