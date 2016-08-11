@@ -154,12 +154,7 @@ def expected_cooccur(prob_active):
         .. math:: p(x|y)
 
     """
-    num_neurons = prob_active.shape[0]
-
-    prob_expected = np.zeros((num_neurons, num_neurons))
-    for i in range(num_neurons):
-        for j in range(num_neurons):
-            prob_expected[i][j] = prob_active[i] * prob_active[j]
+    prob_expected = np.outer(prob_active, prob_active)
 
     # Remove probability of cell co-occurring with itself
     prob_expected[np.eye(len(prob_expected), dtype=bool)] = np.nan
@@ -185,9 +180,8 @@ def observed_cooccur(activity_matrix):
 
     prob_observed = np.zeros((num_neurons, num_neurons))
     for i in range(num_neurons):
-        for j in range(num_neurons):
-            if len(activity_matrix) > 0:
-                prob_observed[i][j] = np.nanmean(activity_matrix[i] * activity_matrix[j])
+        neuron_activities = activity_matrix[i]
+        prob_observed[i] = np.mean(neuron_activities * activity_matrix, axis=1)
 
     # Remove probability of cell co-occurring with itself
     prob_observed[np.eye(len(prob_observed), dtype=bool)] = np.nan
@@ -210,21 +204,20 @@ def shuffle_cooccur(activity_matrix, num_shuffles):
     prob_shuffle : np.array
 
     """
-    shuffled_matrix = np.array(activity_matrix)
+    shuffled_matrix = activity_matrix
 
-    num_rows = shuffled_matrix.shape[0]
-    num_col = shuffled_matrix.shape[1]
+    rows = shuffled_matrix.shape[0]
+    cols = shuffled_matrix.shape[1]
 
-    prob_shuffle = np.zeros((num_shuffles, num_rows, num_rows))
+    prob_shuffle = np.zeros((num_shuffles, rows, rows))
 
     for i in range(num_shuffles):
         this_matrix = shuffled_matrix
-        for j in range(num_rows):
-            this_matrix[j] = this_matrix[j, np.random.permutation(range(num_col))]
-        for k in range(num_rows):
-            for m in range(num_rows):
-                if len(this_matrix) > 0:
-                    prob_shuffle[i, k, m] = np.nanmean(this_matrix[k]*this_matrix[m])
+        for j in range(rows):
+            this_matrix[j] = this_matrix[j, np.random.permutation(range(cols))]
+        for k in range(rows):
+            neuron_activities = this_matrix[k]
+            prob_shuffle[i, k] = np.nanmean(neuron_activities * this_matrix, axis=1)
 
     return prob_shuffle
 
@@ -251,6 +244,6 @@ def zscore_cooccur(prob_observed, prob_shuffle):
                 prob_zscore[i][j] = (prob_observed[i][j] -
                                      np.nanmean(np.squeeze(prob_shuffle[:, i, j]))) / np.nanstd(np.squeeze(prob_shuffle[:, i, j]))
             else:
-                prob_zscore[i][j] = np.abs(prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j])))
+                prob_zscore[i][j] = prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j]))
 
     return prob_zscore
