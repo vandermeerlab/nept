@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 
 def spike_counts(spikes, interval_times, window=None):
@@ -240,10 +241,12 @@ def zscore_cooccur(prob_observed, prob_shuffle):
     prob_zscore = np.zeros((num_neurons, num_neurons))
     for i in range(num_neurons):
         for j in range(num_neurons):
-            if np.nanstd(np.squeeze(prob_shuffle[:, i, j])) > 0.0:
+            # if np.nanstd(np.squeeze(prob_shuffle[:, i, j])) > 0.0:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=RuntimeWarning)
                 prob_zscore[i][j] = (prob_observed[i][j] -
                                      np.nanmean(np.squeeze(prob_shuffle[:, i, j]))) / np.nanstd(np.squeeze(prob_shuffle[:, i, j]))
-            else:
-                prob_zscore[i][j] = prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j]))
+            # else:
+            #     prob_zscore[i][j] = prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j]))
 
     return prob_zscore

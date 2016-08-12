@@ -1,6 +1,6 @@
 import numpy as np
 
-def bayesian_prob(counts, tuning_curves, centers, min_neurons=1, min_spikes=1):
+def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     """Computes the bayesian probability of location based on spike counts.
 
     Parameters
@@ -9,8 +9,8 @@ def bayesian_prob(counts, tuning_curves, centers, min_neurons=1, min_spikes=1):
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
     tuning_curves : np.array
         Where each inner array is the tuning curve (floats) for an individual neuron.
-    centers : np.array
-        Bin centers from computing spike counts, based on edges given to get_counts().
+    binsize : float
+        Size of the time bins.
     min_neurons : int
         Mininum number of neurons active in a given bin. Default is 1.
     min_spikes : int
@@ -27,24 +27,24 @@ def bayesian_prob(counts, tuning_curves, centers, min_neurons=1, min_spikes=1):
     is set to nan. To convert it to 0s instead, use : prob[np.isnan(prob)] = 0 on the output.
 
     """
-    length = np.shape(counts)[1]
-    num_bins = np.shape(tuning_curves)[1]
-    bin_size = np.median(np.diff(centers))
+    n_time_bins = np.shape(counts)[1]
+    n_position_bins = np.shape(tuning_curves)[1]
 
-    prob = np.empty((length, num_bins)) * np.nan
-    for idx in range(num_bins):
-        # What does tempprod represent?
-        tempprod = np.nansum(np.log(tuning_curves[:, idx][..., np.newaxis] ** counts), axis=0)
+    prob = np.empty((n_time_bins, n_position_bins)) * np.nan
+    for idx in range(n_position_bins):
+        valid_idx = tuning_curves[:, idx] > 1  # log of 1 or less is negative or invalid
+        if any(valid_idx):
+            # What does tempprod represent?
+            tempprod = np.nansum(np.log(tuning_curves[valid_idx, idx][..., np.newaxis] ** counts[valid_idx]), axis=0)
 
-        # What does tempsum represent?
-        tempsum = np.exp(-bin_size * np.nansum(tuning_curves[:, idx]))
+            # What does tempsum represent?
+            tempsum = np.exp(-binsize * np.nansum(tuning_curves[valid_idx, idx]))
 
-        prob[:, idx] = np.exp(tempprod) * tempsum * (1/num_bins)
+            prob[:, idx] = np.exp(tempprod) * tempsum * (1/n_position_bins)
 
+    prob /= np.nansum(prob, axis=1)[..., np.newaxis]
 
-    prob /= np.sum(prob, axis=1)[..., np.newaxis]
-
-    num_active_neurons = np.sum(counts > min_spikes, axis=0)
+    num_active_neurons = np.sum(counts >= min_spikes, axis=0)
     prob[num_active_neurons < min_neurons] = np.nan
     return prob
 

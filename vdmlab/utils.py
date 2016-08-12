@@ -224,7 +224,7 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize=
     return scalebar
 
 
-def get_counts(spikes, edges, apply_filter=True, gaussian_std=0.02, gaussian_window=1.0):
+def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_window=1.0):
     """Finds the number of spikes in each bin.
 
     Parameters
