@@ -30,26 +30,37 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     n_time_bins = np.shape(counts)[1]
     n_position_bins = np.shape(tuning_curves)[1]
 
-    prob = np.empty((n_time_bins, n_position_bins)) * np.nan
+    likelihood = np.empty((n_time_bins, n_position_bins)) * np.nan
+
+    # Ignore warnings when inf created in this loop
+    error_settings = np.seterr(over='ignore')
     for idx in range(n_position_bins):
         valid_idx = tuning_curves[:, idx] > 1  # log of 1 or less is negative or invalid
-        if any(valid_idx):
-            # What does tempprod represent?
-            tempprod = np.nansum(np.log(tuning_curves[valid_idx, idx][..., np.newaxis] ** counts[valid_idx]), axis=0)
+        if np.any(valid_idx):
+            # event_rate is the lambda in this poisson distribution
+            event_rate = tuning_curves[valid_idx, idx][..., np.newaxis] ** counts[valid_idx]
+            prior = np.exp(-binsize * np.sum(tuning_curves[valid_idx, idx]))
 
-            # What does tempsum represent?
-            tempsum = np.exp(-binsize * np.nansum(tuning_curves[valid_idx, idx]))
+            # Below is the same as
+            # likelihood[:, idx] = np.prod(event_rate, axis=0) * prior * (1/n_position_bins)
+            # only less likely to have floating point issues, though slower
+            likelihood[:, idx] = np.exp(np.sum(np.log(event_rate), axis=0)) * prior * (1/n_position_bins)
+    np.seterr(**error_settings)
 
-            prob[:, idx] = np.exp(tempprod) * tempsum * (1/n_position_bins)
+    # Set any inf value to be largest float
+    largest_float = np.finfo(float).max
+    likelihood[np.isinf(likelihood)] = largest_float
+    likelihood /= np.nansum(likelihood, axis=1)[..., np.newaxis]
 
-    prob /= np.nansum(prob, axis=1)[..., np.newaxis]
+    # Remove bins with too few neurons that that are active
+    # a neuron is considered active by having at least min_spikes in a bin
+    n_active_neurons = np.sum(counts >= min_spikes, axis=0)
+    likelihood[n_active_neurons < min_neurons] = np.nan
 
-    num_active_neurons = np.sum(counts >= min_spikes, axis=0)
-    prob[num_active_neurons < min_neurons] = np.nan
-    return prob
+    return likelihood
 
 
-def decode_location(prob, linear):
+def decode_location(likelihood, linear):
     """Finds the decoded location based on a linear (1D) trajectory.
 
     Parameters
@@ -65,11 +76,11 @@ def decode_location(prob, linear):
         Estimate of decoded location (floats) for each time bin.
 
     """
-    max_decoded_idx = np.argmax(prob, axis=1)
-    decoded = max_decoded_idx * (np.max(linear['position'])-np.min(linear['position'])) / (np.shape(prob)[1]-1)
+    max_decoded_idx = np.argmax(likelihood, axis=1)
+    decoded = max_decoded_idx * (np.max(linear['position'])-np.min(linear['position'])) / (np.shape(likelihood)[1]-1)
     decoded += np.min(linear['position'])
 
-    nan_idx = np.sum(np.isnan(prob), axis=1) == (np.shape(prob)[1]-1)
+    nan_idx = np.sum(np.isnan(likelihood), axis=1) == (np.shape(likelihood)[1]-1)
     decoded[nan_idx] = np.nan
 
     return decoded
