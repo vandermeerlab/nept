@@ -5,4 +5,4 @@ from .tuning_curves import linear_trajectory, tuning_curve, get_speed
 from .place_fields import consecutive, find_fields, get_single_field, get_heatmaps
 from .lfp_filtering import detect_swr_hilbert
 from .co_occurrence import spike_counts, compute_cooccur
-from .decoding import bayesian_prob, decode_location, decoded_sequences
+from .decoding import bayesian_prob, decode_location, decode_sequences

@@ -86,39 +86,29 @@ def decode_location(likelihood, linear):
     return decoded
 
 
-def decoded_sequences(decoded, min_idx_length=3, max_idx_jump=20):
+def decode_sequences(decoded, min_length=3, max_jump=20):
     """Finds intervals of decoded position that are within jump limits.
 
     Parameters
     ----------
-    decoded : np.array
-        Estimate of decoded location (floats) for each time bin.
-    min_idx_length : int
+    decoded : dict
+        Estimate of decoded location (floats) for each time bin. Has position, time keys.
+    min_length : int
         Minimum number of bins to be considered a sequence.
-    max_idx_jump : int
-        Maximum number of bins to break a sequence.
+    max_jump : int
+        Any jump greater than this amount will break a sequence.
 
     Returns
     -------
     sequences : dict
-        With time (tuple of floats), index (tuple of ints) as keys.
-        Where start, stop are [0], [1] of each tuple.
+        With time (np.arrays) and position (np.arrays) as keys.
 
     """
-    previous_position = -100
-    start_idx = []
-    sequences = dict(time=[], index=[])
+    sequence = dict()
+    sequence['position'] = np.split(decoded['position'], np.where(np.abs(np.diff(decoded['position']))>= max_jump)[0]+1)
+    sequence['position'] = [i for i in sequence['position'] if i.size >= min_length]
 
-    for idx, position in enumerate(decoded['position']):
-        this_jump = np.abs(position - previous_position)
-        if this_jump <= max_idx_jump:
-            if len(start_idx) < 1:
-                start_idx.append(idx-1)
-            else:
-                if ((idx-1) - start_idx[0]) >= min_idx_length:
-                    sequences['time'].append((decoded['time'][start_idx[0]], decoded['time'][idx-1]))
-                    sequences['index'].append((start_idx[0], idx-1))
-                    start_idx = []
-        previous_position = position
+    sequence['time'] = np.split(decoded['time'], np.where(np.abs(np.diff(decoded['position'])) >= max_jump)[0]+1)
+    sequence['time'] = [i for i in sequence['time'] if i.size >= min_length]
 
-    return sequences
+    return sequence
