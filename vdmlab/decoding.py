@@ -106,9 +106,9 @@ def decode_sequences(decoded, min_length=3, max_jump=20):
     """
     sequence = dict()
     sequence['position'] = np.split(decoded['position'], np.where(np.abs(np.diff(decoded['position']))>= max_jump)[0]+1)
-    sequence['position'] = [i for i in sequence['position'] if i.size >= min_length]
+    sequence['position'] = np.array([i for i in sequence['position'] if i.size >= min_length])
 
     sequence['time'] = np.split(decoded['time'], np.where(np.abs(np.diff(decoded['position'])) >= max_jump)[0]+1)
-    sequence['time'] = [i for i in sequence['time'] if i.size >= min_length]
+    sequence['time'] = np.array([i for i in sequence['time'] if i.size >= min_length])
 
     return sequence
