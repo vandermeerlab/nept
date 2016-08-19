@@ -54,11 +54,21 @@ class Position(AnalogSignal):
     def x(self):
         return self.data[:, 0]
 
+    @x.setter
+    def x(self, val):
+        self.data[:, 0] = val
+
     @property
     def y(self):
-        if self.data.shape[1] < 2:
+        if self.dimensions < 2:
             raise ValueError("can't get 'y' of one-dimensional position")
         return self.data[:, 1]
+
+    @y.setter
+    def y(self, val):
+        if self.dimensions < 2:
+            raise ValueError("can't set 'y' of one-dimensional position")
+        self.data[:, 1] = val
 
     def distance(self, pos):
         """ Return the euclidean distance from this pos to the given 'pos'.
@@ -80,14 +90,12 @@ class Position(AnalogSignal):
             dist += (self.data[:, idx] - pos.data[:, idx]) ** 2
         return np.sqrt(dist)
 
-    def linearize(self, ideal_path, trial_start, trial_stop):
+    def linearize(self, ideal_path):
         """ Projects 2D positions into an 'ideal' linear trajectory.
 
         Parameters
         ----------
         ideal_path : shapely.LineString
-        trial_start : float
-        trial_stop : float
 
         Returns
         -------
@@ -95,15 +103,11 @@ class Position(AnalogSignal):
             1D position.
 
         """
-        t_start_idx = find_nearest_idx(self.time, trial_start)
-        t_end_idx = find_nearest_idx(self.time, trial_stop)
-        pos_trial = self[t_start_idx:t_end_idx]
-
         zpos = []
-        for point_x, point_y in zip(pos_trial.x, pos_trial.y):
+        for point_x, point_y in zip(self.x, self.y):
             zpos.append(ideal_path.project(Point(point_x, point_y)))
 
-        return Position(zpos, pos_trial.time)
+        return Position(zpos, self.time)
 
     def speed(self, t_smooth=None):
         """Finds the velocity of the animal from position.

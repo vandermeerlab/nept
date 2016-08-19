@@ -28,8 +28,8 @@ def test_simple_tc1():
 
 
 def test_linearize():
-    trial_start = 1.0
-    trial_stop = 6.0
+    t_start = 1.0
+    t_stop = 6.0
 
     pos = np.vstack([np.arange(1, 11, 1), np.arange(1, 11, 1)])
     pos = vdm.Position(pos, np.arange(0, 10, 1))
@@ -37,7 +37,9 @@ def test_linearize():
     trajectory = [[0., 0.], [5., 5.], [10., 10.]]
     line = LineString(trajectory)
 
-    linear = pos.linearize(line, trial_start, trial_stop)
+    sliced_pos = pos[t_start:t_stop]
+
+    linear = sliced_pos.linearize(line)
 
     assert np.allclose(linear.x, [2.82842712, 4.24264069, 5.65685425, 7.07106781, 8.48528137])
     assert np.allclose(linear.time, [1, 2, 3, 4, 5])

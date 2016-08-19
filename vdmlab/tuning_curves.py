@@ -73,7 +73,7 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
         print('Tuning curve with no filter.')
         out_tc = tc
 
-    return out_tc
+    return np.array(out_tc, dtype=float)
 
 
 def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gaussian_sigma=None):

@@ -75,7 +75,7 @@ def decode_location(likelihood, position):
 
     Returns
     -------
-    decoded : vdmlab.Position
+    decoded : np.array
         Estimate of decoded position.
 
     """
@@ -89,10 +89,10 @@ def decode_location(likelihood, position):
     nan_idx = np.sum(np.isnan(likelihood), axis=1) == (np.shape(likelihood)[1]-1)
     decoded[nan_idx] = np.nan
 
-    return Position(decoded, position.time)
+    return decoded
 
 
-def find_sequences(decoded, min_length=3, max_jump=20):
+def filter_jumps(decoded, min_length=3, max_jump=20):
     """Finds intervals of decoded that are within jump limits.
 
     Parameters
@@ -106,7 +106,7 @@ def find_sequences(decoded, min_length=3, max_jump=20):
 
     Returns
     -------
-    sequences : list of vdmlab.Position
+    sequences : vdmlab.Position
         Decoded position with jumps removed.
 
     """
@@ -117,4 +117,11 @@ def find_sequences(decoded, min_length=3, max_jump=20):
     split_decoded = np.split(decoded.x, split_idx)
     split_time = np.split(decoded.time, split_idx)
 
-    return [Position(x, time) for x, time in zip(split_decoded, split_time) if x.size >= min_length]
+    pos = []
+    time = []
+    for xx, tt in zip(split_decoded, split_time):
+        if xx.size >= min_length:
+            pos.extend(xx)
+            time.extend(tt)
+
+    return Position(pos, time)

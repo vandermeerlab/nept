@@ -110,7 +110,7 @@ def test_decode_location():
     linear = vdm.Position(np.array([1., 2., 3.]), np.array([0., 1., 2.]))
     decoded = vdm.decode_location(likelihood, linear)
 
-    assert np.allclose(decoded.x, np.array([2., 1., 3.]))
+    assert np.allclose(decoded, np.array([2., 1., 3.]))
 
 
 def test_decode_location_equal():
@@ -120,23 +120,20 @@ def test_decode_location_equal():
     linear = vdm.Position(np.array([1., 2., 3.]), np.array([0., 1., 2.]))
     decoded = vdm.decode_location(likelihood, linear)
 
-    assert np.allclose(decoded.x, np.array([1., 2., 1.]))
+    assert np.allclose(decoded, np.array([1., 2., 1.]))
 
 
-def test_find_sequences():
+def test_filter_jumps():
     decoded = vdm.Position(np.array([1., 1.5, 2., 3., 15.5, 17., 21., 22., 23.]),
                            np.array([0., 1., 2., 3., 4., 5., 6., 7., 8.]))
 
-    decoded_sequences = vdm.find_sequences(decoded, min_length=3, max_jump=4)
+    decoded_sequences = vdm.filter_jumps(decoded, min_length=3, max_jump=4)
 
-    assert len(decoded_sequences) == 2
-    assert np.allclose(decoded_sequences[0].time, np.array([0., 1., 2., 3.]))
-    assert np.allclose(decoded_sequences[0].x, np.array([1., 1.5, 2., 3.]))
-    assert np.allclose(decoded_sequences[1].time, np.array([6., 7., 8.]))
-    assert np.allclose(decoded_sequences[1].x, np.array([21., 22., 23.]))
+    assert np.allclose(decoded_sequences.time, np.array([0., 1., 2., 3., 6., 7., 8.]))
+    assert np.allclose(decoded_sequences.x, np.array([1., 1.5, 2., 3., 21., 22., 23.]))
 
 
-def test_find_sequences_empty():
+def test_filter_jumps_empty():
     decoded = vdm.Position(np.array([10., 20., 30., 40.]), np.array([0., 1., 2., 3.]))
-    decoded_sequences = vdm.find_sequences(decoded, min_length=3, max_jump=9)
-    assert len(decoded_sequences) == 0
+    decoded_sequences = vdm.filter_jumps(decoded, min_length=3, max_jump=9)
+    assert len(decoded_sequences.x) == 0
