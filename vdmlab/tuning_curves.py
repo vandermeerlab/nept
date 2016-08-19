@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import signal
 from shapely.geometry import Point
+from scipy.ndimage.filters import gaussian_filter
 
 from .utils import find_nearest_idx
 
@@ -32,66 +33,64 @@ def linear_trajectory(pos, ideal_path, trial_start, trial_stop):
 
     z = dict(position=[])
     z['time'] = np.array(pos_trial['time'])
-    for point in list(range(len(pos_trial['x']))):
-        position = Point(pos_trial['x'][point], pos_trial['y'][point])
-        z['position'].append(ideal_path.project(position))
+    for point_x, point_y in zip(pos_trial['x'], pos_trial['y']):
+        z['position'].append(ideal_path.project(Point(point_x, point_y)))
     z['position'] = np.array(z['position'])
     return z
 
 
-def tuning_curve(position_z, spike_times, num_bins=100, sampling_rate=1/30.0, filter_type='gaussian', gaussian_std=3):
+def tuning_curve(linear, spike_times, binsize, sampling_rate=1/30., gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
     ----------
-    position_z : dict
+    linear : dict
         With position, time as keys
-    spike_times : list of lists
-        Where each inner list contains the spike times for an
-        individual neuron.
-    num_bins : int
-        Defaults to 100 if not specified
+    spike_times : list of arrays
+        Each inner array contains the spike times (floats) for an individual neuron.
     sampling_rate : float
-        Defaults to 1/30. if not specified.
-    filter_type : str, optional
-        Defaults to 'gaussian' to smooth with a gaussian filter.
-        No smoothing if None.
+        Default set to 1/30.
+    binsize : int
+        Defaults to 3 if not specified
     gaussian_std : int
-        Defaults to 18.
+        Defaults to 3. No smoothing if None.
 
     Returns
     -------
-    out_tc : list of lists
-        Where each inner list contains the tuning curves for an
+    out_tc : list of np.arrays
+        Where each inner array contains the tuning curves for an
         individual neuron.
 
     Notes
     -----
-    Input position_z and spike_times should be from the same time
+    Input linear and spikes should be from the same time
     period. Eg. when the animal is running on the track.
 
     """
-    linear_start = np.min(position_z['position'])
-    linear_stop = np.max(position_z['position'])
-    bin_edges = np.linspace(linear_start, linear_stop, num=num_bins)
-    bin_centers = np.array((bin_edges[1:] + bin_edges[:-1]) / 2.)
+    linear_start = np.min(linear['position'])
+    linear_stop = np.max(linear['position'])
+    edges = np.arange(linear_start, linear_stop, binsize)
+    if edges[-1] < linear_stop:
+        edges = np.hstack([edges, linear_stop])
+
+    position_counts = np.histogram(linear['position'], bins=edges)[0]
+    position_counts = position_counts.astype(float)
+    position_counts *= sampling_rate
+    occupied_idx = position_counts > 0
+
     tc = []
-    occupancy = np.zeros(len(bin_centers))
-    for position in position_z['position']:
-        pos_idx = find_nearest_idx(bin_centers, position)
-        occupancy[pos_idx] += sampling_rate
-    occupied_idx = occupancy > 0
-    for neuron_spikes in spike_times:
-        spike_z = np.zeros(len(bin_centers))
+    for idx, neuron_spikes in enumerate(spike_times):
+        counts_idx = []
         for spike_time in neuron_spikes:
-            bin_idx = find_nearest_idx(position_z['time'], spike_time)
-            which_bin = find_nearest_idx(bin_centers, position_z['position'][bin_idx])
-            spike_z[which_bin] += 1
-        firing_rate = np.zeros(len(bin_centers))
-        firing_rate[occupied_idx] = spike_z[occupied_idx] / occupancy[occupied_idx]
+            bin_idx = find_nearest_idx(linear['time'], spike_time)
+            counts_idx.append(linear['position'][bin_idx])
+        spike_counts = np.histogram(counts_idx, bins=edges)[0]
+
+        firing_rate = np.zeros(len(edges)-1)
+        firing_rate[occupied_idx] = spike_counts[occupied_idx] / position_counts[occupied_idx]
         tc.append(firing_rate)
 
-    if filter_type == 'gaussian':
+    if gaussian_std is not None:
         filter_multiplier = 6
         out_tc = []
         gaussian_filter = signal.get_window(('gaussian', gaussian_std), gaussian_std*filter_multiplier)
@@ -134,3 +133,56 @@ def get_speed(pos, smooth=True, t_smooth=0.5):
     speed['smoothed'] = np.convolve(speed['velocity'], np.ones(int(filter_length))/filter_length, 'same')
 
     return speed
+
+
+def tuning_curve_2d(spikes, position, xedges, yedges, sampling_rate=1/30., gaussian_sigma=None):
+    """Creates 2D tuning curves based on spikes and 2D position.
+
+    Parameters
+    ----------
+    spikes : dict
+        With time (floats) and labels (str) as keys. Where each inner array
+        represents the spike times for an individual neuron.
+    position : dict
+        With x (floats), y (floats), time (floats) as keys.
+    xedges : np.array
+    yedges : np.array
+    sampling_rate : float
+    gaussian_sigma : float
+        Sigma used in gaussian filter if filtering.
+
+    Returns
+    -------
+    tuning_curves : np.array
+        Where each inner array is the tuning curve for an individual neuron.
+
+    """
+    position_2d, pos_xedges, pos_yedges = np.histogram2d(position['y'], position['x'], bins=[yedges, xedges])
+    position_2d *= sampling_rate
+    shape = position_2d.shape
+    occupied_idx = position_2d > 0
+
+    tc = []
+    for neuron_spikes in spikes['time']:
+        spikes_x = []
+        spikes_y = []
+        for spike_time in neuron_spikes:
+            spike_idx = find_nearest_idx(position['time'], spike_time)
+            spikes_x.append(position['x'][spike_idx])
+            spikes_y.append(position['y'][spike_idx])
+        spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_y, spikes_x, bins=[yedges, xedges])
+
+        firing_rate = np.zeros(shape)
+        firing_rate[occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
+
+        tc.append(firing_rate)
+
+    if gaussian_sigma is not None:
+        tuning_curves = []
+        for firing_rate in tc:
+            tuning_curves.append(gaussian_filter(firing_rate, gaussian_sigma))
+    else:
+        print('Tuning curves with no filter.')
+        tuning_curves = tc
+
+    return tuning_curves
