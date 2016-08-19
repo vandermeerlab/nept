@@ -1,5 +1,8 @@
 import numpy as np
 
+from .objects import Position
+
+
 def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     """Computes the bayesian probability of location based on spike counts.
 
@@ -60,39 +63,42 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     return likelihood
 
 
-def decode_location(likelihood, linear):
+def decode_location(likelihood, position):
     """Finds the decoded location based on a linear (1D) trajectory.
 
     Parameters
     ----------
     prob : np.array
         Where each inner array is the probability (floats) for an individual neuron by location bins.
-    linear : dict
-        With position (floats), time (floats) as keys.
+    position : vdmlab.Position
+        Must be linear (1D).
 
     Returns
     -------
-    decoded : np.array
-        Estimate of decoded location (floats) for each time bin.
+    decoded : vdmlab.Position
+        Estimate of decoded position.
 
     """
+    if not position.dimensions == 1:
+        raise ValueError("position must be linear")
+
     max_decoded_idx = np.argmax(likelihood, axis=1)
-    decoded = max_decoded_idx * (np.max(linear['position'])-np.min(linear['position'])) / (np.shape(likelihood)[1]-1)
-    decoded += np.min(linear['position'])
+    decoded = max_decoded_idx * (np.max(position.x)-np.min(position.x)) / (np.shape(likelihood)[1]-1)
+    decoded += np.min(position.x)
 
     nan_idx = np.sum(np.isnan(likelihood), axis=1) == (np.shape(likelihood)[1]-1)
     decoded[nan_idx] = np.nan
 
-    return decoded
+    return Position(decoded, position.time)
 
 
-def decode_sequences(decoded, min_length=3, max_jump=20):
-    """Finds intervals of decoded position that are within jump limits.
+def find_sequences(decoded, min_length=3, max_jump=20):
+    """Finds intervals of decoded that are within jump limits.
 
     Parameters
     ----------
-    decoded : dict
-        Estimate of decoded location (floats) for each time bin. Has position, time keys.
+    decoded : vdmlab.Position
+        Estimate of decoded position.
     min_length : int
         Minimum number of bins to be considered a sequence.
     max_jump : int
@@ -100,15 +106,15 @@ def decode_sequences(decoded, min_length=3, max_jump=20):
 
     Returns
     -------
-    sequences : dict
-        With time (np.arrays) and position (np.arrays) as keys.
+    sequences : list of vdmlab.Position
+        Decoded position with jumps removed.
 
     """
-    sequence = dict()
-    sequence['position'] = np.split(decoded['position'], np.where(np.abs(np.diff(decoded['position']))>= max_jump)[0]+1)
-    sequence['position'] = np.array([i for i in sequence['position'] if i.size >= min_length])
+    if not decoded.dimensions == 1:
+        raise ValueError("decoded must be linear")
 
-    sequence['time'] = np.split(decoded['time'], np.where(np.abs(np.diff(decoded['position'])) >= max_jump)[0]+1)
-    sequence['time'] = np.array([i for i in sequence['time'] if i.size >= min_length])
+    split_idx = np.where(np.abs(np.diff(decoded.x)) >= max_jump)[0] + 1
+    split_decoded = np.split(decoded.x, split_idx)
+    split_time = np.split(decoded.time, split_idx)
 
-    return sequence
+    return [Position(x, time) for x, time in zip(split_decoded, split_time) if x.size >= min_length]

@@ -111,8 +111,8 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
         These will be the indices into the full list of neuron spike times
     spikes : dict
         With times(float), labels (str) as keys
-    pos : dict
-        With time(float), x(float), y(float) as keys
+    pos : vdmlab.Position
+        Must be 2D.
     num_bins : int
         This will specify how the 2D space is broken up, the greater the number
         the more specific the heatmap will be. The default is set at 100.
@@ -124,8 +124,11 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
         that individual neuron.
 
     """
-    xedges = np.linspace(np.min(pos['x'])-2, np.max(pos['x'])+2, num_bins+1)
-    yedges = np.linspace(np.min(pos['y'])-2, np.max(pos['y'])+2, num_bins+1)
+    if not pos.dimensions == 2:
+        raise ValueError("pos must be two-dimensional")
+
+    xedges = np.linspace(np.min(pos.x)-2, np.max(pos.x)+2, num_bins+1)
+    yedges = np.linspace(np.min(pos.y)-2, np.max(pos.y)+2, num_bins+1)
 
     heatmaps = dict()
     count = 1
@@ -133,12 +136,11 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
         field_x = []
         field_y = []
         for spike in spikes['time'][neuron]:
-            spike_idx = find_nearest_idx(pos['time'], spike)
-            field_x.append(pos['x'][spike_idx])
-            field_y.append(pos['y'][spike_idx])
+            spike_idx = find_nearest_idx(pos.time, spike)
+            field_x.append(pos.x[spike_idx])
+            field_y.append(pos.y[spike_idx])
             heatmap, out_xedges, out_yedges = np.histogram2d(field_x, field_y, bins=[xedges, yedges])
         heatmaps[neuron] = heatmap.T
         print(str(neuron) + ' of ' + str(len(neuron_list)))
         count += 1
     return heatmaps
-

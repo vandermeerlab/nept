@@ -84,30 +84,6 @@ def time_slice(spikes, t_start, t_stop):
     return sliced_spikes
 
 
-def idx_in_pos(position, index):
-    """Indexes into position data.
-
-    Keeps x, y, time consistent.
-
-    Parameters
-    ----------
-    position : dict
-        With x, y, time (np.arrays) keys
-    index : int, np.array or list of ints
-
-    Returns
-    -------
-    pos : dict
-        With x, y, time (np.arrays) keys
-
-    """
-    pos = dict()
-    pos['x'] = position['x'][index]
-    pos['y'] = position['y'][index]
-    pos['time'] = position['time'][index]
-    return pos
-
-
 def get_sort_idx(tuning_curves):
     """Finds indices to sort neurons by max firing in tuning curve.
 
@@ -263,5 +239,3 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
         if apply_filter and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts
-
-

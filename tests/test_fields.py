@@ -41,10 +41,8 @@ def test_get_single_fields():
 
 
 def test_get_heatmaps():
-    pos = dict()
-    pos['x'] = np.arange(0, 10, 1)
-    pos['y'] = np.hstack((np.arange(0, 10, 2), np.arange(10, 0, -2)))
-    pos['time'] = np.arange(0, 30, 3)
+    pos = np.vstack([np.arange(0, 10, 1), np.hstack((np.arange(0, 10, 2), np.arange(10, 0, -2)))]),
+    pos = vdm.Position(pos, np.arange(0, 30, 3))
 
     neuron_list = [0, 2, 3]
 
