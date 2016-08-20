@@ -31,7 +31,9 @@ MOCK_MODULES = ['numpy',
                 'matplotlib',
                 'matplotlib.pyplot',
                 'matplotlib.offsetbox',
-                'matplotlib.offsetbox.AnchoredOffsetbox']
+                'matplotlib.offsetbox.AnchoredOffsetbox',
+                'scipy.ndimage.filters',
+                'scipy.ndimage']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 

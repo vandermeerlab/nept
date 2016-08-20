@@ -18,6 +18,11 @@ Documentation
    getting_started
 
 .. toctree::
+   :maxdepth: 1
+
+   core
+
+.. toctree::
    :maxdepth: 2
 
    modules

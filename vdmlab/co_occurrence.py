@@ -74,8 +74,8 @@ def compute_cooccur(count_matrix, num_shuffles=10000):
 def vector_from_array(array):
     """Get triangle of output in vector from a correlation-type array
 
-    Paramenters
-    -----------
+    Parameters
+    ----------
     array : np.array
 
     Returns
