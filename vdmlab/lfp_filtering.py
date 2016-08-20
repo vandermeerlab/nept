@@ -1,9 +1,11 @@
 import numpy as np
-from scipy import signal
+import scipy.signal
 import scipy.stats as stats
 
+from .objects import LFP
 
-def butter_bandpass(lowcut, highcut, fs, lfp, order=4):
+
+def butter_bandpass(signal, thresh, fs, order=4):
     """ Filters signal using butterworth filter
 
     Parameters
@@ -14,8 +16,7 @@ def butter_bandpass(lowcut, highcut, fs, lfp, order=4):
         Suggested 250.0 for sharp-wave ripple detection.
     fs : int
         Eg. 2000. Should get this from experiment-specifics.
-    lfp : np.array
-        Eg. csc['data']
+    lfp : vdmlad.LFP
     order : int
         Default set to 4.
 
@@ -24,28 +25,27 @@ def butter_bandpass(lowcut, highcut, fs, lfp, order=4):
     filtered_butter : np.array
 
     """
-    nyq = 0.5 * fs
-    low = lowcut / nyq
-    high = highcut / nyq
-    b, a = signal.butter(order, [low, high], btype='band')
-    filtered_butter = signal.filtfilt(b, a, lfp)
+    signal = np.squeeze(signal)
+    nyquist = 0.5 * fs
+
+    b, a = scipy.signal.butter(order, [thresh[0]/nyquist, thresh[1]/nyquist], btype='band')
+    filtered_butter = scipy.signal.filtfilt(b, a, signal)
+
     return filtered_butter
 
 
-def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
-                       z_thres=3, power_thres=3, merge_thres=0.02, min_length=0.01):
-    """ Finds sharp-wave ripple (SWR) times and indices.
+def detect_swr_hilbert(lfp, fs, thresh, z_thres=3,
+                       power_thres=3, merge_thres=0.02, min_length=0.01):
+    """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
     ----------
-    csc : dict
-        With time(np.array), data(np.array) as keys
+    lfp : vdmlab.LFP
     fs : int
-        Experiment-specific, something in the range of 2000 is not unexpected.
-    lowcut : float
-        The default is set to 140.0
-    highcut : float
-        The default is set to 250.0
+        Experiment-specific, something in the range of 2000 typical.
+    thresh : tuple
+        With format (lowcut, highcut).
+        Typically (140.0, 250.0) for sharp-wave ripple detection.
     z_thres : int or float
         The default is set to 3
     power_thres : int or float
@@ -58,25 +58,19 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
 
     Returns
     -------
-    swr_times : dict
-        With start(float), stop(float) as keys
-    swr_idx : dict
-        With start(int), stop(int) as keys
-    filtered_butter : np.array
-        Mostly for plotting purposes
+    swrs : list
+        Containing vdmlab.LFP for each SWR event
 
     """
-    n_samples = len(csc['data'])
-
     # Filtering signal with butterworth fitler
-    filtered_butter = butter_bandpass(lowcut, highcut, fs, csc['data'])
+    filtered_butter = butter_bandpass(lfp.data, thresh, fs)
 
     # Get LFP power (using Hilbert) and z-score the power
     # Zero padding to nearest regular number to speed up fast fourier transforms (FFT) computed in the hilbert function.
     # Regular numbers are composites of the prime factors 2, 3, and 5.
-    hilbert_n = next_regular(n_samples)
-    power_lfp = np.abs(signal.hilbert(filtered_butter, N=hilbert_n))
-    power_lfp = power_lfp[:n_samples]  # removing the zero padding now that the power is computed
+    hilbert_n = next_regular(lfp.n_samples)
+    power_lfp = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
+    power_lfp = power_lfp[:lfp.n_samples]  # removing the zero padding now that the power is computed
     zpower_lfp = stats.zscore(power_lfp)
 
     # Finding locations where the power changes
@@ -88,8 +82,8 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
     stop_swr_idx = np.where(signal_change == -1)[0] - 1
 
     # Getting times associated with these power changes
-    start_time = csc['time'][start_swr_idx]
-    stop_time = csc['time'][stop_swr_idx]
+    start_time = lfp.time[start_swr_idx]
+    stop_time = lfp.time[stop_swr_idx]
 
     # Merging ranges that are closer - in time - than the merge_threshold.
     no_double = start_time[1:] - stop_time[:-1]
@@ -120,16 +114,11 @@ def detect_swr_hilbert(csc, fs=2000, lowcut=140.0, highcut=250.0,
         start_merged_idx = np.delete(start_merged_idx, z_idx)
         stop_merged_idx = np.delete(stop_merged_idx, z_idx)
 
-    swr_idx = dict()
-    swr_times = dict()
-    swr_times['start'] = start_merged
-    swr_times['stop'] = stop_merged
-    swr_idx['start'] = start_merged_idx
-    swr_idx['stop'] = stop_merged_idx
+    swrs = []
+    for start, stop in zip(start_merged_idx, stop_merged_idx):
+        swrs.append(lfp[start:stop])
 
-    print('Number of SWR events found: ', str(len(swr_idx['start'])))
-
-    return swr_times, swr_idx, filtered_butter
+    return swrs
 
 
 def next_regular(target):

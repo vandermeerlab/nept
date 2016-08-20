@@ -36,6 +36,10 @@ class AnalogSignal:
     def __getitem__(self, idx):
         return AnalogSignal(self.data[idx], self.time[idx])
 
+    @property
+    def n_samples(self):
+        return self.time.size
+
 
 class Position(AnalogSignal):
 
@@ -45,10 +49,6 @@ class Position(AnalogSignal):
     @property
     def dimensions(self):
         return self.data.shape[1]
-
-    @property
-    def n_samples(self):
-        return self.time.size
 
     @property
     def x(self):
@@ -132,3 +132,9 @@ class Position(AnalogSignal):
             velocity = np.convolve(velocity, np.ones(int(filter_length))/filter_length, 'same')
 
         return AnalogSignal(velocity, self.time)
+
+
+class LFP(AnalogSignal):
+
+    def __getitem__(self, idx):
+        return LFP(self.data[idx], self.time[idx])
