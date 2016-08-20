@@ -5,11 +5,6 @@ from shapely.geometry import Point
 
 from .utils import find_nearest_idx
 
-class SpikeTrain:
-    def __init__(self, time, label):
-        if time.shape[0] != label.shape[0]:
-            raise ValueError("must have same number of neurons for time and label")
-
 
 class AnalogSignal:
     def __init__(self, data, time):
@@ -30,7 +25,7 @@ class AnalogSignal:
             raise ValueError("data must be vector or 2D array")
         if data.shape[0] != data.shape[1] and time.shape[0] == data.shape[1]:
             warnings.warn("data should be shape (timesteps, dimensionality); "
-                          "got (dimensionality, timesteps). Correcting.")
+                          "got (dimensionality, timesteps). Correcting...")
             data = data.T
         if time.shape[0] != data.shape[0]:
             raise ValueError("must have same number of time and data samples")
@@ -54,7 +49,7 @@ class LocalFieldPotential(AnalogSignal):
     def __init__(self, data, time):
         super().__init__(data, time)
         if self.dimensions > 1:
-            raise ValueError("Can only contain one LFP")
+            raise ValueError("can only contain one LFP")
 
     def __getitem__(self, idx):
         return LocalFieldPotential(self.data[idx], self.time[idx])
@@ -121,6 +116,7 @@ class Position(AnalogSignal):
         zpos = []
         for point_x, point_y in zip(self.x, self.y):
             zpos.append(ideal_path.project(Point(point_x, point_y)))
+        zpos = np.array(zpos)
 
         return Position(zpos, self.time)
 
@@ -147,3 +143,44 @@ class Position(AnalogSignal):
             velocity = np.convolve(velocity, np.ones(int(filter_length))/filter_length, 'same')
 
         return AnalogSignal(velocity, self.time)
+
+
+class SpikeTrain:
+    def __init__(self, time, label):
+        time = np.squeeze(time).astype(float)
+
+        if time.ndim != 1:
+            raise ValueError("time must be a vector")
+
+        if not isinstance(label, str):
+            raise ValueError("label must be a string")
+
+        self.time = time
+        self.label = label
+
+    def __getitem__(self, idx):
+        return SpikeTrain(self.time[idx], self.label)
+
+    def time_slice(self, t_start, t_stop):
+        """Creates a new vdmlab.SpikeTrain corresponding to the time slice of
+        the original between (and including) times t_start and t_stop. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        spikes : vdmlab.SpikeTrain
+        t_start : float
+        t_stop : float
+
+        Returns
+        -------
+        sliced_spikes : vdmlab.SpikeTrain
+        """
+        if t_start is None:
+            t_start = -np.inf
+        if t_stop is None:
+            t_stop = np.inf
+
+        indices = (self >= t_start) & (self <= t_stop)
+
+        return self[indices]
