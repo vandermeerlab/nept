@@ -2,21 +2,18 @@ import numpy as np
 import scipy.signal
 import scipy.stats as stats
 
-from .objects import LocalFieldPotential
-
 
 def butter_bandpass(signal, thresh, fs, order=4):
     """ Filters signal using butterworth filter
 
     Parameters
     ----------
-    lowcut : float
-        Suggested 140.0 for sharp-wave ripple detection.
-    highcut : float
-        Suggested 250.0 for sharp-wave ripple detection.
+    signal : vdmlad.LFP
     fs : int
         Eg. 2000. Should get this from experiment-specifics.
-    lfp : vdmlad.LFP
+    thresh : tuple
+        With format (lowcut, highcut).
+        Typically (140.0, 250.0) for sharp-wave ripple detection.
     order : int
         Default set to 4.
 
@@ -34,8 +31,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thres=3,
-                       power_thres=3, merge_thres=0.02, min_length=0.01):
+def detect_swr_hilbert(lfp, fs, thresh, z_thres=3, power_thres=3, merge_thres=0.02, min_length=0.01):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters

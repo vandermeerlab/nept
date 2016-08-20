@@ -4,14 +4,14 @@ import vdmlab as vdm
 
 
 def test_spike_counts():
-    interval_times = dict()
-    interval_times['start'] = [2., 7.]
-    interval_times['stop'] = [6., 10.]
+    intervals = np.array([[2., 7.], [6., 10.]])
 
-    spikes = dict()
-    spikes['time'] = [[0., 3., 4., 8.], [0., 3., 4., 8.], [1., 7., 11.], [0., 3., 4., 8.]]
+    spikes = [vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
+              vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
+              vdm.SpikeTrain(np.array([1., 7., 11.]), 'test'),
+              vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test')]
 
-    count_matrix = vdm.spike_counts(spikes, interval_times, window=None)
+    count_matrix = vdm.spike_counts(spikes, intervals)
 
     assert np.allclose(np.mean(count_matrix), 1.25)
     assert np.allclose(count_matrix[0], count_matrix[1], count_matrix[3])

@@ -2,14 +2,16 @@ import numpy as np
 import warnings
 
 
-def spike_counts(spikes, interval_times, window=None):
+def spike_counts(spikes, intervals, window=None):
     """Get spike counts for specific interval.
 
     Parameters
     ----------
-    spike_times : np.array
-    interval_times : dict
-        With start(int or float), stop(int or float) as keys
+    spikes : list
+        Containing vdmlab.SpikeTrain for each neuron.
+    interval_times : np.array
+        With shape (2, N). Where the first dimension is start, stop for
+        each interval
     window : float
         When window is set, takes the spike times for this window length
         around the center of the interval times. The default is set to None.
@@ -21,18 +23,20 @@ def spike_counts(spikes, interval_times, window=None):
         num_neurons x num_bins
 
     """
-    intervals = np.vstack((interval_times['start'], interval_times['stop']))
+    if intervals.shape[0] != 2:
+        raise ValueError("intervals must have shape (2, N), with start, stop interval")
+
     bin_centers = np.mean(intervals, axis=0)
 
     if window is not None:
         intervals = np.vstack([bin_centers-(window*0.5), bin_centers+(window*0.5)])
 
-    num_neurons = len(spikes['time'])
+    num_neurons = len(spikes)
     count_matrix = np.zeros((num_neurons, intervals.shape[1]))
 
     for i, (start, stop) in enumerate(zip(intervals[0], intervals[1])):
         for neuron in range(num_neurons):
-            count_matrix[neuron][i] = ((start <= spikes['time'][neuron]) & (spikes['time'][neuron] <= stop)).sum()
+            count_matrix[neuron][i] = ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum()
 
     return count_matrix
 

@@ -46,8 +46,10 @@ def test_get_heatmaps():
 
     neuron_list = [0, 2, 3]
 
-    spikes = dict()
-    spikes['time'] = [[19.9, 20., 20.1], [8.], [0., 15., 27.], [9., 10., 11., 15., 16.]]
+    spikes = [vdm.SpikeTrain(np.array([19.9, 20., 20.1]), 'test'),
+              vdm.SpikeTrain(np.array([8.]), 'test'),
+              vdm.SpikeTrain(np.array([0., 15., 27.]), 'test'),
+              vdm.SpikeTrain(np.array([9., 10., 11., 15., 16.]), 'test')]
 
     heatmaps = vdm.get_heatmaps(neuron_list, spikes, pos, num_bins=5)
 

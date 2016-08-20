@@ -7,8 +7,9 @@ import vdmlab as vdm
 def test_simple_tc():
     linear = vdm.Position(np.linspace(0, 10, 4), np.linspace(0, 3, 4))
 
-    spikes = dict()
-    spikes['time'] = np.array([[0.5], [1.5], [2.5]])
+    spikes = [vdm.SpikeTrain(np.array([0.5]), 'test'),
+              vdm.SpikeTrain(np.array([1.5]), 'test'),
+              vdm.SpikeTrain(np.array([2.5]), 'test')]
 
     tuning = vdm.tuning_curve(linear, spikes, binsize=3, sampling_rate=1., gaussian_std=None)
 
@@ -19,8 +20,10 @@ def test_simple_tc1():
     """Time spent in each bin not the same."""
     linear = vdm.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
 
-    spikes = dict()
-    spikes['time'] = np.array([[0.0], [1.0], [2.0], [2.5]])
+    spikes = [vdm.SpikeTrain(np.array([0.0]), 'test'),
+              vdm.SpikeTrain(np.array([1.0]), 'test'),
+              vdm.SpikeTrain(np.array([2.0]), 'test'),
+              vdm.SpikeTrain(np.array([2.5]), 'test')]
 
     tuning = vdm.tuning_curve(linear, spikes, binsize=3, sampling_rate=1., gaussian_std=None)
 
@@ -53,7 +56,7 @@ def test_tuning_curve_2d():
     yedges = np.arange(pos.y.min(), pos.y.max()+binsize, binsize)
 
     spikes = dict()
-    spikes['time'] = np.array([[0., 3., 3., 3.]])
+    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
     tuning_curves = vdm.tuning_curve_2d(pos, spikes, xedges, yedges, sampling_rate=1.)
 

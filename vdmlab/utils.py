@@ -41,49 +41,6 @@ def find_nearest_indices(array, vals):
     return np.array([find_nearest_idx(array, val) for val in vals], dtype=int)
 
 
-def time_slice(spikes, t_start, t_stop):
-    """Slices into spike list between a start and stop time.
-
-    Parameters
-    ----------
-    spikes : list of np.arrays
-        Where each inner list contains the spike times for an
-        individual neuron. And len(spikes) is the total number
-        of neurons.
-    t_start : int
-        If None, takes the slice from the beginning of the spike
-        times.
-    t_stop : int
-        If None, takes the slice from the end of the spike times.
-
-    Returns
-    -------
-    sliced_spikes : list of np.arrays
-        Where each inner list contains the spike times of interest
-        for an individual neuron.
-
-    Raises
-    ------
-    AssertionError
-    When that len(spikes) != len(sliced_spikes) (eg. the number
-    of neurons stays the same.
-
-    """
-    if t_start is None:
-        t_start = -np.inf
-    if t_stop is None:
-        t_stop = np.inf
-
-    sliced_spikes = []
-    for neuron_spikes in spikes:
-        indices = (neuron_spikes >= t_start) & (neuron_spikes <= t_stop)
-        sliced_spikes.append(np.array(neuron_spikes[indices]))
-
-    assert(len(spikes) == len(sliced_spikes))
-
-    return sliced_spikes
-
-
 def get_sort_idx(tuning_curves):
     """Finds indices to sort neurons by max firing in tuning curve.
 
@@ -205,8 +162,8 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
 
     Parameters
     ----------
-    spikes : np.array
-        Where each inner array contains the spike times (floats) for an individual neuron.
+    spikes : list
+        Contains vdmlan.SpikeTrain for each neuron
     edges : np.array
         Bin edges for computing spike counts.
     gaussian_std : float
@@ -234,8 +191,8 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
         print('No gaussian filter applied. Check that gaussian_std > dt if filter desired.')
 
     counts = np.zeros((int(len(spikes)), int(len(edges)-1)))
-    for idx, neuron_spikes in enumerate(spikes):
-        counts[idx] = np.histogram(neuron_spikes, bins=edges)[0]
+    for idx, spiketrain in enumerate(spikes):
+        counts[idx] = np.histogram(spiketrain.time, bins=edges)[0]
         if apply_filter and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts

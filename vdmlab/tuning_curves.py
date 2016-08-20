@@ -14,9 +14,8 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     ----------
     position : vdmlab.Position
         Must be a linear position (1D).
-    spikes : dict
-        With time (floats) and labels (str) as keys. Where each inner array
-        represents the spike times for an individual neuron.
+    spikes : list
+        Containing vdmlab.SpikeTrain for each neuron.
     sampling_rate : float
         Default set to 1/30.
     binsize : int
@@ -51,9 +50,9 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     occupied_idx = position_counts > 0
 
     tc = []
-    for idx, neuron_spikes in enumerate(spikes['time']):
+    for spiketrain in spikes:
         counts_idx = []
-        for spike_time in neuron_spikes:
+        for spike_time in spiketrain.time:
             bin_idx = find_nearest_idx(position.time, spike_time)
             counts_idx.append(position.x[bin_idx])
         spike_counts = np.histogram(counts_idx, bins=edges)[0]
@@ -83,9 +82,8 @@ def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gauss
     ----------
     position : vdmlab.Position
         Must be a 2D position.
-    spikes : dict
-        With time (floats) and labels (str) as keys. Where each inner array
-        represents the spike times for an individual neuron.
+    spikes : list
+        Containing vdmlab.SpikeTrain for each neuron.
     xedges : np.array
     yedges : np.array
     sampling_rate : float
@@ -104,10 +102,10 @@ def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gauss
     occupied_idx = position_2d > 0
 
     tc = []
-    for neuron_spikes in spikes['time']:
+    for spiketrain in spikes:
         spikes_x = []
         spikes_y = []
-        for spike_time in neuron_spikes:
+        for spike_time in spiketrain.time:
             spike_idx = find_nearest_idx(position.time, spike_time)
             spikes_x.append(position.x[spike_idx])
             spikes_y.append(position.y[spike_idx])

@@ -44,6 +44,30 @@ class AnalogSignal:
     def n_samples(self):
         return self.time.size
 
+    def time_slice(self, t_start, t_stop):
+        """Creates a new object corresponding to the time slice of
+        the original between (and including) times t_start and t_stop. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        analogsignal : vdmlab.AnalogSignal
+        t_start : float
+        t_stop : float
+
+        Returns
+        -------
+        sliced_analogsignal : vdmlab.AnalogSignal
+        """
+        if t_start is None:
+            t_start = -np.inf
+        if t_stop is None:
+            t_stop = np.inf
+
+        indices = (self.time >= t_start) & (self.time <= t_stop)
+
+        return self[indices]
+
 
 class LocalFieldPotential(AnalogSignal):
     def __init__(self, data, time):
@@ -149,6 +173,9 @@ class SpikeTrain:
     def __init__(self, time, label):
         time = np.squeeze(time).astype(float)
 
+        if time.shape == ():
+            time = time[..., np.newaxis]
+
         if time.ndim != 1:
             raise ValueError("time must be a vector")
 
@@ -181,6 +208,6 @@ class SpikeTrain:
         if t_stop is None:
             t_stop = np.inf
 
-        indices = (self >= t_start) & (self <= t_stop)
+        indices = (self.time >= t_start) & (self.time <= t_stop)
 
         return self[indices]

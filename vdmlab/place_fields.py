@@ -109,8 +109,8 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
     ----------
     neuron_list : list of ints
         These will be the indices into the full list of neuron spike times
-    spikes : dict
-        With times(float), labels (str) as keys
+    spikes : list
+        Containing vdmlab.SpikeTrain for each neuron.
     pos : vdmlab.Position
         Must be 2D.
     num_bins : int
@@ -122,7 +122,6 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
     heatmaps : dict of lists
         Where the key is the neuron number and the value is the heatmap for
         that individual neuron.
-
     """
     if not pos.dimensions == 2:
         raise ValueError("pos must be two-dimensional")
@@ -135,7 +134,7 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
     for neuron in neuron_list:
         field_x = []
         field_y = []
-        for spike in spikes['time'][neuron]:
+        for spike in spikes[neuron].time:
             spike_idx = find_nearest_idx(pos.time, spike)
             field_x.append(pos.x[spike_idx])
             field_y.append(pos.y[spike_idx])
