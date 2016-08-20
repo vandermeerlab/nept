@@ -5,6 +5,11 @@ from shapely.geometry import Point
 
 from .utils import find_nearest_idx
 
+class SpikeTrain:
+    def __init__(self, time, label):
+        if time.shape[0] != label.shape[0]:
+            raise ValueError("must have same number of neurons for time and label")
+
 
 class AnalogSignal:
     def __init__(self, data, time):
@@ -37,18 +42,28 @@ class AnalogSignal:
         return AnalogSignal(self.data[idx], self.time[idx])
 
     @property
+    def dimensions(self):
+        return self.data.shape[1]
+
+    @property
     def n_samples(self):
         return self.time.size
+
+
+class LocalFieldPotential(AnalogSignal):
+    def __init__(self, data, time):
+        super().__init__(data, time)
+        if self.dimensions > 1:
+            raise ValueError("Can only contain one LFP")
+
+    def __getitem__(self, idx):
+        return LocalFieldPotential(self.data[idx], self.time[idx])
 
 
 class Position(AnalogSignal):
 
     def __getitem__(self, idx):
         return Position(self.data[idx], self.time[idx])
-
-    @property
-    def dimensions(self):
-        return self.data.shape[1]
 
     @property
     def x(self):
@@ -132,9 +147,3 @@ class Position(AnalogSignal):
             velocity = np.convolve(velocity, np.ones(int(filter_length))/filter_length, 'same')
 
         return AnalogSignal(velocity, self.time)
-
-
-class LFP(AnalogSignal):
-
-    def __getitem__(self, idx):
-        return LFP(self.data[idx], self.time[idx])

@@ -11,7 +11,7 @@ def test_swr():
     freq[int(len(time)*0.7):int(len(time)*0.9)] = 260
     data = np.sin(2.*np.pi*freq*time)
 
-    lfp = vdm.LFP(data, time)
+    lfp = vdm.LocalFieldPotential(data, time)
 
     swrs = vdm.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), power_thres=0.5, z_thres=0.4)
     assert np.allclose(swrs[0].time[0], 0.1995)

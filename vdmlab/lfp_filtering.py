@@ -2,7 +2,7 @@ import numpy as np
 import scipy.signal
 import scipy.stats as stats
 
-from .objects import LFP
+from .objects import LocalFieldPotential
 
 
 def butter_bandpass(signal, thresh, fs, order=4):
@@ -40,7 +40,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thres=3,
 
     Parameters
     ----------
-    lfp : vdmlab.LFP
+    lfp : vdmlab.LocalFieldPotential
     fs : int
         Experiment-specific, something in the range of 2000 typical.
     thresh : tuple
@@ -59,7 +59,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thres=3,
     Returns
     -------
     swrs : list
-        Containing vdmlab.LFP for each SWR event
+        Containing vdmlab.LocalFieldPotential for each SWR event
 
     """
     # Filtering signal with butterworth fitler
