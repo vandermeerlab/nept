@@ -3,10 +3,23 @@ import warnings
 import numpy as np
 from shapely.geometry import Point
 
-from .utils import find_nearest_idx
-
 
 class AnalogSignal:
+    """A continuous analog timestamped signal.
+
+    Parameters
+    ----------
+    data : np.array
+    time : np.array
+
+    Attributes
+    ----------
+    data : np.array
+        With shape (n_samples, dimensionality).
+    time : np.array
+        With shape (n_samples,).
+
+    """
     def __init__(self, data, time):
         data = np.squeeze(data).astype(float)
         time = np.squeeze(time).astype(float)
@@ -38,10 +51,12 @@ class AnalogSignal:
 
     @property
     def dimensions(self):
+        """(int) Dimensionality of data attribute."""
         return self.data.shape[1]
 
     @property
     def n_samples(self):
+        """(int) Number of samples."""
         return self.time.size
 
     def time_slice(self, t_start, t_stop):
@@ -70,6 +85,20 @@ class AnalogSignal:
 
 
 class LocalFieldPotential(AnalogSignal):
+    """Subclass of AnalogSignal.
+
+    Parameters
+    ----------
+    data : np.array
+    time : np.array
+
+    Attributes
+    ----------
+    data : np.array
+        With shape (n_samples, 1).
+    time : np.array
+        With shape (n_samples,).
+    """
     def __init__(self, data, time):
         super().__init__(data, time)
         if self.dimensions > 1:
@@ -80,12 +109,26 @@ class LocalFieldPotential(AnalogSignal):
 
 
 class Position(AnalogSignal):
+    """Subclass of AnalogSignal. Handles both 1D and 2d positions.
 
+    Parameters
+    ----------
+    data : np.array
+    time : np.array
+
+    Attributes
+    ----------
+    data : np.array
+        With shape (n_samples, dimensionality).
+    time : np.array
+        With shape (n_samples,).
+    """
     def __getitem__(self, idx):
         return Position(self.data[idx], self.time[idx])
 
     @property
     def x(self):
+        """(np.array) The 'x' position attribute."""
         return self.data[:, 0]
 
     @x.setter
@@ -94,6 +137,7 @@ class Position(AnalogSignal):
 
     @property
     def y(self):
+        """(np.array) The 'y' position attribute for 2D position data."""
         if self.dimensions < 2:
             raise ValueError("can't get 'y' of one-dimensional position")
         return self.data[:, 1]
@@ -105,7 +149,7 @@ class Position(AnalogSignal):
         self.data[:, 1] = val
 
     def distance(self, pos):
-        """ Return the euclidean distance from this pos to the given 'pos'.
+        """ Return the euclidean distance from this position to the given 'pos'.
 
         Parameters
         ----------
@@ -170,7 +214,23 @@ class Position(AnalogSignal):
 
 
 class SpikeTrain:
-    def __init__(self, time, label):
+    """A set of spike times associated with an individual putative neuron.
+
+    Parameters
+    ----------
+    time : np.array
+    label : str or None, optional
+        Information pertaining to the source of the spiketrain.
+
+    Attributes
+    ----------
+    time : np.array
+        With shape (n_samples,).
+    label : str or None
+        Information pertaining to the source of the spiketrain.
+
+    """
+    def __init__(self, time, label=None):
         time = np.squeeze(time).astype(float)
 
         if time.shape == ():
@@ -179,7 +239,7 @@ class SpikeTrain:
         if time.ndim != 1:
             raise ValueError("time must be a vector")
 
-        if not isinstance(label, str):
+        if label is not None and not isinstance(label, str):
             raise ValueError("label must be a string")
 
         self.time = time

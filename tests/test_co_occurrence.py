@@ -8,7 +8,7 @@ def test_spike_counts():
 
     spikes = [vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
               vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
-              vdm.SpikeTrain(np.array([1., 7., 11.]), 'test'),
+              vdm.SpikeTrain(np.array([1., 7., 11.])),
               vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test')]
 
     count_matrix = vdm.spike_counts(spikes, intervals)

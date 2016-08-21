@@ -4,17 +4,32 @@ Objects in vdmlab represent neural and behavioral data.
 
 AnalogSignal
 ------------
-A regular sampling of a continuous, analog signal.
+
+.. autoclass:: vdmlab.AnalogSignal
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 LocalFieldPotential
 ~~~~~~~~~~~~~~~~~~~
-Subclass of AnalogSignal.
+
+.. autoclass:: vdmlab.LocalFieldPotential
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Position
 ~~~~~~~~
-Subclass of AnalogSignal, with properties and methods specific 
-to 1D and 2D position data.
+
+.. autoclass:: vdmlab.Position
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 SpikeTrain
 ----------
-A set of spike times associated with an individual putative neuron.
+
+.. autoclass:: vdmlab.SpikeTrain
+    :members:
+    :undoc-members:
+    :show-inheritance:
