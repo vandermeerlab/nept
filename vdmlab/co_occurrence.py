@@ -41,13 +41,31 @@ def spike_counts(spikes, intervals, window=None):
     return count_matrix
 
 
-def compute_cooccur(count_matrix, num_shuffles=10000):
+def get_tetrode_mask(spikes):
+    tetrode_mask = np.zeros((len(spikes), len(spikes)), dtype=bool)
+
+    labels = []
+    for spiketrain in spikes:
+        labels.append(spiketrain.label)
+
+    for i, ilabel in enumerate(labels):
+        for j, jlabel in enumerate(labels):
+            if ilabel == jlabel:
+                tetrode_mask[i][j] = True
+
+    return tetrode_mask
+
+
+def compute_cooccur(count_matrix, tetrode_mask, num_shuffles=10000):
     """Computes the probabilities for co-occurrence
 
     Parameters
     ----------
     count_matrix : np.array
         num_neurons by num_bins
+    tetrode_mask : np.array
+        n_neurons by n_neurons. Boolean of True (same tetrode) or
+        False (different tetrode)
 
     Returns
     -------
@@ -55,24 +73,20 @@ def compute_cooccur(count_matrix, num_shuffles=10000):
     prob_expected : ap.array
     prob_observed : ap.array
     prob_zscore : np.array
-
-    Notes
-    -----
-    NOT IMPLEMENTED: Handle mask for neurons that were recorded on the same tetrode
-
     """
+    prob = dict()
     activity_matrix = bool_counts(count_matrix)
-    prob_active = prob_active_neuron(activity_matrix)
-    prob_expected = expected_cooccur(prob_active)
-    prob_observed = observed_cooccur(activity_matrix)
-    prob_shuffle = shuffle_cooccur(activity_matrix, num_shuffles)
-    prob_zscore = zscore_cooccur(prob_observed, prob_shuffle)
+    prob['active'] = prob_active_neuron(activity_matrix)
+    prob['expected'] = expected_cooccur(prob['active'], tetrode_mask)
+    prob['observed'] = observed_cooccur(activity_matrix, tetrode_mask)
+    prob['shuffle'] = shuffle_cooccur(activity_matrix, num_shuffles)
+    prob['zscore'] = zscore_cooccur(prob['observed'], prob['shuffle'])
 
-    prob_expected = vector_from_array(prob_expected)
-    prob_observed = vector_from_array(prob_observed)
-    prob_zscore = vector_from_array(prob_zscore)
+    prob['expected'] = vector_from_array(prob['expected'])
+    prob['observed'] = vector_from_array(prob['observed'])
+    prob['zscore'] = vector_from_array(prob['zscore'])
 
-    return prob_active, prob_expected, prob_observed, prob_zscore
+    return prob
 
 
 def vector_from_array(array):
@@ -92,7 +106,6 @@ def vector_from_array(array):
     of the top triangle, we have to do some reshaping.
     Otherwise, if the vector made up by rows is OK, then simply :
     triangle = np.triu_indices(array.size, k=1), out = array[triangle]
-
     """
     triangle_lower = np.tril_indices(array.shape[0], k=-1)
     flatten_idx = np.arange(array.size).reshape(array.shape)[triangle_lower]
@@ -119,7 +132,6 @@ def bool_counts(count_matrix, min_spikes=1):
     -------
     activity_matrix : np.array
         num_neurons by num_bins, boolean (1 or 0)
-
     """
     activity_matrix = np.zeros(count_matrix.shape)
     activity_matrix[count_matrix >= min_spikes] = 1
@@ -138,48 +150,52 @@ def prob_active_neuron(activity_matrix):
     -------
     prob_active : np.array
         Fraction of bins each cell participates in individually
-
     """
     prob_active = np.mean(activity_matrix, axis=1)
 
     return prob_active
 
 
-def expected_cooccur(prob_active):
+def expected_cooccur(prob_active, tetrode_mask):
     """Expected co-occurrence, multiply single cell probabilities
 
     Parameters
     ----------
     prob_active : np.array
         Fraction of bins each cell participates in individually
+    tetrode_mask : np.array
+        n_neurons by n_neurons. Boolean of True (same tetrode) or
+        False (different tetrode).
 
     Returns
     -------
     prob_expected : np.array
         .. math:: p(x|y)
-
     """
     prob_expected = np.outer(prob_active, prob_active)
 
-    # Remove probability of cell co-occurring with itself
-    prob_expected[np.eye(len(prob_expected), dtype=bool)] = np.nan
+    # Remove probability of cell co-occurring with itself or
+    # cells from the same tetrode due to inaccurate spike sorting.
+    prob_expected[tetrode_mask] = np.nan
 
     return prob_expected
 
 
-def observed_cooccur(activity_matrix):
+def observed_cooccur(activity_matrix, tetrode_mask):
     """Observed co-occurrences
 
     Parameters
     ----------
     activity_matrix : np.array
         num_neurons by num_bins, boolean (1 or 0)
+    tetrode_mask : np.array
+        n_neurons by n_neurons. Boolean of True (same tetrode) or
+        False (different tetrode).
 
     Returns
     -------
     prob_observed : np.array
         .. math:: p(x,y)
-
     """
     num_neurons = activity_matrix.shape[0]
 
@@ -188,8 +204,9 @@ def observed_cooccur(activity_matrix):
         neuron_activities = activity_matrix[i]
         prob_observed[i] = np.mean(neuron_activities * activity_matrix, axis=1)
 
-    # Remove probability of cell co-occurring with itself
-    prob_observed[np.eye(len(prob_observed), dtype=bool)] = np.nan
+    # Remove probability of cell co-occurring with itself or
+    # cells from the same tetrode due to inaccurate spike sorting.
+    prob_observed[tetrode_mask] = np.nan
 
     return prob_observed
 
@@ -207,7 +224,6 @@ def shuffle_cooccur(activity_matrix, num_shuffles):
     Returns
     -------
     prob_shuffle : np.array
-
     """
     shuffled_matrix = activity_matrix
 
@@ -238,19 +254,15 @@ def zscore_cooccur(prob_observed, prob_shuffle):
     Returns
     -------
     prob_zscore : np.array
-
     """
     num_neurons = prob_observed.shape[0]
 
     prob_zscore = np.zeros((num_neurons, num_neurons))
     for i in range(num_neurons):
         for j in range(num_neurons):
-            # if np.nanstd(np.squeeze(prob_shuffle[:, i, j])) > 0.0:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=RuntimeWarning)
                 prob_zscore[i][j] = (prob_observed[i][j] -
                                      np.nanmean(np.squeeze(prob_shuffle[:, i, j]))) / np.nanstd(np.squeeze(prob_shuffle[:, i, j]))
-            # else:
-            #     prob_zscore[i][j] = prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j]))
 
     return prob_zscore

@@ -23,8 +23,15 @@ def test_compute_cooccur():
                              [1., 0., 2.],
                              [0., 2., 0.]])
 
-    prob_active, prob_expected, prob_observed, prob_zscore = vdm.compute_cooccur(count_matrix, num_shuffles=100)
+    tetrode_mask = np.array([[True, True, False, False],
+                             [True, True, False, False],
+                             [False, False, True, False],
+                             [False, False, False, True]])
 
-    assert np.allclose(prob_active, np.array([1., 0., 2. / 3., 1. / 3.]))
-    assert np.allclose(prob_expected, np.array([0., 2. / 3., 0., 1. / 3., 0., (2. / 3. * 1. / 3.)]))
-    assert np.allclose(prob_observed, np.array([0., 2. / 3., 0., 1. / 3., 0., 0.]))
+    prob = vdm.compute_cooccur(count_matrix, tetrode_mask, num_shuffles=100)
+
+    assert np.allclose(prob['active'], np.array([1., 0., 2. / 3., 1. / 3.]))
+    assert np.isnan(prob['expected'][0])
+    assert np.allclose(prob['expected'][1:], np.array([2. / 3., 0., 1. / 3., 0., (2. / 3. * 1. / 3.)]))
+    assert np.isnan(prob['observed'][0])
+    assert np.allclose(prob['observed'][1:], np.array([2. / 3., 0., 1. / 3., 0., 0.]))
