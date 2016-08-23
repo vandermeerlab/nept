@@ -84,6 +84,197 @@ class AnalogSignal:
         return self[indices]
 
 
+class Epoch:
+    """An array of epochs, where each epoch has a start and stop time.
+
+    Parameters
+    ----------
+    time : np.array
+        If shape (n_epochs, 1) or (n_epochs,), the start time for each epoch.
+        If shape (n_epochs, 2), the start and stop times for each epoch.
+    duration : np.array or None, optional
+        The length of the epoch.
+
+    Attributes
+    ----------
+    time : np.array
+        The start and stop times for each epoch. With shape (n_epochs, 2).
+
+    """
+    def __init__(self, time, duration=None):
+        time = np.squeeze(time).astype(float)
+
+        if time.ndim == 0:
+            time = time[..., np.newaxis]
+
+        if duration is not None:
+            duration = np.squeeze(duration).astype(float)
+            if duration.ndim == 0:
+                duration = duration[..., np.newaxis]
+
+            if time.ndim == 2 and duration.ndim == 1:
+                raise ValueError("duration not allowed when using start and stop times")
+
+            if time.ndim == 1 and time.shape[0] != duration.shape[0]:
+                raise ValueError("must have same number of time and duration samples")
+
+            if time.ndim == 1 and duration.ndim == 1:
+                stop_epoch = time + duration
+                time = np.hstack((time[..., np.newaxis], stop_epoch[..., np.newaxis]))
+
+        if time.ndim == 1 and duration is None:
+            time = time[..., np.newaxis]
+
+        if time.ndim == 2 and time.shape[1] != 2:
+            time = np.hstack((time[0][..., np.newaxis], time[1][..., np.newaxis]))
+
+        if time.ndim > 2:
+            raise ValueError("time cannot have more than 2 dimensions")
+
+        if time[:, 0].shape[0] != time[:, 1].shape[0]:
+            raise ValueError("must have the same number of start and stop times")
+
+        if time.ndim == 2 and np.any(time[:, 1] - time[:, 0] <= 0):
+            raise ValueError("start must be less than stop")
+
+        time = np.sort(time, axis=0)
+
+        self.time = time
+
+    @property
+    def centers(self):
+        """(np.array) The center of each epoch."""
+        return np.mean(self.time, axis=1)
+
+    @property
+    def durations(self):
+        """(np.array) The duration of each epoch."""
+        return self.time[:, 1] - self.time[:, 0]
+
+    @property
+    def starts(self):
+        """(np.array) The start of each epoch."""
+        return self.time[:, 0]
+
+    @property
+    def stops(self):
+        """(np.array) The start of each epoch attribute."""
+        return self.time[:, 1]
+
+    def intersect(self, epoch):
+        """Finds intersection (overlap) between two sets of epochs.
+
+        Parameters
+        ----------
+        epoch : vdmlab.Epoch
+
+        Returns
+        -------
+        intersect_epochs : vdmlab.Epoch
+
+        """
+        new_starts = []
+        new_stops = []
+        for aa in self.time:
+            for bb in epoch.time:
+                if aa[0] <= bb[0] and aa[1] >= bb[1]:
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif bb[0] < aa[0] <= bb[1] > aa[1]:
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
+                elif aa[1] >= bb[1] > aa[0] > bb[0]:
+                    new_starts.append(aa[0])
+                    new_stops.append(bb[1])
+                elif aa[0] <= bb[0] < aa[1] <= bb[1]:
+                    new_starts.append(bb[0])
+                    new_stops.append(aa[1])
+
+        return Epoch(np.hstack((np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis])))
+
+    def merge(self, gap=0.0):
+        """Merges epochs that are close or overlapping.
+
+        Parameters
+        ----------
+        gap : float, optional
+            Amount (in time) to consider epochs close enough to merge.
+            Defaults to 0.0 (no gap).
+
+        Returns
+        -------
+        merged_epochs : vdmlab.Epoch
+
+        """
+        if gap < 0:
+            raise ValueError("gap cannot be negative")
+
+        stops = self.stops[:-1] + gap
+        starts = self.starts[1:]
+        to_merge = (stops - starts) >= 0
+
+        new_starts = [self.starts[0]]
+        new_stops = []
+
+        for i in range(self.time.shape[0] - 1):
+            if not to_merge[i]:
+                new_stops.append(self.stops[i])
+                new_starts.append(self.starts[i+1])
+
+        new_stops.append(self.stops[-1])
+        return Epoch(np.array([np.array(new_starts), np.array(new_stops)]))
+
+    def resize(self, amount, direction='both'):
+        """Merges epochs that are close or overlapping.
+
+        Parameters
+        ----------
+        amount : float
+            Amount (in time) to resize each epoch.
+            Note: negative times shrinks the epoch.
+        direction : str
+            Can be 'both', 'start', or 'stop'. This specifies
+            which direction to resize epoch.
+
+        Returns
+        -------
+        resized_epochs : vdmlab.Epoch
+
+        """
+        if direction == 'both':
+            resize_starts = self.time[:, 0] - amount
+            resize_stops = self.time[:, 1] + amount
+        elif direction == 'start':
+            resize_starts = self.time[:, 0] - amount
+            resize_stops = self.time[:, 1]
+        elif direction == 'stop':
+            resize_starts = self.time[:, 0]
+            resize_stops = self.time[:, 1] + amount
+        else:
+            raise ValueError("direction must be 'both', 'start', or 'stop'")
+
+        return Epoch(np.hstack((resize_starts[..., np.newaxis],
+                                resize_stops[..., np.newaxis])))
+
+    def join(self, epoch):
+        """Combines two sets of epochs.
+
+        Parameters
+        ----------
+        epoch : vdmlab.Epoch
+
+        Returns
+        -------
+        joined_epochs : vdmlab.Epoch
+
+        """
+        join_starts = np.concatenate((self.starts, epoch.starts))
+        join_stops = np.concatenate((self.stops, epoch.stops))
+
+        return Epoch(np.array([join_starts, join_stops]))
+
+
 class LocalFieldPotential(AnalogSignal):
     """Subclass of AnalogSignal.
 
