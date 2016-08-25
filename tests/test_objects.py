@@ -91,7 +91,7 @@ def test_epoch_too_many_parameters():
 
 def test_epoch_simple_intersect():
     times_1 = np.array([[0.0, 1.0],
-                        [0.9, 1.5],
+                        [1.1, 1.5],
                         [1.6, 2.0]])
     epoch_1 = vdm.Epoch(times_1)
 
@@ -105,17 +105,69 @@ def test_epoch_simple_intersect():
 
 def test_epoch_intersect():
     times_1 = np.array([[0.0, 1.0],
-                        [0.9, 1.5],
+                        [1.1, 1.5],
                         [1.6, 2.0]])
     epoch_1 = vdm.Epoch(times_1)
 
     times_2 = np.array([[1.2, 1.8]])
     epoch_2 = vdm.Epoch(times_2)
 
-    intersected_epochs = epoch_1.intersect(epoch_2)
+    intersects = epoch_1.intersect(epoch_2)
 
-    assert np.allclose(intersected_epochs.starts, np.array([1.2, 1.6]))
-    assert np.allclose(intersected_epochs.stops, np.array([1.5, 1.8]))
+    assert np.allclose(intersects.starts, np.array([1.2, 1.6]))
+    assert np.allclose(intersects.stops, np.array([1.5, 1.8]))
+
+
+def test_epoch_intersect_a_short():
+    times_a = np.array([[1.0, 2.0]])
+    epoch_a = vdm.Epoch(times_a)
+
+    times_b = np.array([[0.0, 3.0]])
+    epoch_b = vdm.Epoch(times_b)
+
+    intersects = epoch_a.intersect(epoch_b)
+
+    assert np.allclose(intersects.starts, np.array([1.0]))
+    assert np.allclose(intersects.stops, np.array([2.0]))
+
+
+def test_epoch_intersect_a_long():
+    times_a = np.array([[1.0, 2.0]])
+    epoch_a = vdm.Epoch(times_a)
+
+    times_b = np.array([[1.1, 1.9]])
+    epoch_b = vdm.Epoch(times_b)
+
+    intersects = epoch_a.intersect(epoch_b)
+
+    assert np.allclose(intersects.starts, np.array([1.1]))
+    assert np.allclose(intersects.stops, np.array([1.9]))
+
+
+def test_epoch_intersect_a_left():
+    times_a = np.array([[1.0, 2.0]])
+    epoch_a = vdm.Epoch(times_a)
+
+    times_b = np.array([[1.5, 2.5]])
+    epoch_b = vdm.Epoch(times_b)
+
+    intersects = epoch_a.intersect(epoch_b)
+
+    assert np.allclose(intersects.starts, np.array([1.5]))
+    assert np.allclose(intersects.stops, np.array([2.0]))
+
+
+def test_epoch_intersect_a_right():
+    times_a = np.array([[1.0, 2.0]])
+    epoch_a = vdm.Epoch(times_a)
+
+    times_b = np.array([[0.5, 1.7]])
+    epoch_b = vdm.Epoch(times_b)
+
+    intersects = epoch_a.intersect(epoch_b)
+
+    assert np.allclose(intersects.starts, np.array([1.0]))
+    assert np.allclose(intersects.stops, np.array([1.7]))
 
 
 def test_epoch_no_intersect():
@@ -157,49 +209,61 @@ def test_epoch_merge_with_gap():
     assert np.allclose(merged.stops, np.array([2.0]))
 
 
-def test_epoch_resize_both():
+def test_epoch_merge_far_stop():
+    times = np.array([[0.0, 10.0],
+                      [1.0, 3.0],
+                      [2.0, 5.0],
+                      [11.0, 12.0]])
+
+    epoch = vdm.Epoch(times)
+    merged = epoch.merge()
+    assert np.allclose(merged.starts, np.array([0.0, 10.0]))
+    assert np.allclose(merged.stops, np.array([11.0, 12.0]))
+
+
+def test_epoch_expand_both():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = vdm.Epoch(times)
 
-    resized = epoch.resize(0.5)
+    resized = epoch.expand(0.5)
 
     assert np.allclose(resized.starts, np.array([-0.5, 0.4, 1.1]))
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
 
 
-def test_epoch_resize_start():
+def test_epoch_expand_start():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = vdm.Epoch(times)
 
-    resized = epoch.resize(0.5, direction='start')
+    resized = epoch.expand(0.5, direction='start')
 
     assert np.allclose(resized.starts, np.array([-0.5, 0.4, 1.1]))
     assert np.allclose(resized.stops, np.array([1.0, 1.5, 2.0]))
 
 
-def test_epoch_resize_stop():
+def test_epoch_expand_stop():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = vdm.Epoch(times)
 
-    resized = epoch.resize(0.5, direction='stop')
+    resized = epoch.expand(0.5, direction='stop')
 
     assert np.allclose(resized.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
 
 
-def test_epoch_resize_shrink():
+def test_epoch_shrink():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = vdm.Epoch(times)
 
-    shrinked = epoch.resize(-0.1)
+    shrinked = epoch.shrink(0.1)
 
     assert np.allclose(shrinked.starts, np.array([0.1, 1.0, 1.7]))
     assert np.allclose(shrinked.stops, np.array([0.9, 1.4, 1.9]))

@@ -137,7 +137,8 @@ class Epoch:
         if time.ndim == 2 and np.any(time[:, 1] - time[:, 0] <= 0):
             raise ValueError("start must be less than stop")
 
-        time = np.sort(time, axis=0)
+        sort_idx = np.argsort(time[:, 0])
+        time = time[sort_idx]
 
         self.time = time
 
@@ -158,7 +159,7 @@ class Epoch:
 
     @property
     def stops(self):
-        """(np.array) The start of each epoch attribute."""
+        """(np.array) The stop of each epoch."""
         return self.time[:, 1]
 
     def intersect(self, epoch):
@@ -173,14 +174,17 @@ class Epoch:
         intersect_epochs : vdmlab.Epoch
 
         """
+        epoch_a = self.merge()
+        epoch_b = epoch.merge()
+
         new_starts = []
         new_stops = []
-        for aa in self.time:
-            for bb in epoch.time:
-                if aa[0] <= bb[0] and aa[1] >= bb[1]:
+        for aa in epoch_a.time:
+            for bb in epoch_b.time:
+                if (aa[0] < bb[0] <= aa[1]) and (aa[0] < bb[1] <= aa[1]):
                     new_starts.append(bb[0])
                     new_stops.append(bb[1])
-                elif bb[0] < aa[0] <= bb[1] > aa[1]:
+                elif (bb[0] < aa[0] <= bb[1]) and (bb[0] < aa[1] <= bb[1]):
                     new_starts.append(aa[0])
                     new_stops.append(aa[1])
                 elif aa[1] >= bb[1] > aa[0] > bb[0]:
@@ -189,9 +193,11 @@ class Epoch:
                 elif aa[0] <= bb[0] < aa[1] <= bb[1]:
                     new_starts.append(bb[0])
                     new_stops.append(aa[1])
+        print([np.array(new_starts),
+               np.array(new_stops)])
 
-        return Epoch(np.hstack((np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis])))
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
 
     def merge(self, gap=0.0):
         """Merges epochs that are close or overlapping.
@@ -217,29 +223,31 @@ class Epoch:
         new_starts = [self.starts[0]]
         new_stops = []
 
+        next_stop = self.stops[0]
         for i in range(self.time.shape[0] - 1):
+            this_stop = self.stops[i]
+            next_stop = max(next_stop, this_stop)
             if not to_merge[i]:
-                new_stops.append(self.stops[i])
+                new_stops.append(next_stop)
                 new_starts.append(self.starts[i+1])
 
         new_stops.append(self.stops[-1])
         return Epoch(np.array([np.array(new_starts), np.array(new_stops)]))
 
-    def resize(self, amount, direction='both'):
-        """Merges epochs that are close or overlapping.
+    def expand(self, amount, direction='both'):
+        """Expands epoch by the given amount.
 
         Parameters
         ----------
         amount : float
-            Amount (in time) to resize each epoch.
-            Note: negative times shrinks the epoch.
+            Amount (in time) to expand each epoch.
         direction : str
             Can be 'both', 'start', or 'stop'. This specifies
             which direction to resize epoch.
 
         Returns
         -------
-        resized_epochs : vdmlab.Epoch
+        expanded_epochs : vdmlab.Epoch
 
         """
         if direction == 'both':
@@ -256,6 +264,32 @@ class Epoch:
 
         return Epoch(np.hstack((resize_starts[..., np.newaxis],
                                 resize_stops[..., np.newaxis])))
+
+    def shrink(self, amount, direction='both'):
+        """Shrinks epoch by the given amount.
+
+        Parameters
+        ----------
+        amount : float
+            Amount (in time) to shrink each epoch.
+        direction : str
+            Can be 'both', 'start', or 'stop'. This specifies
+            which direction to resize epoch.
+
+        Returns
+        -------
+        shrinked_epochs : vdmlab.Epoch
+
+        """
+        both_limit = min(self.durations / 2)
+        if amount > both_limit and direction == 'both':
+            raise ValueError("shrink amount too large")
+
+        single_limit = min(self.durations)
+        if amount > single_limit and direction != 'both':
+            raise ValueError("shrink amount too large")
+
+        return self.expand(-amount, direction)
 
     def join(self, epoch):
         """Combines two sets of epochs.
