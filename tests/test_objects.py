@@ -282,3 +282,11 @@ def test_epoch_join():
 
     assert np.allclose(union.starts, np.array([0.0, 0.9, 1.6, 1.8]))
     assert np.allclose(union.stops, np.array([1.0, 1.5, 2.0, 2.5]))
+
+
+def test_epoch_start_stop():
+    epoch = vdm.Epoch(np.array([[721.9412, 900.0],
+                                [1000.0, 1027.1]]))
+
+    assert np.allclose(epoch.start, 721.9412)
+    assert np.allclose(epoch.stop, 1027.1)
