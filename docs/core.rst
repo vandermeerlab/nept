@@ -26,6 +26,14 @@ Position
     :undoc-members:
     :show-inheritance:
 
+Epoch
+-----
+
+.. autoclass:: vdmlab.Epoch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 SpikeTrain
 ----------
 

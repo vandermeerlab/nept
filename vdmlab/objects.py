@@ -158,9 +158,19 @@ class Epoch:
         return self.time[:, 0]
 
     @property
+    def start(self):
+        """(np.array) The start of the first epoch."""
+        return self.time[:, 0][0]
+
+    @property
     def stops(self):
         """(np.array) The stop of each epoch."""
         return self.time[:, 1]
+
+    @property
+    def stop(self):
+        """(np.array) The stop of the last epoch."""
+        return self.time[:, 1][-1]
 
     def intersect(self, epoch):
         """Finds intersection (overlap) between two sets of epochs.
