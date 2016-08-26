@@ -398,6 +398,9 @@ class Position(AnalogSignal):
         if pos.n_samples != self.n_samples:
             raise ValueError("'pos' must have %d samples" % self.n_samples)
 
+        if self.dimensions != pos.dimensions:
+            raise ValueError("'pos' must be %d dimensions" % self.dimensions)
+
         dist = np.zeros(self.n_samples)
         for idx in range(self.data.shape[1]):
             dist += (self.data[:, idx] - pos.data[:, idx]) ** 2
@@ -437,7 +440,12 @@ class Position(AnalogSignal):
         -------
         speed : vdmlab.AnalogSignal
         """
+        if not np.all(np.diff(self.time) == np.median(np.diff(self.time))):
+            # might fail if *close* floats. use np.allclose instead
+            raise ValueError("time needs to be equally spaced")
+
         velocity = self[1:].distance(self[:-1])
+        velocity /= np.diff(self.time)
         velocity = np.hstack(([0], velocity))
 
         if t_smooth is not None:
