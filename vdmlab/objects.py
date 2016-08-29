@@ -406,12 +406,13 @@ class Position(AnalogSignal):
             dist += (self.data[:, idx] - pos.data[:, idx]) ** 2
         return np.sqrt(dist)
 
-    def linearize(self, ideal_path):
+    def linearize(self, ideal_path, zone):
         """ Projects 2D positions into an 'ideal' linear trajectory.
 
         Parameters
         ----------
         ideal_path : shapely.LineString
+        zone : shapely.Polygon
 
         Returns
         -------
@@ -421,7 +422,9 @@ class Position(AnalogSignal):
         """
         zpos = []
         for point_x, point_y in zip(self.x, self.y):
-            zpos.append(ideal_path.project(Point(point_x, point_y)))
+            point = Point([point_x, point_y])
+            if zone.contains(point):
+                zpos.append(ideal_path.project(Point(point_x, point_y)))
         zpos = np.array(zpos)
 
         return Position(zpos, self.time)
@@ -440,10 +443,6 @@ class Position(AnalogSignal):
         -------
         speed : vdmlab.AnalogSignal
         """
-        if not np.all(np.diff(self.time) == np.median(np.diff(self.time))):
-            # might fail if *close* floats. use np.allclose instead
-            raise ValueError("time needs to be equally spaced")
-
         velocity = self[1:].distance(self[:-1])
         velocity /= np.diff(self.time)
         velocity = np.hstack(([0], velocity))

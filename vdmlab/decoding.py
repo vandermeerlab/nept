@@ -82,7 +82,15 @@ def decode_location(likelihood, position):
     if not position.dimensions == 1:
         raise ValueError("position must be linear")
 
-    max_decoded_idx = np.argmax(likelihood, axis=1)
+    max_decoded_idx = []
+    posbins = likelihood.shape[1]
+    for posbin in range(posbins):
+        if np.sum(np.isnan(likelihood[:, posbin])) != (np.shape(likelihood)[0]):
+            max_decoded_idx.append(np.nanargmax(likelihood[:, posbin]))
+        else:
+            max_decoded_idx.append(np.nan)
+    max_decoded_idx = np.array(max_decoded_idx)
+
     decoded = max_decoded_idx * (np.max(position.x)-np.min(position.x)) / (np.shape(likelihood)[1]-1)
     decoded += np.min(position.x)
 
