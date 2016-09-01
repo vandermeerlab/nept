@@ -1,5 +1,5 @@
 import numpy as np
-
+import vdmlab as vdm
 from .objects import Position
 
 
@@ -63,15 +63,15 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     return likelihood
 
 
-def decode_location(likelihood, position):
-    """Finds the decoded location based on a linear (1D) trajectory.
+def decode_location(likelihood, pos_centers, time_centers):
+    """Finds the decoded location based on the centers of the position bins.
 
     Parameters
     ----------
-    prob : np.array
-        Where each inner array is the probability (floats) for an individual neuron by location bins.
-    position : vdmlab.Position
-        Must be linear (1D).
+    likelihood : np.array
+        With shape(n_timebins, n_positionbins)
+    pos_centers : np.array
+    time_centers : np.array
 
     Returns
     -------
@@ -79,57 +79,43 @@ def decode_location(likelihood, position):
         Estimate of decoded position.
 
     """
-    if not position.dimensions == 1:
-        raise ValueError("position must be linear")
+    prob_rows = np.sum(np.isnan(likelihood), axis=1) < likelihood.shape[1]
+    max_decoded_idx = np.nanargmax(likelihood[prob_rows], axis=1)
 
-    max_decoded_idx = []
-    posbins = likelihood.shape[1]
-    for posbin in range(posbins):
-        if np.sum(np.isnan(likelihood[:, posbin])) != (np.shape(likelihood)[0]):
-            max_decoded_idx.append(np.nanargmax(likelihood[:, posbin]))
-        else:
-            max_decoded_idx.append(np.nan)
-    max_decoded_idx = np.array(max_decoded_idx)
+    prob_decoded = pos_centers[max_decoded_idx]
 
-    decoded = max_decoded_idx * (np.max(position.x)-np.min(position.x)) / (np.shape(likelihood)[1]-1)
-    decoded += np.min(position.x)
+    decoded_pos = np.empty((likelihood.shape[0], pos_centers.shape[1])) * np.nan
+    decoded_pos[prob_rows] = prob_decoded
 
-    nan_idx = np.sum(np.isnan(likelihood), axis=1) == (np.shape(likelihood)[1]-1)
-    decoded[nan_idx] = np.nan
+    decoded_pos = np.squeeze(decoded_pos)
+
+    decoded = vdm.Position(decoded_pos, time_centers)
 
     return decoded
 
 
-def filter_jumps(decoded, min_length=3, max_jump=20):
-    """Finds intervals of decoded that are within jump limits.
+def remove_teleports(position, speed_thresh, min_length):
+    """Removes positions above a certain speed threshold
 
     Parameters
     ----------
-    decoded : vdmlab.Position
-        Estimate of decoded position.
+    position : vdmlab.Position
+    speed_thresh : int
+        Maximum speed to consider natural rat movements. Anything
+        above this theshold will not be included in the filtered positions.
     min_length : int
-        Minimum number of bins to be considered a sequence.
-    max_jump : int
-        Any jump greater than this amount will break a sequence.
+        Minimum length for a sequence to be included in filtered positions.
 
     Returns
     -------
-    sequences : vdmlab.Position
-        Decoded position with jumps removed.
+    filtered_position : vdmlab.Position
 
     """
-    if not decoded.dimensions == 1:
-        raise ValueError("decoded must be linear")
+    velocity = np.squeeze(position.speed().data)
 
-    split_idx = np.where(np.abs(np.diff(decoded.x)) >= max_jump)[0] + 1
-    split_decoded = np.split(decoded.x, split_idx)
-    split_time = np.split(decoded.time, split_idx)
+    split_idx = np.where(velocity >= speed_thresh)[0]
+    keep_idx = [idx for idx in np.split(np.arange(position.n_samples), split_idx) if idx.size >= min_length]
+    if len(keep_idx) == 0:
+        raise ValueError("resulted in all position samples removed. Adjust min_length or speed_thresh.")
 
-    pos = []
-    time = []
-    for xx, tt in zip(split_decoded, split_time):
-        if xx.size >= min_length:
-            pos.extend(xx)
-            time.extend(tt)
-
-    return Position(pos, time)
+    return position[np.hstack(keep_idx)]

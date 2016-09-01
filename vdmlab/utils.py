@@ -196,3 +196,22 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
         if apply_filter and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts
+
+
+def cartesian(xcenters, ycenters):
+    """Finds every combination of elements in two arrays.
+
+    Parameters
+    ----------
+    xcenters : np.array
+    ycenters : np.array
+
+    Returns
+    -------
+    cartesian : np.array
+        With shape(n_sample, 2).
+
+    """
+    return np.transpose([np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))])
+
+

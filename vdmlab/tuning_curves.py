@@ -7,6 +7,33 @@ from .objects import AnalogSignal
 from .utils import find_nearest_idx
 
 
+def binned_position(position, binsize):
+    """Bins 1D position by the binsize.
+
+    Parameters
+    ----------
+    position : vdm.Position
+        Must be a 1D position
+    binsize : int
+
+    Returns
+    -------
+    edges : np.array
+
+    """
+    if not position.dimensions == 1:
+        raise ValueError("position must be linear")
+
+    pos_start = np.min(position.x)
+    pos_stop = np.max(position.x)
+    edges = np.arange(pos_start, pos_stop, binsize)
+
+    if edges[-1] < pos_stop:
+        edges = np.hstack([edges, pos_stop])
+
+    return edges
+
+
 def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
@@ -19,7 +46,6 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     sampling_rate : float
         Default set to 1/30.
     binsize : int
-        Defaults to 3 if not specified
     gaussian_std : int
         Defaults to 3. No smoothing if None.
 
@@ -38,11 +64,7 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     if not position.dimensions == 1:
         raise ValueError("position must be linear")
 
-    pos_start = np.min(position.x)
-    pos_stop = np.max(position.x)
-    edges = np.arange(pos_start, pos_stop, binsize)
-    if edges[-1] < pos_stop:
-        edges = np.hstack([edges, pos_stop])
+    edges = binned_position(position, binsize)
 
     position_counts = np.histogram(position.x, bins=edges)[0]
     position_counts = position_counts.astype(float)
