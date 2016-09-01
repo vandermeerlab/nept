@@ -430,7 +430,7 @@ class Position(AnalogSignal):
         return Position(zpos, self.time)
 
     def speed(self, t_smooth=None):
-        """Finds the velocity of the animal from position.
+        """Finds the speed of the animal from position.
 
         Parameters
         ----------
@@ -443,16 +443,16 @@ class Position(AnalogSignal):
         -------
         speed : vdmlab.AnalogSignal
         """
-        velocity = self[1:].distance(self[:-1])
-        velocity /= np.diff(self.time)
-        velocity = np.hstack(([0], velocity))
+        speed = self[1:].distance(self[:-1])
+        speed /= np.diff(self.time)
+        speed = np.hstack(([0], speed))
 
         if t_smooth is not None:
             dt = np.median(np.diff(self.time))
             filter_length = np.ceil(t_smooth / dt)
-            velocity = np.convolve(velocity, np.ones(int(filter_length))/filter_length, 'same')
+            velocity = np.convolve(speed, np.ones(int(filter_length))/filter_length, 'same')
 
-        return AnalogSignal(velocity, self.time)
+        return AnalogSignal(speed, self.time)
 
 
 class SpikeTrain:

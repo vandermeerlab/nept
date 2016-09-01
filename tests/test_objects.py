@@ -148,30 +148,27 @@ def test_positon_speed_simple():
 
 
 def test_position_speed_complex():
-    time = np.linspace(0, np.pi*2, 201)
-    data = np.hstack((np.sin(time[:100]), np.cos(time[100:])))
+    time = np.linspace(0, np.pi * 2, 201)
+    data = np.hstack((np.sin(time)))
 
     position = vdm.Position(data, time)
     speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 1
-    run_position = position[~run_idx]
+    run_idx = np.squeeze(speed.data) >= 0.7
+    run_position = position[run_idx]
 
-    assert np.allclose(len(run_position.x), 200)
+    assert np.allclose(len(run_position.x), 100)
 
 
 def test_position_speed_complex2():
-    time = np.linspace(0, np.pi*2, 201)
-    data = np.hstack((np.sin(time[:50]),
-                      np.cos(time[50:100]),
-                      np.sin(time[100:150]),
-                      np.cos(time[150:])))
+    time = np.linspace(0, np.pi * 2, 201)
+    data = np.hstack((np.sin(time)))
 
     position = vdm.Position(data, time)
     speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 1
-    run_position = position[~run_idx]
+    run_idx = np.squeeze(speed.data) >= 0.1
+    run_position = position[run_idx]
 
-    assert np.allclose(len(run_position.x), 198)
+    assert np.allclose(len(run_position.x), 188)
 
 
 def test_localfieldpotential_nsamples():
