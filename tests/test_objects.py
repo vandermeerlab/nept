@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 import vdmlab as vdm
-from shapely.geometry import LineString
+from shapely.geometry import Point, LineString
 
 
 def test_position_xy():
@@ -126,9 +126,15 @@ def test_position_linearize():
     pos = vdm.Position(data, times)
     line = LineString([(0.0, 0.0), (1.0, 1.0)])
 
-    linear = pos.linearize(line)
+    zone_start = Point([1., 1.])
+    zone_stop = Point([9., 9.])
+    expand_by = 1
+    zone = vdm.expand_line(zone_start, zone_stop, line, expand_by)
+
+    linear = pos.linearize(line, zone)
 
     assert np.allclose(linear.x, np.array([0.35355339, 0.42426407, 1.41421356]))
+    assert np.allclose(linear.time, np.array([1., 2., 3.]))
 
 
 def test_positon_speed_simple():

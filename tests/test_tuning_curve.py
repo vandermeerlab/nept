@@ -31,21 +31,27 @@ def test_simple_tc1():
 
 
 def test_linearize():
-    t_start = 1.0
-    t_stop = 6.0
+    t_start = 1
+    t_stop = 6
 
-    pos = np.vstack([np.arange(1, 11, 1), np.arange(1, 11, 1)])
-    pos = vdm.Position(pos, np.arange(0, 10, 1))
+    xy = np.array(([1., 1.], [2., 2.], [3., 3.], [4., 4.], [5., 5.]))
+    time = np.array([0., 1., 2., 3., 4.])
+    pos = vdm.Position(xy, time)
 
     trajectory = [[0., 0.], [5., 5.], [10., 10.]]
     line = LineString(trajectory)
 
+    zone_start = Point([1., 1.])
+    zone_stop = Point([9., 9.])
+    expand_by = 1
+    zone = vdm.expand_line(zone_start, zone_stop, line, expand_by)
+
     sliced_pos = pos[t_start:t_stop]
 
-    linear = sliced_pos.linearize(line)
+    linear = sliced_pos.linearize(line, zone)
 
-    assert np.allclose(linear.x, [2.82842712, 4.24264069, 5.65685425, 7.07106781, 8.48528137])
-    assert np.allclose(linear.time, [1, 2, 3, 4, 5])
+    assert np.allclose(linear.x, np.array([2.82842712, 4.24264069, 5.65685425, 7.07106781]))
+    assert np.allclose(linear.time, [1, 2, 3, 4])
 
 
 def test_tuning_curve_2d():
