@@ -157,7 +157,7 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize=
     return scalebar
 
 
-def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_window=1.0):
+def get_counts(spikes, edges, gaussian_std=None):
     """Finds the number of spikes in each bin.
 
     Parameters
@@ -167,11 +167,7 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
     edges : np.array
         Bin edges for computing spike counts.
     gaussian_std : float
-        Standard deviation for gaussian filter. Default set to 0.02. Normalized by bin size (dt).
-        Only uses filter if this value is greater than dt.
-    gaussian_window : float
-        Window for gaussian filter. Default set to 1.0. Normalized by bin size (dt).
-        Only uses filter if gaussian_std is greater than dt.
+        Standard deviation for gaussian filter. Default is None.
 
     Returns
     -------
@@ -181,19 +177,19 @@ def get_counts(spikes, edges, apply_filter=False, gaussian_std=0.02, gaussian_wi
     """
     dt = np.median(np.diff(edges))
 
-    gaussian_std /= dt
-    gaussian_window /= dt
-
-    if apply_filter and gaussian_std > dt:
-        gaussian_filter = signal.gaussian(gaussian_window, gaussian_std)
+    if gaussian_std is not None:
+        n_points = 3 * gaussian_std * 2 / dt
+        if n_points > len(edges):
+            raise ValueError("gaussian_std is too large for these times")
+        if n_points < 2:
+            print('No gaussian filter applied. Check that gaussian_std > dt if filter desired.')
+        gaussian_filter = signal.gaussian(n_points, gaussian_std/dt)
         gaussian_filter /= np.sum(gaussian_filter)
-    elif apply_filter:
-        print('No gaussian filter applied. Check that gaussian_std > dt if filter desired.')
 
-    counts = np.zeros((int(len(spikes)), int(len(edges)-1)))
+    counts = np.zeros((len(spikes), len(edges)-1))
     for idx, spiketrain in enumerate(spikes):
         counts[idx] = np.histogram(spiketrain.time, bins=edges)[0]
-        if apply_filter and gaussian_std > dt:
+        if gaussian_std is not None and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
     return counts
 

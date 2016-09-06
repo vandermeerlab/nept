@@ -84,6 +84,32 @@ class AnalogSignal:
         return self[indices]
 
 
+    def time_slices(self, t_starts, t_stops):
+        """Creates a new object corresponding to the time slice of
+        the original between (and including) times t_start and t_stop. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        analogsignal : vdmlab.AnalogSignal
+        t_starts : list of floats
+        t_stops : list of floats
+
+        Returns
+        -------
+        sliced_analogsignal : vdmlab.AnalogSignal
+        """
+        if len(t_starts) != len(t_stops):
+            raise ValueError("must have same number of start and stop times")
+
+        indices = []
+        for t_start, t_stop in zip(t_starts, t_stops):
+            indices.append((self.time >= t_start) & (self.time <= t_stop))
+        indices = np.any(np.column_stack(indices), axis=1)
+
+        return self[indices]
+
+
 class Epoch:
     """An array of epochs, where each epoch has a start and stop time.
 
@@ -511,5 +537,31 @@ class SpikeTrain:
             t_stop = np.inf
 
         indices = (self.time >= t_start) & (self.time <= t_stop)
+
+        return self[indices]
+
+
+    def time_slices(self, t_starts, t_stops):
+        """Creates a new object corresponding to the time slice of
+        the original between (and including) times t_start and t_stop. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        spiketrain : vdmlab.SpikeTrain
+        t_starts : list of floats
+        t_stops : list of floats
+
+        Returns
+        -------
+        sliced_spiketrain : vdmlab.SpikeTrain
+        """
+        if len(t_starts) != len(t_stops):
+            raise ValueError("must have same number of start and stop times")
+
+        indices = []
+        for t_start, t_stop in zip(t_starts, t_stops):
+            indices.append((self.time >= t_start) & (self.time <= t_stop))
+        indices = np.any(np.column_stack(indices), axis=1)
 
         return self[indices]
