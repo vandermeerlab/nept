@@ -59,6 +59,15 @@ class AnalogSignal:
         """(int) Number of samples."""
         return self.time.size
 
+    @property
+    def isempty(self):
+        """(bool) Empty AnalogSignal."""
+        if len(self.time) == 0:
+            empty = True
+        else:
+            empty = False
+        return empty
+
     def time_slice(self, t_start, t_stop):
         """Creates a new object corresponding to the time slice of
         the original between (and including) times t_start and t_stop. Setting

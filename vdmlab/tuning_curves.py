@@ -146,4 +146,4 @@ def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gauss
         print('Tuning curves with no filter.')
         tuning_curves = tc
 
-    return tuning_curves
+    return np.array(tuning_curves)
