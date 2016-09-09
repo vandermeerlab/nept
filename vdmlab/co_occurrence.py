@@ -1,17 +1,16 @@
 import numpy as np
 import warnings
+import vdmlab as vdm
 
 
-def spike_counts(spikes, intervals, window=None):
+def spike_counts(spikes, epochs, window=None):
     """Get spike counts for specific interval.
 
     Parameters
     ----------
     spikes : list
         Containing vdmlab.SpikeTrain for each neuron.
-    interval_times : np.array
-        With shape (2, N). Where the first dimension is start, stop for
-        each interval
+    interval_times : vdmlab.Epoch
     window : float
         When window is set, takes the spike times for this window length
         around the center of the interval times. The default is set to None.
@@ -23,19 +22,14 @@ def spike_counts(spikes, intervals, window=None):
         num_neurons x num_bins
 
     """
-    if intervals.shape[0] != 2:
-        raise ValueError("intervals must have shape (2, N), with start, stop interval")
-
-    bin_centers = np.mean(intervals, axis=0)
-
     if window is not None:
-        intervals = np.vstack([bin_centers-(window*0.5), bin_centers+(window*0.5)])
+        epochs = vdm.Epoch(np.array([epochs.centers-(window*0.5), epochs.centers+(window*0.5)]))
 
-    num_neurons = len(spikes)
-    count_matrix = np.zeros((num_neurons, intervals.shape[1]))
+    n_neurons = len(spikes)
+    count_matrix = np.zeros((n_neurons, epochs.n_epochs))
 
-    for i, (start, stop) in enumerate(zip(intervals[0], intervals[1])):
-        for neuron in range(num_neurons):
+    for i, (start, stop) in enumerate(zip(epochs.starts, epochs.stops)):
+        for neuron in range(n_neurons):
             count_matrix[neuron][i] = ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum()
 
     return count_matrix
@@ -54,6 +48,28 @@ def get_tetrode_mask(spikes):
                 tetrode_mask[i][j] = True
 
     return tetrode_mask
+
+
+def find_multi_in_epochs(spikes, epochs, min_involved):
+    multi_starts = []
+    multi_stops = []
+
+    n_neurons = len(spikes)
+    for start, stop in zip(epochs.starts, epochs.stops):
+        involved = 0
+        for neuron in range(n_neurons):
+            if ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum() > 1:
+                involved += 1
+        if involved > min_involved:
+            multi_starts.append(start)
+            multi_stops.append(stop)
+
+    multi_starts = np.array(multi_starts)
+    multi_stops = np.array(multi_stops)
+
+    multi_epochs = vdm.Epoch(np.array([multi_starts, multi_stops]))
+
+    return multi_epochs
 
 
 def compute_cooccur(count_matrix, tetrode_mask, num_shuffles=10000):

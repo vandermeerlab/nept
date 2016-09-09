@@ -207,6 +207,11 @@ class Epoch:
         """(np.array) The stop of the last epoch."""
         return self.time[:, 1][-1]
 
+    @property
+    def n_epochs(self):
+        """(int) The number of epochs."""
+        return len(self.time[:, 0])
+
     def intersect(self, epoch):
         """Finds intersection (overlap) between two sets of epochs.
 

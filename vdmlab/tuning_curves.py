@@ -34,7 +34,7 @@ def binned_position(position, binsize):
     return edges
 
 
-def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3):
+def tuning_curve(position, spikes, binsize, gaussian_std=3):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -63,6 +63,8 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     """
     if not position.dimensions == 1:
         raise ValueError("position must be linear")
+
+    sampling_rate = np.median(np.diff(position.time))
 
     edges = binned_position(position, binsize)
 
@@ -97,7 +99,7 @@ def tuning_curve(position, spikes, binsize, sampling_rate=1/30., gaussian_std=3)
     return np.array(out_tc, dtype=float)
 
 
-def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gaussian_sigma=None):
+def tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=None):
     """Creates 2D tuning curves based on spikes and 2D position.
 
     Parameters
@@ -118,6 +120,8 @@ def tuning_curve_2d(position, spikes, xedges, yedges, sampling_rate=1/30., gauss
         Where each inner array is the tuning curve for an individual neuron.
 
     """
+    sampling_rate = np.median(np.diff(position.time))
+
     position_2d, pos_xedges, pos_yedges = np.histogram2d(position.y, position.x, bins=[yedges, xedges])
     position_2d *= sampling_rate
     shape = position_2d.shape

@@ -2,6 +2,8 @@ import numpy as np
 import scipy.signal
 import scipy.stats as stats
 
+import vdmlab as vdm
+
 
 def butter_bandpass(signal, thresh, fs, order=4):
     """ Filters signal using butterworth filter
@@ -31,7 +33,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thres=3, power_thres=3, merge_thres=0.02, min_length=0.01):
+def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh=0.02, min_length=0.01):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -70,7 +72,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thres=3, power_thres=3, merge_thres=0.
     zpower_lfp = stats.zscore(power_lfp)
 
     # Finding locations where the power changes
-    detect = zpower_lfp > z_thres
+    detect = zpower_lfp > z_thresh
     detect = np.hstack([0, detect, 0])  # pad to detect first or last element change
     signal_change = np.diff(detect.astype(int))
 
@@ -83,7 +85,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thres=3, power_thres=3, merge_thres=0.
 
     # Merging ranges that are closer - in time - than the merge_threshold.
     no_double = start_time[1:] - stop_time[:-1]
-    merge_idx = np.where(no_double < merge_thres)[0]
+    merge_idx = np.where(no_double < merge_thresh)[0]
     start_merged = np.delete(start_time, merge_idx + 1)
     stop_merged = np.delete(stop_time, merge_idx)
     start_merged_idx = np.delete(start_swr_idx, merge_idx + 1)
@@ -98,21 +100,19 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thres=3, power_thres=3, merge_thres=0.
     stop_merged_idx = np.delete(stop_merged_idx, short_idx)
 
     # Removing ranges that have powers less than the power_threshold if sufficiently different.
-    if power_thres > z_thres:
+    if power_thresh > z_thresh:
         max_z = []
         for start_idx, stop_idx in zip(start_merged_idx, stop_merged_idx):
             max_z.append(np.max(zpower_lfp[start_idx:stop_idx]))
         max_z = np.array(max_z)
 
-        z_idx = np.where(max_z < power_thres)[0]
+        z_idx = np.where(max_z < power_thresh)[0]
         start_merged = np.delete(start_merged, z_idx)
         stop_merged = np.delete(stop_merged, z_idx)
         start_merged_idx = np.delete(start_merged_idx, z_idx)
         stop_merged_idx = np.delete(stop_merged_idx, z_idx)
 
-    swrs = []
-    for start, stop in zip(start_merged_idx, stop_merged_idx):
-        swrs.append(lfp[start:stop])
+    swrs = vdm.Epoch(np.array([start_merged, stop_merged]))
 
     return swrs
 
