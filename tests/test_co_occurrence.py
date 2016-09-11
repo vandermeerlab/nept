@@ -4,7 +4,7 @@ import vdmlab as vdm
 
 
 def test_spike_counts():
-    intervals = np.array([[2., 7.], [6., 10.]])
+    intervals = vdm.Epoch(np.array([[2., 6.], [7., 10.]]))
 
     spikes = [vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
               vdm.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
@@ -35,3 +35,21 @@ def test_compute_cooccur():
     assert np.allclose(prob['expected'][1:], np.array([2. / 3., 0., 1. / 3., 0., (2. / 3. * 1. / 3.)]))
     assert np.isnan(prob['observed'][0])
     assert np.allclose(prob['observed'][1:], np.array([2. / 3., 0., 1. / 3., 0., 0.]))
+
+
+def test_get_tetrode_mask():
+    spikes = [vdm.SpikeTrain([1., 2., 3.], 'a'),
+              vdm.SpikeTrain([1., 2., 3.], 'b'),
+              vdm.SpikeTrain([1., 2., 3.], 'a'),
+              vdm.SpikeTrain([1., 2., 3.], 'b'),
+              vdm.SpikeTrain([1., 2., 3.], 'c')]
+
+    tetrode_mask = vdm.get_tetrode_mask(spikes)
+
+    true_compare = np.array([[1, 0, 1, 0, 0],
+                             [0, 1, 0, 1, 0],
+                             [1, 0, 1, 0, 0],
+                             [0, 1, 0, 1, 0],
+                             [0, 0, 0, 0, 1]])
+
+    assert np.all(true_compare == tetrode_mask)

@@ -26,7 +26,7 @@ def test_sort_idx():
               vdm.SpikeTrain(np.array([0.5]), 'test'),
               vdm.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, gaussian_std=None)
+    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
     print(tuning)
     sort_idx = vdm.get_sort_idx(tuning)
 
@@ -41,7 +41,7 @@ def test_sort_idx1():
               vdm.SpikeTrain(np.array([2.0]), 'test'),
               vdm.SpikeTrain(np.array([1.0]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, sampling_rate=1, binsize=3, gaussian_std=None)
+    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
     print(tuning)
     sort_idx = vdm.get_sort_idx(tuning)
 
@@ -53,6 +53,15 @@ def test_get_counts():
     spikes = [vdm.SpikeTrain(np.sort(spikes), 'test')]
 
     edges = [0, 2, 4, 6, 8, 10]
-    counts = vdm.get_counts(spikes, edges, apply_filter=False)
+    counts = vdm.get_counts(spikes, edges)
 
     assert np.allclose(counts, [9., 7., 5., 1., 2.])
+
+
+def test_get_counts_unequal_edges():
+    spikes = [vdm.SpikeTrain([1., 1.1, 1.2, 5., 5.2, 7.6])]
+
+    edges = [0, 2.5, 4, 5, 6, 10]
+    counts = vdm.get_counts(spikes, edges)
+
+    assert np.allclose(counts, [3., 0., 0., 2., 1.])

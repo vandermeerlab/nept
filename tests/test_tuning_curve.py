@@ -11,7 +11,7 @@ def test_simple_tc():
               vdm.SpikeTrain(np.array([1.5]), 'test'),
               vdm.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, binsize=3, sampling_rate=1., gaussian_std=None)
+    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0., 0.], [0., 1., 0., 0.], [0., 0., 1., 0.]))
 
@@ -25,7 +25,7 @@ def test_simple_tc1():
               vdm.SpikeTrain(np.array([2.0]), 'test'),
               vdm.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, binsize=3, sampling_rate=1., gaussian_std=None)
+    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 
@@ -61,9 +61,8 @@ def test_tuning_curve_2d():
     xedges = np.arange(pos.x.min(), pos.x.max()+binsize, binsize)
     yedges = np.arange(pos.y.min(), pos.y.max()+binsize, binsize)
 
-    spikes = dict()
     spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
-    tuning_curves = vdm.tuning_curve_2d(pos, spikes, xedges, yedges, sampling_rate=1.)
+    tuning_curves = vdm.tuning_curve_2d(pos, spikes, xedges, yedges)
 
     assert np.allclose(tuning_curves, [np.array([[0., 0., 3.], [0., 0., 0.], [1., 0., 0.]])])

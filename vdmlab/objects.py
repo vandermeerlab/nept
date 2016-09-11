@@ -487,10 +487,13 @@ class Position(AnalogSignal):
         speed /= np.diff(self.time)
         speed = np.hstack(([0], speed))
 
+        dt = np.median(np.diff(self.time))
+
         if t_smooth is not None:
-            dt = np.median(np.diff(self.time))
             filter_length = np.ceil(t_smooth / dt)
-            velocity = np.convolve(speed, np.ones(int(filter_length))/filter_length, 'same')
+            speed = np.convolve(speed, np.ones(int(filter_length))/filter_length, 'same')
+
+        speed = speed * dt
 
         return AnalogSignal(speed, self.time)
 

@@ -46,7 +46,7 @@ def tuning_curve(position, spikes, binsize, gaussian_std=3):
     sampling_rate : float
         Default set to 1/30.
     binsize : int
-    gaussian_std : int
+    gaussian_std : int or None
         Defaults to 3. No smoothing if None.
 
     Returns

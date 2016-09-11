@@ -13,6 +13,6 @@ def test_swr():
 
     lfp = vdm.LocalFieldPotential(data, time)
 
-    swrs = vdm.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), power_thres=0.5, z_thres=0.4)
-    assert np.allclose(swrs[0].time[0], 0.1995)
-    assert np.allclose(swrs[0].time[-1], 0.3)
+    swrs = vdm.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), power_thresh=0.5, z_thresh=0.4)
+    assert np.allclose(swrs.start, 0.19950000000000001)
+    assert np.allclose(swrs.stop, 0.30049999999999999)
