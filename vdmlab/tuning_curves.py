@@ -34,7 +34,7 @@ def binned_position(position, binsize):
     return edges
 
 
-def tuning_curve(position, spikes, binsize, gaussian_std=3):
+def tuning_curve(position, spikes, binsize, gaussian_std=None):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -43,11 +43,9 @@ def tuning_curve(position, spikes, binsize, gaussian_std=3):
         Must be a linear position (1D).
     spikes : list
         Containing vdmlab.SpikeTrain for each neuron.
-    sampling_rate : float
-        Default set to 1/30.
     binsize : int
     gaussian_std : int or None
-        Defaults to 3. No smoothing if None.
+        No smoothing if None.
 
     Returns
     -------
@@ -78,7 +76,8 @@ def tuning_curve(position, spikes, binsize, gaussian_std=3):
         counts_idx = []
         for spike_time in spiketrain.time:
             bin_idx = find_nearest_idx(position.time, spike_time)
-            counts_idx.append(position.x[bin_idx])
+            if np.abs(position.time[bin_idx] - spike_time) < sampling_rate:
+                counts_idx.append(position.x[bin_idx])
         spike_counts = np.histogram(counts_idx, bins=edges)[0]
 
         firing_rate = np.zeros(len(edges)-1)
@@ -133,8 +132,9 @@ def tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=None):
         spikes_y = []
         for spike_time in spiketrain.time:
             spike_idx = find_nearest_idx(position.time, spike_time)
-            spikes_x.append(position.x[spike_idx])
-            spikes_y.append(position.y[spike_idx])
+            if np.abs(position.time[spike_idx] - spike_time) < sampling_rate:
+                spikes_x.append(position.x[spike_idx])
+                spikes_y.append(position.y[spike_idx])
         spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_y, spikes_x, bins=[yedges, xedges])
 
         firing_rate = np.zeros(shape)
