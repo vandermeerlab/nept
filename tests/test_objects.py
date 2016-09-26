@@ -153,10 +153,10 @@ def test_position_speed_complex():
 
     position = vdm.Position(data, time)
     speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 0.7
+    run_idx = np.squeeze(speed.data) >= 0.015
     run_position = position[run_idx]
 
-    assert np.allclose(len(run_position.x), 100)
+    assert np.allclose(len(run_position.x), 136)
 
 
 def test_position_speed_complex2():
@@ -165,10 +165,10 @@ def test_position_speed_complex2():
 
     position = vdm.Position(data, time)
     speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 0.1
+    run_idx = np.squeeze(speed.data) >= 0.01
     run_position = position[run_idx]
 
-    assert np.allclose(len(run_position.x), 188)
+    assert np.allclose(len(run_position.x), 160)
 
 
 def test_position_speed_unequal_time():
