@@ -108,14 +108,19 @@ def remove_teleports(position, speed_thresh, min_length):
 
     Returns
     -------
-    filtered_position : vdmlab.Position
+    filtered_position : vdmlab.Epoch
 
     """
     velocity = np.squeeze(position.speed().data)
 
     split_idx = np.where(velocity >= speed_thresh)[0]
     keep_idx = [idx for idx in np.split(np.arange(position.n_samples), split_idx) if idx.size >= min_length]
+
     if len(keep_idx) == 0:
         raise ValueError("resulted in all position samples removed. Adjust min_length or speed_thresh.")
 
-    return position[np.hstack(keep_idx)]
+    starts = [position.time[idx_sequence[0]] for idx_sequence in keep_idx]
+    stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx]
+
+    return vdm.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
+                                np.array(stops)[..., np.newaxis]]))

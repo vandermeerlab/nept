@@ -117,7 +117,7 @@ class AnchoredScaleBar(AnchoredOffsetbox):
         AnchoredOffsetbox.__init__(self, loc=loc, pad=pad, borderpad=borderpad,
                                        child=bars, prop=prop, frameon=False, **kwargs)
 
-def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize='medium', **kwargs):
+def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize='medium', units='ms', **kwargs):
     """Add scalebars to axes
     Adds a set of scale bars to *ax*, matching the size to the ticks of the
     plot and optionally hiding the x and y axes
@@ -145,7 +145,10 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize=
     if matchx:
         kwargs['sizex'] = find_loc(*ax.get_xlim())
 #         kwargs['labelx'] = str(kwargs['sizex'])
-        kwargs['labelx'] = str(int(kwargs['sizex']*1000)) + ' ms'
+        if units == 'ms':
+            kwargs['labelx'] = str(int(round(kwargs['sizex']*1000, 2))) + ' ms'
+        elif units == 's':
+            kwargs['labelx'] = str(int(round(kwargs['sizex'], 2))) + ' s'
 
     if matchy:
         kwargs['sizey'] = find_loc(*ax.get_ylim())
@@ -211,3 +214,17 @@ def cartesian(xcenters, ycenters):
     return np.transpose([np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))])
 
 
+def epoch_position(position, epoch):
+    """Finds positions associated with epoch times
+
+    Parameters
+    ----------
+    position : vdmlab.Position
+    epoch : vdmlab.Epoch
+
+    Returns
+    -------
+    epoch_position : vdmlab.Position
+
+    """
+    return position.time_slices(epoch.starts, epoch.stops)

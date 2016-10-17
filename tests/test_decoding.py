@@ -133,8 +133,8 @@ def test_remove_teleports():
 
     decoded_sequences = vdm.remove_teleports(decoded, speed_thresh=4, min_length=3)
 
-    assert np.allclose(decoded_sequences.time, np.array([0., 1., 2., 3., 6., 7., 8.]))
-    assert np.allclose(decoded_sequences.x, np.array([1., 1.5, 2., 3., 21., 22., 23.]))
+    assert np.allclose(decoded_sequences.starts, np.array([0., 6.]))
+    assert np.allclose(decoded_sequences.stops, np.array([3., 8.]))
 
 
 def test_filter_jumps_empty():

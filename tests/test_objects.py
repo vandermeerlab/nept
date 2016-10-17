@@ -319,6 +319,21 @@ def test_epoch_intersect():
     assert np.allclose(intersects.stops, np.array([1.5, 1.8]))
 
 
+def test_epoch_contains():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = vdm.Epoch(times_1)
+
+    times_2 = np.array([[1.2, 1.8]])
+    epoch_2 = vdm.Epoch(times_2)
+
+    contains = epoch_1.contains(epoch_2)
+
+    assert np.allclose(contains.starts, np.array([1.1, 1.6]))
+    assert np.allclose(contains.stops, np.array([1.5, 2.0]))
+
+
 def test_epoch_intersect_a_short():
     times_a = np.array([[1.0, 2.0]])
     epoch_a = vdm.Epoch(times_a)

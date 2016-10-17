@@ -243,8 +243,8 @@ class Epoch:
                 elif aa[0] <= bb[0] < aa[1] <= bb[1]:
                     new_starts.append(bb[0])
                     new_stops.append(aa[1])
-        print([np.array(new_starts),
-               np.array(new_stops)])
+        # print([np.array(new_starts),
+        #        np.array(new_stops)])
 
         return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
                                 np.array(new_stops)[..., np.newaxis]]))
@@ -357,6 +357,43 @@ class Epoch:
         join_stops = np.concatenate((self.stops, epoch.stops))
 
         return Epoch(np.array([join_starts, join_stops]))
+
+    def contains(self, epoch):
+        """Finds subset epochs that contains another set of epochs.
+
+        Parameters
+        ----------
+        epoch : vdmlab.Epoch
+
+        Returns
+        -------
+        contains_epochs : vdmlab.Epoch
+
+        """
+        epoch_a = self.merge()
+        epoch_b = epoch.merge()
+
+        new_starts = []
+        new_stops = []
+        for aa in epoch_a.time:
+            for bb in epoch_b.time:
+                if (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
+                elif (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
+                elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
+                elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
+        new_starts = np.unique(new_starts)
+        new_stops = np.unique(new_stops)
+
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
 
 
 class LocalFieldPotential(AnalogSignal):
