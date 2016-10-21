@@ -358,12 +358,14 @@ class Epoch:
 
         return Epoch(np.array([join_starts, join_stops]))
 
-    def contains(self, epoch):
+    def contains(self, epoch, boundaries=False):
         """Finds subset epochs that contains another set of epochs.
 
         Parameters
         ----------
         epoch : vdmlab.Epoch
+        boundaries : bool
+            If True, limits start, stop to epoch start and stop.
 
         Returns
         -------
@@ -378,14 +380,24 @@ class Epoch:
         for aa in epoch_a.time:
             for bb in epoch_b.time:
                 if (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
-                    new_starts.append(aa[0])
-                    new_stops.append(aa[1])
+                    if boundaries:
+                        new_starts.append(bb[0])
+                        new_stops.append(bb[1])
+                    else:
+                        new_starts.append(aa[0])
+                        new_stops.append(aa[1])
                 elif (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
-                    new_starts.append(aa[0])
+                    if boundaries:
+                        new_starts.append(bb[0])
+                    else:
+                        new_starts.append(aa[0])
                     new_stops.append(aa[1])
                 elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
                     new_starts.append(aa[0])
-                    new_stops.append(aa[1])
+                    if boundaries:
+                        new_stops.append(bb[1])
+                    else:
+                        new_stops.append(aa[1])
                 elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
                     new_starts.append(aa[0])
                     new_stops.append(aa[1])
