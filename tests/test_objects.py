@@ -330,8 +330,8 @@ def test_epoch_contains():
 
     contains = epoch_1.contains(epoch_2)
 
-    assert np.allclose(contains.starts, np.array([1.1, 1.6]))
-    assert np.allclose(contains.stops, np.array([1.5, 2.0]))
+    assert np.allclose(contains.starts, np.array([1.2]))
+    assert np.allclose(contains.stops, np.array([1.8]))
 
 
 def test_epoch_intersect_a_short():

@@ -177,6 +177,9 @@ class Epoch:
 
         self.time = time
 
+    def __getitem__(self, idx):
+        return Epoch([self.starts[idx], self.stops[idx]])
+
     @property
     def centers(self):
         """(np.array) The center of each epoch."""
@@ -212,6 +215,59 @@ class Epoch:
         """(int) The number of epochs."""
         return len(self.time[:, 0])
 
+    def contains(self, epoch, boundaries=False):
+        """Finds subset epochs that contains another set of epochs.
+
+        Parameters
+        ----------
+        epoch : vdmlab.Epoch
+        boundaries : bool
+            If True, limits start, stop to epoch start and stop.
+
+        Returns
+        -------
+        contains_epochs : vdmlab.Epoch
+
+        """
+        epoch_a = self.merge()
+        epoch_b = epoch.merge()
+
+        new_starts = []
+        new_stops = []
+        for aa in epoch_a.time:
+            for bb in epoch_b.time:
+                if (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
+                    new_starts.append(bb[0])
+                    if boundaries:
+                        new_stops.append(aa[1])
+                    else:
+                        new_stops.append(bb[1])
+                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
+                    if boundaries:
+                        new_starts.append(aa[0])
+                    else:
+                        new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
+                    if boundaries:
+                        new_starts.append(aa[0])
+                        new_stops.append(aa[1])
+                    else:
+                        new_starts.append(bb[0])
+                        new_stops.append(bb[1])
+                elif (aa[0] == bb[0]) and (aa[1] == bb[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+        if not boundaries:
+            new_starts = np.unique(new_starts)
+            new_stops = np.unique(new_stops)
+
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
+
     def intersect(self, epoch):
         """Finds intersection (overlap) between two sets of epochs.
 
@@ -224,30 +280,9 @@ class Epoch:
         intersect_epochs : vdmlab.Epoch
 
         """
-        epoch_a = self.merge()
-        epoch_b = epoch.merge()
+        intersect = self.contains(epoch, boundaries=True)
 
-        new_starts = []
-        new_stops = []
-        for aa in epoch_a.time:
-            for bb in epoch_b.time:
-                if (aa[0] < bb[0] <= aa[1]) and (aa[0] < bb[1] <= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (bb[0] < aa[0] <= bb[1]) and (bb[0] < aa[1] <= bb[1]):
-                    new_starts.append(aa[0])
-                    new_stops.append(aa[1])
-                elif aa[1] >= bb[1] > aa[0] > bb[0]:
-                    new_starts.append(aa[0])
-                    new_stops.append(bb[1])
-                elif aa[0] <= bb[0] < aa[1] <= bb[1]:
-                    new_starts.append(bb[0])
-                    new_stops.append(aa[1])
-        # print([np.array(new_starts),
-        #        np.array(new_stops)])
-
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return intersect
 
     def merge(self, gap=0.0):
         """Merges epochs that are close or overlapping.
@@ -357,55 +392,6 @@ class Epoch:
         join_stops = np.concatenate((self.stops, epoch.stops))
 
         return Epoch(np.array([join_starts, join_stops]))
-
-    def contains(self, epoch, boundaries=False):
-        """Finds subset epochs that contains another set of epochs.
-
-        Parameters
-        ----------
-        epoch : vdmlab.Epoch
-        boundaries : bool
-            If True, limits start, stop to epoch start and stop.
-
-        Returns
-        -------
-        contains_epochs : vdmlab.Epoch
-
-        """
-        epoch_a = self.merge()
-        epoch_b = epoch.merge()
-
-        new_starts = []
-        new_stops = []
-        for aa in epoch_a.time:
-            for bb in epoch_b.time:
-                if (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
-                    if boundaries:
-                        new_starts.append(bb[0])
-                        new_stops.append(bb[1])
-                    else:
-                        new_starts.append(aa[0])
-                        new_stops.append(aa[1])
-                elif (aa[0] <= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
-                    if boundaries:
-                        new_starts.append(bb[0])
-                    else:
-                        new_starts.append(aa[0])
-                    new_stops.append(aa[1])
-                elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] <= aa[1]):
-                    new_starts.append(aa[0])
-                    if boundaries:
-                        new_stops.append(bb[1])
-                    else:
-                        new_stops.append(aa[1])
-                elif (aa[0] >= bb[0] <= aa[1]) and (aa[0] <= bb[1] >= aa[1]):
-                    new_starts.append(aa[0])
-                    new_stops.append(aa[1])
-        new_starts = np.unique(new_starts)
-        new_stops = np.unique(new_stops)
-
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
 
 
 class LocalFieldPotential(AnalogSignal):
