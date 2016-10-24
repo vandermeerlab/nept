@@ -328,7 +328,7 @@ def test_epoch_contains():
     times_2 = np.array([[1.2, 1.8]])
     epoch_2 = vdm.Epoch(times_2)
 
-    contains = epoch_1.contains(epoch_2)
+    contains = epoch_1.intersect(epoch_2, boundaries=False)
 
     assert np.allclose(contains.starts, np.array([1.2]))
     assert np.allclose(contains.stops, np.array([1.8]))

@@ -215,8 +215,14 @@ class Epoch:
         """(int) The number of epochs."""
         return len(self.time[:, 0])
 
-    def contains(self, epoch, boundaries=False):
-        """Finds subset epochs that contains another set of epochs.
+    def copy(self):
+        new_starts = np.array(self.starts)
+        new_stops = np.array(self.stops)
+        return Epoch([new_starts, new_stops])
+
+
+    def intersect(self, epoch, boundaries=True):
+        """Finds intersection (overlap) between two sets of epochs.
 
         Parameters
         ----------
@@ -226,11 +232,11 @@ class Epoch:
 
         Returns
         -------
-        contains_epochs : vdmlab.Epoch
+        intersect_epochs : vdmlab.Epoch
 
         """
-        epoch_a = self.merge()
-        epoch_b = epoch.merge()
+        epoch_a = self.copy().merge()
+        epoch_b = epoch.copy().merge()
 
         new_starts = []
         new_stops = []
@@ -267,22 +273,6 @@ class Epoch:
 
         return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
                                 np.array(new_stops)[..., np.newaxis]]))
-
-    def intersect(self, epoch):
-        """Finds intersection (overlap) between two sets of epochs.
-
-        Parameters
-        ----------
-        epoch : vdmlab.Epoch
-
-        Returns
-        -------
-        intersect_epochs : vdmlab.Epoch
-
-        """
-        intersect = self.contains(epoch, boundaries=True)
-
-        return intersect
 
     def merge(self, gap=0.0):
         """Merges epochs that are close or overlapping.
