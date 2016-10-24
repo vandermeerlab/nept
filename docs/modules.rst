@@ -29,6 +29,15 @@ vdmlab.maze_breakdown module
     :undoc-members:
     :show-inheritance:
 
+vdmlab.medpc module
+----------------------------
+
+.. automodule:: vdmlab.medpc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 vdmlab.place_fields module
 --------------------------
 
