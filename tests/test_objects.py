@@ -409,8 +409,8 @@ def test_epoch_merge():
     epoch = vdm.Epoch(times)
 
     merged = epoch.merge()
-    assert np.allclose(merged.starts, np.array([0., 1.5]))
-    assert np.allclose(merged.stops, np.array([1.6, 2.0]))
+    assert np.allclose(merged.starts, np.array([0., 1.6]))
+    assert np.allclose(merged.stops, np.array([1.5, 2.0]))
 
 
 def test_epoch_merge_with_gap():
@@ -433,8 +433,8 @@ def test_epoch_merge_far_stop():
 
     epoch = vdm.Epoch(times)
     merged = epoch.merge()
-    assert np.allclose(merged.starts, np.array([0.0, 10.0]))
-    assert np.allclose(merged.stops, np.array([11.0, 12.0]))
+    assert np.allclose(merged.starts, np.array([0.0, 11.0]))
+    assert np.allclose(merged.stops, np.array([10.0, 12.0]))
 
 
 def test_epoch_expand_both():

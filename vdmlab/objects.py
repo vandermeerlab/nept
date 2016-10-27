@@ -218,7 +218,7 @@ class Epoch:
     def copy(self):
         new_starts = np.array(self.starts)
         new_stops = np.array(self.stops)
-        return Epoch([new_starts, new_stops])
+        return Epoch(new_starts, new_stops-new_starts)
 
 
     def intersect(self, epoch, boundaries=True):
@@ -235,14 +235,17 @@ class Epoch:
         intersect_epochs : vdmlab.Epoch
 
         """
-        epoch_a = self.copy().merge()
-        epoch_b = epoch.copy().merge()
+        if len(self.starts) == 0 or len(epoch.starts) == 0:
+            return Epoch([], [])
 
         new_starts = []
         new_stops = []
+        epoch_a = self.copy().merge()
+        epoch_b = epoch.copy().merge()
+
         for aa in epoch_a.time:
             for bb in epoch_b.time:
-                if (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
+                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
                     new_starts.append(bb[0])
                     new_stops.append(bb[1])
                 elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
@@ -257,16 +260,14 @@ class Epoch:
                     else:
                         new_starts.append(bb[0])
                     new_stops.append(bb[1])
-                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
+                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
                     if boundaries:
                         new_starts.append(aa[0])
                         new_stops.append(aa[1])
                     else:
                         new_starts.append(bb[0])
                         new_stops.append(bb[1])
-                elif (aa[0] == bb[0]) and (aa[1] == bb[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
+
         if not boundaries:
             new_starts = np.unique(new_starts)
             new_stops = np.unique(new_stops)
@@ -291,23 +292,29 @@ class Epoch:
         if gap < 0:
             raise ValueError("gap cannot be negative")
 
-        stops = self.stops[:-1] + gap
-        starts = self.starts[1:]
+        epoch = self.copy()
+
+        stops = epoch.stops[:-1] + gap
+        starts = epoch.starts[1:]
         to_merge = (stops - starts) >= 0
 
-        new_starts = [self.starts[0]]
+        new_starts = [epoch.starts[0]]
         new_stops = []
 
-        next_stop = self.stops[0]
-        for i in range(self.time.shape[0] - 1):
-            this_stop = self.stops[i]
+        next_stop = epoch.stops[0]
+        for i in range(epoch.time.shape[0] - 1):
+            this_stop = epoch.stops[i]
             next_stop = max(next_stop, this_stop)
             if not to_merge[i]:
                 new_stops.append(next_stop)
-                new_starts.append(self.starts[i+1])
+                new_starts.append(epoch.starts[i+1])
 
-        new_stops.append(self.stops[-1])
-        return Epoch(np.array([np.array(new_starts), np.array(new_stops)]))
+        new_stops.append(epoch.stops[-1])
+
+        new_starts = np.array(new_starts)
+        new_stops = np.array(new_stops)
+
+        return Epoch(new_starts, new_stops-new_starts)
 
     def expand(self, amount, direction='both'):
         """Expands epoch by the given amount.
@@ -381,7 +388,7 @@ class Epoch:
         join_starts = np.concatenate((self.starts, epoch.starts))
         join_stops = np.concatenate((self.stops, epoch.stops))
 
-        return Epoch(np.array([join_starts, join_stops]))
+        return Epoch(join_starts, join_stops-join_starts)
 
 
 class LocalFieldPotential(AnalogSignal):
