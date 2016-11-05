@@ -19,7 +19,7 @@ def read_file(file):
                 temp = []
 
     if len(temp) > 0:
-        contents.append(temp) # appends the last subject
+        contents.append(temp)  # appends the last subject
 
     for i, content in enumerate(contents):
         contents[i] = ' '.join(content)
