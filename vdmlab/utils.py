@@ -160,7 +160,7 @@ def add_scalebar(ax, matchx=True, matchy=True, hidex=True, hidey=True, fontsize=
     return scalebar
 
 
-def get_counts(spikes, edges, gaussian_std=None):
+def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
     """Finds the number of spikes in each bin.
 
     Parameters
@@ -181,11 +181,12 @@ def get_counts(spikes, edges, gaussian_std=None):
     dt = np.median(np.diff(edges))
 
     if gaussian_std is not None:
-        n_points = 3 * gaussian_std * 2 / dt
+        n_points = n_gaussian_std * gaussian_std * 2 / dt
+        n_points = max(n_points, 1.0)
+        if n_points % 2 == 0:
+            n_points += 1
         if n_points > len(edges):
             raise ValueError("gaussian_std is too large for these times")
-        if n_points < 2:
-            print('No gaussian filter applied. Check that gaussian_std > dt if filter desired.')
         gaussian_filter = signal.gaussian(n_points, gaussian_std/dt)
         gaussian_filter /= np.sum(gaussian_filter)
 
