@@ -72,6 +72,9 @@ The vdmlab codebase is made available under made available
 under the [MIT license](LICENSE.md) 
 that allows using, copying, and sharing.
 
+The file `vdmlab/nlx_loaders.py` contains code from 
+[nlxio](https://github.com/bwillers/nlxio) by Bernard Willers, used with permission. 
+
 Projects using vdmlab
 =====================
 

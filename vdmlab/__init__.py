@@ -17,3 +17,4 @@ from .utils import (find_nearest_idx,
                     cartesian,
                     epoch_position)
 from .medpc import load_medpc
+from .nlx_loaders import load_events
