@@ -390,6 +390,24 @@ class Epoch:
 
         return Epoch(join_starts, join_stops-join_starts)
 
+    def contains(self, value):
+        """Checks whether value is in any epoch.
+
+        Parameters
+        ----------
+        epochs: vdmlab.Epoch
+        value: float or int
+
+        Returns
+        -------
+        boolean
+
+        """
+        for start, stop in zip(self.starts, self.stops):
+            if start <= value <= stop:
+                return True
+        return False
+
 
 class LocalFieldPotential(AnalogSignal):
     """Subclass of AnalogSignal.
