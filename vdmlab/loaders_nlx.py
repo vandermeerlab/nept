@@ -29,7 +29,7 @@ def load_lfp(filename):
     return vdm.LocalFieldPotential(data, time)
 
 
-def load_header(filename):
+def load_nlx_header(filename):
     """Loads a neuralynx header.
 
     Parameters
@@ -45,6 +45,8 @@ def load_header(filename):
 
     # Nlx files have a 16kbyte header
     header = f.read(2 ** 14).strip(b'\x00')
+
+    f.close()
 
     return header
 
@@ -63,10 +65,6 @@ def load_ncs(filename):
     times: np.array
         Timestamps (microseconds)
 
-    Usage
-    -----
-    csc, time = nlxio.loadNcs('TT4E1.ncs')
-
     """
 
     f = open(filename, 'rb')
@@ -82,7 +80,6 @@ def load_ncs(filename):
     # int16 x 512 - actual csc samples
     dt = np.dtype([('time', '<Q'), ('channel', '<i'), ('freq', '<i'),
                    ('valid', '<i'), ('csc', '<h', (512,))])
-    # five points for fast numpy dtype reading
     data = np.fromfile(f, dt)
 
     # unpack the csc matrix
@@ -108,16 +105,18 @@ def load_ncs(filename):
         times[this_idx:this_idx + n_valid] = time + offsets[:n_valid]
         this_idx += n_valid
 
-    # now find a2d conversion factor in the header
-    volt_conversion_factor = None
+    # now find analog_to_digital conversion factor in the header
+        analog_to_digital = None
     for line in header.split(b'\n'):
         if line.strip().startswith(b'-ADBitVolts'):
-            volt_conversion_factor = np.array(float(line.split(b' ')[1].decode()))
+            analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
 
-    if volt_conversion_factor is None:
+    if analog_to_digital is None:
         raise IOError("ADBitVolts not found in .ncs header for " + filename)
 
-    cscs = csc * volt_conversion_factor
+    cscs = csc * analog_to_digital
+
+    f.close()
 
     return cscs, times
 
@@ -158,6 +157,8 @@ def load_nev(filename):
                    ('event_str', np.dtype('a128'))])
     nev_data = np.fromfile(f, dt)
 
+    f.close()
+
     return nev_data
 
 
@@ -196,12 +197,12 @@ def load_ntt(filename):
     header = f.read(2 ** 14).strip(b'\x00')
 
     # Read the header and find the conversion factors / sampling frequency
-    a2d_conversion = None
+    analog_to_digital = None
     frequency = None
 
     for line in header.split(b'\n'):
         if line.strip().startswith(b'-ADBitVolts'):
-            a2d_conversion = np.array(float(line.split(b' ')[1].decode()))
+            analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
         if line.strip().startswith(b'-SamplingFrequency'):
             frequency = float(line.split(b' ')[1].decode())
 
@@ -211,9 +212,11 @@ def load_ntt(filename):
                    ('spikes', np.dtype('<h'), (32, 4))])
     data = np.fromfile(f, dt)
 
-    if a2d_conversion is None:
+    if analog_to_digital is None:
         raise IOError("ADBitVolts not found in .ntt header for " + filename)
     if frequency is None:
         raise IOError("Frequency not found in .ntt header for " + filename)
 
-    return data['time'], data['spikes'] * a2d_conversion, frequency
+    f.close()
+
+    return data['time'], data['spikes'] * analog_to_digital, frequency
