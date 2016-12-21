@@ -5,6 +5,19 @@ import vdmlab as vdm
 
 
 def load_events(filename, labels):
+    """Loads neuralynx events
+
+    Parameters
+    ----------
+    filename: str
+    labels: list
+        Contains event strings
+
+    Returns
+    -------
+    timestamps: dict
+
+    """
     nev_data = load_nev(filename)
 
     idx = {label: [] for label in labels}
@@ -24,9 +37,41 @@ def load_events(filename, labels):
 
 
 def load_lfp(filename):
+    """Loads LFP as vdmlab.LocalFieldPotential
+
+    Parameters
+    ----------
+    filename: str
+
+    Returns
+    -------
+    lfp: vdmlab.LocalFieldPotential
+
+    """
     data, time = load_ncs(filename)
 
     return vdm.LocalFieldPotential(data, time)
+
+
+def load_position(filename, pxl_to_cm):
+    """Loads videotracking position as vdmlab.Position
+
+    Parameters
+    ----------
+    filename: str
+    pxl_to_cm: tuple
+        With (x, y) conversion factors
+
+    Returns
+    -------
+    position: vdmlab.Position
+
+    """
+    nvt_data = load_nvt(filename)
+
+    xy = np.hstack(np.array([nvt_data['x'] / pxl_to_cm[0], nvt_data['y'] / pxl_to_cm[1]])[..., np.newaxis])
+
+    return vdm.Position(xy, nvt_data['time'])
 
 
 def load_nlx_header(filename):
@@ -220,3 +265,49 @@ def load_ntt(filename):
     f.close()
 
     return data['time'], data['spikes'] * analog_to_digital, frequency
+
+
+def load_nvt(filename):
+    """Loads a neuralynx .nvt file.
+
+    Parameters
+    ----------
+    filename: str
+
+    Returns
+    -------
+    nvt_data: dict
+        With time, x, and y as keys.
+
+    """
+    f = open(filename, 'rb')
+
+    # Nlx files have a 16kbyte header
+    header = f.read(2 ** 14).strip(b'\x00')
+
+    # The format for .nvt files according the the neuralynx docs is
+    # uint16 - beginning of the record
+    # uint16 - ID for the system
+    # uint16 - size of videorec in bytes
+    # uint64 - timestamp in microseconds
+    # uint32 x 400 - points with the color bitfield values
+    # int16 - unused
+    # int32 - extracted X location of target
+    # int32 - extracted Y location of target
+    # int32 - calculated head angle in degrees clockwise from the positive Y axis
+    # int32 x 50 - colored targets using the same bitfield format used to extract colors earlier
+    dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('points', '<i', 400),
+                   ('filler2', '<h'), ('x', '<i'), ('y', '<i'), ('head_angle', '<i'),
+                   ('targets', '<i', 50)])
+    data = np.fromfile(f, dt)
+
+    nvt_data = dict()
+    nvt_data['time'] = data['time'] * 1e-6
+    nvt_data['x'] = np.array(data['x'], dtype=float)
+    nvt_data['y'] = np.array(data['y'], dtype=float)
+
+    empty_idx = (data['x'] == 0) & (data['y'] == 0)
+    for key in nvt_data:
+        nvt_data[key] = nvt_data[key][~empty_idx]
+
+    return nvt_data
