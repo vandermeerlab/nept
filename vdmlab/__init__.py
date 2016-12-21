@@ -18,4 +18,4 @@ from .utils import (find_nearest_idx,
                     epoch_position)
 from .medpc import load_medpc
 from .loaders_nlx import load_events, load_lfp, load_ntt, load_nlx_header
-from .loaders_mclust import load_mclust_header
+from .loaders_mclust import load_mclust_header, load_spikes
