@@ -83,14 +83,14 @@ def get_spiketrain(spike_times):
 
 
 def load_spikes(filepath, load_questionable=True):
-    """Loads spikes from multiple *.t files from a given session.
+    """Loads spikes from multiple tetrode spike files from a given session.
 
     Parameters
     ----------
     filepath: str
         Session folder
     load_questionable: boolean
-        Loads *.t and *._t spiketrains if True (default).
+        Loads ``*.t`` and ``*._t`` spiketrains if True (default).
 
     Returns
     -------
@@ -110,6 +110,3 @@ def load_spikes(filepath, load_questionable=True):
                 spikes.append(spiketrain)
 
     return spikes
-
-
-

@@ -13,10 +13,34 @@ vdmlab.co_occurrence module
     :undoc-members:
     :show-inheritance:
 
+vdmlab.decoding module
+----------------------
+
+.. automodule:: vdmlab.decoding
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 vdmlab.lfp_filtering module
 ---------------------------
 
 .. automodule:: vdmlab.lfp_filtering
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vdmlab.loaders_mclust module
+----------------------------
+
+.. automodule:: vdmlab.loaders_mclust
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vdmlab.loaders_nlx module
+-------------------------
+
+.. automodule:: vdmlab.loaders_nlx
     :members:
     :undoc-members:
     :show-inheritance:
@@ -36,7 +60,6 @@ vdmlab.medpc module
     :members:
     :undoc-members:
     :show-inheritance:
-
 
 vdmlab.place_fields module
 --------------------------

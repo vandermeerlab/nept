@@ -3,12 +3,23 @@ import string
 from collections import defaultdict
 
 
-def read_file(file):
+def read_file(filename):
+    """Reads the contents of a ``*.mpc`` file
+
+    Parameters
+    ----------
+    filename: str
+
+    Returns
+    -------
+    contents: list
+
+    """
     contents = []
     temp = []
 
-    this_file = open(file, 'r')
-    lines = this_file.readlines()
+    file = open(filename, 'r')
+    lines = file.readlines()
 
     for line in lines:
         if line != '\n':
@@ -24,12 +35,24 @@ def read_file(file):
     for i, content in enumerate(contents):
         contents[i] = ' '.join(content)
 
-    this_file.close()
+    file.close()
 
     return contents
 
 
 def get_data(contents):
+    """Extracts content from a ``*.mpc`` file
+
+    Parameters
+    ----------
+    contents: list
+
+    Returns
+    -------
+    header: dict
+    data: dict
+
+    """
 
     header = {}
     copy = contents.split('\n')
@@ -96,6 +119,9 @@ def get_events(event_list):
 
 def get_subject(subject_content, data_key='b'):
     """Gets header and data from MedPC file for a single subject.
+
+    Parameters
+    ----------
     subject_content: str
     data_key: str
         Default set to 'b'
@@ -104,6 +130,7 @@ def get_subject(subject_content, data_key='b'):
     -------
     header: dict
     data: list
+
     """
     (header, data) = get_data(subject_content)
     data = get_events(data[data_key])
