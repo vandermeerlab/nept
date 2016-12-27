@@ -10,8 +10,8 @@ def load_events(filename, labels):
     Parameters
     ----------
     filename: str
-    labels: list
-        Contains event strings
+    labels: dict
+        With event name as the key and Neuralynx event string as the value.
 
     Returns
     -------
@@ -20,11 +20,11 @@ def load_events(filename, labels):
     """
     nev_data = load_nev(filename)
 
-    idx = {label: [] for label in labels}
-    for label in labels:
+    idx = {key: [] for key in labels}
+    for key in labels:
         for i, event in enumerate(nev_data['event_str']):
-            if event.decode() == label:
-                idx[label].append(i)
+            if event.decode() == labels[key]:
+                idx[key].append(i)
 
     timestamps = {label: [] for label in labels}
 
