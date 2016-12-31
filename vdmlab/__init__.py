@@ -17,5 +17,5 @@ from .utils import (find_nearest_idx,
                     cartesian,
                     epoch_position)
 from .medpc import load_medpc
-from .loaders_nlx import load_events, load_lfp, load_position, load_ntt, load_nlx_header
+from .loaders_nlx import load_events, load_lfp, load_position, load_ntt, load_nlx_header, load_nvt
 from .loaders_mclust import load_mclust_header, load_spikes

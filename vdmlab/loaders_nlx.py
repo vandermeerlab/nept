@@ -305,6 +305,7 @@ def load_nvt(filename):
     nvt_data['time'] = data['time'] * 1e-6
     nvt_data['x'] = np.array(data['x'], dtype=float)
     nvt_data['y'] = np.array(data['y'], dtype=float)
+    nvt_data['targets'] = np.array(data['targets'], dtype=float)
 
     empty_idx = (data['x'] == 0) & (data['y'] == 0)
     for key in nvt_data:
