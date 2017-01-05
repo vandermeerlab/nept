@@ -66,12 +66,13 @@ def load_mclust_t(filename):
     return spikes
 
 
-def get_spiketrain(spike_times):
+def get_spiketrain(spike_times, label):
     """Converts spike times to vdm.SpikeTrain.
 
     Parameters
     ----------
     spike_times: np.array
+    label: str
 
     Returns
     -------
@@ -79,7 +80,7 @@ def get_spiketrain(spike_times):
 
     """
 
-    return vdm.SpikeTrain(spike_times)
+    return vdm.SpikeTrain(spike_times, label)
 
 
 def load_spikes(filepath, load_questionable=True):
@@ -101,12 +102,14 @@ def load_spikes(filepath, load_questionable=True):
 
     for file in os.listdir(filepath):
         if file.endswith(".t"):
-            spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)))
+            label = file[18:20]
+            spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)), label)
             spikes.append(spiketrain)
 
         if load_questionable:
             if file.endswith("._t"):
-                spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)))
+                label = file[18:20]
+                spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)), label)
                 spikes.append(spiketrain)
 
     return spikes
