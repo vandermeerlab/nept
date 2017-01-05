@@ -2,6 +2,8 @@ import numpy as np
 from scipy import signal
 from matplotlib.offsetbox import AnchoredOffsetbox
 
+import vdmlab as vdm
+
 
 def find_nearest_idx(array, val):
     """Finds nearest index in array to value.
@@ -39,6 +41,41 @@ def find_nearest_indices(array, vals):
 
     """
     return np.array([find_nearest_idx(array, val) for val in vals], dtype=int)
+
+
+def find_multi_in_epochs(spikes, epochs, min_involved):
+    """Finds epochs with minimum number of spikes.
+
+    Parameters
+    ----------
+    spikes: list of vdm.SpikeTrain
+    epochs: vdm.Epoch
+    min_involved: int
+
+    Returns
+    -------
+    multi_epochs: vdm.Epoch
+
+    """
+    multi_starts = []
+    multi_stops = []
+
+    n_neurons = len(spikes)
+    for start, stop in zip(epochs.starts, epochs.stops):
+        involved = 0
+        for neuron in range(n_neurons):
+            if ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum() > 1:
+                involved += 1
+        if involved > min_involved:
+            multi_starts.append(start)
+            multi_stops.append(stop)
+
+    multi_starts = np.array(multi_starts)
+    multi_stops = np.array(multi_stops)
+
+    multi_epochs = vdm.Epoch(np.array([multi_starts, multi_stops]))
+
+    return multi_epochs
 
 
 def get_sort_idx(tuning_curves):
