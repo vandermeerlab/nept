@@ -74,7 +74,7 @@ def load_position(filename, pxl_to_cm):
     return vdm.Position(xy, nvt_data['time'])
 
 
-def load_nlx_header(filename):
+def load_neuralynx_header(filename):
     """Loads a neuralynx header.
 
     Parameters
@@ -88,7 +88,7 @@ def load_nlx_header(filename):
     """
     f = open(filename, 'rb')
 
-    # Nlx files have a 16kbyte header
+    # Neuralynx files have a 16kbyte header
     header = f.read(2 ** 14).strip(b'\x00')
 
     f.close()
@@ -114,7 +114,7 @@ def load_ncs(filename):
 
     f = open(filename, 'rb')
 
-    # Nlx files have a 16kbyte header
+    # Neuralynx files have a 16kbyte header
     header = f.read(2 ** 14).strip(b'\x00')
 
     # The format for a .ncs files according the the neuralynx docs is
@@ -224,7 +224,7 @@ def load_ntt(filename):
         Sampling frequency in waveforms (Hz)
 
     Usage:
-    timestamps, spikes, frequency = nlxio.loadNtt('TT13.ntt')
+    timestamps, spikes, frequency = load_ntt('TT13.ntt')
 
     """
 
@@ -282,7 +282,7 @@ def load_nvt(filename):
     """
     f = open(filename, 'rb')
 
-    # Nlx files have a 16kbyte header
+    # Neuralynx files have a 16kbyte header
     header = f.read(2 ** 14).strip(b'\x00')
 
     # The format for .nvt files according the the neuralynx docs is
