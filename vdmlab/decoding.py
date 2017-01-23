@@ -75,7 +75,7 @@ def decode_location(likelihood, pos_centers, time_centers):
 
     Returns
     -------
-    decoded : np.array
+    decoded : vdmlab.Position
         Estimate of decoded position.
 
     """
@@ -89,9 +89,7 @@ def decode_location(likelihood, pos_centers, time_centers):
 
     decoded_pos = np.squeeze(decoded_pos)
 
-    decoded = vdm.Position(decoded_pos, time_centers)
-
-    return decoded
+    return vdm.Position(decoded_pos, time_centers)
 
 
 def remove_teleports(position, speed_thresh, min_length):

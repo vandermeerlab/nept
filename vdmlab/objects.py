@@ -3,6 +3,8 @@ import warnings
 import numpy as np
 from shapely.geometry import Point
 
+import vdmlab as vdm
+
 
 class AnalogSignal:
     """A continuous analog timestamped signal.
@@ -449,7 +451,10 @@ class Position(AnalogSignal):
         With shape (n_samples,).
     """
     def __getitem__(self, idx):
-        return Position(self.data[idx], self.time[idx])
+        if type(idx) == vdm.objects.Epoch:
+            return self.time_slices(idx.starts, idx.stops)
+        else:
+            return Position(self.data[idx], self.time[idx])
 
     @property
     def x(self):

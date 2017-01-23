@@ -252,17 +252,21 @@ def cartesian(xcenters, ycenters):
     return np.transpose([np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))])
 
 
-def epoch_position(position, epoch):
-    """Finds positions associated with epoch times
+def get_xyedges(position, binsize=3):
+    """Gets edges based on position min and max.
 
     Parameters
     ----------
-    position : vdmlab.Position
-    epoch : vdmlab.Epoch
+    position: 2D vdm.Position
+    binsize: int
 
     Returns
     -------
-    epoch_position : vdmlab.Position
+    xedges: np.array
+    yedges: np.array
 
     """
-    return position.time_slices(epoch.starts, epoch.stops)
+    xedges = np.arange(position.x.min(), position.x.max() + binsize, binsize)
+    yedges = np.arange(position.y.min(), position.y.max() + binsize, binsize)
+
+    return xedges, yedges
