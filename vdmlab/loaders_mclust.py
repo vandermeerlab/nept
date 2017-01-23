@@ -112,4 +112,4 @@ def load_spikes(filepath, load_questionable=True):
                 spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)), label)
                 spikes.append(spiketrain)
 
-    return spikes
+    return np.array(spikes)
