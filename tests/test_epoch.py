@@ -8,6 +8,7 @@ def test_epoch_duration():
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = vdm.Epoch(times)
+
     assert np.allclose(epoch.durations, np.array([1., 0.6, 0.4]))
 
 
@@ -17,6 +18,7 @@ def test_epoch_stops():
                             [1.6]])
     durations = np.array([1., 0.6, 0.4])
     epoch = vdm.Epoch(start_times, durations)
+
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
 
@@ -25,6 +27,7 @@ def test_epoch_sort():
                       [0.0, 1.0],
                       [0.9, 1.5]])
     epoch = vdm.Epoch(times)
+
     assert np.allclose(epoch.starts, np.array([0., 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
@@ -33,6 +36,7 @@ def test_epoch_sortlist():
     start_times = [0.9, 0.0, 1.6]
     durations = [0.6, 1.0, 0.4]
     epoch = vdm.Epoch(start_times, durations)
+
     assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
@@ -40,6 +44,7 @@ def test_epoch_sortlist():
 def test_epoch_reshape():
     times = np.array([[0.0, 0.9, 1.6], [1.0, 1.5, 2.0]])
     epoch = vdm.Epoch(times)
+
     assert np.allclose(epoch.time.shape, (3, 2))
 
 
@@ -55,9 +60,12 @@ def test_epoch_too_many_parameters():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
+
     durations = np.array([1., 0.6, 0.4])
+
     with pytest.raises(ValueError) as excinfo:
         epoch = vdm.Epoch(times, durations)
+
     assert str(excinfo.value) == 'duration not allowed when using start and stop times'
 
 
@@ -71,11 +79,12 @@ def test_epoch_intersect_case1():
     epoch_2 = vdm.Epoch(times_2)
 
     intersects = epoch_1.intersect(epoch_2)
+
     assert np.allclose(intersects.starts, np.array([1.6]))
     assert np.allclose(intersects.stops, np.array([1.8]))
 
 
-def test_epoch_intersect_case1_bounds():
+def test_epoch_overlaps_case1_bounds():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -84,9 +93,10 @@ def test_epoch_intersect_case1_bounds():
     times_2 = np.array([[1.55, 1.8]])
     epoch_2 = vdm.Epoch(times_2)
 
-    intersects = epoch_1.intersect(epoch_2, boundaries=False)
-    assert np.allclose(intersects.starts, np.array([1.55]))
-    assert np.allclose(intersects.stops, np.array([1.8]))
+    overlaps = epoch_1.overlaps(epoch_2)
+
+    assert np.allclose(overlaps.starts, np.array([1.55]))
+    assert np.allclose(overlaps.stops, np.array([1.8]))
 
 
 def test_epoch_intersect_case2():
@@ -104,7 +114,7 @@ def test_epoch_intersect_case2():
     assert np.allclose(intersects.stops, np.array([1.5]))
 
 
-def test_epoch_intersect_case2_bounds():
+def test_epoch_overlaps_case2_bounds():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -113,10 +123,10 @@ def test_epoch_intersect_case2_bounds():
     times_2 = np.array([[1.2, 1.6]])
     epoch_2 = vdm.Epoch(times_2)
 
-    intersects = epoch_1.intersect(epoch_2, boundaries=False)
+    overlaps = epoch_1.overlaps(epoch_2)
 
-    assert np.allclose(intersects.starts, np.array([1.2]))
-    assert np.allclose(intersects.stops, np.array([1.6]))
+    assert np.allclose(overlaps.starts, np.array([1.2]))
+    assert np.allclose(overlaps.stops, np.array([1.6]))
 
 
 def test_epoch_intersect_case3():
@@ -132,17 +142,17 @@ def test_epoch_intersect_case3():
     assert np.allclose(intersects.stops, np.array([2.0]))
 
 
-def test_epoch_intersect_case3_bounds():
+def test_epoch_overlaps_case3_bounds():
     times_a = np.array([[1.0, 2.0]])
     epoch_a = vdm.Epoch(times_a)
 
     times_b = np.array([[0.0, 3.0]])
     epoch_b = vdm.Epoch(times_b)
 
-    intersects = epoch_a.intersect(epoch_b, boundaries=False)
+    overlaps = epoch_a.overlaps(epoch_b)
 
-    assert np.allclose(intersects.starts, np.array([0.0]))
-    assert np.allclose(intersects.stops, np.array([3.0]))
+    assert np.allclose(overlaps.starts, np.array([0.0]))
+    assert np.allclose(overlaps.stops, np.array([3.0]))
 
 
 def test_epoch_intersect_case4():
@@ -158,17 +168,17 @@ def test_epoch_intersect_case4():
     assert np.allclose(intersects.stops, np.array([1.9]))
 
 
-def test_epoch_intersect_case4_bounds():
+def test_epoch_overlaps_case4_bounds():
     times_a = np.array([[1.0, 2.0]])
     epoch_a = vdm.Epoch(times_a)
 
     times_b = np.array([[1.1, 1.9]])
     epoch_b = vdm.Epoch(times_b)
 
-    intersects = epoch_a.intersect(epoch_b, boundaries=False)
+    overlaps = epoch_a.overlaps(epoch_b)
 
-    assert np.allclose(intersects.starts, np.array([1.1]))
-    assert np.allclose(intersects.stops, np.array([1.9]))
+    assert np.allclose(overlaps.starts, np.array([1.1]))
+    assert np.allclose(overlaps.stops, np.array([1.9]))
 
 
 def test_epoch_intersect_case5():
@@ -184,17 +194,17 @@ def test_epoch_intersect_case5():
     assert np.allclose(intersects.stops, np.array([2.5]))
 
 
-def test_epoch_intersect_case5_bounds():
+def test_epoch_overlaps_case5_bounds():
     times_a = np.array([[1.5, 2.5]])
     epoch_a = vdm.Epoch(times_a)
 
     times_b = np.array([[1.5, 2.5]])
     epoch_b = vdm.Epoch(times_b)
 
-    intersects = epoch_a.intersect(epoch_b, boundaries=False)
+    overlaps = epoch_a.overlaps(epoch_b)
 
-    assert np.allclose(intersects.starts, np.array([1.5]))
-    assert np.allclose(intersects.stops, np.array([2.5]))
+    assert np.allclose(overlaps.starts, np.array([1.5]))
+    assert np.allclose(overlaps.stops, np.array([2.5]))
 
 
 def test_epoch_intersect_multiple():
@@ -216,7 +226,7 @@ def test_epoch_intersect_multiple():
     assert np.allclose(intersects.stops, np.array([1.7, 5.0, 7.0, 8.4]))
 
 
-def test_epoch_intersect_multiple_bounds():
+def test_epoch_overlaps_multiple_bounds():
     times_a = np.array([[1.0, 2.0],
                         [4.0, 5.0],
                         [6.0, 7.0],
@@ -229,10 +239,10 @@ def test_epoch_intersect_multiple_bounds():
                         [8.2, 8.4]])
     epoch_b = vdm.Epoch(times_b)
 
-    intersects = epoch_a.intersect(epoch_b, boundaries=False)
+    overlaps = epoch_a.overlaps(epoch_b)
 
-    assert np.allclose(intersects.starts, np.array([0.5, 4.3, 5.1, 8.2]))
-    assert np.allclose(intersects.stops, np.array([1.7, 5.0, 7.2, 8.4]))
+    assert np.allclose(overlaps.starts, np.array([0.5, 4.3, 5.1, 8.2]))
+    assert np.allclose(overlaps.stops, np.array([1.7, 5.0, 7.2, 8.4]))
 
 
 def test_epoch_intersect_multiple2():
@@ -254,8 +264,8 @@ def test_epoch_intersect_multiple2():
     assert np.allclose(intersects.stops, np.array([2.0, 5.0, 6.2, 9.0]))
 
 
-def test_epoch_intersect_multiple2_bounds():
-    times_a = np.array([[1.0, 2.0],
+def test_epoch_overlaps_multiple2_bounds():
+    times_a = np.array([[0.0, 2.0],
                         [4.0, 5.0],
                         [6.0, 7.0],
                         [8.0, 9.0]])
@@ -267,10 +277,13 @@ def test_epoch_intersect_multiple2_bounds():
                         [7.8, 9.3]])
     epoch_b = vdm.Epoch(times_b)
 
-    intersects = epoch_a.intersect(epoch_b, boundaries=False)
+    overlaps = epoch_a.overlaps(epoch_b)
 
-    assert np.allclose(intersects.starts, np.array([1.0, 4.0, 7.8]))
-    assert np.allclose(intersects.stops, np.array([2.0, 6.2, 9.3]))
+    print(overlaps.starts)
+    print(overlaps.stops)
+
+    assert np.allclose(overlaps.starts, np.array([1.0, 4.0, 7.8]))
+    assert np.allclose(overlaps.stops, np.array([2.0, 6.2, 9.3]))
 
 
 def test_epoch_no_intersect():

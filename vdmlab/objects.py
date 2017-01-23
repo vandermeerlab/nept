@@ -223,14 +223,12 @@ class Epoch:
         return Epoch(new_starts, new_stops-new_starts)
 
 
-    def intersect(self, epoch, boundaries=True):
-        """Finds intersection (overlap) between two sets of epochs.
+    def intersect(self, epoch):
+        """Finds intersection between two sets of epochs.
 
         Parameters
         ----------
         epoch : vdmlab.Epoch
-        boundaries : bool
-            If True, limits start, stop to epoch start and stop.
 
         Returns
         -------
@@ -252,27 +250,55 @@ class Epoch:
                     new_stops.append(bb[1])
                 elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
                     new_starts.append(bb[0])
-                    if boundaries:
-                        new_stops.append(aa[1])
-                    else:
-                        new_stops.append(bb[1])
+                    new_stops.append(aa[1])
                 elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
-                    if boundaries:
-                        new_starts.append(aa[0])
-                    else:
-                        new_starts.append(bb[0])
+                    new_starts.append(aa[0])
                     new_stops.append(bb[1])
                 elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
-                    if boundaries:
-                        new_starts.append(aa[0])
-                        new_stops.append(aa[1])
-                    else:
-                        new_starts.append(bb[0])
-                        new_stops.append(bb[1])
+                    new_starts.append(aa[0])
+                    new_stops.append(aa[1])
 
-        if not boundaries:
-            new_starts = np.unique(new_starts)
-            new_stops = np.unique(new_stops)
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
+
+
+    def overlaps(self, epoch):
+        """Finds overlap between template epochs and epoch of interest.
+
+        Parameters
+        ----------
+        epoch : vdmlab.Epoch
+
+        Returns
+        -------
+        overlaps_epochs : vdmlab.Epoch
+
+        """
+        if len(self.starts) == 0 or len(epoch.starts) == 0:
+            return Epoch([], [])
+
+        new_starts = []
+        new_stops = []
+        template = self.copy().merge()
+        epoch_interest = epoch.copy().merge()
+
+        for aa in template.time:
+            for bb in epoch_interest.time:
+                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+
+        new_starts = np.unique(new_starts)
+        new_stops = np.unique(new_stops)
 
         return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
                                 np.array(new_stops)[..., np.newaxis]]))
