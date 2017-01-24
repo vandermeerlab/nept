@@ -10,7 +10,7 @@ before_install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION matplotlib jupyter scipy numpy pandas pytest
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION matplotlib jupyter scipy numpy pandas pytest coverage
 
 # install dependencies
 install:
@@ -21,8 +21,8 @@ install:
 
 # run tests
 script: 
-  - py.test
+  - coverage run --source vdmlab -m py.test
 
 # coverage tests
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
