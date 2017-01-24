@@ -26,7 +26,7 @@ Getting started
   (must be in the directory where this .whl is located).
 
   ```
-  conda install numpy scipy shapely matplotlib
+  conda install matplotlib jupyter scipy numpy pandas pytest coverage
   ```
 
 * Clone the analysis code from Github and developer installation.
@@ -63,9 +63,9 @@ Testing
 
 Run tests with [pytest](http://docs.pytest.org/en/latest/usage.html).
 
-```
-conda install pytest
-```
+Check coverage with [codecov](https://codecov.io/gh/vandermeerlab/python-vdmlab).
+Or 'py.test' and `coverage report' in the command line.
+
 
 License
 =======
@@ -81,3 +81,4 @@ Projects using vdmlab
 =====================
 
 * [emi_shortcut](https://github.com/vandermeerlab/emi_shortcut)
+* [emi_biconditional](https://github.com/vandermeerlab/emi_biconditional)
