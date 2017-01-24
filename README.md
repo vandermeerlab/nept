@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vandermeerlab/python-vdmlab.svg?branch=master)](https://travis-ci.org/vandermeerlab/python-vdmlab)
+
 Tools used for the analysis of neural recording data
 ====================================================
 
