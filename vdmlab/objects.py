@@ -461,6 +461,80 @@ class LocalFieldPotential(AnalogSignal):
         return LocalFieldPotential(self.data[idx], self.time[idx])
 
 
+class Neurons:
+    """ A grouping of spiketrains and tuning curves
+
+    Parameters
+    ----------
+    spikes : np.array
+    tuning_curves : np.array
+
+    Attributes
+    ----------
+    spikes : np.array
+    tuning_curves : np.array
+
+    """
+    def __init__(self, spikes, tuning_curves):
+
+        if spikes.shape[0] != tuning_curves.shape[0]:
+            raise ValueError("spikes and tuning curves must have the same number of neurons")
+
+        self.spikes = spikes
+        self.tuning_curves = tuning_curves
+
+    def __getitem__(self, idx):
+        return Neurons(self.spikes[idx], self.tuning_curves[idx])
+
+    @property
+    def n_neurons(self):
+        """(int) The number of neurons."""
+        return len(self.spikes)
+
+    @property
+    def tuning_shape(self):
+        """(tuple) The shape of the tuning curves."""
+        return self.tuning_curves[0].shape
+
+    def time_slice(self, t_start, t_stop):
+        """ Gets the neuron spikes corresponding to the time slice of
+        the original between (and including) times t_start and t_stop. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        spikes : vdmlab.Neurons
+        t_start : float
+        t_stop : float
+
+        Returns
+        -------
+        sliced_spikes : list of vdmlab.SpikeTrain
+
+        """
+        sliced_spikes = [spiketrain.time_slice(t_start, t_stop) for spiketrain in self.spikes]
+        return sliced_spikes
+
+    def time_slices(self, t_starts, t_stops):
+        """ Gets the neuron spikes corresponding to the time slices of
+        the original between (and including) times t_starts and t_stops. Setting
+        either parameter to None uses infinite endpoints for the time interval.
+
+        Parameters
+        ----------
+        spikes : vdmlab.Neurons
+        t_start : float
+        t_stop : float
+
+        Returns
+        -------
+        sliced_spikes : list of vdmlab.SpikeTrain
+
+        """
+        sliced_spikes = [spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes]
+        return sliced_spikes
+
+
 class Position(AnalogSignal):
     """Subclass of AnalogSignal. Handles both 1D and 2d positions.
 

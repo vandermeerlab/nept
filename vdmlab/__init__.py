@@ -5,6 +5,7 @@ from .maze_breakdown import expand_line, save_spike_position
 from .objects import (AnalogSignal,
                       Epoch,
                       LocalFieldPotential,
+                      Neurons,
                       Position,
                       SpikeTrain)
 from .place_fields import consecutive, find_fields, get_single_field, get_heatmaps
