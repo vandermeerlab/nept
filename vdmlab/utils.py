@@ -211,7 +211,7 @@ def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
 
     Returns
     -------
-    counts : np.array
+    counts : vdm.AnalogSignal
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
 
     """
@@ -232,7 +232,9 @@ def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
         counts[idx] = np.histogram(spiketrain.time, bins=edges)[0]
         if gaussian_std is not None and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
-    return counts
+
+    return vdm.AnalogSignal(counts.T, edges[:-1])
+    # return counts
 
 
 def cartesian(xcenters, ycenters):

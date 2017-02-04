@@ -8,7 +8,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
 
     Parameters
     ----------
-    counts : np.array
+    counts : vdm.AnalogSignal
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
     tuning_curves : np.array
         Where each inner array is the tuning curve (floats) for an individual neuron.
@@ -30,7 +30,8 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     is set to nan. To convert it to 0s instead, use : prob[np.isnan(prob)] = 0 on the output.
 
     """
-    n_time_bins = np.shape(counts)[1]
+    n_time_bins = np.shape(counts.data)[0]
+    # n_time_bins = np.shape(counts)[1]
     n_position_bins = np.shape(tuning_curves)[1]
 
     likelihood = np.empty((n_time_bins, n_position_bins)) * np.nan
@@ -41,7 +42,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
         valid_idx = tuning_curves[:, idx] > 1  # log of 1 or less is negative or invalid
         if np.any(valid_idx):
             # event_rate is the lambda in this poisson distribution
-            event_rate = tuning_curves[valid_idx, idx][..., np.newaxis] ** counts[valid_idx]
+            event_rate = tuning_curves[valid_idx, idx][..., np.newaxis] ** counts.data.T[valid_idx]
             prior = np.exp(-binsize * np.sum(tuning_curves[valid_idx, idx]))
 
             # Below is the same as
@@ -57,7 +58,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
 
     # Remove bins with too few neurons that that are active
     # a neuron is considered active by having at least min_spikes in a bin
-    n_active_neurons = np.sum(counts >= min_spikes, axis=0)
+    n_active_neurons = np.sum(counts.data >= min_spikes, axis=1)
     likelihood[n_active_neurons < min_neurons] = np.nan
 
     return likelihood
