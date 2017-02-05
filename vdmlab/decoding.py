@@ -30,8 +30,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     is set to nan. To convert it to 0s instead, use : prob[np.isnan(prob)] = 0 on the output.
 
     """
-    n_time_bins = np.shape(counts.data)[0]
-    # n_time_bins = np.shape(counts)[1]
+    n_time_bins = np.shape(counts.time)[0]
     n_position_bins = np.shape(tuning_curves)[1]
 
     likelihood = np.empty((n_time_bins, n_position_bins)) * np.nan

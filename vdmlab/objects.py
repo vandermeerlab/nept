@@ -28,20 +28,27 @@ class AnalogSignal:
 
         if time.ndim == 0:
             time = time[..., np.newaxis]
-            data = data[np.newaxis, ...]
-
-        if time.ndim != 1:
+        elif time.ndim != 1:
             raise ValueError("time must be a vector")
 
-        if data.ndim == 1:
-            data = data[..., np.newaxis]
+        if data.ndim == 0:
+            data = data.reshape((1, time.shape[0]))
+        elif data.ndim == 1:
+            if time.shape[0] == 1:
+                data = data[np.newaxis, ...]
+            elif time.shape[0] == data.shape[0]:
+                data = data[..., np.newaxis]
+            else:
+                raise ValueError("data and time should be the same length")
 
-        if data.ndim > 2:
+        elif data.ndim > 2:
             raise ValueError("data must be vector or 2D array")
+
         if data.shape[0] != data.shape[1] and time.shape[0] == data.shape[1]:
             warnings.warn("data should be shape (timesteps, dimensionality); "
                           "got (dimensionality, timesteps). Correcting...")
             data = data.T
+
         if time.shape[0] != data.shape[0]:
             raise ValueError("must have same number of time and data samples")
 
