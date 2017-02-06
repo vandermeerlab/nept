@@ -98,7 +98,7 @@ def tuning_curve(position, spikes, binsize, gaussian_std=None):
     return np.array(out_tc, dtype=float)
 
 
-def tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=None):
+def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussian_sigma=None):
     """Creates 2D tuning curves based on spikes and 2D position.
 
     Parameters
@@ -110,6 +110,7 @@ def tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=None):
     xedges : np.array
     yedges : np.array
     sampling_rate : float
+    occupied_thresh: float
     gaussian_sigma : float
         Sigma used in gaussian filter if filtering.
 
@@ -124,7 +125,7 @@ def tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=None):
     position_2d, pos_xedges, pos_yedges = np.histogram2d(position.y, position.x, bins=[yedges, xedges])
     position_2d *= sampling_rate
     shape = position_2d.shape
-    occupied_idx = position_2d > 0
+    occupied_idx = position_2d > occupied_thresh
 
     tc = []
     for spiketrain in spikes:
