@@ -8,8 +8,13 @@ from .objects import (AnalogSignal,
                       Neurons,
                       Position,
                       SpikeTrain)
-from .place_fields import consecutive, find_fields, get_single_field, get_heatmaps
-from .tuning_curves import binned_position, tuning_curve, tuning_curve_2d
+from .place_fields import (consecutive,
+                           find_fields,
+                           get_single_field,
+                           get_heatmaps)
+from .tuning_curves import (binned_position,
+                            tuning_curve,
+                            tuning_curve_2d)
 from .utils import (add_scalebar,
                     cartesian,
                     find_multi_in_epochs,
@@ -19,5 +24,10 @@ from .utils import (add_scalebar,
                     get_sort_idx,
                     get_xyedges)
 from .medpc import load_medpc
-from .loaders_neuralynx import load_events, load_lfp, load_position, load_ntt, load_neuralynx_header, load_nvt
+from .loaders_neuralynx import (load_events,
+                                load_lfp,
+                                load_position,
+                                load_ntt,
+                                load_neuralynx_header,
+                                load_nvt)
 from .loaders_mclust import load_mclust_header, load_spikes

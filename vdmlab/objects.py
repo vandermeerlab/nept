@@ -187,7 +187,7 @@ class Epoch:
         self.time = time
 
     def __getitem__(self, idx):
-        return Epoch([self.starts[idx], self.stops[idx]])
+        return Epoch(np.array([self.starts[idx], self.stops[idx]]))
 
     @property
     def centers(self):
