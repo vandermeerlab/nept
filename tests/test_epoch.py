@@ -22,6 +22,17 @@ def test_epoch_stops():
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
 
+def test_epoch_index():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = vdm.Epoch(times)
+    sliced_epoch = epoch[:2]
+
+    assert np.allclose(sliced_epoch.starts, np.array([0., 0.9]))
+    assert np.allclose(sliced_epoch.stops, np.array([1., 1.5]))
+
+
 def test_epoch_sort():
     times = np.array([[1.6, 2.0],
                       [0.0, 1.0],

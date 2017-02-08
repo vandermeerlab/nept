@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from shapely.geometry import Point, LineString
 
 import vdmlab as vdm
@@ -30,6 +31,37 @@ def test_simple_tc1():
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 
 
+def test_tuning_curve_1d_gaussian():
+    linear = vdm.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
+
+    spikes = [vdm.SpikeTrain(np.array([0.0]), 'test'),
+              vdm.SpikeTrain(np.array([1.0]), 'test'),
+              vdm.SpikeTrain(np.array([2.0]), 'test'),
+              vdm.SpikeTrain(np.array([2.5]), 'test')]
+
+    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=0.5)
+
+    assert np.allclose(tuning, ([0.78698604, 0.10650698, 0.],
+                                [0.10650698, 0.78698604, 0.10650698],
+                                [0., 0.05325349, 0.39349302],
+                                [0., 0.05325349, 0.39349302]))
+
+
+def test_tuning_curve_1d_with_2d_position():
+    position = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                       np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                            np.array([0., 1., 2., 3.]))
+
+    binsize = 2
+
+    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
+
+    with pytest.raises(ValueError) as excinfo:
+        tuning_curves = vdm.tuning_curve(position, spikes, binsize=binsize)
+
+    assert str(excinfo.value) == 'position must be linear'
+
+
 def test_linearize():
     t_start = 1
     t_stop = 6
@@ -55,7 +87,9 @@ def test_linearize():
 
 
 def test_tuning_curve_2d():
-    pos = vdm.Position(np.array([[2, 4, 6, 8], [7, 5, 3, 1]]), np.array([0., 1., 2., 3.]))
+    pos = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                  np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                       np.array([0., 1., 2., 3.]))
 
     binsize = 2
     xedges = np.arange(pos.x.min(), pos.x.max()+binsize, binsize)
@@ -66,3 +100,21 @@ def test_tuning_curve_2d():
     tuning_curves = vdm.tuning_curve_2d(pos, spikes, xedges, yedges)
 
     assert np.allclose(tuning_curves, [np.array([[0., 0., 3.], [0., 0., 0.], [1., 0., 0.]])])
+
+
+def test_tuning_curve_2d_gaussian():
+    position = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                       np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                            np.array([0., 1., 2., 3.]))
+
+    binsize = 2
+    xedges = np.arange(position.x.min(), position.x.max()+binsize, binsize)
+    yedges = np.arange(position.y.min(), position.y.max()+binsize, binsize)
+
+    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
+
+    tuning_curves = vdm.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=0.7)
+
+    assert np.allclose(tuning_curves, [np.array([[0.0301911, 0.50216994, 1.80311125],
+                                                 [0.17297243, 0.18493196, 0.50216994],
+                                                 [0.60128985, 0.17297243, 0.0301911 ]])])

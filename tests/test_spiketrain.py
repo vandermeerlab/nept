@@ -3,6 +3,22 @@ import pytest
 import vdmlab as vdm
 
 
+def test_spiketrain_labels():
+    spikes = [vdm.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
+              vdm.SpikeTrain(np.array([1.3, 3.3, 5.3]), 'check_label')]
+
+    assert spikes[0].label == None
+    assert spikes[1].label == 'check_label'
+
+
+def test_spiketrain_sort_times():
+    spikes = [vdm.SpikeTrain(np.array([9., 7., 5., 3., 1.])),
+              vdm.SpikeTrain(np.array([1.3, 5.3, 3.3]))]
+
+    assert np.allclose(spikes[0].time, np.array([1., 3., 5., 7., 9.]))
+    assert np.allclose(spikes[1].time, np.array([1.3, 3.3, 5.3]))
+
+
 def test_spiketrain_time_slice():
     spikes_a = vdm.SpikeTrain(np.arange(1, 100, 5), 'test')
     spikes_b = vdm.SpikeTrain(np.arange(24, 62, 1), 'test')
@@ -22,3 +38,14 @@ def test_spiketrain_time_slice():
     assert np.allclose(sliced_spikes_c.time, np.array([]))
 
 
+def test_spiketrain_time_slices():
+    spikes = [vdm.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
+              vdm.SpikeTrain(np.array([1.3, 3.3, 5.3]))]
+
+    starts = np.array([1., 7.])
+    stops = np.array([4., 10.])
+
+    sliced_spikes = [spike.time_slices(starts, stops) for spike in spikes]
+
+    assert np.allclose(sliced_spikes[0].time, np.array([1., 3., 7., 9.]))
+    assert np.allclose(sliced_spikes[1].time, np.array([1.3, 3.3]))

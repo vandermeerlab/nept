@@ -187,7 +187,8 @@ class Epoch:
         self.time = time
 
     def __getitem__(self, idx):
-        return Epoch(np.array([self.starts[idx], self.stops[idx]]))
+        return Epoch(np.hstack([np.array(self.starts[idx])[..., np.newaxis],
+                                np.array(self.stops[idx])[..., np.newaxis]]))
 
     @property
     def centers(self):
@@ -689,7 +690,7 @@ class SpikeTrain:
         if label is not None and not isinstance(label, str):
             raise ValueError("label must be a string")
 
-        self.time = time
+        self.time = np.sort(time)
         self.label = label
 
     def __getitem__(self, idx):

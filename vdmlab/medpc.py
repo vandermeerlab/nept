@@ -98,7 +98,7 @@ def get_events(event_list):
 
     Parameters
     ----------
-    event_times : list
+    event_list : list
 
     Returns
     -------

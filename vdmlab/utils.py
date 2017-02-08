@@ -44,11 +44,12 @@ def find_nearest_indices(array, vals):
 
 
 def find_multi_in_epochs(spikes, epochs, min_involved):
-    """Finds epochs with minimum number of spikes.
+    """Finds epochs with minimum number of participating neurons.
 
     Parameters
     ----------
-    spikes: list of vdm.SpikeTrain
+    spikes: np.array
+        Of vdm.SpikeTrain objects
     epochs: vdm.Epoch
     min_involved: int
 
@@ -63,17 +64,18 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
     n_neurons = len(spikes)
     for start, stop in zip(epochs.starts, epochs.stops):
         involved = 0
-        for neuron in range(n_neurons):
-            if ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum() > 1:
+        for this_neuron in spikes:
+            if ((start <= this_neuron.time) & (this_neuron.time <= stop)).sum() >= 1:
                 involved += 1
-        if involved > min_involved:
+        if involved >= min_involved:
             multi_starts.append(start)
             multi_stops.append(stop)
 
     multi_starts = np.array(multi_starts)
     multi_stops = np.array(multi_stops)
 
-    multi_epochs = vdm.Epoch(np.array([multi_starts, multi_stops]))
+    multi_epochs = vdm.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
+                                        np.array(multi_stops)[..., np.newaxis]]))
 
     return multi_epochs
 
