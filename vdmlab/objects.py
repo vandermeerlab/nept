@@ -201,6 +201,14 @@ class Epoch:
         return self.time[:, 1] - self.time[:, 0]
 
     @property
+    def isempty(self):
+        """(boolean) Whether the epoch array is empty."""
+        if self.time.size == 0:
+            return True
+        else:
+            return False
+
+    @property
     def starts(self):
         """(np.array) The start of each epoch."""
         return self.time[:, 0]
@@ -560,7 +568,10 @@ class Position(AnalogSignal):
     """
     def __getitem__(self, idx):
         if type(idx) == vdm.objects.Epoch:
-            return self.time_slices(idx.starts, idx.stops)
+            if idx.isempty:
+                return vdm.Position(np.array([[]]), np.array([]))
+            else:
+                return self.time_slices(idx.starts, idx.stops)
         else:
             return Position(self.data[idx], self.time[idx])
 

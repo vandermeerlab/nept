@@ -56,7 +56,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
 
     Returns
     -------
-    swrs : list
+    swrs : vdmlab.Epoch
         Containing vdmlab.LocalFieldPotential for each SWR event
 
     """
