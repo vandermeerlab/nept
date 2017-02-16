@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/vandermeerlab/nept.svg?branch=master)](https://travis-ci.org/vandermeerlab/nept)
 [![Coverage Status](https://img.shields.io/codecov/c/github/vandermeerlab/nept/master.svg)](https://codecov.io/gh/vandermeerlab/nept/branch/master)
-[![Documentation Status](https://readthedocs.org/projects/nept/badge/?version=latest)](https://readthedocs.org/projects/nept/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/nept/badge/?version=latest)](http://nept.readthedocs.io/en/latest/?badge=latest)
 
 nept - Neuroelectrophysiology tools
 ===================================
