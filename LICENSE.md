@@ -1,5 +1,5 @@
-Vdmlab codebase license
-=======================
+nept codebase license
+=====================
 
 Copyright (c) 2015-2016, contributors
 
@@ -28,7 +28,7 @@ ADVISED IN ADVANCE OF THE POSSIBILITY OF SUCH DAMAGE.
 Licensed code
 =============
 
-The vdmlab codebase relies on several open source libraries:
+The nept codebase relies on several open source libraries:
 
 - [NumPy](http://www.numpy.org/) - Used under [BSD license](http://www.numpy.org/license.html)
 - [SciPy](https://www.scipy.org/) - Used under [BSD license](https://www.scipy.org/scipylib/license.html)

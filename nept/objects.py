@@ -3,7 +3,7 @@ import warnings
 import numpy as np
 from shapely.geometry import Point
 
-import vdmlab as vdm
+import nept
 
 
 class AnalogSignal:
@@ -84,13 +84,13 @@ class AnalogSignal:
 
         Parameters
         ----------
-        analogsignal : vdmlab.AnalogSignal
+        analogsignal : nept.AnalogSignal
         t_start : float
         t_stop : float
 
         Returns
         -------
-        sliced_analogsignal : vdmlab.AnalogSignal
+        sliced_analogsignal : nept.AnalogSignal
         """
         if t_start is None:
             t_start = -np.inf
@@ -109,13 +109,13 @@ class AnalogSignal:
 
         Parameters
         ----------
-        analogsignal : vdmlab.AnalogSignal
+        analogsignal : nept.AnalogSignal
         t_starts : list of floats
         t_stops : list of floats
 
         Returns
         -------
-        sliced_analogsignal : vdmlab.AnalogSignal
+        sliced_analogsignal : nept.AnalogSignal
         """
         if len(t_starts) != len(t_stops):
             raise ValueError("must have same number of start and stop times")
@@ -244,11 +244,11 @@ class Epoch:
 
         Parameters
         ----------
-        epoch : vdmlab.Epoch
+        epoch : nept.Epoch
 
         Returns
         -------
-        intersect_epochs : vdmlab.Epoch
+        intersect_epochs : nept.Epoch
 
         """
         if len(self.starts) == 0 or len(epoch.starts) == 0:
@@ -283,11 +283,11 @@ class Epoch:
 
         Parameters
         ----------
-        epoch : vdmlab.Epoch
+        epoch : nept.Epoch
 
         Returns
         -------
-        overlaps_epochs : vdmlab.Epoch
+        overlaps_epochs : nept.Epoch
 
         """
         if len(self.starts) == 0 or len(epoch.starts) == 0:
@@ -330,7 +330,7 @@ class Epoch:
 
         Returns
         -------
-        merged_epochs : vdmlab.Epoch
+        merged_epochs : nept.Epoch
 
         """
         if gap < 0:
@@ -373,7 +373,7 @@ class Epoch:
 
         Returns
         -------
-        expanded_epochs : vdmlab.Epoch
+        expanded_epochs : nept.Epoch
 
         """
         if direction == 'both':
@@ -404,7 +404,7 @@ class Epoch:
 
         Returns
         -------
-        shrinked_epochs : vdmlab.Epoch
+        shrinked_epochs : nept.Epoch
 
         """
         both_limit = min(self.durations / 2)
@@ -422,11 +422,11 @@ class Epoch:
 
         Parameters
         ----------
-        epoch : vdmlab.Epoch
+        epoch : nept.Epoch
 
         Returns
         -------
-        joined_epochs : vdmlab.Epoch
+        joined_epochs : nept.Epoch
 
         """
         join_starts = np.concatenate((self.starts, epoch.starts))
@@ -439,7 +439,7 @@ class Epoch:
 
         Parameters
         ----------
-        epochs: vdmlab.Epoch
+        epochs: nept.Epoch
         value: float or int
 
         Returns
@@ -519,13 +519,13 @@ class Neurons:
 
         Parameters
         ----------
-        spikes : vdmlab.Neurons
+        spikes : nept.Neurons
         t_start : float
         t_stop : float
 
         Returns
         -------
-        sliced_spikes : list of vdmlab.SpikeTrain
+        sliced_spikes : list of nept.SpikeTrain
 
         """
         sliced_spikes = [spiketrain.time_slice(t_start, t_stop) for spiketrain in self.spikes]
@@ -538,13 +538,13 @@ class Neurons:
 
         Parameters
         ----------
-        spikes : vdmlab.Neurons
+        spikes : nept.Neurons
         t_start : float
         t_stop : float
 
         Returns
         -------
-        sliced_spikes : list of vdmlab.SpikeTrain
+        sliced_spikes : list of nept.SpikeTrain
 
         """
         sliced_spikes = [spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes]
@@ -567,9 +567,9 @@ class Position(AnalogSignal):
         With shape (n_samples,).
     """
     def __getitem__(self, idx):
-        if type(idx) == vdm.objects.Epoch:
+        if type(idx) == nept.objects.Epoch:
             if idx.isempty:
-                return vdm.Position(np.array([[]]), np.array([]))
+                return nept.Position(np.array([[]]), np.array([]))
             else:
                 return self.time_slices(idx.starts, idx.stops)
         else:
@@ -602,7 +602,7 @@ class Position(AnalogSignal):
 
         Parameters
         ----------
-        pos : vdmlab.Position
+        pos : nept.Position
 
         Returns
         -------
@@ -630,7 +630,7 @@ class Position(AnalogSignal):
 
         Returns
         -------
-        pos : vdmlab.Position
+        pos : nept.Position
             1D position.
 
         """
@@ -648,14 +648,14 @@ class Position(AnalogSignal):
 
         Parameters
         ----------
-        pos : vdmlab.Position
+        pos : nept.Position
         t_smooth : float or None
             Range over which smoothing occurs in seconds.
             Default is None (no smoothing).
 
         Returns
         -------
-        speed : vdmlab.AnalogSignal
+        speed : nept.AnalogSignal
         """
         speed = self[1:].distance(self[:-1])
         speed /= np.diff(self.time)
@@ -708,19 +708,19 @@ class SpikeTrain:
         return SpikeTrain(self.time[idx], self.label)
 
     def time_slice(self, t_start, t_stop):
-        """Creates a new vdmlab.SpikeTrain corresponding to the time slice of
+        """Creates a new nept.SpikeTrain corresponding to the time slice of
         the original between (and including) times t_start and t_stop. Setting
         either parameter to None uses infinite endpoints for the time interval.
 
         Parameters
         ----------
-        spikes : vdmlab.SpikeTrain
+        spikes : nept.SpikeTrain
         t_start : float
         t_stop : float
 
         Returns
         -------
-        sliced_spikes : vdmlab.SpikeTrain
+        sliced_spikes : nept.SpikeTrain
         """
         if t_start is None:
             t_start = -np.inf
@@ -739,13 +739,13 @@ class SpikeTrain:
 
         Parameters
         ----------
-        spiketrain : vdmlab.SpikeTrain
+        spiketrain : nept.SpikeTrain
         t_starts : list of floats
         t_stops : list of floats
 
         Returns
         -------
-        sliced_spiketrain : vdmlab.SpikeTrain
+        sliced_spiketrain : nept.SpikeTrain
         """
         if len(t_starts) != len(t_stops):
             raise ValueError("must have same number of start and stop times")

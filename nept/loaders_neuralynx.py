@@ -1,7 +1,7 @@
 # Adapted from nlxio written by Bernard Willards <https://github.com/bwillers/nlxio>
 
 import numpy as np
-import vdmlab as vdm
+import nept
 
 
 def load_events(filename, labels):
@@ -37,7 +37,7 @@ def load_events(filename, labels):
 
 
 def load_lfp(filename):
-    """Loads LFP as vdmlab.LocalFieldPotential
+    """Loads LFP as nept.LocalFieldPotential
 
     Parameters
     ----------
@@ -45,16 +45,16 @@ def load_lfp(filename):
 
     Returns
     -------
-    lfp: vdmlab.LocalFieldPotential
+    lfp: nept.LocalFieldPotential
 
     """
     data, time = load_ncs(filename)
 
-    return vdm.LocalFieldPotential(data, time)
+    return nept.LocalFieldPotential(data, time)
 
 
 def load_position(filename, pxl_to_cm):
-    """Loads videotracking position as vdmlab.Position
+    """Loads videotracking position as nept.Position
 
     Parameters
     ----------
@@ -64,14 +64,14 @@ def load_position(filename, pxl_to_cm):
 
     Returns
     -------
-    position: vdmlab.Position
+    position: nept.Position
 
     """
     nvt_data = load_nvt(filename)
 
     xy = np.hstack(np.array([nvt_data['x'] / pxl_to_cm[0], nvt_data['y'] / pxl_to_cm[1]])[..., np.newaxis])
 
-    return vdm.Position(xy, nvt_data['time'])
+    return nept.Position(xy, nvt_data['time'])
 
 
 def load_neuralynx_header(filename):

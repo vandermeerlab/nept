@@ -1,6 +1,5 @@
 import numpy as np
-import vdmlab as vdm
-from .objects import Position
+import nept
 
 
 def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
@@ -8,7 +7,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
 
     Parameters
     ----------
-    counts : vdm.AnalogSignal
+    counts : nept.AnalogSignal
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
     tuning_curves : np.array
         Where each inner array is the tuning curve (floats) for an individual neuron.
@@ -75,7 +74,7 @@ def decode_location(likelihood, pos_centers, time_centers):
 
     Returns
     -------
-    decoded : vdmlab.Position
+    decoded : nept.Position
         Estimate of decoded position.
 
     """
@@ -89,7 +88,7 @@ def decode_location(likelihood, pos_centers, time_centers):
 
     decoded_pos = np.squeeze(decoded_pos)
 
-    return vdm.Position(decoded_pos, time_centers)
+    return nept.Position(decoded_pos, time_centers)
 
 
 def remove_teleports(position, speed_thresh, min_length):
@@ -97,7 +96,7 @@ def remove_teleports(position, speed_thresh, min_length):
 
     Parameters
     ----------
-    position : vdmlab.Position
+    position : nept.Position
     speed_thresh : int
         Maximum speed to consider natural rat movements. Anything
         above this theshold will not be included in the filtered positions.
@@ -106,7 +105,7 @@ def remove_teleports(position, speed_thresh, min_length):
 
     Returns
     -------
-    filtered_position : vdmlab.Epoch
+    filtered_position : nept.Epoch
 
     """
     velocity = np.squeeze(position.speed().data)
@@ -120,5 +119,5 @@ def remove_teleports(position, speed_thresh, min_length):
     starts = [position.time[idx_sequence[0]] for idx_sequence in keep_idx]
     stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx]
 
-    return vdm.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
+    return nept.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
                                 np.array(stops)[..., np.newaxis]]))

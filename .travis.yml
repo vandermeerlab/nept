@@ -21,7 +21,7 @@ install:
 
 # run tests
 script: 
-  - coverage run --source vdmlab -m py.test
+  - coverage run --source nept -m py.test
 
 # coverage tests
 after_success:

@@ -1,28 +1,28 @@
 import numpy as np
 import pytest
-import vdmlab as vdm
+import nept
 
 
 def test_spiketrain_labels():
-    spikes = [vdm.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
-              vdm.SpikeTrain(np.array([1.3, 3.3, 5.3]), 'check_label')]
+    spikes = [nept.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
+              nept.SpikeTrain(np.array([1.3, 3.3, 5.3]), 'check_label')]
 
     assert spikes[0].label == None
     assert spikes[1].label == 'check_label'
 
 
 def test_spiketrain_sort_times():
-    spikes = [vdm.SpikeTrain(np.array([9., 7., 5., 3., 1.])),
-              vdm.SpikeTrain(np.array([1.3, 5.3, 3.3]))]
+    spikes = [nept.SpikeTrain(np.array([9., 7., 5., 3., 1.])),
+              nept.SpikeTrain(np.array([1.3, 5.3, 3.3]))]
 
     assert np.allclose(spikes[0].time, np.array([1., 3., 5., 7., 9.]))
     assert np.allclose(spikes[1].time, np.array([1.3, 3.3, 5.3]))
 
 
 def test_spiketrain_time_slice():
-    spikes_a = vdm.SpikeTrain(np.arange(1, 100, 5), 'test')
-    spikes_b = vdm.SpikeTrain(np.arange(24, 62, 1), 'test')
-    spikes_c = vdm.SpikeTrain(np.hstack((np.arange(0, 24, 3), np.arange(61, 100, 3))), 'test')
+    spikes_a = nept.SpikeTrain(np.arange(1, 100, 5), 'test')
+    spikes_b = nept.SpikeTrain(np.arange(24, 62, 1), 'test')
+    spikes_c = nept.SpikeTrain(np.hstack((np.arange(0, 24, 3), np.arange(61, 100, 3))), 'test')
 
     t_start = 25.
     t_stop = 60.
@@ -39,8 +39,8 @@ def test_spiketrain_time_slice():
 
 
 def test_spiketrain_time_slices():
-    spikes = [vdm.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
-              vdm.SpikeTrain(np.array([1.3, 3.3, 5.3]))]
+    spikes = [nept.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
+              nept.SpikeTrain(np.array([1.3, 3.3, 5.3]))]
 
     starts = np.array([1., 7.])
     stops = np.array([4., 10.])

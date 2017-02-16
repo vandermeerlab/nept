@@ -1,45 +1,44 @@
 import numpy as np
 import pytest
 from shapely.geometry import Point, LineString
-
-import vdmlab as vdm
+import nept
 
 
 def test_simple_tc():
-    linear = vdm.Position(np.linspace(0, 10, 4), np.linspace(0, 3, 4))
+    linear = nept.Position(np.linspace(0, 10, 4), np.linspace(0, 3, 4))
 
-    spikes = [vdm.SpikeTrain(np.array([0.5]), 'test'),
-              vdm.SpikeTrain(np.array([1.5]), 'test'),
-              vdm.SpikeTrain(np.array([2.5]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0.5]), 'test'),
+              nept.SpikeTrain(np.array([1.5]), 'test'),
+              nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
+    tuning = nept.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0., 0.], [0., 1., 0., 0.], [0., 0., 1., 0.]))
 
 
 def test_simple_tc1():
     """Time spent in each bin not the same."""
-    linear = vdm.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
+    linear = nept.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
 
-    spikes = [vdm.SpikeTrain(np.array([0.0]), 'test'),
-              vdm.SpikeTrain(np.array([1.0]), 'test'),
-              vdm.SpikeTrain(np.array([2.0]), 'test'),
-              vdm.SpikeTrain(np.array([2.5]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0.0]), 'test'),
+              nept.SpikeTrain(np.array([1.0]), 'test'),
+              nept.SpikeTrain(np.array([2.0]), 'test'),
+              nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
+    tuning = nept.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 
 
 def test_tuning_curve_1d_gaussian():
-    linear = vdm.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
+    linear = nept.Position(np.linspace(0, 9, 4), np.linspace(0, 3, 4))
 
-    spikes = [vdm.SpikeTrain(np.array([0.0]), 'test'),
-              vdm.SpikeTrain(np.array([1.0]), 'test'),
-              vdm.SpikeTrain(np.array([2.0]), 'test'),
-              vdm.SpikeTrain(np.array([2.5]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0.0]), 'test'),
+              nept.SpikeTrain(np.array([1.0]), 'test'),
+              nept.SpikeTrain(np.array([2.0]), 'test'),
+              nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = vdm.tuning_curve(linear, spikes, binsize=3, gaussian_std=0.5)
+    tuning = nept.tuning_curve(linear, spikes, binsize=3, gaussian_std=0.5)
 
     assert np.allclose(tuning, ([0.78698604, 0.10650698, 0.],
                                 [0.10650698, 0.78698604, 0.10650698],
@@ -48,16 +47,16 @@ def test_tuning_curve_1d_gaussian():
 
 
 def test_tuning_curve_1d_with_2d_position():
-    position = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+    position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
                                        np.array([7, 5, 3, 1])[..., np.newaxis]]),
                             np.array([0., 1., 2., 3.]))
 
     binsize = 2
 
-    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
     with pytest.raises(ValueError) as excinfo:
-        tuning_curves = vdm.tuning_curve(position, spikes, binsize=binsize)
+        tuning_curves = nept.tuning_curve(position, spikes, binsize=binsize)
 
     assert str(excinfo.value) == 'position must be linear'
 
@@ -68,7 +67,7 @@ def test_linearize():
 
     xy = np.array(([1., 1.], [2., 2.], [3., 3.], [4., 4.], [5., 5.]))
     time = np.array([0., 1., 2., 3., 4.])
-    pos = vdm.Position(xy, time)
+    pos = nept.Position(xy, time)
 
     trajectory = [[0., 0.], [5., 5.], [10., 10.]]
     line = LineString(trajectory)
@@ -76,7 +75,7 @@ def test_linearize():
     zone_start = Point([1., 1.])
     zone_stop = Point([9., 9.])
     expand_by = 1
-    zone = vdm.expand_line(zone_start, zone_stop, line, expand_by)
+    zone = nept.expand_line(zone_start, zone_stop, line, expand_by)
 
     sliced_pos = pos[t_start:t_stop]
 
@@ -87,33 +86,33 @@ def test_linearize():
 
 
 def test_tuning_curve_2d():
-    pos = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+    pos = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
                                   np.array([7, 5, 3, 1])[..., np.newaxis]]),
-                       np.array([0., 1., 2., 3.]))
+                        np.array([0., 1., 2., 3.]))
 
     binsize = 2
     xedges = np.arange(pos.x.min(), pos.x.max()+binsize, binsize)
     yedges = np.arange(pos.y.min(), pos.y.max()+binsize, binsize)
 
-    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
-    tuning_curves = vdm.tuning_curve_2d(pos, spikes, xedges, yedges)
+    tuning_curves = nept.tuning_curve_2d(pos, spikes, xedges, yedges)
 
     assert np.allclose(tuning_curves, [np.array([[0., 0., 3.], [0., 0., 0.], [1., 0., 0.]])])
 
 
 def test_tuning_curve_2d_gaussian():
-    position = vdm.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+    position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
                                        np.array([7, 5, 3, 1])[..., np.newaxis]]),
-                            np.array([0., 1., 2., 3.]))
+                             np.array([0., 1., 2., 3.]))
 
     binsize = 2
     xedges = np.arange(position.x.min(), position.x.max()+binsize, binsize)
     yedges = np.arange(position.y.min(), position.y.max()+binsize, binsize)
 
-    spikes = [vdm.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
+    spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
-    tuning_curves = vdm.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=0.7)
+    tuning_curves = nept.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_sigma=0.7)
 
     assert np.allclose(tuning_curves, [np.array([[0.0301911, 0.50216994, 1.80311125],
                                                  [0.17297243, 0.18493196, 0.50216994],

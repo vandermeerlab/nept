@@ -110,8 +110,8 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
     neuron_list : list of ints
         These will be the indices into the full list of neuron spike times
     spikes : list
-        Containing vdmlab.SpikeTrain for each neuron.
-    pos : vdmlab.Position
+        Containing nept.SpikeTrain for each neuron.
+    pos : nept.Position
         Must be 2D.
     num_bins : int
         This will specify how the 2D space is broken up, the greater the number

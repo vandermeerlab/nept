@@ -1,13 +1,13 @@
 import numpy as np
 import pytest
-import vdmlab as vdm
+import nept
 
 
 def test_analogsignal_time_slice_1d():
     data = np.array([9., 7., 5., 3., 1.])
     time = np.array([0., 1., 2., 3., 4.])
 
-    analogsignal = vdm.AnalogSignal(data, time)
+    analogsignal = nept.AnalogSignal(data, time)
 
     start = 1.
     stop = 3.
@@ -21,7 +21,7 @@ def test_analogsignal_time_slices_1d():
     data = np.array([9., 7., 5., 3., 1.])
     time = np.array([0., 1., 2., 3., 4.])
 
-    analogsignal = vdm.AnalogSignal(data, time)
+    analogsignal = nept.AnalogSignal(data, time)
 
     starts = np.array([1., 3.])
     stops = np.array([1.5, 4.])
@@ -38,7 +38,7 @@ def test_analogsignal_time_slice_2d():
 
     data = np.hstack([np.array(x)[..., np.newaxis], np.array(y)[..., np.newaxis]])
 
-    analogsignal = vdm.AnalogSignal(data, time)
+    analogsignal = nept.AnalogSignal(data, time)
 
     start = 1.
     stop = 3.
@@ -55,7 +55,7 @@ def test_analogsignal_time_slices_2d():
 
     data = np.hstack([np.array(x)[..., np.newaxis], np.array(y)[..., np.newaxis]])
 
-    analogsignal = vdm.AnalogSignal(data, time)
+    analogsignal = nept.AnalogSignal(data, time)
 
     starts = np.array([1., 3.])
     stops = np.array([1.5, 4.])

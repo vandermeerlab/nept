@@ -149,7 +149,7 @@ def load_medpc(filename, f_assign_label):
     Returns
     -------
     rats_data: dict
-        With each subject as keys. Contains dict of event as vdmlab.Epochs.
+        With each subject as keys. Contains dict of event as nept.Epochs.
 
     """
     contents = read_file(filename)

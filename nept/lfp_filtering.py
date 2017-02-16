@@ -2,7 +2,7 @@ import numpy as np
 import scipy.signal
 import scipy.stats as stats
 
-import vdmlab as vdm
+import nept
 
 
 def butter_bandpass(signal, thresh, fs, order=4):
@@ -10,7 +10,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
 
     Parameters
     ----------
-    signal : vdmlad.LFP
+    signal : nept.LFP
     fs : int
         Eg. 2000. Should get this from experiment-specifics.
     thresh : tuple
@@ -38,7 +38,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
 
     Parameters
     ----------
-    lfp : vdmlab.LocalFieldPotential
+    lfp : nept.LocalFieldPotential
     fs : int
         Experiment-specific, something in the range of 2000 typical.
     thresh : tuple
@@ -56,8 +56,8 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
 
     Returns
     -------
-    swrs : vdmlab.Epoch
-        Containing vdmlab.LocalFieldPotential for each SWR event
+    swrs : nept.Epoch
+        Containing nept.LocalFieldPotential for each SWR event
 
     """
     # Filtering signal with butterworth fitler
@@ -112,7 +112,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
         start_merged_idx = np.delete(start_merged_idx, z_idx)
         stop_merged_idx = np.delete(stop_merged_idx, z_idx)
 
-    swrs = vdm.Epoch(np.array([start_merged, stop_merged]))
+    swrs = nept.Epoch(np.array([start_merged, stop_merged]))
 
     return swrs
 

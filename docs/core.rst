@@ -1,11 +1,11 @@
-vdmlab Core
-===========
-Objects in vdmlab represent neural and behavioral data.
+nept Objects
+============
+Objects in nept represent neural and behavioral data.
 
 AnalogSignal
 ------------
 
-.. autoclass:: vdmlab.AnalogSignal
+.. autoclass:: nept.AnalogSignal
     :members:
     :undoc-members:
     :show-inheritance:
@@ -13,7 +13,7 @@ AnalogSignal
 LocalFieldPotential
 ~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: vdmlab.LocalFieldPotential
+.. autoclass:: nept.LocalFieldPotential
     :members:
     :undoc-members:
     :show-inheritance:
@@ -21,7 +21,7 @@ LocalFieldPotential
 Position
 ~~~~~~~~
 
-.. autoclass:: vdmlab.Position
+.. autoclass:: nept.Position
     :members:
     :undoc-members:
     :show-inheritance:
@@ -29,7 +29,7 @@ Position
 Epoch
 -----
 
-.. autoclass:: vdmlab.Epoch
+.. autoclass:: nept.Epoch
     :members:
     :undoc-members:
     :show-inheritance:
@@ -37,7 +37,7 @@ Epoch
 SpikeTrain
 ----------
 
-.. autoclass:: vdmlab.SpikeTrain
+.. autoclass:: nept.SpikeTrain
     :members:
     :undoc-members:
     :show-inheritance:

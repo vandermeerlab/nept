@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-import vdmlab as vdm
 from shapely.geometry import Point, LineString
+import nept
 
 
 def test_position_xy():
@@ -10,7 +10,7 @@ def test_position_xy():
                      [0.9, 2.0],
                      [2.3, 1.4]])
 
-    pos = vdm.Position(data, times)
+    pos = nept.Position(data, times)
 
     assert np.allclose(pos.x, np.array([1.1, 0.9, 2.3]))
     assert np.allclose(pos.y, np.array([3.1, 2.0, 1.4]))
@@ -22,7 +22,7 @@ def test_position_xy_reshaped():
     x = np.array([1.1, 0.9, 2.3])
     y = np.array([3.1, 2.0, 1.4])
 
-    pos = vdm.Position(np.array([x, y]), times)
+    pos = nept.Position(np.array([x, y]), times)
 
     assert np.allclose(pos.x, np.array([1.1, 0.9, 2.3]))
     assert np.allclose(pos.y, np.array([3.1, 2.0, 1.4]))
@@ -30,7 +30,7 @@ def test_position_xy_reshaped():
 
 
 def test_position_idx_in_pos():
-    position = vdm.Position([[0, 1, 2], [9, 7, 5]], [10, 11, 12])
+    position = nept.Position([[0, 1, 2], [9, 7, 5]], [10, 11, 12])
     pos = position[1]
 
     assert np.allclose(pos.x, 1)
@@ -42,7 +42,7 @@ def test_position_1d_y():
     times = np.array([1.0, 2.0, 3.0])
     x = np.array([1.1, 0.9, 2.3])
 
-    pos = vdm.Position(x, times)
+    pos = nept.Position(x, times)
 
     with pytest.raises(ValueError) as excinfo:
         y_val = pos.y
@@ -54,8 +54,8 @@ def test_position_distance_1d():
     x = np.array([1.1, 0.9, 2.3])
     y = np.array([3.1, 2.0, 1.4])
 
-    pos = vdm.Position(x, times)
-    other = vdm.Position(y, times)
+    pos = nept.Position(x, times)
+    other = nept.Position(y, times)
 
     distance_pos = pos.distance(other)
     distance_other = other.distance(pos)
@@ -74,8 +74,8 @@ def test_position_distance_2d():
                       [2.0, 2.6],
                       [3.0, 1.1]])
 
-    pos = vdm.Position(data, times)
-    other = vdm.Position(data2, times2)
+    pos = nept.Position(data, times)
+    other = nept.Position(data2, times2)
 
     dist = pos.distance(other)
 
@@ -89,8 +89,8 @@ def test_position_distance_dimensions():
                      [3.0, 1.1]])
     x = np.array([1.1, 0.9, 2.3])
 
-    pos = vdm.Position(data, times)
-    other = vdm.Position(x, times)
+    pos = nept.Position(data, times)
+    other = nept.Position(x, times)
 
     with pytest.raises(ValueError) as excinfo:
         dist = pos.distance(other)
@@ -109,8 +109,8 @@ def test_position_distance_diff_size():
                       [2.0, 2.6],
                       [3.0, 1.1]])
 
-    pos = vdm.Position(data, times)
-    other = vdm.Position(data2, times2)
+    pos = nept.Position(data, times)
+    other = nept.Position(data2, times2)
 
     with pytest.raises(ValueError) as excinfo:
         dist = pos.distance(other)
@@ -123,13 +123,13 @@ def test_position_linearize():
                      [0.5, 0.1],
                      [1.0, 1.2]])
 
-    pos = vdm.Position(data, times)
+    pos = nept.Position(data, times)
     line = LineString([(0.0, 0.0), (1.0, 1.0)])
 
     zone_start = Point([1., 1.])
     zone_stop = Point([9., 9.])
     expand_by = 1
-    zone = vdm.expand_line(zone_start, zone_stop, line, expand_by)
+    zone = nept.expand_line(zone_start, zone_stop, line, expand_by)
 
     linear = pos.linearize(line, zone)
 
@@ -141,7 +141,7 @@ def test_positon_speed_simple():
     times = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
     data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
 
-    pos = vdm.Position(data, times)
+    pos = nept.Position(data, times)
     speed = pos.speed()
 
     assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
@@ -151,7 +151,7 @@ def test_position_speed_complex():
     time = np.linspace(0, np.pi * 2, 201)
     data = np.hstack((np.sin(time)))
 
-    position = vdm.Position(data, time)
+    position = nept.Position(data, time)
     speed = position.speed()
     run_idx = np.squeeze(speed.data) >= 0.015
     run_position = position[run_idx]
@@ -163,7 +163,7 @@ def test_position_speed_complex2():
     time = np.linspace(0, np.pi * 2, 201)
     data = np.hstack((np.sin(time)))
 
-    position = vdm.Position(data, time)
+    position = nept.Position(data, time)
     speed = position.speed()
     run_idx = np.squeeze(speed.data) >= 0.01
     run_position = position[run_idx]
@@ -175,7 +175,7 @@ def test_position_speed_unequal_time():
     time = np.hstack((np.linspace(0, 10, 10), np.linspace(11, 101, 10)))
     data = np.arange(0, 20)
 
-    position = vdm.Position(data, time)
+    position = nept.Position(data, time)
     speed = position.speed()
     run_idx = np.squeeze(speed.data) >= 0.7
     run_position = position[run_idx]

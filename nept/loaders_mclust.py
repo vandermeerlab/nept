@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import vdmlab as vdm
+import nept
 
 
 def load_mclust_header(filename):
@@ -67,7 +67,7 @@ def load_mclust_t(filename):
 
 
 def get_spiketrain(spike_times, label):
-    """Converts spike times to vdm.SpikeTrain.
+    """Converts spike times to nept.SpikeTrain.
 
     Parameters
     ----------
@@ -76,11 +76,11 @@ def get_spiketrain(spike_times, label):
 
     Returns
     -------
-    spiketrain: vdm.SpikeTrain
+    spiketrain: nept.SpikeTrain
 
     """
 
-    return vdm.SpikeTrain(spike_times, label)
+    return nept.SpikeTrain(spike_times, label)
 
 
 def load_spikes(filepath, load_questionable=True):
@@ -95,7 +95,7 @@ def load_spikes(filepath, load_questionable=True):
 
     Returns
     -------
-    spikes: list of vdm.SpikeTrain
+    spikes: list of nept.SpikeTrain
 
     """
     spikes = []

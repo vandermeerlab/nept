@@ -12,7 +12,7 @@ def binned_position(position, binsize):
 
     Parameters
     ----------
-    position : vdm.Position
+    position : nept.Position
         Must be a 1D position
     binsize : int
 
@@ -39,10 +39,10 @@ def tuning_curve(position, spikes, binsize, gaussian_std=None):
 
     Parameters
     ----------
-    position : vdmlab.Position
+    position : nept.Position
         Must be a linear position (1D).
     spikes : list
-        Containing vdmlab.SpikeTrain for each neuron.
+        Containing nept.SpikeTrain for each neuron.
     binsize : int
     gaussian_std : int or None
         No smoothing if None.
@@ -103,10 +103,10 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
 
     Parameters
     ----------
-    position : vdmlab.Position
+    position : nept.Position
         Must be a 2D position.
     spikes : list
-        Containing vdmlab.SpikeTrain for each neuron.
+        Containing nept.SpikeTrain for each neuron.
     xedges : np.array
     yedges : np.array
     sampling_rate : float

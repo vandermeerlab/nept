@@ -1,86 +1,86 @@
-vdmlab Modules
-==============
+nept Modules
+============
 
-The vdmlab modules are used for the analysis 
-of neural (electrophysiological) and behavioral data.
+The nept modules are used for the analysis 
+of neural electrophysiological and behavioral data.
 
 
-vdmlab.co_occurrence module
----------------------------
-
-.. automodule:: vdmlab.co_occurrence
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vdmlab.decoding module
-----------------------
-
-.. automodule:: vdmlab.decoding
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vdmlab.lfp_filtering module
----------------------------
-
-.. automodule:: vdmlab.lfp_filtering
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vdmlab.loaders_mclust module
-----------------------------
-
-.. automodule:: vdmlab.loaders_mclust
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vdmlab.loaders_nlx module
+nept.co_occurrence module
 -------------------------
 
-.. automodule:: vdmlab.loaders_nlx
+.. automodule:: nept.co_occurrence
     :members:
     :undoc-members:
     :show-inheritance:
 
-vdmlab.maze_breakdown module
-----------------------------
+nept.decoding module
+--------------------
 
-.. automodule:: vdmlab.maze_breakdown
+.. automodule:: nept.decoding
     :members:
     :undoc-members:
     :show-inheritance:
 
-vdmlab.medpc module
-----------------------------
+nept.lfp_filtering module
+-------------------------
 
-.. automodule:: vdmlab.medpc
+.. automodule:: nept.lfp_filtering
     :members:
     :undoc-members:
     :show-inheritance:
 
-vdmlab.place_fields module
+nept.loaders_mclust module
 --------------------------
 
-.. automodule:: vdmlab.place_fields
+.. automodule:: nept.loaders_mclust
     :members:
     :undoc-members:
     :show-inheritance:
 
-vdmlab.tuning_curves module
----------------------------
+nept.loaders_neuralynx module
+------------------------------
 
-.. automodule:: vdmlab.tuning_curves
+.. automodule:: nept.loaders_neuralynx
     :members:
     :undoc-members:
     :show-inheritance:
 
-vdmlab.utils module
--------------------
+nept.maze_breakdown module
+--------------------------
 
-.. automodule:: vdmlab.utils
+.. automodule:: nept.maze_breakdown
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nept.medpc module
+-----------------
+
+.. automodule:: nept.medpc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nept.place_fields module
+------------------------
+
+.. automodule:: nept.place_fields
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nept.tuning_curves module
+-------------------------
+
+.. automodule:: nept.tuning_curves
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nept.utils module
+-----------------
+
+.. automodule:: nept.utils
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import signal
 
-import vdmlab as vdm
+import nept
 
 
 def find_nearest_idx(array, val):
@@ -48,13 +48,13 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
     Parameters
     ----------
     spikes: np.array
-        Of vdm.SpikeTrain objects
-    epochs: vdm.Epoch
+        Of nept.SpikeTrain objects
+    epochs: nept.Epoch
     min_involved: int
 
     Returns
     -------
-    multi_epochs: vdm.Epoch
+    multi_epochs: nept.Epoch
 
     """
     multi_starts = []
@@ -73,7 +73,7 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
     multi_starts = np.array(multi_starts)
     multi_stops = np.array(multi_stops)
 
-    multi_epochs = vdm.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
+    multi_epochs = nept.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
                                         np.array(multi_stops)[..., np.newaxis]]))
 
     return multi_epochs
@@ -112,7 +112,7 @@ def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
     Parameters
     ----------
     spikes : list
-        Contains vdmlan.SpikeTrain for each neuron
+        Contains nept.SpikeTrain for each neuron
     edges : np.array
         Bin edges for computing spike counts.
     gaussian_std : float
@@ -120,7 +120,7 @@ def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
 
     Returns
     -------
-    counts : vdm.AnalogSignal
+    counts : nept.AnalogSignal
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
 
     """
@@ -142,8 +142,7 @@ def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
         if gaussian_std is not None and gaussian_std > dt:
             counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
 
-    return vdm.AnalogSignal(counts.T, edges[:-1])
-    # return counts
+    return nept.AnalogSignal(counts.T, edges[:-1])
 
 
 def cartesian(xcenters, ycenters):
@@ -168,7 +167,7 @@ def get_xyedges(position, binsize=3):
 
     Parameters
     ----------
-    position: 2D vdm.Position
+    position: 2D nept.Position
     binsize: int
 
     Returns

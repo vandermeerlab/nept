@@ -14,13 +14,13 @@ def read(*filenames, **kwargs):
     return sep.join(buf)
 
 setup(
-    name="vdmlab",
+    name="nept",
     version="0.1.0.dev0",
-    author="van der Meer lab",
+    author="Emily Irvine",
     author_email="emily.m.irvine.gr@dartmouth.edu",
     packages=find_packages(),
-    url="https://github.com/mvdm/vandermeerlab",
-    description="Tools used for the analysis of neural recording data.",
+    url="https://github.com/vandermeerlab/nept",
+    description="Neuroelectrophysiology tools",
     long_description=read('README.md'),
     install_requires=[
         "numpy",

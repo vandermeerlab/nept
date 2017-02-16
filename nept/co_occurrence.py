@@ -1,6 +1,6 @@
 import numpy as np
 import warnings
-import vdmlab as vdm
+import nept
 
 
 def spike_counts(spikes, epochs, window=None):
@@ -9,8 +9,8 @@ def spike_counts(spikes, epochs, window=None):
     Parameters
     ----------
     spikes : list
-        Containing vdmlab.SpikeTrain for each neuron.
-    interval_times : vdmlab.Epoch
+        Containing nept.SpikeTrain for each neuron.
+    interval_times : nept.Epoch
     window : float
         When window is set, takes the spike times for this window length
         around the center of the interval times. The default is set to None.
@@ -23,7 +23,7 @@ def spike_counts(spikes, epochs, window=None):
 
     """
     if window is not None:
-        epochs = vdm.Epoch(np.array([epochs.centers-(window*0.5), epochs.centers+(window*0.5)]))
+        epochs = nept.Epoch(np.array([epochs.centers-(window*0.5), epochs.centers+(window*0.5)]))
 
     n_neurons = len(spikes)
     count_matrix = np.zeros((n_neurons, epochs.n_epochs))

@@ -1,36 +1,3 @@
-# code-matlab
-*.*~
-*.aux
-*.bbl
-*.blg
-*.dvi
-*.fdb_latexmk
-*.glg
-*.glo
-*.gls
-*.idx
-*.ilg
-*.ind
-*.ist
-*.lof
-*.log
-*.lot
-*.nav
-*.nlo
-*.out
-*.pdfsync
-*.ps
-*.snm
-*.synctex.gz
-*.toc
-*.vrb
-*.maf
-*.mtc
-*.mtc0
-*.asv
-code-matlab/shared/datatypes/tsd/UnionTSD.m
-
-# code-python
 *.pyc
 Thumbs.db
 .DS_Store

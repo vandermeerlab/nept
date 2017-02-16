@@ -28,24 +28,24 @@ In Windows, you may need to download the most recent ``*.whl`` file
 and install using ``pip install yourshapelyinstall.whl``
 (remember, you must be in the directory where this .whl is located).
 
-Clone python-vdmlab from Github
--------------------------------
+Clone nept from Github
+----------------------
 
 Clone the analysis code from Github.
 
   .. code-block:: bash
 
-    git clone https://github.com/vandermeerlab/python-vdmlab.git
+    git clone https://github.com/vandermeerlab/nept.git
 
 Set up a developer installation.
 
   .. code-block:: bash
 
-    cd python-vdmlab
+    cd nept
     python setup.py develop
 
-All set! You're ready to start using the vdmlab module.
+All set! You're ready to start using the nept module.
 
   .. code-block:: python
 
-    import vdmlab
+    import nept
