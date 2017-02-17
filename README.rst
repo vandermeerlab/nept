@@ -1,0 +1,104 @@
+.. image:: https://img.shields.io/travis/vandermeerlab/nept/master.svg
+  :target: https://travis-ci.org/vandermeerlab/nept
+  :alt: Travis-CI build status
+
+.. image:: https://img.shields.io/codecov/c/github/vandermeerlab/nept/master.svg
+  :target: https://codecov.io/gh/vandermeerlab/nept/branch/master
+  :alt: Test coverage
+
+.. image:: https://readthedocs.org/projects/nept/badge/?version=latest
+  :target: http://nept.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status
+
+**********************************
+nept: Neuroelectrophysiology tools
+**********************************
+
+Formerly ``vdmlab``, renamed to emphasize general abilities of this module.
+
+Getting started for beginners
+=============================
+
+Download Miniconda from `Continuum Analytics <http://conda.pydata.org/miniconda.html>`_. 
+We support Python 3.
+
+Open a **new** terminal, create and activate a new conda environment::
+
+  conda create -n yourenv python=3.5
+  activate yourenv [Windows] or source activate yourenv [Linux]
+
+Install package dependencies::
+
+  conda install matplotlib jupyter scipy numpy pandas pytest coverage
+
+For Shapely, try::
+
+  pip install shapely
+
+In Windows, download the most recent wheel file 
+`here <http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely>`_.
+Once downloaded, install with wheel.
+
+.. code:: bash
+
+  pip install yourshapelyinstall.whl
+
+
+Clone the analysis code from Github and use a developer installation::
+
+  git clone https://github.com/vandermeerlab/nept.git
+  cd nept
+  python setup.py develop
+
+*All set!*
+
+Documentation
+=============
+
+Users
+-----
+
+Check `Read The Docs <http://nept.readthedocs.io/en/latest/index.html>`_ 
+for the latest version of the nept documentation.
+
+Developers
+----------
+
+Ensure you have sphinx, numpydic, and mock::
+
+  conda install sphinx numpydoc mock
+
+
+Build latest version of the documentation using 
+in the nept directory prior to pushing it to Github::
+
+  python setup.py build_sphinx
+
+Testing
+=======
+
+Run tests with `pytest <http://docs.pytest.org/en/latest/usage.html>`_.
+
+Check coverage with `codecov <https://codecov.io/gh/vandermeerlab/nept>`_.
+Or in the command line::
+
+  py.test
+  coverage report
+
+License
+=======
+
+The nept codebase is made available under made available 
+under the `MIT license <LICENSE.md>`_
+that allows using, copying, and sharing.
+
+The file ``nept/neuralynx_loaders.py`` contains code from 
+`nlxio <https://github.com/bwillers/nlxio>`_ by Bernard Willers, 
+used with permission. 
+
+Projects using nept
+===================
+
+`emi_shortcut <https://github.com/vandermeerlab/emi_shortcut>`_
+
+`emi_biconditional <https://github.com/vandermeerlab/emi_biconditional>`_

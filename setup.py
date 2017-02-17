@@ -17,11 +17,11 @@ setup(
     name="nept",
     version="0.1.0.dev0",
     author="Emily Irvine",
-    author_email="emily.m.irvine.gr@dartmouth.edu",
+    author_email="emilymirvine@gmail.com",
     packages=find_packages(),
     url="https://github.com/vandermeerlab/nept",
     description="Neuroelectrophysiology tools",
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     install_requires=[
         "numpy",
         "scipy",
