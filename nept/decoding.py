@@ -110,7 +110,7 @@ def remove_teleports(position, speed_thresh, min_length):
     """
     velocity = np.squeeze(position.speed().data)
 
-    split_idx = np.where((0.0 < velocity) & (velocity <= speed_thresh))[0]
+    split_idx = np.where(velocity >= speed_thresh)[0]
     keep_idx = [idx for idx in np.split(np.arange(position.n_samples), split_idx) if idx.size >= min_length]
 
     if len(keep_idx) == 0:
