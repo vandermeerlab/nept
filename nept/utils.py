@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import signal
+import warnings
 
 import nept
 
@@ -106,43 +107,87 @@ def get_sort_idx(tuning_curves):
     return sorted_idx
 
 
-def get_counts(spikes, edges, gaussian_std=None, n_gaussian_std=5):
-    """Finds the number of spikes in each bin.
+def get_edges(position, binsize, lastbin=True):
+    """Finds edges based on linear time
 
     Parameters
     ----------
-    spikes : list
-        Contains nept.SpikeTrain for each neuron
-    edges : np.array
-        Bin edges for computing spike counts.
-    gaussian_std : float
-        Standard deviation for gaussian filter. Default is None.
+    position : nept.AnalogSignal
+    binsize : float
+        This is the desired size of bin.
+        Typically set around 0.020 to 0.040 seconds.
+    lastbin : boolean
+        Determines whether to include the last bin. This last bin may
+        not have the same binsize as the other bins.
 
     Returns
     -------
-    counts : nept.AnalogSignal
-        Where each inner array is the number of spikes (int) in each bin for an individual neuron.
+    edges : np.array
 
     """
-    dt = np.median(np.diff(edges))
+    edges = np.arange(position.time[0], position.time[-1], binsize)
 
-    if gaussian_std is not None:
-        n_points = n_gaussian_std * gaussian_std * 2 / dt
+    if lastbin:
+        if edges[-1] != position.time[-1]:
+            edges = np.hstack((edges, position.time[-1]))
+
+    return edges
+
+
+def bin_spikes(spikes, position, window_size, window_advance,
+               gaussian_std=None, n_gaussian_std=5, normalized=True):
+    """Bins spikes using a sliding window.
+
+    Parameters
+    ----------
+    spikes: list
+        Of nept.SpikeTrain
+    position: nept.AnalogSignal
+    window_size: float
+    window_advance: float
+    gaussian_std: float or None
+    n_gaussian_std: int
+    normalized: boolean
+
+    Returns
+    -------
+    binned_spikes: nept.AnalogSignal
+
+    """
+    bin_edges = get_edges(position, window_advance, lastbin=True)
+
+    given_n_bins = window_size / window_advance
+    n_bins = int(round(given_n_bins))
+    if abs(n_bins - given_n_bins) > 0.01:
+        warnings.warn("window advance does not divide the window size evenly. "
+                      "Using window size %g instead." % (n_bins*window_advance))
+
+    if normalized:
+        square_filter = np.ones(n_bins) * (1 / n_bins)
+    else:
+        square_filter = np.ones(n_bins)
+
+    counts = np.zeros((len(spikes), len(bin_edges)))
+    for idx, spiketrain in enumerate(spikes):
+        counts[idx] = np.convolve(np.hstack([np.histogram(spiketrain.time, bins=bin_edges)[0],
+                                             np.array([0])]),
+                                  square_filter, mode='same')
+
+    if gaussian_std is not None and gaussian_std > window_advance:
+        n_points = n_gaussian_std * gaussian_std * 2 / window_advance
         n_points = max(n_points, 1.0)
         if n_points % 2 == 0:
             n_points += 1
-        if n_points > len(edges):
-            raise ValueError("gaussian_std is too large for these times")
-        gaussian_filter = signal.gaussian(n_points, gaussian_std/dt)
+        gaussian_filter = signal.gaussian(n_points, gaussian_std / window_advance)
         gaussian_filter /= np.sum(gaussian_filter)
 
-    counts = np.zeros((len(spikes), len(edges)-1))
-    for idx, spiketrain in enumerate(spikes):
-        counts[idx] = np.histogram(spiketrain.time, bins=edges)[0]
-        if gaussian_std is not None and gaussian_std > dt:
-            counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
+        if len(gaussian_filter) < counts.shape[1]:
+            for idx, spiketrain in enumerate(spikes):
+                counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
+        else:
+            raise ValueError("gaussian filter too long for this length of time")
 
-    return nept.AnalogSignal(counts.T, edges[:-1])
+    return nept.AnalogSignal(counts.T, bin_edges)
 
 
 def cartesian(xcenters, ycenters):
