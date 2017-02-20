@@ -1,48 +1,43 @@
-Getting Started
+Getting started
 ===============
 
-Download Python
----------------
-Download Miniconda from
-`Continuum Analytics <http://conda.pydata.org/miniconda.html>`_.
-We recommend the Python 3 version.
+If you don't already have python 3, we recommend you download it using Miniconda 
+from `Continuum Analytics <http://conda.pydata.org/miniconda.html>`_.
 
-Open a *new* terminal, create and activate a new conda environment.
+We recommend using a separate python environment.
 
-  .. code-block:: bash
+Open a **new** terminal, create and activate a new conda environment::
 
-    conda create -n yourenv python=3.5
-    activate yourenv [Windows] or source activate yourenv [Linux]
+  conda create -n yourenv python=3.5
+  activate yourenv [Windows] or source activate yourenv [Linux]
 
-Install package dependencies (it's possible to
-install multiple packages at once or individually).
+Install package dependencies::
 
-  .. code-block:: bash
+  conda install matplotlib jupyter scipy numpy pandas pytest coverage
 
-    conda install numpy scipy shapely matplotlib
+For Shapely, try::
 
-If conda doesn't have a package of interest (eg. shapely),
-in the terminal try: ``pip install shapely``.
-In Windows, you may need to download the most recent ``*.whl`` file
-`here <http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely>`_
-and install using ``pip install yourshapelyinstall.whl``
-(remember, you must be in the directory where this .whl is located).
+  pip install shapely
 
-Clone nept from Github
-----------------------
+If that fails, in Windows, download the most recent wheel file 
+`here <http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely>`_.
+Once downloaded, install with wheel.
 
-Clone the analysis code from Github.
+.. code:: bash
 
-  .. code-block:: bash
+  pip install yourshapelyinstall.whl
 
-    git clone https://github.com/vandermeerlab/nept.git
+Installation
+============
 
-Set up a developer installation.
+Clone nept from Github and use a developer installation::
 
-  .. code-block:: bash
+  git clone https://github.com/vandermeerlab/nept.git
 
-    cd nept
-    python setup.py develop
+Set up a developer installation::
+
+  cd nept
+  python setup.py develop
 
 All set! You're ready to start using the nept module.
 

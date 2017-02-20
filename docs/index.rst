@@ -4,7 +4,7 @@
 nept
 ====
 
-nept stands for neuroelectrophysiology tools and is a package 
+nept is short for neuroelectrophysiology tools and is a library 
 that we use in the `van der Meer lab <http://www.vandermeerlab.org/>`_
 at Dartmouth College for analyzing neural electrophysiological
 recording data and associated behaviors.
@@ -32,5 +32,5 @@ Documentation
 License
 -------
 
-The nept codebase free software,
+The nept library is free software,
 distributed under a MIT license.

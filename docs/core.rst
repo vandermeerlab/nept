@@ -1,6 +1,7 @@
 nept Objects
 ============
-Objects in nept represent neural and behavioral data.
+Objects in nept represent neural electrophysiology
+and behavioral data.
 
 AnalogSignal
 ------------
@@ -11,7 +12,7 @@ AnalogSignal
     :show-inheritance:
 
 LocalFieldPotential
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 .. autoclass:: nept.LocalFieldPotential
     :members:
@@ -19,7 +20,7 @@ LocalFieldPotential
     :show-inheritance:
 
 Position
-~~~~~~~~
+--------
 
 .. autoclass:: nept.Position
     :members:

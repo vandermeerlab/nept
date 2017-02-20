@@ -14,13 +14,15 @@
 nept: Neuroelectrophysiology tools
 **********************************
 
-Formerly ``vdmlab``, renamed to emphasize general abilities of this module.
+Formerly ``vdmlab``, renamed to emphasize general abilities of this library.
 
-Getting started for beginners
-=============================
+Getting started
+===============
 
-Download Miniconda from `Continuum Analytics <http://conda.pydata.org/miniconda.html>`_. 
-We support Python 3.
+If you don't already have python 3, we recommend you download it using Miniconda 
+from `Continuum Analytics <http://conda.pydata.org/miniconda.html>`_.
+
+We recommend using a separate python environment.
 
 Open a **new** terminal, create and activate a new conda environment::
 
@@ -35,7 +37,7 @@ For Shapely, try::
 
   pip install shapely
 
-In Windows, download the most recent wheel file 
+If that fails, in Windows, download the most recent wheel file 
 `here <http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely>`_.
 Once downloaded, install with wheel.
 
@@ -43,14 +45,14 @@ Once downloaded, install with wheel.
 
   pip install yourshapelyinstall.whl
 
+Installation
+============
 
-Clone the analysis code from Github and use a developer installation::
+Clone nept from Github and use a developer installation::
 
   git clone https://github.com/vandermeerlab/nept.git
   cd nept
   python setup.py develop
-
-*All set!*
 
 Documentation
 =============
@@ -68,8 +70,7 @@ Ensure you have sphinx, numpydic, and mock::
 
   conda install sphinx numpydoc mock
 
-
-Build latest version of the documentation using 
+Build the latest version of the documentation using 
 in the nept directory prior to pushing it to Github::
 
   python setup.py build_sphinx
@@ -80,17 +81,13 @@ Testing
 Run tests with `pytest <http://docs.pytest.org/en/latest/usage.html>`_.
 
 Check coverage with `codecov <https://codecov.io/gh/vandermeerlab/nept>`_.
-Or in the command line::
-
-  py.test
-  coverage report
 
 License
 =======
 
 The nept codebase is made available under made available 
 under the `MIT license <LICENSE.md>`_
-that allows using, copying, and sharing.
+that allows using, copying and sharing.
 
 The file ``nept/neuralynx_loaders.py`` contains code from 
 `nlxio <https://github.com/bwillers/nlxio>`_ by Bernard Willers, 
