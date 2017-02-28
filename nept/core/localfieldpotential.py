@@ -1,7 +1,4 @@
-import warnings
-import numpy as np
 from nept.core.analogsignal import AnalogSignal
-import nept
 
 
 class LocalFieldPotential(AnalogSignal):

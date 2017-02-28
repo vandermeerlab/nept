@@ -1,4 +1,3 @@
-import warnings
 import numpy as np
 from shapely.geometry import Point
 from nept.core.analogsignal import AnalogSignal
