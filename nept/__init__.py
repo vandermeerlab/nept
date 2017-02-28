@@ -1,3 +1,9 @@
+from .core.analogsignal import AnalogSignal
+from .core.epoch import Epoch
+from .core.localfieldpotential import LocalFieldPotential
+from .core.neurons import Neurons
+from .core.position import Position
+from .core.spiketrain import SpikeTrain
 from .co_occurrence import spike_counts, get_tetrode_mask, compute_cooccur
 from .decoding import bayesian_prob, decode_location, remove_teleports
 from .lfp_filtering import detect_swr_hilbert
@@ -10,12 +16,6 @@ from .loaders_neuralynx import (load_events,
                                 load_nvt)
 from .maze_breakdown import expand_line, save_spike_position
 from .medpc import load_medpc
-from .objects import (AnalogSignal,
-                      Epoch,
-                      LocalFieldPotential,
-                      Neurons,
-                      Position,
-                      SpikeTrain)
 from .place_fields import (consecutive,
                            find_fields,
                            get_single_field,
