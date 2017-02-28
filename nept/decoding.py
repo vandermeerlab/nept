@@ -2,7 +2,7 @@ import numpy as np
 import nept
 
 
-def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
+def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes):
     """Computes the bayesian probability of location based on spike counts.
 
     Parameters
@@ -14,9 +14,9 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons=1, min_spikes=1):
     binsize : float
         Size of the time bins.
     min_neurons : int
-        Mininum number of neurons active in a given bin. Default is 1.
+        Mininum number of neurons active in a given bin.
     min_spikes : int
-        Mininum number of spikes in a given bin. Default is 1.
+        Mininum number of spikes in a given bin.
 
     Returns
     -------

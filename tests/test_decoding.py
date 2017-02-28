@@ -9,7 +9,7 @@ def test_bayesian_prob_smalltc():
     counts = nept.AnalogSignal(np.array([[10.], [5.]]), np.array([1.]))
     binsize = 1.0
 
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.sum(np.isnan(likelihood)) == likelihood.size
 
@@ -19,7 +19,7 @@ def test_bayesian_prob_onetime():
     counts = nept.AnalogSignal(np.array([[10.], [5.]]), np.array([1.]))
     binsize = 1.0
 
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.allclose(likelihood[0][2], 1.0)
 
@@ -29,7 +29,7 @@ def test_bayesian_prob_nospike():
     counts = nept.AnalogSignal(np.array([[0.]]), np.array([1.]))
     binsize = 1.0
 
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.sum(np.isnan(likelihood)) == likelihood.size
 
@@ -42,7 +42,7 @@ def test_bayesian_prob_multtc():
     counts = nept.AnalogSignal(np.array([[0.], [4.], [2.]]), np.array([1.]))
 
     binsize = 1.0
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.allclose(likelihood, np.array([[0.02997459, 0.93271674, 0.03730867]]))
 
@@ -55,7 +55,7 @@ def test_bayesian_prob_emptytcbin():
     counts = nept.AnalogSignal(np.array([[0.], [2.], [2.]]), np.array([1.]))
 
     binsize = 1.0
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.isnan(likelihood[0][0])
     assert np.allclose(likelihood[0][1], 0.5)
@@ -68,7 +68,7 @@ def test_bayesian_prob_onepos():
     counts = nept.AnalogSignal(np.array([[0., 2., 4.]]), np.array([1., 2., 3.]))
 
     binsize = 1.0
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.isnan(likelihood[0][0])
     assert np.allclose(likelihood[1][0], 1.0)
@@ -81,7 +81,7 @@ def test_bayesian_prob_multtimepos():
     counts = nept.AnalogSignal(np.array([[0., 2., 4.]]), np.array([1., 2., 3.]))
 
     binsize = 1.0
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.sum(np.isnan(likelihood[0])) == 3
     assert np.allclose(likelihood[1][0], 1.0)
@@ -100,7 +100,7 @@ def test_bayesian_prob_multneurons():
                                         [0., 1., 3.]]).T, np.array([1., 2., 3.]))
 
     binsize = 1.0
-    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize)
+    likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
 
     assert np.allclose(likelihood[0], np.array([0.0310880460, 0.967364171, 0.00154778267]))
     assert np.allclose(likelihood[1], np.array([0.998834476, 0.000194254064, 0.000971270319]))
