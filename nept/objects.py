@@ -77,7 +77,7 @@ class AnalogSignal:
             empty = False
         return empty
 
-    def time_slice(self, t_start, t_stop):
+    def time_slice(self, t_starts, t_stops):
         """Creates a new object corresponding to the time slice of
         the original between (and including) times t_start and t_stop. Setting
         either parameter to None uses infinite endpoints for the time interval.
@@ -85,38 +85,25 @@ class AnalogSignal:
         Parameters
         ----------
         analogsignal : nept.AnalogSignal
-        t_start : float
-        t_stop : float
+        t_starts : float or list or None
+        t_stops : float or list or None
 
         Returns
         -------
         sliced_analogsignal : nept.AnalogSignal
         """
-        if t_start is None:
-            t_start = -np.inf
-        if t_stop is None:
-            t_stop = np.inf
+        if t_starts is None:
+            t_starts = [-np.inf]
 
-        indices = (self.time >= t_start) & (self.time <= t_stop)
+        if t_stops is None:
+            t_stops = [np.inf]
 
-        return self[indices]
+        if isinstance(t_starts, (int, float)):
+            t_starts = [t_starts]
 
+        if isinstance(t_stops, (int, float)):
+            t_stops = [t_stops]
 
-    def time_slices(self, t_starts, t_stops):
-        """Creates a new object corresponding to the time slice of
-        the original between (and including) times t_start and t_stop. Setting
-        either parameter to None uses infinite endpoints for the time interval.
-
-        Parameters
-        ----------
-        analogsignal : nept.AnalogSignal
-        t_starts : list of floats
-        t_stops : list of floats
-
-        Returns
-        -------
-        sliced_analogsignal : nept.AnalogSignal
-        """
         if len(t_starts) != len(t_stops):
             raise ValueError("must have same number of start and stop times")
 
@@ -512,26 +499,7 @@ class Neurons:
         """(tuple) The shape of the tuning curves."""
         return self.tuning_curves[0].shape
 
-    def time_slice(self, t_start, t_stop):
-        """ Gets the neuron spikes corresponding to the time slice of
-        the original between (and including) times t_start and t_stop. Setting
-        either parameter to None uses infinite endpoints for the time interval.
-
-        Parameters
-        ----------
-        spikes : nept.Neurons
-        t_start : float
-        t_stop : float
-
-        Returns
-        -------
-        sliced_spikes : list of nept.SpikeTrain
-
-        """
-        sliced_spikes = [spiketrain.time_slice(t_start, t_stop) for spiketrain in self.spikes]
-        return sliced_spikes
-
-    def time_slices(self, t_starts, t_stops):
+    def time_slice(self, t_starts, t_stops):
         """ Gets the neuron spikes corresponding to the time slices of
         the original between (and including) times t_starts and t_stops. Setting
         either parameter to None uses infinite endpoints for the time interval.
@@ -539,15 +507,28 @@ class Neurons:
         Parameters
         ----------
         spikes : nept.Neurons
-        t_start : float
-        t_stop : float
+        t_starts : float or list or None
+        t_stops : float or list or None
 
         Returns
         -------
         sliced_spikes : list of nept.SpikeTrain
 
         """
+        if t_starts is None:
+            t_starts = [-np.inf]
+
+        if t_stops is None:
+            t_stops = [np.inf]
+
+        if isinstance(t_starts, (int, float)):
+            t_starts = [t_starts]
+
+        if isinstance(t_stops, (int, float)):
+            t_stops = [t_stops]
+
         sliced_spikes = [spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes]
+
         return sliced_spikes
 
 
@@ -571,7 +552,7 @@ class Position(AnalogSignal):
             if idx.isempty:
                 return nept.Position(np.array([[]]), np.array([]))
             else:
-                return self.time_slices(idx.starts, idx.stops)
+                return self.time_slice(idx.starts, idx.stops)
         else:
             return Position(self.data[idx], self.time[idx])
 
@@ -707,32 +688,7 @@ class SpikeTrain:
     def __getitem__(self, idx):
         return SpikeTrain(self.time[idx], self.label)
 
-    def time_slice(self, t_start, t_stop):
-        """Creates a new nept.SpikeTrain corresponding to the time slice of
-        the original between (and including) times t_start and t_stop. Setting
-        either parameter to None uses infinite endpoints for the time interval.
-
-        Parameters
-        ----------
-        spikes : nept.SpikeTrain
-        t_start : float
-        t_stop : float
-
-        Returns
-        -------
-        sliced_spikes : nept.SpikeTrain
-        """
-        if t_start is None:
-            t_start = -np.inf
-        if t_stop is None:
-            t_stop = np.inf
-
-        indices = (self.time >= t_start) & (self.time <= t_stop)
-
-        return self[indices]
-
-
-    def time_slices(self, t_starts, t_stops):
+    def time_slice(self, t_starts, t_stops):
         """Creates a new object corresponding to the time slice of
         the original between (and including) times t_start and t_stop. Setting
         either parameter to None uses infinite endpoints for the time interval.
@@ -740,13 +696,25 @@ class SpikeTrain:
         Parameters
         ----------
         spiketrain : nept.SpikeTrain
-        t_starts : list of floats
-        t_stops : list of floats
+        t_starts : float or list or None
+        t_stops : float or list or None
 
         Returns
         -------
         sliced_spiketrain : nept.SpikeTrain
         """
+        if t_starts is None:
+            t_starts = [-np.inf]
+
+        if t_stops is None:
+            t_stops = [np.inf]
+
+        if isinstance(t_starts, (int, float)):
+            t_starts = [t_starts]
+
+        if isinstance(t_stops, (int, float)):
+            t_stops = [t_stops]
+
         if len(t_starts) != len(t_stops):
             raise ValueError("must have same number of start and stop times")
 

@@ -25,7 +25,7 @@ def test_analogsignal_time_slices_1d():
 
     starts = np.array([1., 3.])
     stops = np.array([1.5, 4.])
-    sliced_analogsignal = analogsignal.time_slices(starts, stops)
+    sliced_analogsignal = analogsignal.time_slice(starts, stops)
 
     assert np.allclose(sliced_analogsignal.data, np.array([[7.], [3.], [1.]]))
     assert np.allclose(sliced_analogsignal.time, np.array([1., 3., 4.]))
@@ -59,7 +59,7 @@ def test_analogsignal_time_slices_2d():
 
     starts = np.array([1., 3.])
     stops = np.array([1.5, 4.])
-    sliced_analogsignal = analogsignal.time_slices(starts, stops)
+    sliced_analogsignal = analogsignal.time_slice(starts, stops)
 
     assert np.allclose(sliced_analogsignal.data, np.array([[7., 7.], [3., 3.], [1., 1.]]))
     assert np.allclose(sliced_analogsignal.time, np.array([1., 3., 4.]))

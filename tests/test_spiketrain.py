@@ -45,7 +45,7 @@ def test_spiketrain_time_slices():
     starts = np.array([1., 7.])
     stops = np.array([4., 10.])
 
-    sliced_spikes = [spike.time_slices(starts, stops) for spike in spikes]
+    sliced_spikes = [spike.time_slice(starts, stops) for spike in spikes]
 
     assert np.allclose(sliced_spikes[0].time, np.array([1., 3., 7., 9.]))
     assert np.allclose(sliced_spikes[1].time, np.array([1.3, 3.3]))
