@@ -24,15 +24,10 @@ sys.path.insert(0, os.path.abspath('..'))
 
 MOCK_MODULES = ['numpy',
                 'scipy',
-                'scipy.io',
                 'scipy.stats',
                 'scipy.signal',
                 'shapely',
                 'shapely.geometry',
-                'matplotlib',
-                'matplotlib.pyplot',
-                'matplotlib.offsetbox',
-                'matplotlib.offsetbox.AnchoredOffsetbox',
                 'scipy.ndimage.filters',
                 'scipy.ndimage']
 for mod_name in MOCK_MODULES:

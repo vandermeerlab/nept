@@ -1,9 +1,7 @@
 import numpy as np
 from scipy import signal
-from shapely.geometry import Point
 from scipy.ndimage.filters import gaussian_filter
 
-from .objects import AnalogSignal
 from .utils import find_nearest_idx
 
 

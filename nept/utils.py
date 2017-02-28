@@ -225,3 +225,25 @@ def get_xyedges(position, binsize=3):
     yedges = np.arange(position.y.min(), position.y.max() + binsize, binsize)
 
     return xedges, yedges
+
+
+def expand_line(start_pt, stop_pt, line, expand_by=6):
+    """ Creates buffer zone around a line.
+
+    Parameters
+    ----------
+    start_pt : Shapely's Point object
+    stop_pt : Shapely's Point object
+    line : Shapely's LineString object
+    expand_by : int
+        This sets by how much you wish to expand the line.
+        Defaults to 6.
+
+    Returns
+    -------
+    zone : Shapely's Polygon object
+
+    """
+    line_expanded = line.buffer(expand_by)
+    zone = start_pt.union(line_expanded).union(stop_pt)
+    return zone
