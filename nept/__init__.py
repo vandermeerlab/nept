@@ -6,7 +6,7 @@ from .core.position import Position
 from .core.spiketrain import SpikeTrain
 from .co_occurrence import spike_counts, get_tetrode_mask, compute_cooccur
 from .decoding import bayesian_prob, decode_location, remove_teleports
-from .lfp_filtering import detect_swr_hilbert
+from .lfp_filtering import detect_swr_hilbert, next_regular
 from .loaders_mclust import load_mclust_header, load_spikes
 from .loaders_medpc import load_medpc
 from .loaders_neuralynx import (load_events,

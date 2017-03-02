@@ -137,6 +137,7 @@ def next_regular(target):
     See http://scipy.org/scipylib/
     """
     if target <= 6:
+        print(target)
         return target
 
     # Quickly check if it's already a power of 2
@@ -153,11 +154,7 @@ def next_regular(target):
             quotient = -(-target // p35)
 
             # Quickly find next power of 2 >= quotient
-            try:
-                p2 = 2**((quotient - 1).bit_length())
-            except AttributeError:
-                # Fallback for Python <2.7
-                p2 = 2**(len(bin(quotient - 1)) - 2)
+            p2 = 2**((quotient - 1).bit_length())
 
             N = p2 * p35
             if N == target:

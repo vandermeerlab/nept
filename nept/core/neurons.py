@@ -1,4 +1,5 @@
 import numpy as np
+import nept
 
 
 class Neurons:
@@ -43,7 +44,7 @@ class Neurons:
 
         Parameters
         ----------
-        spikes : nept.Neurons
+        neurons : nept.Neurons
         t_starts : float or list or None
         t_stops : float or list or None
 
@@ -66,4 +67,4 @@ class Neurons:
 
         sliced_spikes = [spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes]
 
-        return sliced_spikes
+        return nept.Neurons(np.array(sliced_spikes), self.tuning_curves)
