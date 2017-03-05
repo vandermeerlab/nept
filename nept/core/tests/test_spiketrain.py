@@ -49,3 +49,78 @@ def test_spiketrain_time_slices():
 
     assert np.allclose(sliced_spikes[0].time, np.array([1., 3., 7., 9.]))
     assert np.allclose(sliced_spikes[1].time, np.array([1.3, 3.3]))
+
+
+def test_spiketrain_timeslice_single():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = 2.
+    stops = 5.
+    sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert np.allclose(sliced_spikes.time, np.array([2., 3., 4., 5.]))
+
+
+def test_spiketrain_timeslice_none_start():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = None
+    stops = 5.
+    sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert np.allclose(sliced_spikes.time, np.array([1., 2., 3., 4., 5.]))
+
+
+def test_spiketrain_timeslice_none_stop():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = 2.
+    stops = None
+    sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert np.allclose(sliced_spikes.time, np.array([2., 3., 4., 5., 6.]))
+
+
+def test_spiketrain_timeslice_none_list_start():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = [None, 4.5]
+    stops = [3., 5.]
+    sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert np.allclose(sliced_spikes.time, np.array([1., 2., 3., 5.]))
+
+
+def test_spiketrain_timeslice_none_list_stop():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = [1.5, 4.5]
+    stops = [3., None]
+    sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert np.allclose(sliced_spikes.time, np.array([2., 3., 5., 6.]))
+
+
+def test_spiketrain_wrong_label():
+    with pytest.raises(ValueError) as excinfo:
+        spikes = nept.SpikeTrain(np.array([1., 3., 5., 7., 9.]), 1)
+
+    assert str(excinfo.value) == "label must be a string"
+
+
+def test_spiketrain_time_notvector():
+    with pytest.raises(ValueError) as excinfo:
+        spikes = nept.SpikeTrain(np.array([[1., 2.], [2., 3.]]))
+
+    assert str(excinfo.value) == "time must be a vector"
+
+
+def test_spiketrain_timeslice_uneven_startstop():
+    spikes = nept.SpikeTrain(np.array([1., 2., 3., 4., 5., 6.]), 'test')
+
+    starts = [0.1]
+    stops = [1.5, 6.]
+    with pytest.raises(ValueError) as excinfo:
+        sliced_spikes = spikes.time_slice(starts, stops)
+
+    assert str(excinfo.value) == "must have same number of start and stop times"
