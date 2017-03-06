@@ -125,6 +125,20 @@ def test_epoch_intersect_case2():
     assert np.allclose(intersects.stops, np.array([1.5]))
 
 
+def test_epoch_intersect_empty():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[], []])
+    epoch_2 = nept.Epoch(times_2)
+
+    intersects = epoch_1.intersect(epoch_2)
+
+    assert intersects.time.size == 0
+
+
 def test_epoch_overlaps_case2_bounds():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
@@ -138,6 +152,20 @@ def test_epoch_overlaps_case2_bounds():
 
     assert np.allclose(overlaps.starts, np.array([1.2]))
     assert np.allclose(overlaps.stops, np.array([1.6]))
+
+
+def test_epoch_overlaps_empty():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[], []])
+    epoch_2 = nept.Epoch(times_2)
+
+    overlaps = epoch_1.overlaps(epoch_2)
+
+    assert overlaps.time.size == 0
 
 
 def test_epoch_intersect_case3():
@@ -336,6 +364,19 @@ def test_epoch_merge_with_gap():
     assert np.allclose(merged.stops, np.array([2.0]))
 
 
+def test_epoch_merge_negative_gap():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+
+    epoch = nept.Epoch(times)
+
+    with pytest.raises(ValueError) as excinfo:
+        merged = epoch.merge(gap=-0.1)
+
+    assert str(excinfo.value) == "gap cannot be negative"
+
+
 def test_epoch_merge_far_stop():
     times = np.array([[0.0, 10.0],
                       [1.0, 3.0],
@@ -408,6 +449,18 @@ def test_epoch_expand_stop():
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
 
 
+def test_epoch_expand_incorrect_direction_input():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    with pytest.raises(ValueError) as excinfo:
+        resized = epoch.expand(0.5, direction='all')
+
+    assert str(excinfo.value) == "direction must be 'both', 'start', or 'stop'"
+
+
 def test_epoch_shrink():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
@@ -418,6 +471,30 @@ def test_epoch_shrink():
 
     assert np.allclose(shrinked.starts, np.array([0.1, 1.0, 1.7]))
     assert np.allclose(shrinked.stops, np.array([0.9, 1.4, 1.9]))
+
+
+def test_epoch_shrink_toobig_both():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    with pytest.raises(ValueError) as excinfo:
+        shrinked = epoch.shrink(2.)
+
+    assert str(excinfo.value) == "shrink amount too large"
+
+
+def test_epoch_shrink_toobig_single():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    with pytest.raises(ValueError) as excinfo:
+        shrinked = epoch.shrink(1., direction='start')
+
+    assert str(excinfo.value) == "shrink amount too large"
 
 
 def test_epoch_join():
@@ -441,3 +518,47 @@ def test_epoch_start_stop():
 
     assert np.allclose(epoch.start, 721.9412)
     assert np.allclose(epoch.stop, 1027.1)
+
+
+def test_epoch_contain_true():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    assert epoch.contains(0.5)
+
+
+def test_epoch_contain_not():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    assert not epoch.contains(1.55)
+
+
+def test_epoch_isempty():
+    epoch = nept.Epoch([[], []])
+
+    assert epoch.isempty
+
+
+def test_epoch_notempty():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    assert not epoch.isempty
+
+
+def test_epoch_incorrect_time_duration():
+    times = np.array([[0.0],
+                      [0.9],
+                      [1.6]])
+
+    with pytest.raises(ValueError) as excinfo:
+        epoch = nept.Epoch(times, duration=0.3)
+
+    assert str(excinfo.value) == "must have same number of time and duration samples"
