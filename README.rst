@@ -86,7 +86,7 @@ License
 =======
 
 The nept codebase is made available under made available 
-under the `MIT license <LICENSE.md>`_
+under the `MIT license <LICENSE.rst>`_
 that allows using, copying and sharing.
 
 The file ``nept/neuralynx_loaders.py`` contains code from 
