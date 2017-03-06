@@ -209,3 +209,13 @@ def test_get_edges_simple():
     edges = nept.get_edges(position, binsize=0.5)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.1]))
+
+
+def test_cartesian():
+    xcenters = np.array([0., 4., 8.])
+    ycenters = np.array([0., 2., 4.])
+    xy_centers = nept.cartesian(xcenters, ycenters)
+
+    assert np.allclose(xy_centers, np.array([[0., 0.], [4., 0.], [8., 0.],
+                                             [0., 2.], [4., 2.], [8., 2.],
+                                             [0., 4.], [4., 4.], [8., 4.]]))
