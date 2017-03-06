@@ -147,6 +147,16 @@ def test_positon_speed_simple():
     assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
 
 
+def test_position_speed_simple_smooth():
+    times = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+    data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
+
+    pos = nept.Position(data, times)
+    speed = pos.speed(t_smooth=2.)
+
+    assert np.allclose(speed.data, np.array([[0.0], [0.25], [0.5], [0.4], [0.65]]))
+
+
 def test_position_speed_complex():
     time = np.linspace(0, np.pi * 2, 201)
     data = np.hstack((np.sin(time)))
@@ -181,3 +191,84 @@ def test_position_speed_unequal_time():
     run_position = position[run_idx]
 
     assert np.allclose(len(run_position.x), 10)
+
+
+def test_position_empty_epoch_slice():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0, 3.1],
+                     [2.0, 2.1],
+                     [3.0, 1.1],
+                     [4.0, 0.1]])
+    position = nept.Position(data, times)
+
+    epochs = nept.Epoch([[], []])
+
+    sliced_position = position[epochs]
+
+    assert sliced_position.time.size == 0
+
+
+def test_position_epoch_slice():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0, 3.1],
+                     [2.0, 2.1],
+                     [3.0, 1.1],
+                     [4.0, 0.1]])
+    position = nept.Position(data, times)
+
+    epochs = nept.Epoch([[1.8], [3.2]])
+
+    sliced_position = position[epochs]
+
+    assert np.allclose(sliced_position.time, np.array([2., 3.]))
+    assert np.allclose(sliced_position.data, np.array([[2., 2.1], [3., 1.1]]))
+
+
+def test_position_x_setter_array():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0, 3.1],
+                     [2.0, 2.1],
+                     [3.0, 1.1],
+                     [4.0, 0.1]])
+    position = nept.Position(data, times)
+    position.x = np.array([0.0, 1.0, 2.0, 3.0])
+
+    assert np.allclose(position.x, np.array([0.0, 1.0, 2.0, 3.0]))
+
+
+def test_position_x_setter_value():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0, 3.1],
+                     [2.0, 2.1],
+                     [3.0, 1.1],
+                     [4.0, 0.1]])
+    position = nept.Position(data, times)
+    position.x = 3.3
+
+    assert np.allclose(position.x, np.array([3.3, 3.3, 3.3, 3.3]))
+
+
+def test_position_y_setter_array():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0, 3.1],
+                     [2.0, 2.1],
+                     [3.0, 1.1],
+                     [4.0, 0.1]])
+    position = nept.Position(data, times)
+    position.y = np.array([0.0, 1.0, 2.0, 3.0])
+
+    assert np.allclose(position.y, np.array([0.0, 1.0, 2.0, 3.0]))
+
+
+def test_position_noy_setter():
+    times = np.array([1.0, 2.0, 3.0, 4.0])
+    data = np.array([[1.0],
+                     [2.0],
+                     [3.0],
+                     [4.0]])
+    position = nept.Position(data, times)
+
+    with pytest.raises(ValueError) as excinfo:
+        position.y = np.array([0.0, 1.0, 2.0, 3.0])
+
+    assert str(excinfo.value) == "can't set 'y' of one-dimensional position"
