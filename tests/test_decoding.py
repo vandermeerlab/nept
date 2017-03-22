@@ -144,6 +144,8 @@ def test_remove_teleports():
 
 def test_filter_jumps_empty():
     decoded = nept.Position(np.array([10., 20., 30., 40.]), np.array([0., 1., 2., 3.]))
-    with pytest.raises(ValueError) as excinfo:
-        decoded_sequences = nept.remove_teleports(decoded, speed_thresh=9, min_length=3)
-    assert str(excinfo.value) == "resulted in all position samples removed. Adjust min_length or speed_thresh."
+
+    decoded_sequences = nept.remove_teleports(decoded, speed_thresh=9, min_length=3)
+
+    assert np.allclose(decoded_sequences.starts, np.array([]))
+    assert np.allclose(decoded_sequences.stops, np.array([]))
