@@ -178,6 +178,7 @@ def bin_spikes(spikes, position, window_size, window_advance,
         n_points = max(n_points, 1.0)
         if n_points % 2 == 0:
             n_points += 1
+        n_points = int(round(n_points))
         gaussian_filter = signal.gaussian(n_points, gaussian_std / window_advance)
         gaussian_filter /= np.sum(gaussian_filter)
 
