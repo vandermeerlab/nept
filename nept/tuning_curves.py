@@ -85,7 +85,7 @@ def tuning_curve(position, spikes, binsize, gaussian_std=None):
     if gaussian_std is not None:
         filter_multiplier = 6
         out_tc = []
-        gaussian_filter = signal.gaussian(gaussian_std*filter_multiplier, 0.5)
+        gaussian_filter = signal.gaussian(gaussian_std*filter_multiplier, gaussian_std)
         normalized_gaussian = gaussian_filter / np.sum(gaussian_filter)
         for firing_rate in tc:
             out_tc.append(np.convolve(firing_rate, normalized_gaussian, mode='same'))
