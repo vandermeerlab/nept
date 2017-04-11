@@ -25,7 +25,13 @@ class Neurons:
         self.tuning_curves = tuning_curves
 
     def __getitem__(self, idx):
-        return Neurons(self.spikes[idx], self.tuning_curves[idx])
+        sliced_spikes = self.spikes[idx]
+        sliced_tuning = self.tuning_curves[idx]
+
+        if type(sliced_spikes) == np.ndarray and type(sliced_tuning) == np.ndarray:
+            return nept.Neurons(sliced_spikes, sliced_tuning)
+        else:
+            return nept.Neurons(np.array([sliced_spikes]), np.array([sliced_tuning]))
 
     @property
     def n_neurons(self):

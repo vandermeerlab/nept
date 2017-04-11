@@ -45,3 +45,8 @@ def test_next_regular_p5_nomatch():
 def test_next_regular_p5_match():
     regular = nept.next_regular(7)
     assert regular == 8
+
+
+def test_next_regular_p5_match():
+    regular = nept.next_regular(121)
+    assert regular == 125

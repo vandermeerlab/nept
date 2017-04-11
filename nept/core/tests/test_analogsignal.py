@@ -211,3 +211,13 @@ def test_analogsignal_n_data_time():
         analogsignal = nept.AnalogSignal(x, time)
 
     assert str(excinfo.value) == "data and time should be the same length"
+
+
+def test_analogsignal_mismatch():
+    data = np.array([[9., 7., 5., 3.], [1., 2., 2., 3.]])
+    time = np.array([0., 1., 2., 3., 4.])
+
+    with pytest.raises(ValueError) as excinfo:
+        analogsignal = nept.AnalogSignal(data, time)
+
+    assert str(excinfo.value) == "must have same number of time and data samples"

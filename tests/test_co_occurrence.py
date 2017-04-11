@@ -17,6 +17,18 @@ def test_spike_counts():
     assert np.allclose(count_matrix[0], count_matrix[1], count_matrix[3])
 
 
+def test_spike_counts_window():
+    intervals = nept.Epoch(np.array([[2., 6.], [7., 10.]]))
+
+    spikes = [nept.SpikeTrain(np.array([0., 3.4, 6., 8.]), 'test'),
+              nept.SpikeTrain(np.array([0., 3.5, 6., 8.]), 'test'),
+              nept.SpikeTrain(np.array([1., 7., 11.]))]
+
+    count_matrix = nept.spike_counts(spikes, intervals, window=1)
+
+    assert np.allclose(count_matrix, np.array([[0., 1.], [1., 1.], [0., 0.]]))
+
+
 def test_compute_cooccur():
     count_matrix = np.array([[3., 2., 1.],
                              [0., 0., 0.],

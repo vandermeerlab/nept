@@ -20,7 +20,10 @@ class Epoch:
 
     """
     def __init__(self, time, duration=None):
-        time = np.squeeze(time).astype(float)
+        try:
+            time = np.squeeze(time).astype(float)
+        except ValueError as err:
+            raise ValueError("must have the same number of start and stop times").with_traceback(err.__traceback__)
 
         if time.ndim == 0:
             time = time[..., np.newaxis]
@@ -48,9 +51,6 @@ class Epoch:
 
         if time.ndim > 2:
             raise ValueError("time cannot have more than 2 dimensions")
-
-        if time[:, 0].shape[0] != time[:, 1].shape[0]:
-            raise ValueError("must have the same number of start and stop times")
 
         if time.ndim == 2 and np.any(time[:, 1] - time[:, 0] <= 0):
             raise ValueError("start must be less than stop")

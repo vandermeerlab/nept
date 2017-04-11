@@ -23,7 +23,7 @@ def spike_counts(spikes, epochs, window=None):
 
     """
     if window is not None:
-        epochs = nept.Epoch(np.array([epochs.centers-(window*0.5), epochs.centers+(window*0.5)]))
+        epochs = nept.Epoch(epochs.centers-(window*0.5), np.ones(epochs.n_epochs)*window)
 
     n_neurons = len(spikes)
     count_matrix = np.zeros((n_neurons, epochs.n_epochs))

@@ -48,8 +48,8 @@ def test_tuning_curve_1d_gaussian():
 
 def test_tuning_curve_1d_with_2d_position():
     position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
-                                       np.array([7, 5, 3, 1])[..., np.newaxis]]),
-                            np.array([0., 1., 2., 3.]))
+                                        np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                             np.array([0., 1., 2., 3.]))
 
     binsize = 2
 
@@ -57,6 +57,18 @@ def test_tuning_curve_1d_with_2d_position():
 
     with pytest.raises(ValueError) as excinfo:
         tuning_curves = nept.tuning_curve(position, spikes, binsize=binsize)
+
+    assert str(excinfo.value) == 'position must be linear'
+
+
+def test_binned_position_2d_position():
+    position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                        np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                             np.array([0., 1., 2., 3.]))
+    binsize = 2
+
+    with pytest.raises(ValueError) as excinfo:
+        binned = nept.binned_position(position, binsize=binsize)
 
     assert str(excinfo.value) == 'position must be linear'
 

@@ -562,3 +562,30 @@ def test_epoch_incorrect_time_duration():
         epoch = nept.Epoch(times, duration=0.3)
 
     assert str(excinfo.value) == "must have same number of time and duration samples"
+
+
+def test_epoch_ndim():
+    times = np.ones((2, 3, 4))
+
+    with pytest.raises(ValueError) as excinfo:
+        epoch = nept.Epoch(times)
+
+    assert str(excinfo.value) == "time cannot have more than 2 dimensions"
+
+
+def test_epoch_stop_before_start():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 0.2],
+                      [1.6, 2.0]])
+
+    with pytest.raises(ValueError) as excinfo:
+        epoch = nept.Epoch(times)
+
+    assert str(excinfo.value) == "start must be less than stop"
+
+
+def test_epoch_mismatch_start_stop():
+    with pytest.raises(ValueError) as excinfo:
+        nept.Epoch([[0.0, 1.0], [0.5]])
+
+    assert str(excinfo.value) == "must have the same number of start and stop times"
