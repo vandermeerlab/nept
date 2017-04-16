@@ -1,8 +1,7 @@
 import numpy as np
 from scipy import signal
-from scipy.ndimage.filters import gaussian_filter
 
-from .utils import find_nearest_idx
+from .utils import find_nearest_idx, gaussian_filter
 
 
 def binned_position(position, binsize):
@@ -32,7 +31,7 @@ def binned_position(position, binsize):
     return edges
 
 
-def tuning_curve(position, spikes, binsize, gaussian_std=None):
+def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
     """ Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -80,23 +79,14 @@ def tuning_curve(position, spikes, binsize, gaussian_std=None):
 
         firing_rate = np.zeros(len(edges)-1)
         firing_rate[occupied_idx] = spike_counts[occupied_idx] / position_counts[occupied_idx]
+        if gaussian_std is not None:
+            firing_rate = gaussian_filter(firing_rate, gaussian_std, dt=binsize)
         tc.append(firing_rate)
 
-    if gaussian_std is not None:
-        filter_multiplier = 6
-        out_tc = []
-        gaussian_filter = signal.gaussian(gaussian_std*filter_multiplier, gaussian_std)
-        normalized_gaussian = gaussian_filter / np.sum(gaussian_filter)
-        for firing_rate in tc:
-            out_tc.append(np.convolve(firing_rate, normalized_gaussian, mode='same'))
-    else:
-        print('Tuning curve with no filter.')
-        out_tc = tc
-
-    return np.array(out_tc, dtype=float)
+    return np.array(tc, dtype=float)
 
 
-def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussian_sigma=None):
+def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussian_std=None):
     """Creates 2D tuning curves based on spikes and 2D position.
 
     Parameters
@@ -125,8 +115,8 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
     shape = position_2d.shape
     occupied_idx = position_2d > occupied_thresh
 
-    tc = []
-    for spiketrain in spikes:
+    tuning_curves = np.zeros((len(spikes), *shape))
+    for i, spiketrain in enumerate(spikes):
         spikes_x = []
         spikes_y = []
         for spike_time in spiketrain.time:
@@ -135,18 +125,12 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
                 spikes_x.append(position.x[spike_idx])
                 spikes_y.append(position.y[spike_idx])
         spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_y, spikes_x, bins=[yedges, xedges])
+        tuning_curves[i, occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
 
-        firing_rate = np.zeros(shape)
-        firing_rate[occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
+    if gaussian_std is not None:
+        xbinsize = xedges[1] - xedges[0]
+        ybinsize = yedges[1] - yedges[0]
+        tuning_curves = gaussian_filter(tuning_curves, gaussian_std, dt=xbinsize, axis=1)
+        tuning_curves = gaussian_filter(tuning_curves, gaussian_std, dt=ybinsize, axis=2)
 
-        tc.append(firing_rate)
-
-    if gaussian_sigma is not None:
-        tuning_curves = []
-        for firing_rate in tc:
-            tuning_curves.append(gaussian_filter(firing_rate, gaussian_sigma))
-    else:
-        print('Tuning curves with no filter.')
-        tuning_curves = tc
-
-    return np.array(tuning_curves)
+    return tuning_curves

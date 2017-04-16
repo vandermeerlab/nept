@@ -26,7 +26,7 @@ def test_sort_idx():
               nept.SpikeTrain(np.array([0.5]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = nept.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
+    tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
     sort_idx = nept.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 0, 2])
@@ -40,21 +40,10 @@ def test_sort_idx1():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([1.0]), 'test')]
 
-    tuning = nept.tuning_curve(linear, spikes, binsize=3, gaussian_std=None)
+    tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
     sort_idx = nept.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 3, 0, 2])
-
-
-def test_bin_spikes():
-    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
-    spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
-
-    position = nept.Position(np.array([0, 2, 4, 6, 8, 10]), np.array([0, 2, 4, 6, 8, 10]))
-    counts = nept.bin_spikes(spikes, position, window_size=2.,
-                             window_advance=2., gaussian_std=None, normalized=False)
-
-    assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.], [2.], [0.]]))
 
 
 def test_multi_in_epochs_one():
@@ -129,75 +118,54 @@ def test_get_xyedges_one_full():
     assert np.allclose(yedges, np.array([1.1, 11.1]))
 
 
+def test_bin_spikes():
+    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
+    spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
+
+    time = np.array([0, 2, 4, 6, 8, 10])
+    counts = nept.bin_spikes(spikes, time, dt=2.,
+                             window=2., gaussian_std=None, normalized=False)
+
+    assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.], [2.]]))
+
+
 def test_bin_spikes_normalized():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.]))
+    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, position, window_size=2.,
-                             window_advance=0.5, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2., gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[0.25], [1.], [1.], [1.25], [1.], [0.5], [0.5], [0.25], [0.25]]))
+    assert np.allclose(counts.data, np.array([[1.], [1.], [1.25], [1.], [0.5], [0.5], [0.25], [0.5]]))
 
 
 def test_bin_spikes_actual():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.]))
+    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, position, window_size=2.,
-                             window_advance=0.5, gaussian_std=None, normalized=False)
+    counts = nept.bin_spikes(spikes, time, dt=0.5,
+                             window=2., gaussian_std=None, normalized=False)
 
-    assert np.allclose(counts.data, np.array([[1.], [4.], [4.], [5.], [4.], [2.], [2.], [1.], [1.]]))
+    assert np.allclose(counts.data, np.array([[4.], [4.], [5.], [4.], [2.], [2.], [1.], [2.]]))
 
 
 def test_bin_spikes_gaussian():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 10.]))
+    time = np.array([0., 10.])
 
-    counts = nept.bin_spikes(spikes, position, window_size=2., window_advance=0.5,
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
                              gaussian_std=0.51, normalized=True)
 
-    assert np.allclose(counts.data, np.array([[2.40140069e-01],
-                                              [5.91549241e-01],
-                                              [9.12611456e-01],
-                                              [1.06078968e+00],
-                                              [1.00901693e+00],
-                                              [7.78011241e-01],
-                                              [5.42862884e-01],
-                                              [3.80398886e-01],
-                                              [2.50560063e-01],
-                                              [1.30139170e-01],
-                                              [3.85667109e-02],
-                                              [5.13336554e-03],
-                                              [2.77129349e-04],
-                                              [5.80454662e-06],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00],
-                                              [0.00000000e+00]]))
-
-
-def test_bin_spikes_gaussian_even():
-    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 10.]))
-
-    counts = nept.bin_spikes(spikes, position, window_size=2., window_advance=0.5,
-                             gaussian_std=0.5, normalized=True)
-
-    assert np.allclose(counts.data, np.array([[0.25],
-                                              [1.],
-                                              [1.],
-                                              [1.25],
-                                              [1.],
-                                              [0.5],
-                                              [0.5],
-                                              [0.25],
-                                              [0.25],
-                                              [0.],
-                                              [0.],
-                                              [0.],
+    assert np.allclose(counts.data, np.array([[1.01560105],
+                                              [1.057903],
+                                              [1.06661335],
+                                              [0.90701256],
+                                              [0.65089043],
+                                              [0.45510984],
+                                              [0.31307944],
+                                              [0.18950878],
+                                              [0.07738638],
+                                              [0.01560105],
+                                              [0.00129411],
                                               [0.],
                                               [0.],
                                               [0.],
@@ -209,63 +177,79 @@ def test_bin_spikes_gaussian_even():
                                               [0.]]))
 
 
-def test_bin_spikes_gaussian_long():
+def test_bin_spikes_gaussian_even():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 10.]))
+    time = np.array([0., 10.])
 
-    with pytest.raises(ValueError) as excinfo:
-        counts = nept.bin_spikes(spikes, position, window_size=2., window_advance=0.5,
-                                 gaussian_std=1., normalized=True)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
+                             gaussian_std=0.5, normalized=True)
 
-    assert str(excinfo.value) == 'gaussian filter too long for this length of time'
+    assert np.allclose(counts.data, np.array([[1.01460966],
+                                              [1.05829253],
+                                              [1.07054325],
+                                              [0.90916337],
+                                              [0.64912917],
+                                              [0.4541006],
+                                              [0.31272558],
+                                              [0.18949094],
+                                              [0.07622698],
+                                              [0.01460966],
+                                              [0.00110826],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.],
+                                              [0.]]))
 
 
 def test_bin_spikes_mult_neurons():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1]),
               nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.]))
+    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, position, window_size=2, window_advance=0.5, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2, gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[0.25, 0.25],
-                                              [1., 1.],
+    assert np.allclose(counts.data, np.array([[1., 1.],
                                               [1., 1.],
                                               [1.25, 1.25],
                                               [1., 1.],
                                               [0.5, 0.5],
                                               [0.5, 0.5],
                                               [0.25, 0.25],
-                                              [0.25, 0.25]]))
+                                              [0.5, 0.5]]))
 
 
 def test_bin_spikes_mult_neurons_adjust_window():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1]),
               nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.]))
+    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, position, window_size=2.2, window_advance=0.5, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.2, gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[0.25, 0.25],
-                                              [1., 1.],
+    assert np.allclose(counts.data, np.array([[1., 1.],
                                               [1., 1.],
                                               [1.25, 1.25],
                                               [1., 1.],
                                               [0.5, 0.5],
                                               [0.5, 0.5],
                                               [0.25, 0.25],
-                                              [0.25, 0.25]]))
+                                              [0.5, 0.5]]))
 
 
 def test_get_edges_no_lastbin():
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.1]))
-    edges = nept.get_edges(position, binsize=0.5, lastbin=False)
+    time = np.array([0., 4.1])
+    edges = nept.get_edges(time, binsize=0.5, lastbin=False)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4.]))
 
 
 def test_get_edges_simple():
-    position = nept.Position(np.array([1., 6.]), np.array([0., 4.1]))
-    edges = nept.get_edges(position, binsize=0.5)
+    time = np.array([0., 4.1])
+    edges = nept.get_edges(time, binsize=0.5)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.1]))
 

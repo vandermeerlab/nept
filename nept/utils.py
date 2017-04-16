@@ -1,5 +1,6 @@
 import numpy as np
-from scipy import signal
+import scipy.signal
+from scipy.ndimage.filters import convolve1d
 import warnings
 
 import nept
@@ -80,6 +81,25 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
     return multi_epochs
 
 
+n_stds = 3
+
+
+def gaussian_filter(signal, std, dt=1, normalized=True, axis=-1):
+    n_points = (n_stds * std * 2) / dt
+    n_points = int(round(n_points))
+    if n_points % 2 == 0:
+        n_points += 1
+    if n_points <= 1.0:
+        warnings.warn("std is too small for given dt. Signal is unchanged.")
+        return signal
+
+    gaussian_filter = scipy.signal.gaussian(n_points, std / dt)
+    if normalized:
+        gaussian_filter /= np.sum(gaussian_filter)
+
+    return convolve1d(signal, gaussian_filter, axis=axis)
+
+
 def get_sort_idx(tuning_curves):
     """Finds indices to sort neurons by max firing in tuning curve.
 
@@ -107,12 +127,12 @@ def get_sort_idx(tuning_curves):
     return sorted_idx
 
 
-def get_edges(position, binsize, lastbin=True):
+def get_edges(time, binsize, lastbin=True):
     """Finds edges based on linear time
 
     Parameters
     ----------
-    position : nept.AnalogSignal
+    time : np.array
     binsize : float
         This is the desired size of bin.
         Typically set around 0.020 to 0.040 seconds.
@@ -125,28 +145,28 @@ def get_edges(position, binsize, lastbin=True):
     edges : np.array
 
     """
-    edges = np.arange(position.time[0], position.time[-1], binsize)
+    edges = np.arange(time[0], time[-1], binsize)
 
     if lastbin:
-        if edges[-1] != position.time[-1]:
-            edges = np.hstack((edges, position.time[-1]))
+        if edges[-1] != time[-1]:
+            edges = np.hstack((edges, time[-1]))
 
     return edges
 
 
-def bin_spikes(spikes, position, window_size, window_advance,
-               gaussian_std=None, n_gaussian_std=5, normalized=True):
+def bin_spikes(spikes, time, dt,
+               window=None, gaussian_std=None, normalized=True):
     """Bins spikes using a sliding window.
 
     Parameters
     ----------
     spikes: list
         Of nept.SpikeTrain
-    position: nept.AnalogSignal
-    window_size: float
-    window_advance: float
+    time: np.array
+    window: float or None
+        Length of the sliding window, in seconds. If None, will default to dt.
+    dt: float
     gaussian_std: float or None
-    n_gaussian_std: int
     normalized: boolean
 
     Returns
@@ -154,41 +174,31 @@ def bin_spikes(spikes, position, window_size, window_advance,
     binned_spikes: nept.AnalogSignal
 
     """
-    bin_edges = get_edges(position, window_advance, lastbin=True)
+    if window is None:
+        window = dt
 
-    given_n_bins = window_size / window_advance
+    bin_edges = get_edges(time, dt, lastbin=True)
+
+    given_n_bins = window / dt
     n_bins = int(round(given_n_bins))
     if abs(n_bins - given_n_bins) > 0.01:
-        warnings.warn("window advance does not divide the window size evenly. "
-                      "Using window size %g instead." % (n_bins*window_advance))
+        warnings.warn("dt does not divide window evenly. "
+                      "Using window %g instead." % (n_bins*dt))
 
     if normalized:
         square_filter = np.ones(n_bins) * (1 / n_bins)
     else:
         square_filter = np.ones(n_bins)
 
-    counts = np.zeros((len(spikes), len(bin_edges)))
+    counts = np.zeros((len(spikes), len(bin_edges) - 1))
     for idx, spiketrain in enumerate(spikes):
-        counts[idx] = np.convolve(np.hstack([np.histogram(spiketrain.time, bins=bin_edges)[0],
-                                             np.array([0])]),
-                                  square_filter, mode='same')
+        counts[idx] = convolve1d(np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
+                                 square_filter)
 
-    if gaussian_std is not None and gaussian_std > window_advance:
-        n_points = n_gaussian_std * gaussian_std * 2 / window_advance
-        n_points = max(n_points, 1.0)
-        if n_points % 2 == 0:
-            n_points += 1
-        n_points = int(round(n_points))
-        gaussian_filter = signal.gaussian(n_points, gaussian_std / window_advance)
-        gaussian_filter /= np.sum(gaussian_filter)
+    if gaussian_std is not None:
+        counts = gaussian_filter(counts, gaussian_std, dt=dt, normalized=normalized, axis=1)
 
-        if len(gaussian_filter) < counts.shape[1]:
-            for idx, spiketrain in enumerate(spikes):
-                counts[idx] = np.convolve(counts[idx], gaussian_filter, mode='same')
-        else:
-            raise ValueError("gaussian filter too long for this length of time")
-
-    return nept.AnalogSignal(counts.T, bin_edges)
+    return nept.AnalogSignal(counts.T, bin_edges[:-1])
 
 
 def cartesian(xcenters, ycenters):
