@@ -110,9 +110,6 @@ def remove_teleports(position, speed_thresh, min_length):
     """
     velocity = np.squeeze(position.speed().data)
 
-    # TODO: should this be:
-    #   split_idx = np.where(np.diff(velocity >= speed_thresh))[0]
-    # ?
     split_idx = np.where(velocity >= speed_thresh)[0]
     keep_idx = [idx for idx in np.split(np.arange(position.n_samples), split_idx) if idx.size >= min_length]
 
@@ -123,4 +120,4 @@ def remove_teleports(position, speed_thresh, min_length):
     stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx]
 
     return nept.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
-                                np.array(stops)[..., np.newaxis]]))
+                                 np.array(stops)[..., np.newaxis]]))

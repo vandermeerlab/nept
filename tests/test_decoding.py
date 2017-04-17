@@ -133,13 +133,59 @@ def test_decode_location_equal():
 
 
 def test_remove_teleports():
-    decoded = nept.Position(np.array([1., 1.5, 2., 3., 15.5, 17., 21., 22., 23.]),
-                            np.array([0., 1., 2., 3., 4., 5., 6., 7., 8.]))
+    speed_thresh = 2
+    min_length = 3
 
-    decoded_sequences = nept.remove_teleports(decoded, speed_thresh=4, min_length=3)
+    data = np.hstack([np.arange(4), np.arange(6)])
+    time = np.arange(10)
+    position = nept.Position(data, time)
 
-    assert np.allclose(decoded_sequences.starts, np.array([0., 6.]))
-    assert np.allclose(decoded_sequences.stops, np.array([3., 8.]))
+    sequences = nept.remove_teleports(position, speed_thresh=speed_thresh, min_length=min_length)
+
+    assert np.allclose(sequences.starts, np.array([0., 4.]))
+    assert np.allclose(sequences.stops, np.array([3., 9.]))
+
+
+def test_remove_teleports_one():
+    speed_thresh = 2
+    min_length = 3
+
+    data = np.array([1, 7, 6, 5, 4, 9, 3, 1, 2, 6])
+    time = np.arange(10)
+    position = nept.Position(data, time)
+
+    sequences = nept.remove_teleports(position, speed_thresh=speed_thresh, min_length=min_length)
+
+    assert np.allclose(sequences.starts, np.array([1.]))
+    assert np.allclose(sequences.stops, np.array([4.]))
+
+
+def test_remove_teleports_empty():
+    speed_thresh = 2
+    min_length = 3
+
+    data = np.array([1, 7, 6, 8, 4, 9, 3, 1, 2, 6])
+    time = np.arange(10)
+    position = nept.Position(data, time)
+
+    sequences = nept.remove_teleports(position, speed_thresh=speed_thresh, min_length=min_length)
+
+    assert np.allclose(sequences.starts, np.array([]))
+    assert np.allclose(sequences.stops, np.array([]))
+
+
+def test_remove_teleports_continuous():
+    speed_thresh = 2
+    min_length = 3
+
+    data = np.arange(10)
+    time = np.arange(10)
+    position = nept.Position(data, time)
+
+    sequences = nept.remove_teleports(position, speed_thresh=speed_thresh, min_length=min_length)
+
+    assert np.allclose(sequences.starts, np.array([0.]))
+    assert np.allclose(sequences.stops, np.array([9.]))
 
 
 def test_filter_jumps_empty():
