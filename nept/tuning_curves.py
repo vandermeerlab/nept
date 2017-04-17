@@ -115,7 +115,7 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
     shape = position_2d.shape
     occupied_idx = position_2d > occupied_thresh
 
-    tuning_curves = np.zeros((len(spikes), *shape))
+    tuning_curves = np.zeros((len(spikes),) + shape)
     for i, spiketrain in enumerate(spikes):
         spikes_x = []
         spikes_y = []
