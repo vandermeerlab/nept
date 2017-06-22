@@ -55,7 +55,12 @@ def load_mclust_t(filename):
     header = file_contents[header_begin_idx:header_end_idx]
 
     data = file_contents[header_end_idx:]
-    spike_times = np.fromstring(data, dtype=np.dtype('>Q'))
+    spike_times = np.fromstring(data, dtype=np.dtype('>L'))
+
+    # Since some .t files are in uint32 and others are in uint64,
+    # we can load all as uint32 (L) but have to remove all the 0's
+    # that result from interpreting a uint64 as a uint32.
+    spike_times = spike_times[spike_times > 0]
 
     # Spikes times are in timestamps (tenths of ms).
     # Let's convert the timestamps to seconds.
