@@ -43,6 +43,8 @@ lfp_theta_filename = session + '-CSC07a.ncs'
 
 spikes_filepath = session
 
+fs = 2000
+
 task_times = dict()
 task_times['prerecord'] = nept.Epoch(np.array([2126.64553, 3214.07253]))
 task_times['task'] = nept.Epoch(np.array([3238.67853, 5645.16153]))
