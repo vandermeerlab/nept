@@ -15,6 +15,7 @@ from .loaders_neuralynx import (load_events,
                                 load_ntt,
                                 load_neuralynx_header,
                                 load_nvt)
+from .medpc_core import Rat, combine_rats
 from .place_fields import (consecutive,
                            find_fields,
                            get_single_field,
