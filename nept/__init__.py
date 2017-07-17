@@ -32,4 +32,5 @@ from .utils import (bin_spikes,
                     find_nearest_indices,
                     get_edges,
                     get_sort_idx,
-                    get_xyedges)
+                    get_xyedges,
+                    perievent_slice)

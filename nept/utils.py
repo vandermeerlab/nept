@@ -248,3 +248,38 @@ def expand_line(start_pt, stop_pt, line, expand_by=6):
     line_expanded = line.buffer(expand_by)
     zone = start_pt.union(line_expanded).union(stop_pt)
     return zone
+
+
+def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
+    """Slices the analogsignal data into perievent chunks.
+    Unlike time_slice, the resulting AnalogSignal will be multidimensional.
+    Only works for 1D signals.
+
+    Parameters
+    ----------
+    analogsignal : nept.AnalogSignal
+    events : np.array
+    t_before : float
+    t_after : float
+    dt : float
+
+    Returns
+    -------
+    nept.AnalogSignal
+
+    """
+
+    if analogsignal.dimensions != 1:
+        raise ValueError("AnalogSignal must be 1D.")
+
+    if dt is None:
+        dt = np.median(np.diff(analogsignal.time))
+
+    time = np.arange(-t_before, t_after+dt, dt)
+
+    data = np.zeros((len(time), len(events)))
+    for i, event in enumerate(events):
+        sliced = analogsignal.time_slice(event-t_before, event+t_after)
+        data[:,i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
+
+    return nept.AnalogSignal(data, time)

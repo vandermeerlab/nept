@@ -278,3 +278,45 @@ def test_cartesian():
     assert np.allclose(xy_centers, np.array([[0., 0.], [4., 0.], [8., 0.],
                                              [0., 2.], [4., 2.], [8., 2.],
                                              [0., 4.], [4., 4.], [8., 4.]]))
+
+
+def test_perievent_slice_simple():
+    data = np.array([9., 7., 5., 3., 1.])
+    time = np.array([0., 1., 2., 3., 4.])
+
+    analogsignal = nept.AnalogSignal(data, time)
+
+    events = np.array([1.])
+    perievent_lfp = nept.perievent_slice(analogsignal, events, t_before=1., t_after=1.)
+
+    assert np.allclose(perievent_lfp.data, np.array([[9.], [7.], [5.]]))
+    assert np.allclose(perievent_lfp.time, np.array([-1., 0., 1.]))
+
+
+def test_perievent_slice_with_dt():
+    data = np.array([9., 7., 5., 3., 1.])
+    time = np.array([0., 1., 2., 3., 4.])
+
+    analogsignal = nept.AnalogSignal(data, time)
+
+    events = np.array([1.])
+    perievent_lfp = nept.perievent_slice(analogsignal, events, t_before=1., t_after=1., dt=0.5)
+
+    assert np.allclose(perievent_lfp.data, np.array([[9.], [8.], [7.], [6.], [5.]]))
+    assert np.allclose(perievent_lfp.time, np.array([-1., -0.5, 0., 0.5, 1.]))
+
+
+def test_perievent_slice_2d():
+    x = np.array([9., 7., 5., 3., 1.])
+    y = np.array([9., 7., 5., 3., 1.])
+    time = np.array([0., 1., 2., 3., 4.])
+
+    data = np.hstack([np.array(x)[..., np.newaxis], np.array(y)[..., np.newaxis]])
+    analogsignal = nept.AnalogSignal(data, time)
+
+    events = np.array([1.])
+
+    with pytest.raises(ValueError) as excinfo:
+        perievent_lfp = nept.perievent_slice(analogsignal, events, t_before=1., t_after=1.)
+
+    assert str(excinfo.value) == "AnalogSignal must be 1D."
