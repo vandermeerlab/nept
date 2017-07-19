@@ -31,7 +31,7 @@ Open a **new** terminal, create and activate a new conda environment::
 
 Install package dependencies::
 
-  conda install matplotlib jupyter scipy numpy pandas pytest coverage
+  conda install matplotlib jupyter scipy numpy pandas seaborn pytest coverage
 
 For Shapely, try::
 
