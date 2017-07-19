@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.signal
-import scipy.stats as stats
+import scipy.stats
+import matplotlib.mlab
 import nept
 
 
@@ -68,7 +69,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
     hilbert_n = next_regular(lfp.n_samples)
     power_lfp = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
     power_lfp = power_lfp[:lfp.n_samples]  # removing the zero padding now that the power is computed
-    zpower_lfp = stats.zscore(power_lfp)
+    zpower_lfp = scipy.stats.zscore(power_lfp)
 
     # Finding locations where the power changes
     detect = zpower_lfp > z_thresh
@@ -172,3 +173,116 @@ def next_regular(target):
     if p5 < match:
         match = p5
     return match
+
+
+def power_in_db(power):
+    """Computes the power in dB for plotting
+
+    Parameters
+    ----------
+    power : np.array
+
+    Returns
+    -------
+    np.array
+    """
+    return 10*np.log10(power)
+
+
+def mean_psd(perievent_lfps, window, fs):
+    """Computes the mean Power Spectral Density (PSD) of perievent slices
+
+    Parameters
+    ----------
+    perievent_lfps : nept.AnalogSignal
+    window : int
+    fs : int
+
+    Returns
+    -------
+    freq : np.array
+    power : np.array
+
+    """
+    power = np.zeros((window+1, perievent_lfps.dimensions))
+    for i, lfp in enumerate(perievent_lfps.data.T):
+        power[:, i], freq = matplotlib.mlab.psd(
+            lfp, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))
+
+    return freq, np.mean(power, axis=1)
+
+
+def mean_csd(perievent_lfp1, perievent_lfp2, window, fs):
+    """Computes the mean Cross-Spectral Density (CSD) between perievent slices
+
+    Parameters
+    ----------
+    perievent_lfp1 : nept.AnalogSignal
+    perievent_lfp2 : nept.AnalogSignal
+    window : int
+    fs : int
+
+    Returns
+    -------
+    freq : np.array
+    power : np.array
+
+    """
+    freq, power = scipy.signal.csd(perievent_lfp1.data.T, perievent_lfp2.data.T,
+                                   fs=fs, nperseg=window, nfft=int(window*2))
+
+    return freq, np.mean(power, axis=0)
+
+
+def mean_coherence(perievent_lfp1, perievent_lfp2, window, fs):
+    """Computes the mean coherence between perievent slices
+
+    Parameters
+    ----------
+    perievent_lfp1 : nept.AnalogSignal
+    perievent_lfp2 : nept.AnalogSignal
+    window : int
+    fs : int
+
+    Returns
+    -------
+    freq : np.array
+    coherence : np.array
+
+    """
+    freq, coherence = scipy.signal.coherence(
+        perievent_lfp1.data.T, perievent_lfp2.data.T, fs=fs, nperseg=window, nfft=int(window*2))
+
+    return freq, np.mean(coherence, axis=0)
+
+
+def mean_coherencegram(perievent_lfp1, perievent_lfp2, dt, window, fs, extend=0.3):
+    """ Computes the mean coherence over time between perievent slices
+        (e.g. "coherencegram" because it's a combination of a coherence and a spectrogram)
+
+    Parameters
+    ----------
+    perievent_lfp1 : nept.AnalogSignal
+    perievent_lfp2 : nept.AnalogSignal
+    dt : float
+    window : int
+    fs : int
+    extend : float
+        Defaults to 0.3
+
+    Returns
+    -------
+    timebins : np.array
+    freq : np.array
+    coherencegram : np.array
+
+    """
+    timebins = np.arange(perievent_lfp1.time[0], perievent_lfp1.time[-1]+dt, dt)
+    coherencegram = np.zeros((window+1, len(timebins)))
+
+    for i, (t_start, t_stop) in enumerate(zip(timebins[:-2], timebins[1:-1])):
+        lfp1 = perievent_lfp1.time_slice(t_start-extend, t_stop+extend)
+        lfp2 = perievent_lfp2.time_slice(t_start-extend, t_stop+extend)
+        freq, coherencegram[:, i] = mean_coherence(lfp1, lfp2, window, fs)
+
+    return timebins, freq, coherencegram
