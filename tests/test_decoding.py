@@ -16,7 +16,7 @@ def test_bayesian_prob_smalltc():
 
 def test_bayesian_prob_onetime():
     tuning_curve = np.array([[0., 0., 2.]])
-    counts = nept.AnalogSignal(np.array([[10.], [5.]]), np.array([1.]))
+    counts = nept.AnalogSignal(np.array([[10.]]), np.array([1.]))
     binsize = 1.0
 
     likelihood = nept.bayesian_prob(counts, tuning_curve, binsize, min_neurons=1, min_spikes=1)
