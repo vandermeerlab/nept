@@ -60,18 +60,65 @@ def test_power_in_db_simple():
 
 
 def test_mean_psd_simple():
-    data = np.array([9., 7., 5., 3., 1.])
-    time = np.array([0., 1., 2., 3., 4.])
+    fs = 500
+    dt = 1./fs
+    time = np.arange(0, 2+dt, dt)
 
-    analogsignal = nept.AnalogSignal(data, time)
+    cycles = 100
+    data1 = np.sin(2 * np.pi * cycles * time)
+    perievent1 = nept.AnalogSignal(data1, time)
 
-    events = np.array([1.])
-    perievent_lfp = nept.perievent_slice(analogsignal, events, t_before=1., t_after=1.)
+    window = 250
+    fs = 125
+    freq, psd = nept.mean_psd(perievent1, window, fs)
 
-    window = 2
-    fs = 1
+    assert freq[np.where(psd == np.max(psd))[0][0]] == 25.0
 
-    freq, psd = nept.mean_psd(perievent_lfp, window, fs)
 
-    assert np.allclose(freq, np.array([0., 0.25, 0.5]))
-    assert np.allclose(psd, np.array([72., 74., 2.]))
+def test_mean_csd_with_itself():
+    fs = 500
+    dt = 1./fs
+    time = np.arange(0, 2+dt, dt)
+
+    cycles = 100
+    data1 = np.sin(2 * np.pi * cycles * time)
+    perievent1 = nept.AnalogSignal(data1, time)
+
+    window = 250
+    fs = 125
+    freq, csd = nept.mean_csd(perievent1, perievent1, window, fs)
+
+    assert freq[np.where(csd == np.max(csd))[0][0]] == 25.0
+
+
+def test_mean_coherence_with_itself():
+    fs = 500
+    dt = 1./fs
+    time = np.arange(0, 2+dt, dt)
+
+    cycles = 100
+    data1 = np.sin(2 * np.pi * cycles * time)
+    perievent1 = nept.AnalogSignal(data1, time)
+
+    window = 250
+    fs = 125
+    freq, coherence = nept.mean_coherence(perievent1, perievent1, window, fs)
+
+    assert np.allclose(np.ones(len(coherence)), coherence)
+
+
+def test_mean_coherencegram_with_itself():
+    fs = 500
+    dt = 1./fs
+    time = np.arange(0, 2+dt, dt)
+
+    cycles = 100
+    data1 = np.sin(2 * np.pi * cycles * time)
+    perievent1 = nept.AnalogSignal(data1, time)
+
+    window = 250
+    fs = 125
+    dt = 1
+    timebins, freq, coherencegram = nept.mean_coherencegram(perievent1, perievent1, dt, window, fs)
+
+    assert np.allclose(coherencegram[0], np.array([1., 0., 0.]))
