@@ -320,3 +320,19 @@ def test_perievent_slice_2d():
         perievent_lfp = nept.perievent_slice(analogsignal, events, t_before=1., t_after=1.)
 
     assert str(excinfo.value) == "AnalogSignal must be 1D."
+
+
+def test_speed_threshold_simple():
+    data = np.array([1., 1.2, 1.4, 8.6, 8.5, 8.4, 3.3, 3.4, 3.3, 1.2])
+    time = np.arange(0, 10)
+    position = nept.Position(data, time)
+
+    running = nept.speed_threshold(position, t_smooth=0.5, speed_limit=0.1)
+
+    assert np.allclose(running.data, np.array([[1.2],
+                                               [1.4],
+                                               [8.6],
+                                               [3.3],
+                                               [3.4],
+                                               [3.3],
+                                               [1.2]]))

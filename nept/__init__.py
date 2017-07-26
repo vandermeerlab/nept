@@ -39,5 +39,6 @@ from .utils import (bin_spikes,
                     get_edges,
                     get_sort_idx,
                     get_xyedges,
-                    perievent_slice)
+                    perievent_slice,
+                    speed_threshold)
 

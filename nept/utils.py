@@ -283,3 +283,23 @@ def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
         data[:,i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
 
     return nept.AnalogSignal(data, time)
+
+
+def speed_threshold(position, t_smooth=0.5, speed_limit=0.4):
+    """Finds positions above a certain speed threshold
+
+    Parameters
+    ----------
+    position : nept.Position
+    t_smooth : float
+    speed_limit : float
+
+    Returns
+    -------
+    position_run : nept.Position
+    """
+
+    speed = position.speed(t_smooth)
+    run_idx = np.squeeze(speed.data) >= speed_limit
+
+    return position[run_idx]
