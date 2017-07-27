@@ -40,7 +40,7 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes):
         valid_idx = tuning_curves[:, idx] > 1  # log of 1 or less is negative or invalid
         if np.any(valid_idx):
             # event_rate is the lambda in this poisson distribution
-            event_rate = tuning_curves[valid_idx, idx, np.newaxis] ** counts.data[:, valid_idx]
+            event_rate = tuning_curves[valid_idx, idx, np.newaxis].T ** counts.data[:, valid_idx]
             prior = np.exp(-binsize * np.sum(tuning_curves[valid_idx, idx]))
 
             # Below is the same as
