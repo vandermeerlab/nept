@@ -1,4 +1,5 @@
 import os
+import pytest
 import numpy as np
 import nept
 
@@ -43,6 +44,50 @@ def assign_medpc_label(data):
     return rats_data
 
 
+def assign_label(data):
+    """Assigns events to proper labels.
+
+    Parameters
+    ----------
+    data: dict
+
+    Returns
+    -------
+    rats_data: dict
+        With mags, pellets, lights1, lights2, sounds1, sounds2, trial1, trial2, trial3, trial4 as keys.
+        Each contains nept.Epoch objects
+
+    """
+    mag_start = np.array(data[1])
+    mag_end = np.array(data[2])
+    if len(mag_start) > len(mag_end):
+        mag_start = np.array(data[1][:-1])
+    pel_start = np.array(data[3])
+    pel_end = pel_start + 1
+    light1_start = np.array(data[4])
+    light1_end = np.array(data[5])
+    light2_start = np.array(data[6])
+    light2_end = np.array(data[7])
+    sound1_start = np.array(data[8])
+    sound1_end = np.array(data[9])
+    sound2_start = np.array(data[10])
+    sound2_end = np.array(data[11])
+
+    rats_data = dict()
+    rats_data['mags'] = nept.Epoch(mag_start, mag_end-mag_start)
+    rats_data['pellets'] = nept.Epoch(pel_start, pel_end-pel_start)
+    rats_data['lights1'] = nept.Epoch(light1_start, light1_end-light1_start)
+    rats_data['lights2'] = nept.Epoch(light2_start, light2_end-light2_start)
+    rats_data['sounds1'] = nept.Epoch(sound1_start, sound1_end-sound1_start)
+    rats_data['sounds2'] = nept.Epoch(sound2_start, sound2_end-sound2_start)
+    rats_data['trial1'] = nept.Epoch(light1_start, sound1_end)
+    rats_data['trial2'] = nept.Epoch(light2_start, sound1_end)
+    rats_data['trial3'] = nept.Epoch(light1_start, sound2_end)
+    rats_data['trial4'] = nept.Epoch(light2_start, sound2_end)
+
+    return rats_data
+
+
 thisdir = os.path.dirname(os.path.realpath(__file__))
 roborats = os.path.join(thisdir, '!roborats')
 
@@ -56,6 +101,37 @@ data = dict()
 for rat in rats:
     data[rat] = nept.Rat(rat, group1, group2)
     data[rat].add_session_medpc(**rats_data[rat])
+
+
+rats_data = nept.load_medpc(roborats, assign_label)
+
+data_trials = dict()
+for rat in rats:
+    data_trials[rat] = nept.Rat(rat, group1, group2)
+    if rat in group1:
+        data_trials[rat].add_session(rats_data[rat]['mags'],
+                                     rats_data[rat]['pellets'],
+                                     rats_data[rat]['lights1'],
+                                     rats_data[rat]['lights2'],
+                                     rats_data[rat]['sounds1'],
+                                     rats_data[rat]['sounds2'],
+                                     rats_data[rat]['trial1'],
+                                     rats_data[rat]['trial2'],
+                                     rats_data[rat]['trial3'],
+                                     rats_data[rat]['trial4'],
+                                     group=1)
+    elif rat in group2:
+        data_trials[rat].add_session(rats_data[rat]['mags'],
+                                     rats_data[rat]['pellets'],
+                                     rats_data[rat]['lights1'],
+                                     rats_data[rat]['lights2'],
+                                     rats_data[rat]['sounds1'],
+                                     rats_data[rat]['sounds2'],
+                                     rats_data[rat]['trial1'],
+                                     rats_data[rat]['trial2'],
+                                     rats_data[rat]['trial3'],
+                                     rats_data[rat]['trial4'],
+                                     group=2)
 
 n_sessions = len(data['1'].sessions)
 only_sound = False
@@ -277,3 +353,36 @@ def test_complex():
     assert (np.allclose(np.mean(this_df[this_df['measure'] == 'numbers']['value']), 1.0))
     assert (np.allclose(np.mean(this_df[this_df['measure'] == 'latency']['value']), 0.0))
     assert (np.allclose(np.mean(this_df[this_df['measure'] == 'responses']['value']), 100.0))
+
+
+def test_rat_wrong_group():
+    with pytest.raises(ValueError) as excinfo:
+        data_trials['1'].add_session(rats_data[rat]['mags'],
+                                     rats_data[rat]['pellets'],
+                                     rats_data[rat]['lights1'],
+                                     rats_data[rat]['lights2'],
+                                     rats_data[rat]['sounds1'],
+                                     rats_data[rat]['sounds2'],
+                                     rats_data[rat]['trial1'],
+                                     rats_data[rat]['trial2'],
+                                     rats_data[rat]['trial3'],
+                                     rats_data[rat]['trial4'],
+                                     group=3)
+
+        assert str(excinfo.value) == "rat id is incorrect. Should be in group1 or group2"
+
+
+def test_rat_no_group():
+    with pytest.raises(ValueError) as excinfo:
+        data_trials['1'].add_session(rats_data[rat]['mags'],
+                                     rats_data[rat]['pellets'],
+                                     rats_data[rat]['lights1'],
+                                     rats_data[rat]['lights2'],
+                                     rats_data[rat]['sounds1'],
+                                     rats_data[rat]['sounds2'],
+                                     rats_data[rat]['trial1'],
+                                     rats_data[rat]['trial2'],
+                                     rats_data[rat]['trial3'],
+                                     rats_data[rat]['trial4'])
+
+        assert str(excinfo.value) == "must specify a group"

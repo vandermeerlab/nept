@@ -162,8 +162,6 @@ def f_analyze(trial, measure):
     output: analysis metric for a given trial
 
     """
-    if measure not in ['durations', 'numbers', 'latency', 'responses']:
-        raise ValueError("measure must be one of 'durations', 'numbers', 'latency', or 'responses'")
     if measure == 'durations':
         output = trial.durations
     if measure == 'numbers':
