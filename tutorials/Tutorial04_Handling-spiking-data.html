@@ -1,0 +1,920 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title># Tutorial 04 - Handling spiking data &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="# Tutorial 05 - Tuning curves and decoding" href="Tutorial05_Tuning-curves-and-decoding.html"/>
+        <link rel="prev" title="# Tutorial 03 - Introduction to neural data types" href="Tutorial03_Data-types.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial01_Principles-of-(neural)-data-analysis.html">Tutorial 01 - Principles of careful (neural) data analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html##-Goals"># Goals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li># Tutorial 04 - Handling spiking data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial04_Handling-spiking-data.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="#-Tutorial-04---Handling-spiking-data">
+<h1># Tutorial 04 - Handling spiking data<a class="headerlink" href="##-Tutorial-04---Handling-spiking-data" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Describe spike trains through binning and spike density functions</li>
+<li>Describe spike trains by their interspike intervals (ISIs)</li>
+<li>Compute an autocorrelation function (ACF) and crosscorrelation
+function (CCF)</li>
+<li>Generating fake spike data</li>
+</ul>
+</div>
+<div class="section" id="#-Determine-firing-rates">
+<h1># Determine firing rates<a class="headerlink" href="##-Determine-firing-rates" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+<span class="c1"># define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R042-2013-08-18&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># load the info file, which contains experiment-specific information</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">r042d3</span> <span class="k">as</span> <span class="nn">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load spikes (.t and ._t) from this experiment</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_spikes</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Let&#39;s limit our investigation to one neuron</span>
+<span class="n">neuron_idx</span> <span class="o">=</span> <span class="mi">31</span>
+<span class="n">these_spikes</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="n">neuron_idx</span><span class="p">]</span>
+
+<span class="c1"># And restrict the time so we can more easily see what&#39;s going on</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mf">2500.0</span>
+<span class="n">stop</span> <span class="o">=</span> <span class="mf">2700.0</span>
+<span class="n">filtered_spikes</span> <span class="o">=</span> <span class="n">these_spikes</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the spikes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_7_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_7_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">2700</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_8_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_8_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Create an AnalogSignal used to define the time edges for the binned spikes</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">AnalogSignal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Bin the spikes</span>
+<span class="n">window_advance</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">time_edges</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">get_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">window_advance</span><span class="p">,</span> <span class="n">lastbin</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the spikes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot the number of spikes in each bin</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">time_edges</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s1">&#39;step&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_11_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_11_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Now let&#39;s look at a spike density function (SDF; convolved spike train)</span>
+<span class="c1"># for this SDF we need a smaller bin size</span>
+<span class="n">bin_size</span> <span class="o">=</span> <span class="mf">0.001</span>
+
+<span class="n">sdf_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">)</span>
+<span class="n">sdf_centers</span> <span class="o">=</span> <span class="n">sdf_edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">bin_size</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c1"># Make a gaussian filter</span>
+<span class="n">gaussian_window</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">bin_size</span>
+<span class="n">gaussian_std</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="o">/</span> <span class="n">bin_size</span>
+
+<span class="n">gaussian_kernel</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">gaussian_window</span><span class="p">,</span> <span class="n">gaussian_std</span><span class="p">)</span>
+<span class="n">gaussian_kernel</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gaussian_kernel</span><span class="p">)</span>
+<span class="n">gaussian_kernel</span> <span class="o">/=</span> <span class="n">bin_size</span>
+
+<span class="c1"># Bin the spikes</span>
+<span class="n">spike_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">sdf_edges</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Convolve the binned spikes by the gaussian filter</span>
+<span class="n">convolved_spiketimes</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">spike_count</span><span class="p">,</span> <span class="n">gaussian_kernel</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the spikes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot the spike density function</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdf_centers</span><span class="p">,</span> <span class="n">convolved_spiketimes</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_13_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_13_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="#-Interspike-intervals-(ISIs)">
+<h1># Interspike intervals (ISIs)<a class="headerlink" href="##-Interspike-intervals-(ISIs)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Let&#39;s work with the same neuron as before, this time with the spikes from the entire session.</span>
+<span class="c1"># Plot the spikes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_15_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_15_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Find the duration of the interspike intervals</span>
+<span class="n">isi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the binned ISIs</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">isi</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_17_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_17_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="#-Spike-autocorrelation-function-(ACF)">
+<h1># Spike autocorrelation function (ACF)<a class="headerlink" href="##-Spike-autocorrelation-function-(ACF)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">autocorrelation</span><span class="p">(</span><span class="n">spiketimes</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">,</span> <span class="n">max_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the autocorrelation for an individual spiketrain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spiketimes : np.array</span>
+<span class="sd">    bin_size : float</span>
+<span class="sd">    max_time : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    aurocorrelation : np.array</span>
+<span class="sd">    bin_centers : np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">max_time</span><span class="o">-</span><span class="n">bin_size</span><span class="p">,</span> <span class="n">max_time</span><span class="o">+</span><span class="n">bin_size</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">)</span>
+    <span class="n">autocorrelation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bin_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">spike</span> <span class="ow">in</span> <span class="n">spiketimes</span><span class="p">:</span>
+        <span class="n">relative_spike_time</span> <span class="o">=</span> <span class="n">spiketimes</span> <span class="o">-</span> <span class="n">spike</span>
+
+        <span class="n">autocorrelation</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">relative_spike_time</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_centers</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">autocorrelation</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Normalize the autocorrelation</span>
+    <span class="n">autocorrelation</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">autocorrelation</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">autocorrelation</span><span class="p">,</span> <span class="n">bin_centers</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Find the autocorrelation for our spikes of interest</span>
+<span class="n">acf</span><span class="p">,</span> <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">(</span><span class="n">these_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+
+<span class="c1"># Plot the autocorrelation</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">acf</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_20_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_20_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="#-Spike-cross-correlation-function-(CCF)">
+<h1># Spike cross-correlation function (CCF)<a class="headerlink" href="##-Spike-cross-correlation-function-(CCF)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">crosscorrelation</span><span class="p">(</span><span class="n">spiketimes1</span><span class="p">,</span> <span class="n">spiketimes2</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">,</span> <span class="n">max_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the autocorrelation for an individual spiketrain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spiketimes1 : np.array</span>
+<span class="sd">    spiketimes2 : np.array</span>
+<span class="sd">    bin_size : float</span>
+<span class="sd">    max_time : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    crosscorrelation : np.array</span>
+<span class="sd">    bin_centers : np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">max_time</span><span class="o">-</span><span class="n">bin_size</span><span class="p">,</span> <span class="n">max_time</span><span class="o">+</span><span class="n">bin_size</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">)</span>
+    <span class="n">crosscorrelation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bin_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">spike</span> <span class="ow">in</span> <span class="n">spiketimes1</span><span class="p">:</span>
+        <span class="n">relative_spike_time</span> <span class="o">=</span> <span class="n">spiketimes2</span> <span class="o">-</span> <span class="n">spike</span>
+
+        <span class="n">crosscorrelation</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">relative_spike_time</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_centers</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">crosscorrelation</span> <span class="o">=</span> <span class="n">crosscorrelation</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Normalize the crosscorrelation by the number of spikes in the first input</span>
+    <span class="n">crosscorrelation</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spiketimes1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">crosscorrelation</span><span class="p">,</span> <span class="n">bin_centers</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># limit spikes to task times</span>
+<span class="n">task_start</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">start</span>
+<span class="n">task_stop</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span>
+
+<span class="n">task_spikes</span> <span class="o">=</span> <span class="p">[</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">task_start</span><span class="p">,</span> <span class="n">task_stop</span><span class="p">)</span> <span class="k">for</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">]</span>
+
+<span class="c1"># Find the crosscorrelation for our spikes of interest</span>
+<span class="n">idx1</span> <span class="o">=</span> <span class="mi">73</span>
+<span class="n">idx2</span> <span class="o">=</span> <span class="mi">31</span>
+
+<span class="n">ccf</span><span class="p">,</span> <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">crosscorrelation</span><span class="p">(</span><span class="n">task_spikes</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">task_spikes</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                                    <span class="n">bin_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+
+<span class="c1"># Plot the crosscorrelation</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">ccf</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_23_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_23_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="#-Generating-fake-spike-data">
+<h1># Generating fake spike data<a class="headerlink" href="##-Generating-fake-spike-data" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate a fake spike train</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">spiketime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="n">probability</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">random_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spiketime</span><span class="p">)))</span>
+<span class="n">spike_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">random_values</span> <span class="o">&lt;</span> <span class="n">probability</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">toy_spikes</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">SpikeTrain</span><span class="p">(</span><span class="n">spiketime</span><span class="p">[</span><span class="n">spike_idx</span><span class="p">])</span>
+
+<span class="c1"># Plot the fake spikes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">toy_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">toy_spikes</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial04_Handling-spiking-data_25_0.png" src="../_images/tutorials_Tutorial04_Handling-spiking-data_25_0.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorial05_Tuning-curves-and-decoding.html" class="btn btn-neutral float-right" title="# Tutorial 05 - Tuning curves and decoding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Tutorial03_Data-types.html" class="btn btn-neutral" title="# Tutorial 03 - Introduction to neural data types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

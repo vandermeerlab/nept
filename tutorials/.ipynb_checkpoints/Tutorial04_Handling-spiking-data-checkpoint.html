@@ -1,0 +1,870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Module 09 - Handling spiking data &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Module-09---Handling-spiking-data">
+<h1># Module 09 - Handling spiking data<a class="headerlink" href="##-Module-09---Handling-spiking-data" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Describe spike trains through binning and spike density functions</li>
+<li>Describe spike trains by their interspike intervals (ISIs)</li>
+<li>Compute an autocorrelation function (ACF) and crosscorrelation
+function (CCF)</li>
+<li>Generating fake spike data</li>
+</ul>
+</div>
+<div class="section" id="#-Determine-firing-rates">
+<h1># Determine firing rates<a class="headerlink" href="##-Determine-firing-rates" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+import scipy.signal
+
+# define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R042-2013-08-18&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># load the info file, which contains experiment-specific information
+import r042d3 as info
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-167e83d3dd57&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># load the info file, which contains experiment-specific information</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> r042d3 <span class="ansi-green-fg">as</span> info
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;r042d3&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load spikes (.t and ._t) from this experiment
+spikes = nept.load_spikes(data_folder)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-fa297a4ab831&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load spikes (.t and ._t) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>spikes <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_spikes<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_mclust.py</span> in <span class="ansi-cyan-fg">load_spikes</span><span class="ansi-blue-fg">(filepath, load_questionable)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>     spikes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> os<span class="ansi-blue-fg">.</span>listdir<span class="ansi-blue-fg">(</span>filepath<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> file<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.t&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    110</span>             label <span class="ansi-blue-fg">=</span> file<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">18</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R042-2013-08-18&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Let&#39;s limit our investigation to one neuron
+neuron_idx = 31
+these_spikes = spikes[neuron_idx]
+
+# And restrict the time so we can more easily see what&#39;s going on
+start = 5801.0
+stop = 5801.7
+filtered_spikes = these_spikes.time_slice(start, stop)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-005137471548&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Let&#39;s limit our investigation to one neuron</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> neuron_idx <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">31</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>these_spikes <span class="ansi-blue-fg">=</span> spikes<span class="ansi-blue-fg">[</span>neuron_idx<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># And restrict the time so we can more easily see what&#39;s going on</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the spikes
+plt.plot(filtered_spikes.time, np.ones(len(filtered_spikes.time)), &#39;|&#39;, ms=30)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-5-a3d0370d7ff3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;|&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;filtered_spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Create an AnalogSignal used to define the time edges for the binned spikes
+edges = nept.AnalogSignal(np.ones(20), np.linspace(start, stop, 20))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-6-7d42fcb587ec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Create an AnalogSignal used to define the time edges for the binned spikes</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>edges <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>AnalogSignal<span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>linspace<span class="ansi-blue-fg">(</span>start<span class="ansi-blue-fg">,</span> stop<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;start&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Bin the spikes
+window_advance = 0.1
+time_edges = nept.get_edges(edges, window_advance, lastbin=True)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-6ff0a439b560&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Bin the spikes</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> window_advance <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.1</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>time_edges <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>get_edges<span class="ansi-blue-fg">(</span>edges<span class="ansi-blue-fg">,</span> window_advance<span class="ansi-blue-fg">,</span> lastbin<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;edges&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the spikes
+plt.plot(filtered_spikes.time, np.ones(len(filtered_spikes.time))-2, &#39;|&#39;, ms=30)
+
+# Plot the number of spikes in each bin
+plt.hist(filtered_spikes.time, time_edges)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-6d231ef0e06a&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;|&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the number of spikes in each bin</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>hist<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> time_edges<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;filtered_spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Now let&#39;s look at a spike density function (SDF; convolved spike train)
+# for this SDF we need a smaller bin size
+bin_size = 0.001
+
+sdf_edges = np.arange(start, stop, bin_size)
+sdf_centers = sdf_edges[:-1]+bin_size/2
+
+# Make a gaussian filter
+gaussian_window = 1.0 / bin_size
+gaussian_std = 0.02 / bin_size
+
+gaussian_kernel = scipy.signal.gaussian(gaussian_window, gaussian_std)
+gaussian_kernel /= np.sum(gaussian_kernel)
+gaussian_kernel /= bin_size
+
+# Bin the spikes
+spike_count = np.histogram(filtered_spikes.time, bins=sdf_edges)[0]
+
+# Convolve the binned spikes by the gaussian filter
+convolved_spiketimes = scipy.signal.convolve(spike_count, gaussian_kernel, mode=&#39;same&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-9-80c6fa872189&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> bin_size <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.001</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>sdf_edges <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>arange<span class="ansi-blue-fg">(</span>start<span class="ansi-blue-fg">,</span> stop<span class="ansi-blue-fg">,</span> bin_size<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> sdf_centers <span class="ansi-blue-fg">=</span> sdf_edges<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">+</span>bin_size<span class="ansi-blue-fg">/</span><span class="ansi-cyan-fg">2</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;start&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the spikes
+plt.plot(filtered_spikes.time, np.ones(len(filtered_spikes.time))-2, &#39;|&#39;, ms=30)
+
+# Plot the spike density function
+plt.plot(sdf_centers, convolved_spiketimes)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-10-a9169a907c05&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>filtered_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;|&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the spike density function</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>sdf_centers<span class="ansi-blue-fg">,</span> convolved_spiketimes<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;filtered_spikes&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Interspike-intervals-(ISIs)">
+<h1># Interspike intervals (ISIs)<a class="headerlink" href="##-Interspike-intervals-(ISIs)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Let&#39;s work with the same neuron as before, this time with the spikes from the entire session.
+# Plot the spikes
+plt.plot(these_spikes.time, np.ones(len(these_spikes.time)), &#39;|&#39;, ms=30)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-895cddf29e04&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Let&#39;s work with the same neuron as before, this time with the spikes from the entire session.</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>these_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>these_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;|&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;these_spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the duration of the interspike intervals
+isi = np.diff(these_spikes.time)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-12-f16986740233&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the duration of the interspike intervals</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>isi <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>diff<span class="ansi-blue-fg">(</span>these_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;these_spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the binned ISIs
+plt.hist(isi, 50)
+plt.ylim(0, 120)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-13-05d679d907ce&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the binned ISIs</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>hist<span class="ansi-blue-fg">(</span>isi<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">50</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>ylim<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">120</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;isi&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Spike-autocorrelation-function-(ACF)">
+<h1># Spike autocorrelation function (ACF)<a class="headerlink" href="##-Spike-autocorrelation-function-(ACF)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def autocorrelation(spiketimes, bin_size, max_time):
+    &quot;&quot;&quot;Computes the autocorrelation for an individual spiketrain.
+
+    Parameters
+    ----------
+    spiketimes : np.array
+    bin_size : float
+    max_time : float
+
+    Returns
+    -------
+    aurocorrelation : np.array
+    bin_centers : np.array
+    &quot;&quot;&quot;
+
+    bin_centers = np.arange(-max_time-bin_size, max_time+bin_size, bin_size)
+    autocorrelation = np.zeros(bin_centers.shape[0]-1)
+
+    for spike in spiketimes:
+        relative_spike_time = spiketimes - spike
+
+        autocorrelation += np.histogram(relative_spike_time, bin_centers)[0]
+
+    bin_centers = bin_centers[2:-1]
+    autocorrelation = autocorrelation[1:-1]
+
+    # Normalize the autocorrelation
+    autocorrelation /= np.max(autocorrelation)
+
+    return autocorrelation, bin_centers
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the autocorrelation for our spikes of interest
+acf, bin_centers = autocorrelation(these_spikes.time, bin_size=0.001, max_time=1.)
+
+# Plot the autocorrelation
+plt.plot(bin_centers, acf)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-5e461a8e6dbf&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the autocorrelation for our spikes of interest</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>acf<span class="ansi-blue-fg">,</span> bin_centers <span class="ansi-blue-fg">=</span> autocorrelation<span class="ansi-blue-fg">(</span>these_spikes<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> bin_size<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">,</span> max_time<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the autocorrelation</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>bin_centers<span class="ansi-blue-fg">,</span> acf<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;these_spikes&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Spike-cross-correlation-function-(CCF)">
+<h1># Spike cross-correlation function (CCF)<a class="headerlink" href="##-Spike-cross-correlation-function-(CCF)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def crosscorrelation(spiketimes1, spiketimes2, bin_size, max_time):
+    &quot;&quot;&quot;Computes the autocorrelation for an individual spiketrain.
+
+    Parameters
+    ----------
+    spiketimes1 : np.array
+    spiketimes2 : np.array
+    bin_size : float
+    max_time : float
+
+    Returns
+    -------
+    crosscorrelation : np.array
+    bin_centers : np.array
+    &quot;&quot;&quot;
+
+    bin_centers = np.arange(-max_time-bin_size, max_time+bin_size, bin_size)
+    crosscorrelation = np.zeros(bin_centers.shape[0]-1)
+
+    for spike in spiketimes1:
+        relative_spike_time = spiketimes2 - spike
+
+        crosscorrelation += np.histogram(relative_spike_time, bin_centers)[0]
+
+    bin_centers = bin_centers[2:-1]
+    crosscorrelation = crosscorrelation[1:-1]
+
+    # Normalize the crosscorrelation by the number of spikes in the first input
+    crosscorrelation /= len(spiketimes1)
+
+    return crosscorrelation, bin_centers
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># limit spikes to task times
+task_start = info.task_times[&#39;task&#39;].start
+task_stop = info.task_times[&#39;task&#39;].stop
+
+task_spikes = [spiketrain.time_slice(task_start, task_stop) for spiketrain in spikes]
+
+# Find the crosscorrelation for our spikes of interest
+idx1 = 73
+idx2 = 31
+
+ccf, bin_centers = crosscorrelation(task_spikes[idx1].time, task_spikes[idx2].time,
+                                    bin_size=0.01, max_time=1.)
+
+# Plot the crosscorrelation
+plt.plot(bin_centers, ccf)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-17-f3d37447d5ac&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># limit spikes to task times</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>task_start <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>start
+<span class="ansi-green-intense-fg ansi-bold">      3</span> task_stop <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>stop
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> task_spikes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>spiketrain<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>task_start<span class="ansi-blue-fg">,</span> task_stop<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> spiketrain <span class="ansi-green-fg">in</span> spikes<span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Generating-fake-spike-data">
+<h1># Generating fake spike data<a class="headerlink" href="##-Generating-fake-spike-data" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Generate a fake spike train
+dt = 0.01
+spiketime = np.arange(-1, 1, dt)
+
+probability = 0.5
+random_values = np.random.random((1, len(spiketime)))
+spike_idx = np.where(random_values &lt; probability)[1]
+poisson_spikes = nept.SpikeTrain(spiketime[spike_idx])
+
+# Plot the fake spikes
+plt.plot(poisson_spikes.time, np.ones(len(poisson_spikes.time)), &#39;|&#39;, ms=30, color=&#39;k&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_.ipynb_checkpoints_Tutorial04_Handling-spiking-data-checkpoint_24_0.png" src="../../_images/tutorials_.ipynb_checkpoints_Tutorial04_Handling-spiking-data-checkpoint_24_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Module 09 - Handling spiking data</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li><a class="reference internal" href="##-Determine-firing-rates"># Determine firing rates</a></li>
+<li><a class="reference internal" href="##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li><a class="reference internal" href="##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li><a class="reference internal" href="##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li><a class="reference internal" href="##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial04_Handling-spiking-data-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

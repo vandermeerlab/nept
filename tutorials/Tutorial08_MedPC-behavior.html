@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title># Tutorial 08 - MedPC behavior &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="nept Objects" href="../core.html"/>
+        <link rel="prev" title="# Tutorial 07 - Signal interactions" href="Tutorial07_Signal-interactions.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial01_Principles-of-(neural)-data-analysis.html">Tutorial 01 - Principles of careful (neural) data analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Goals"># Goals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials">Compute the duration in food cup for rewarded and unrewarded trials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li># Tutorial 08 - MedPC behavior</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial08_MedPC-behavior.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="#-Tutorial-08---MedPC-behavior">
+<h1># Tutorial 08 - MedPC behavior<a class="headerlink" href="##-Tutorial-08---MedPC-behavior" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Implement a behavioral analysis for a Pavlovian task measured in
+epochs</li>
+</ul>
+<div class="section" id="Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials">
+<h2>Compute the duration in food cup for rewarded and unrewarded trials<a class="headerlink" href="#Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials" title="Permalink to this headline">¶</a></h2>
+<p>This data is from a Pavlovian biconditional discrimination experiment
+where two lights (steady, flashing) and two sounds (tone, white noise)
+were presented for 10 seconds at a time. A trial consisted of one light
+presentation followed by a 5 second gap, then one sound presentation.
+There were four different trial types (AX-, AY+, BX+, BY-), such that
+each individual cue is equally presented with and without food reward. A
+successful discrimination in this task is when AY+ and BX+ trials have a
+greater response than AX- and BY- trials.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;biconditional-tutorial&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Let&#39;s look at Rat 5</span>
+<span class="n">rats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;5&#39;</span><span class="p">]</span>
+<span class="n">group1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">]</span>
+<span class="n">group2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Get the sessions. MedPC data is stored in a file that is is in the format !YYYY-MM-DD.</span>
+<span class="c1"># The a and b indicate morning and afternoon sessions.</span>
+<span class="n">sessions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;!&#39;</span><span class="p">:</span>
+        <span class="n">sessions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+
+<span class="c1"># Find out the number of sessions</span>
+<span class="n">n_sessions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sessions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of sessions:&#39;</span><span class="p">,</span> <span class="n">n_sessions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of sessions: 40
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Write a function that dictates the maping between the medpc values and the experimental conditions</span>
+<span class="k">def</span> <span class="nf">assign_medpc_label</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Assigns events to proper labels.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: dict</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rats_data: dict</span>
+<span class="sd">        With mags, pellets, lights1, lights2, sounds1, sounds2, trial1, trial2, trial3, trial4 as keys.</span>
+<span class="sd">        Each contains nept.Epoch objects</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mag_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">mag_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mag_start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">mag_end</span><span class="p">):</span>
+        <span class="n">mag_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">pel_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">pel_end</span> <span class="o">=</span> <span class="n">pel_start</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">light1_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">light1_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="n">light2_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+    <span class="n">light2_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+    <span class="n">sound1_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+    <span class="n">sound1_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">])</span>
+    <span class="n">sound2_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span>
+    <span class="n">sound2_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span>
+
+    <span class="n">rats_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;mags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">mag_start</span><span class="p">,</span> <span class="n">mag_end</span><span class="o">-</span><span class="n">mag_start</span><span class="p">)</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;pellets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">pel_start</span><span class="p">,</span> <span class="n">pel_end</span><span class="o">-</span><span class="n">pel_start</span><span class="p">)</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;lights1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">light1_start</span><span class="p">,</span> <span class="n">light1_end</span><span class="o">-</span><span class="n">light1_start</span><span class="p">)</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;lights2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">light2_start</span><span class="p">,</span> <span class="n">light2_end</span><span class="o">-</span><span class="n">light2_start</span><span class="p">)</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;sounds1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">sound1_start</span><span class="p">,</span> <span class="n">sound1_end</span><span class="o">-</span><span class="n">sound1_start</span><span class="p">)</span>
+    <span class="n">rats_data</span><span class="p">[</span><span class="s1">&#39;sounds2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">sound2_start</span><span class="p">,</span> <span class="n">sound2_end</span><span class="o">-</span><span class="n">sound2_start</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rats_data</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Set up the data in a dictionary, which is most useful when handling multiple rats</span>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="n">rats</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Rat</span><span class="p">(</span><span class="n">rat</span><span class="p">,</span> <span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Gather the data from all the sessions and add them to the dictionary</span>
+<span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">sessions</span><span class="p">:</span>
+    <span class="n">rats_data</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_medpc</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">session</span><span class="p">),</span> <span class="n">assign_medpc_label</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="n">rats</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">add_session_medpc</span><span class="p">(</span><span class="o">**</span><span class="n">rats_data</span><span class="p">[</span><span class="n">rat</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Make a dataframe from the dictionary</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">combine_rats</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">rats</span><span class="p">,</span> <span class="n">n_sessions</span><span class="p">,</span> <span class="n">only_sound</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Take a look at the first few entries of the dataframe.</span>
+<span class="c1"># Notice we&#39;re computing more than only the food cup duration here.</span>
+<span class="c1"># We can filter it to only the values of interest in our plotting.</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>condition</th>
+      <th>cue</th>
+      <th>measure</th>
+      <th>rat</th>
+      <th>rewarded</th>
+      <th>session</th>
+      <th>trial</th>
+      <th>trial_type</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>light 1</td>
+      <td>light</td>
+      <td>durations</td>
+      <td>5</td>
+      <td>light unrewarded</td>
+      <td>1</td>
+      <td>5, 0</td>
+      <td>1</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>light 1</td>
+      <td>light</td>
+      <td>numbers</td>
+      <td>5</td>
+      <td>light unrewarded</td>
+      <td>1</td>
+      <td>5, 0</td>
+      <td>1</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>light 1</td>
+      <td>light</td>
+      <td>latency</td>
+      <td>5</td>
+      <td>light unrewarded</td>
+      <td>1</td>
+      <td>5, 0</td>
+      <td>1</td>
+      <td>10.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>light 1</td>
+      <td>light</td>
+      <td>responses</td>
+      <td>5</td>
+      <td>light unrewarded</td>
+      <td>1</td>
+      <td>5, 0</td>
+      <td>1</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>sound 1</td>
+      <td>sound</td>
+      <td>durations</td>
+      <td>5</td>
+      <td>sound unrewarded</td>
+      <td>1</td>
+      <td>5, 1</td>
+      <td>1</td>
+      <td>0.12</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the duration in food cup behavior</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_measure</span><span class="p">(</span><span class="n">measure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots the measure overtime for one rat.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    measure: str</span>
+<span class="sd">        Must be &#39;durations&#39;, &#39;numbers&#39;, &#39;latency&#39;, or &#39;responses&#39;.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Filter the dataframe by rat</span>
+    <span class="n">rat_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="n">rats</span><span class="p">:</span>
+        <span class="n">rat_idx</span> <span class="o">=</span> <span class="n">rat_idx</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;rat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">rat</span><span class="p">)</span>
+    <span class="n">rats_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">rat_idx</span><span class="p">]</span>
+
+    <span class="c1"># Filter the dataframe by measure, here let&#39;s look at the duration of food cup entries</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">measure</span> <span class="o">==</span> <span class="n">measure</span><span class="p">]</span>
+
+    <span class="c1"># Plot using seaborn since seaborn and pandas (the dataframe) work well together</span>
+    <span class="n">colours</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#9970ab&quot;</span><span class="p">,</span> <span class="s2">&quot;#d6604d&quot;</span><span class="p">,</span> <span class="s2">&quot;#1b7837&quot;</span><span class="p">,</span> <span class="s2">&quot;#2166ac&quot;</span><span class="p">]</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">tsplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;trial&quot;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="s2">&quot;rewarded&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+                    <span class="n">err_style</span><span class="o">=</span><span class="s2">&quot;ci_band&quot;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mi">68</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">)</span>
+
+    <span class="c1"># Set plotting parameters</span>
+    <span class="n">legend_dist</span> <span class="o">=</span> <span class="mf">1.</span>
+
+    <span class="k">if</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;durations&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Session&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Duration in food cup (s)&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;numbers&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Session&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Number of food cup entries&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;latency&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Session&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Latency to first entry (s)&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;responses&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Session&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Percent responses&#39;</span><span class="p">)</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="n">legend_dist</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Rat 5 duration in food cup by outcome&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Show the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_measure</span><span class="p">(</span><span class="s1">&#39;durations&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial08_MedPC-behavior_13_0.png" src="../_images/tutorials_Tutorial08_MedPC-behavior_13_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_measure</span><span class="p">(</span><span class="s1">&#39;numbers&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial08_MedPC-behavior_14_0.png" src="../_images/tutorials_Tutorial08_MedPC-behavior_14_0.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../core.html" class="btn btn-neutral float-right" title="nept Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Tutorial07_Signal-interactions.html" class="btn btn-neutral" title="# Tutorial 07 - Signal interactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

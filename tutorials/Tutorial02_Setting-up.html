@@ -1,0 +1,646 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title># Tutorial 02 - Setting up &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="# Tutorial 03 - Introduction to neural data types" href="Tutorial03_Data-types.html"/>
+        <link rel="prev" title="Tutorial 01 - Principles of careful (neural) data analysis" href="Tutorial01_Principles-of-(neural)-data-analysis.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial01_Principles-of-(neural)-data-analysis.html">Tutorial 01 - Principles of careful (neural) data analysis</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html##-Goals"># Goals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li># Tutorial 02 - Setting up</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial02_Setting-up.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="#-Tutorial-02---Setting-up">
+<h1># Tutorial 02 - Setting up<a class="headerlink" href="##-Tutorial-02---Setting-up" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Establish a sensible folder structure</li>
+<li>Install python and nept</li>
+<li>Introduction to git and GitHub</li>
+<li>Download a data set and test your path setup</li>
+</ul>
+</div>
+<div class="section" id="#-Establish-a-sensible-folder-structure">
+<h1># Establish a sensible folder structure<a class="headerlink" href="##-Establish-a-sensible-folder-structure" title="Permalink to this headline">¶</a></h1>
+<p>So far, you have a local nept repository, with code common to many
+analyses. As you work on your own project, you will write your own
+analysis code that may not be relevant to others. You will also have
+data files for each project. We can now consider where all of these
+files can go and how you will manage them. We recommend using two main
+locations:</p>
+<ul class="simple">
+<li><strong>Code.</strong> Repositories (folders) here are linked to remote GitHub
+repositories (either public or private). This may mean that some
+project code repositories depend on other repositories, which is
+fine. Just be aware that you need to keep your code up-to-date in
+every location where it is used (by doing <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code>).</li>
+<li><strong>Data.</strong> Data should not be put on GitHub because it takes up a lot
+of space and never changes, so it does not benefit from being tracked
+with the version control of git. Raw data should be in a separate
+location on your computer than where your code lives, but processed
+data and intermediate files can be in a folder within your project
+code <em>as long as you specify git to ignore that location within your
+.gitignore file</em>.</li>
+</ul>
+<p>If you are an owner or collaborator of a GitHub repository, such as when
+you make a repository for your own project, you will be able to push
+changes you make and manage the repository as you like. Generally, when
+you want to contribute to another repository, you can make your changes
+in a Fork of the repository and create a <a class="reference external" href="https://help.github.com/articles/about-pull-requests/">pull
+request</a>.
+These pull requests allows the maintainers to see your code and ask for
+changes before it is merged into master, which helps to ensure that the
+code in master is working and stable.</p>
+</div>
+<div class="section" id="#-Install-python-and-nept">
+<h1># Install python and nept<a class="headerlink" href="##-Install-python-and-nept" title="Permalink to this headline">¶</a></h1>
+<p>Python is a free and open-source programming language, with a core
+language and many additional useful scientific libraries. Follow the
+getting started directions in
+<a class="reference external" href="https://github.com/vandermeerlab/nept">nept</a>, our lab&#8217;s codebase, if
+you wish to make this tutorial interactive. Any code in this tutorial
+can be modified and run in the <a class="reference external" href="http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html">Jupyter
+notebook</a>.</p>
+</div>
+<div class="section" id="#-Introduction-to-git-and-GitHub">
+<h1># Introduction to git and GitHub<a class="headerlink" href="##-Introduction-to-git-and-GitHub" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/">GitHub</a> is a platform for distributed version
+control. So, you can get access to the latest codebase and it provides a
+<a class="reference external" href="https://github.com/vandermeerlab/nept/blob/master/CONTRIBUTING.rst">platform</a>
+for you to submit changes should you find any bugs or desire
+improvements to what is currently available.</p>
+<p>If you don&#8217;t already have an account, you can make one
+<a class="reference external" href="https://github.com/">here</a>. And GitHub provides some (free) benefits
+to educators and students, check out if you qualify for them
+<a class="reference external" href="https://education.github.com/">here</a>.</p>
+<p>There are
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">many</a>
+<a class="reference external" href="http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1/#awesm=~ov691XRLABIiU0">excellent</a>
+<a class="reference external" href="http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners">resources</a>
+dedicated to showing beginners how to effective use git and GitHub, so
+take a moment to go through those if they&#8217;re unfamiliar to you. After
+going through those, you should be familiar with the commands
+<code class="docutils literal"><span class="pre">status</span></code>, <code class="docutils literal"><span class="pre">push</span></code>, <code class="docutils literal"><span class="pre">pull</span></code>, <code class="docutils literal"><span class="pre">add</span></code>, <code class="docutils literal"><span class="pre">commit</span></code>, and have some idea
+of how git and GitHub track changes so you know when your code is saved
+under version control.</p>
+</div>
+<div class="section" id="#-Get-a-data-session-from-the-vandermeerlab-server">
+<h1># Get a data session from the vandermeerlab server<a class="headerlink" href="##-Get-a-data-session-from-the-vandermeerlab-server" title="Permalink to this headline">¶</a></h1>
+<p>Use a FTP client such as <a class="reference external" href="https://filezilla-project.org/">Filezilla</a>
+to connect to the lab FTP server, using the following settings:</p>
+<ul class="simple">
+<li>Host: <strong>LAB SERVER IP</strong></li>
+<li>Protocol: &#8220;FTP - File Transfer Protocol&#8221;</li>
+<li>Encryption: &#8220;Use explicit FTP over TLS if available&#8221;</li>
+<li>Logon Type: &#8220;Normal&#8221;</li>
+<li>User: <strong>LAB USER NAME</strong></li>
+<li>Passwork: <strong>LAB PASSWORD</strong></li>
+</ul>
+<p><em>Note, contact us for the lab server ip, user, and password.</em></p>
+<p>If you cannot log in to the server, send me your IP address and I will
+enable access for you. If you still can&#8217;t login, try changing the
+Filezilla login settings to use &#8220;FTP&#8221; as the Protocol, &#8220;Use explicit FTP
+over TLS if available&#8221;, and Logon Type &#8220;Normal&#8221;.</p>
+<p>For these tutorials you will need the /datavault/nept-tutorials data
+files copied into the data folder in your copy of nept/tutorials/data.
+In general, you will want to keep your data separate from your code, but
+for simplicity for these tutorials we ensure these folders are NOT
+tracked by git and can be accessed the same for everyone by putting them
+in a common relative location (nept/tutorials/data/). A reason to
+generally keep your data separate from your code is that multiple
+analysis projects may use the same data and you don&#8217;t want to duplicate
+it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R016-2012-10-03&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load the info file, which contains experiment-specific information</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">r016d3</span> <span class="k">as</span> <span class="nn">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load LFP (.ncs) from rat ventral striatum</span>
+<span class="n">lfp</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_lfp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">lfp_theta_filename</span><span class="p">))</span>
+
+<span class="c1"># Slice the LFP to [2000, 2001]</span>
+<span class="n">sliced_lfp</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2001</span><span class="p">)</span>
+
+<span class="c1"># Plot the data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sliced_lfp</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">sliced_lfp</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial02_Setting-up_8_0.png" src="../_images/tutorials_Tutorial02_Setting-up_8_0.png" />
+</div>
+</div>
+<p>If you see the local field potential (LFP) plotted, then great job!
+Next, let&#8217;s get more into how we represent our neural data.</p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorial03_Data-types.html" class="btn btn-neutral float-right" title="# Tutorial 03 - Introduction to neural data types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Tutorial01_Principles-of-(neural)-data-analysis.html" class="btn btn-neutral" title="Tutorial 01 - Principles of careful (neural) data analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,1464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Module 11 - Signal interactions &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Module-11---Signal-interactions">
+<h1># Module 11 - Signal interactions<a class="headerlink" href="##-Module-11---Signal-interactions" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Compute the Power Spectrum Density (PSD) and coherence between two
+signals</li>
+</ul>
+</div>
+<div class="section" id="#-Coherence">
+<h1># Coherence<a class="headerlink" href="##-Coherence" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s start by considering how two oscillating signals may be related.
+There are various possible relationships between the two, such as
+illustrated here (from <a class="reference external" href="http://www.ncbi.nlm.nih.gov/pubmed/22233726">Siegel et al.
+2012</a>):</p>
+</div>
+<div class="section" id="#-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)">
+<h1># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)<a class="headerlink" href="##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Import necessary packages
+%matplotlib inline
+import os
+import sys
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+import matplotlib.mlab
+import scipy.signal
+
+# Define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R016-2012-10-03&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load the info file, which contains experiment-specific information
+sys.path.append(data_folder)
+import r016d3 as info
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-92e7e291a83e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load the info file, which contains experiment-specific information</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> sys<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> r016d3 <span class="ansi-green-fg">as</span> info
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;r016d3&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load both LFPs (.ncs) from rat ventral striatum and one from the hippocampus
+lfp_vstr1 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename1))
+lfp_vstr2 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename2))
+
+lfp_hipp = nept.load_lfp(os.path.join(data_folder, info.lfp_theta_filename))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-9b70dc60117b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load both LFPs (.ncs) from rat ventral striatum and one from the hippocampus</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>lfp_vstr1 <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>lfp_gamma_filename1<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> lfp_vstr2 <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>lfp_gamma_filename2<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> lfp_hipp <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>lfp_theta_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Let&#39;s restrict our LFPs to during task times
+task_start = info.task_times[&#39;task-value&#39;].start
+task_stop = info.task_times[&#39;task-reward&#39;].stop
+
+lfp_vstr1 = lfp_vstr1.time_slice(task_start, task_stop)
+lfp_vstr2 = lfp_vstr2.time_slice(task_start, task_stop)
+lfp_hipp = lfp_hipp.time_slice(task_start, task_stop)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-acbfaf60a2fe&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Let&#39;s restrict our LFPs to during task times</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>task_start <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task-value&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>start
+<span class="ansi-green-intense-fg ansi-bold">      3</span> task_stop <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task-reward&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>stop
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> lfp_vstr1 <span class="ansi-blue-fg">=</span> lfp_vstr1<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>task_start<span class="ansi-blue-fg">,</span> task_stop<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the LFPs. Notice the break in LFP when the task was switched from &#39;value&#39; to &#39;reward&#39;
+plt.plot(lfp_vstr1.time, lfp_vstr1.data)
+plt.plot(lfp_vstr2.time, lfp_vstr2.data)
+plt.plot(lfp_hipp.time, lfp_hipp.data)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-5-7e9a36a7e4e6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the LFPs. Notice the break in LFP when the task was switched from &#39;value&#39; to &#39;reward&#39;</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>lfp_vstr1<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> lfp_vstr1<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>lfp_vstr2<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> lfp_vstr2<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>lfp_hipp<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> lfp_hipp<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;lfp_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Compute the Power Spectral Density (PSD) for each signal with Welch’s average
+window = 2048
+fs = 2000
+
+vstr1 = np.squeeze(lfp_vstr1.data)
+vstr2 = np.squeeze(lfp_vstr2.data)
+hipp = np.squeeze(lfp_hipp.data)
+
+fig, ax = plt.subplots()
+
+# Theta
+ax.axvspan(4, 12, color=&#39;#cccccc&#39;, alpha=0.3)
+# Gamma
+ax.axvspan(25, 100, color=&#39;#cccccc&#39;, alpha=0.3)
+
+for lfp_data in [vstr1, vstr2, hipp]:
+    power, freq = matplotlib.mlab.psd(lfp_data,
+                                      Fs=fs,
+                                      NFFT=int(window*2),
+                                      noverlap=int(window/2))
+
+    power_db = 10*np.log10(power)
+    plt.plot(freq, power_db)
+
+    plt.xlim(0, 150)
+    plt.ylim(-120, -85)
+    plt.ylabel(&#39;Power (dB)&#39;)
+    plt.xlabel(&#39;Frequency (Hz)&#39;)
+    plt.legend([&#39;vStr1&#39;, &#39;vStr2&#39;, &#39;Hipp&#39;])
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-6-35bdf909b2e4&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> fs <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">2000</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>vstr1 <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>squeeze<span class="ansi-blue-fg">(</span>lfp_vstr1<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> vstr2 <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>squeeze<span class="ansi-blue-fg">(</span>lfp_vstr2<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> hipp <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>squeeze<span class="ansi-blue-fg">(</span>lfp_hipp<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;lfp_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<p>Notice the hippocampus has a clear theta (4 - 12 Hz) peak, which is
+visible as only a slight hump in ventral striatum. Ventral striatum has
+large gamma (25 - 100 Hz) components, which are not present in the
+hippocampus.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Compute the coherence for vStr-vStr and vStr-hipp
+
+fig, ax = plt.subplots()
+
+# Theta
+ax.axvspan(4, 12, color=&#39;#cccccc&#39;, alpha=0.3)
+# Gamma
+ax.axvspan(25, 100, color=&#39;#cccccc&#39;, alpha=0.3)
+
+for lfp_data in [vstr2, hipp]:
+    coherence, freq = matplotlib.mlab.cohere(
+        vstr1, lfp_data, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))
+
+    plt.plot(freq, coherence)
+    plt.xlim(0, 150)
+    plt.ylim(0, 1)
+    plt.ylabel(&#39;Coherence&#39;)
+    plt.xlabel(&#39;Frequency (Hz)&#39;)
+    plt.legend([&#39;vStr1-vStr2&#39;, &#39;vStr1-Hipp&#39;])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-638eaed17aa0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> ax<span class="ansi-blue-fg">.</span>axvspan<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">25</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">,</span> color<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;#cccccc&#39;</span><span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.3</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">for</span> lfp_data <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span>vstr2<span class="ansi-blue-fg">,</span> hipp<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span>     coherence, freq = matplotlib.mlab.cohere(
+<span class="ansi-green-intense-fg ansi-bold">     12</span>         vstr1, lfp_data, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))
+
+<span class="ansi-red-fg">NameError</span>: name &#39;vstr2&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_.ipynb_checkpoints_Tutorial07_Signal-interactions-checkpoint_11_1.png" src="../../_images/tutorials_.ipynb_checkpoints_Tutorial07_Signal-interactions-checkpoint_11_1.png" />
+</div>
+</div>
+<p>The coherence between the two ventral striatum signals is high overall
+compared to that between the ventral striatum and hippocampus. The
+ventral striatum gamma frequencies are particularly coherent within the
+ventral striatum.</p>
+<div class="section" id="Compute-vStr-Hipp-coherence-between-experimental-conditions">
+<h2>Compute vStr-Hipp coherence between experimental conditions<a class="headerlink" href="#Compute-vStr-Hipp-coherence-between-experimental-conditions" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load events from this experiment
+events = nept.load_events(os.path.join(data_folder, info.event_filename), info.event_labels)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-0b9d9496e7a3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load events from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>events <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_events<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>event_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>event_labels<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<p>Let&#8217;s see if there is a change in coherence between <em>approach to the
+reward site</em> and <em>reward receipt</em>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Get the photobeam break times
+pb = np.sort(np.append(events[&#39;feeder0&#39;], events[&#39;feeder1&#39;]))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-9-9c9564c0bcba&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Get the photobeam break times</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>pb <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>sort<span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;feeder0&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;feeder1&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;events&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
+    &quot;&quot;&quot;Slices the analogsignal data into perievent chunks.
+    Unlike time_slice, the resulting AnalogSignal will be multidimensional.
+    Only works for 1D signals.
+
+    Parameters
+    ----------
+    analogsignal : nept.AnalogSignal
+    events : np.array
+    t_before : float
+    t_after : float
+    dt : float
+
+    Returns
+    -------
+    nept.AnalogSignal
+
+    &quot;&quot;&quot;
+
+    if analogsignal.dimensions != 1:
+        raise ValueError(&quot;AnalogSignal must be 1D.&quot;)
+
+    if dt is None:
+        dt = np.median(np.diff(analogsignal.time))
+
+    time = np.arange(-t_before, t_after+dt, dt)
+
+    data = np.zeros((len(time), len(events)))
+    for i, event in enumerate(events):
+        sliced = analogsignal.time_slice(event-t_before, event+t_after)
+        data[:,i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
+
+    return nept.AnalogSignal(data, time)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Compute the perievent slices for the nosepoke times
+np_vstr1 = perievent_slice(lfp_vstr1, pb, t_before=2.5, t_after=5.0)
+np_vstr2 = perievent_slice(lfp_vstr2, pb, t_before=2.5, t_after=5.0)
+np_hipp = perievent_slice(lfp_hipp, pb, t_before=2.5, t_after=5.0)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-e58b5ea4b846&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Compute the perievent slices for the nosepoke times</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>np_vstr1 <span class="ansi-blue-fg">=</span> perievent_slice<span class="ansi-blue-fg">(</span>lfp_vstr1<span class="ansi-blue-fg">,</span> pb<span class="ansi-blue-fg">,</span> t_before<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2.5</span><span class="ansi-blue-fg">,</span> t_after<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">5.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> np_vstr2 <span class="ansi-blue-fg">=</span> perievent_slice<span class="ansi-blue-fg">(</span>lfp_vstr2<span class="ansi-blue-fg">,</span> pb<span class="ansi-blue-fg">,</span> t_before<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2.5</span><span class="ansi-blue-fg">,</span> t_after<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">5.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> np_hipp <span class="ansi-blue-fg">=</span> perievent_slice<span class="ansi-blue-fg">(</span>lfp_hipp<span class="ansi-blue-fg">,</span> pb<span class="ansi-blue-fg">,</span> t_before<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2.5</span><span class="ansi-blue-fg">,</span> t_after<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">5.0</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;lfp_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def mean_psd(perievent_lfps, window, fs):
+    power = np.zeros((window+1, perievent_lfps.dimensions))
+    for i, lfp in enumerate(perievent_lfps.data.T):
+        power[:,i], freq = matplotlib.mlab.psd(
+            lfp, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))
+
+    return freq, np.mean(power, axis=1)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def power_in_db(power):
+    return 10*np.log10(power)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>freq, psd_vstr1 = mean_psd(np_vstr1, window, fs)
+freq, psd_vstr2 = mean_psd(np_vstr2, window, fs)
+freq, psd_hipp = mean_psd(np_hipp, window, fs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-fbf46372b88d&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>freq<span class="ansi-blue-fg">,</span> psd_vstr1 <span class="ansi-blue-fg">=</span> mean_psd<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> freq<span class="ansi-blue-fg">,</span> psd_vstr2 <span class="ansi-blue-fg">=</span> mean_psd<span class="ansi-blue-fg">(</span>np_vstr2<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> freq<span class="ansi-blue-fg">,</span> psd_hipp <span class="ansi-blue-fg">=</span> mean_psd<span class="ansi-blue-fg">(</span>np_hipp<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;np_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>plt.plot(freq, power_in_db(psd_vstr1))
+plt.plot(freq, power_in_db(psd_vstr2))
+plt.plot(freq, power_in_db(psd_hipp))
+plt.xlim(0, 100)
+plt.ylim(-110, -80)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-7c3a2e28f917&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> power_in_db<span class="ansi-blue-fg">(</span>psd_vstr1<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> power_in_db<span class="ansi-blue-fg">(</span>psd_vstr2<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> power_in_db<span class="ansi-blue-fg">(</span>psd_hipp<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>xlim<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>ylim<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">110</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">80</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;freq&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def mean_csd(perievent_lfp1, perievent_lfp2, window, fs):
+    freq, power = scipy.signal.csd(perievent_lfp1.data.T, perievent_lfp2.data.T,
+                                   fs=fs, nperseg=window, nfft=int(window*2))
+
+    return freq, np.mean(power, axis=0)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>freq, csd_vstr1_vstr2 = mean_csd(np_vstr1, np_vstr2, window, fs)
+freq, csd_vstr1_hipp = mean_csd(np_vstr1, np_hipp, window, fs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-17-7fb0760172f0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>freq<span class="ansi-blue-fg">,</span> csd_vstr1_vstr2 <span class="ansi-blue-fg">=</span> mean_csd<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_vstr2<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> freq<span class="ansi-blue-fg">,</span> csd_vstr1_hipp <span class="ansi-blue-fg">=</span> mean_csd<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_hipp<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;np_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>plt.plot(freq, power_in_db(csd_vstr1_vstr2))
+plt.plot(freq, power_in_db(csd_vstr1_hipp))
+plt.xlim(0, 100)
+plt.ylim(-120, -90)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-18-fb604276e389&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> power_in_db<span class="ansi-blue-fg">(</span>csd_vstr1_vstr2<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> power_in_db<span class="ansi-blue-fg">(</span>csd_vstr1_hipp<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>xlim<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>ylim<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">120</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">90</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;freq&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def mean_coherence(perievent_lfp1, perievent_lfp2, window, fs):
+    freq, coherence = scipy.signal.coherence(
+        perievent_lfp1.data.T, perievent_lfp2.data.T, fs=fs, nperseg=window, nfft=int(window*2))
+
+    return freq, np.mean(coherence, axis=0)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>freq, coh_vstr1_vstr2 = mean_coherence(np_vstr1, np_vstr2, window, fs)
+freq, coh_vstr1_hipp = mean_coherence(np_vstr1, np_hipp, window, fs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-20-040441ae3e7f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>freq<span class="ansi-blue-fg">,</span> coh_vstr1_vstr2 <span class="ansi-blue-fg">=</span> mean_coherence<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_vstr2<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> freq<span class="ansi-blue-fg">,</span> coh_vstr1_hipp <span class="ansi-blue-fg">=</span> mean_coherence<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_hipp<span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;np_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>plt.plot(freq, coh_vstr1_vstr2)
+plt.plot(freq, coh_vstr1_hipp)
+plt.xlim(0, 100)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-21-bd4517797f82&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> coh_vstr1_vstr2<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>freq<span class="ansi-blue-fg">,</span> coh_vstr1_hipp<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>xlim<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;freq&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def mean_coherencegram(perievent_lfp1, perievent_lfp2, dt, window, fs, extend=0.3):
+    timebins = np.arange(perievent_lfp1.time[0], perievent_lfp1.time[-1]+dt, dt)
+    coherencegram = np.zeros((window+1, len(timebins)))
+
+    for i, (t_start, t_stop) in enumerate(zip(timebins[:-2], timebins[1:-1])):
+        lfp1 = perievent_lfp1.time_slice(t_start-extend, t_stop+extend)
+        lfp2 = perievent_lfp2.time_slice(t_start-extend, t_stop+extend)
+        freq, coherencegram[:, i] = mean_coherence(lfp1, lfp2, window, fs)
+
+    return timebins, freq, coherencegram
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>time, freq, coherencegram_vstr1_vstr2 = mean_coherencegram(np_vstr1, np_vstr2, dt=0.07, window=256, fs=fs)
+time, freq, coherencegram_vstr1_hipp = mean_coherencegram(np_vstr1, np_hipp, dt=0.07, window=256, fs=fs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-23-1223815bd7d7&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>time<span class="ansi-blue-fg">,</span> freq<span class="ansi-blue-fg">,</span> coherencegram_vstr1_vstr2 <span class="ansi-blue-fg">=</span> mean_coherencegram<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_vstr2<span class="ansi-blue-fg">,</span> dt<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.07</span><span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">256</span><span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">=</span>fs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> time<span class="ansi-blue-fg">,</span> freq<span class="ansi-blue-fg">,</span> coherencegram_vstr1_hipp <span class="ansi-blue-fg">=</span> mean_coherencegram<span class="ansi-blue-fg">(</span>np_vstr1<span class="ansi-blue-fg">,</span> np_hipp<span class="ansi-blue-fg">,</span> dt<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.07</span><span class="ansi-blue-fg">,</span> window<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">256</span><span class="ansi-blue-fg">,</span> fs<span class="ansi-blue-fg">=</span>fs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;np_vstr1&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>xx, yy = np.meshgrid(time, freq)
+plt.pcolormesh(xx, yy, coherencegram_vstr1_hipp)
+plt.ylim(0, 100)
+plt.colorbar()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-24-653800dc6b01&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>xx<span class="ansi-blue-fg">,</span> yy <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>meshgrid<span class="ansi-blue-fg">(</span>time<span class="ansi-blue-fg">,</span> freq<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> plt<span class="ansi-blue-fg">.</span>pcolormesh<span class="ansi-blue-fg">(</span>xx<span class="ansi-blue-fg">,</span> yy<span class="ansi-blue-fg">,</span> coherencegram_vstr1_hipp<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>ylim<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>colorbar<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;time&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Beyond-coherence">
+<h2>Beyond coherence<a class="headerlink" href="#Beyond-coherence" title="Permalink to this headline">¶</a></h2>
+<p>Coherence is only one of many measures that attempt to characterize the
+relationship between LFPs. A glance at the
+<a class="reference external" href="http://fieldtrip.fcdonders.nl/reference/ft_connectivityanalysis">documentation</a>
+for &#8216;&#8217;ft_connectivityanalysis()&#8217;&#8217; reveals a who&#8217;s who of popular
+neuroscience tools for assessing functional connectivity. A review of
+these methods is beyond the scope of this module, but in general they
+address some of the limitations of the coherence measure. For instance:</p>
+<ul class="simple">
+<li>Phase slope index (PSI), Granger causality, and partial directed
+coherence (PDC) are <em>directional</em> measures that under certain
+circumstances can capture the direction of the flow of information
+between two signals. We will discuss a few of these in this module,
+below.</li>
+<li>Weighted phase lag index (WPLI) can exclude contributions from a
+volume-conducted source common to both signals</li>
+<li>Pairwise phase consistency (PPC) addresses some statistical issues of
+how coherence estimates are affected by the amount of data</li>
+</ul>
+<p>For an illustration of how these improved methods can give a more
+reliable estimate of interactions than coherence, let&#8217;s give pairwise
+phase consistency a try:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg</span>            <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">method</span>     <span class="p">=</span> <span class="s">&#39;ppc&#39;</span><span class="p">;</span>
+<span class="n">fd</span>             <span class="p">=</span> <span class="n">ft_connectivityanalysis</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span><span class="n">TFR_post</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Plot the coherogram as above, changing &#8216;&#8217;cohspectrm&#8217;&#8217; to &#8216;&#8217;ppcspctrm&#8217;&#8217;
+in the plotting code. You should get (again for the post-nosepoke
+epoch):</p>
+<p>Note that some of the spurious high-frequency events have now been
+eliminated. In general, however, estimates of coherence and other
+connectivity measures require relatively large amounts of data to obtain
+&#8211; more than the small number of trials from one single session
+considered here.</p>
+</div>
+<div class="section" id="Amplitude-cross-correlation">
+<h2>Amplitude cross-correlation<a class="headerlink" href="#Amplitude-cross-correlation" title="Permalink to this headline">¶</a></h2>
+<p>As should be clear from the discussion of coherence so far, it is a
+non-directional measure &#8211; it doesn&#8217;t address whether signal A leads or
+lags signal B. There are many methods out there that can be used to
+address this directionality question. One that you already have the
+tools to perform is computing the <em>amplitude cross-correlation</em> between
+two signals, filtered in a specific frequency band. Looking at the lower
+left panel in the figure at the top of the page, you can see that the
+amplitude envelope (red line) is clearly correlated between the two
+signals. Computing the cross-correlation would establish at what time
+lead (or lag) that correlation is maximal; a peak offset from zero would
+indicate a specific temporal asymmetry suggesting one signal leads the
+other.</p>
+<p>We will not cover this method in detail here since you already know how
+to compute amplitude envelopes and cross-correlations; however, if you&#8217;d
+like to delve more into this, example code that performs this analysis,
+including a very nice shuffling procedure to determine chance level, can
+be found on the vandermeerlab papers repository
+<a class="reference external" href="https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_AmplCorr.m">here</a>.
+A recent paper introducing the method is <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0165027010003432">Adhikari et al.
+(2010)</a>.</p>
+</div>
+<div class="section" id="Granger-causality:-introduction">
+<h2>Granger causality: introduction<a class="headerlink" href="#Granger-causality:-introduction" title="Permalink to this headline">¶</a></h2>
+<p>The concept of Granger causality (<a class="reference external" href="http://www.jstor.org/stable/1912791?seq=1#page_scan_tab_contents">Granger
+1969</a>)
+is simple: if a signal <span class="math">\(X\)</span> &#8220;Granger-causes&#8221; signal <span class="math">\(Y\)</span>, then
+knowing the value of <span class="math">\(X\)</span> improves your ability to predict
+<span class="math">\(Y\)</span> beyond what can be predicted from the history of <span class="math">\(Y\)</span>
+alone (see also <a class="reference external" href="http://www.scholarpedia.org/article/Granger_causality">Seth
+2007</a>). Thus,
+Granger-causality is inferred based on the relative fits of statistical
+models applied to time series data.</p>
+<p>More mathematically:</p>
+<div class="math">
+\[\begin{split}M_1: Y(t) = \sum_{l = 1}^{L} a_l Y(t-l) + \epsilon_1 \\
+M_2: Y(t) = \sum_{l = 1}^{L} a'_l Y(t-l) + b'_l X(t-l) + \epsilon_2\end{split}\]</div>
+<p>If <span class="math">\(M_2\)</span> provides a better fit to the data (best predicts the
+value of <span class="math">\(Y(t)\)</span>) then <span class="math">\(X\)</span> is said to Granger-cause
+<span class="math">\(Y\)</span>. The parameter <span class="math">\(L\)</span> indicates the number of samples into
+the past that are included in the model; as was the case in our
+discussion of <a class="reference external" href="analysis:course-w16:week6">filters</a>, the <em>order</em> of
+the model refers to how many past samples are included (i.e. the value
+of <span class="math">\(L\)</span>).</p>
+<p>In general, the above models <span class="math">\(M\)</span> are examples of
+<strong>autoregressive</strong> (AR) models: the dependent variable <span class="math">\(Y(t)\)</span> is
+regressed against linear combinations of past values of that variable
+itself, where the coefficients <span class="math">\(a\)</span> and <span class="math">\(b\)</span> can be thought of
+as the regression coefficients or weights of each past value. You may
+also encounter the term vector autoregressive (VAR) models, this is
+simply the multivariate extension of AR models. <span class="math">\(M_2\)</span> above is a
+VAR model since it has two variables. There is a large literature on
+(V)AR models, since it is a major tool in forecasting of all sorts of
+things ranging from the stock market to the weather.</p>
+</div>
+<div class="section" id="Generating-artificial-data">
+<h2>Generating artificial data<a class="headerlink" href="#Generating-artificial-data" title="Permalink to this headline">¶</a></h2>
+<p>To explore how to fit AR models to data, it&#8217;s a good idea to start with
+some artificial data of which we know the structure. Earlier in this
+module we did so &#8220;by hand&#8221;, but here we will use FieldTrip&#8217;s useful
+&#8216;&#8217;ft_connectivitysimulation()&#8217;&#8216;:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg</span>             <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">ntrials</span>     <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">triallength</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c">% in seconds</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">fsample</span>     <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>     <span class="p">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c">% two signals, X and Y, which start out as identical white noise</span>
+
+<span class="n">cfg</span><span class="p">.</span><span class="n">method</span>      <span class="p">=</span> <span class="s">&#39;linear_mix&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">mix</span>         <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">0</span><span class="p">];</span> <span class="c">% multiply white noise for X and Y by this</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">delay</span>       <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">0</span><span class="p">];</span> <span class="c">% Y is n samples delayed relative to X (both 0)</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfilter</span>    <span class="p">=</span> <span class="s">&#39;no&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">absnoise</span>    <span class="p">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c">% add independent noise to both signals, so now X and Y should be independent</span>
+
+<span class="n">data</span>            <span class="p">=</span> <span class="n">ft_connectivitysimulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
+<span class="n">data</span><span class="p">.</span><span class="n">label</span>      <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>The above code generates 1000 trials of 5 seconds each of independent
+white noise for two signals <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>. We do so in a
+somewhat roundabout way, by first setting the common signal in A and B
+to zero for each (&#8216;&#8217;cfg.mix = [0; 0]&#8217;&#8216;) and then adding independent
+noise of amplitude 1 to each (&#8216;&#8217;cfg.absnoise = 1&#8217;&#8216;). Why this is so will
+become clear later when we generate more interesting combinations of
+signals.</p>
+<p>** Verify that indeed the two signals X and Y are uncorrelated, as one
+would expect from independently generated white noise. One way to do so
+is to compute a correlation coefficient for each trial and plot the
+distribution of resulting correlation coefficients (use &#8216;&#8217;corrcoef()&#8217;&#8216;).
+**</p>
+<p>Next, we can fit our AR model:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg_ar</span>         <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg_ar</span><span class="p">.</span><span class="n">order</span>   <span class="p">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">cfg_ar</span><span class="p">.</span><span class="n">toolbox</span> <span class="p">=</span> <span class="s">&#39;bsmart&#39;</span><span class="p">;</span>
+<span class="n">mdata</span>          <span class="p">=</span> <span class="n">ft_mvaranalysis</span><span class="p">(</span><span class="n">cfg_ar</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Note the &#8216;&#8217;order&#8217;&#8217; parameter, which specifies how far back to estimate
+coefficients for (the <span class="math">\(L\)</span> parameter in the equations above).
+Although this is FieldTrip code, it uses the
+<a class="reference external" href="http://www.brain-smart.org/">BSMART</a> toolbox under the hood to fit
+the model. The &#8216;&#8217;ft_mvaranalysis()&#8217;&#8217; function has some useful options
+we aren&#8217;t using right now, such as the ability to estimate errorbars
+with the &#8216;&#8217;jackknife&#8217;&#8217; option. This takes a long time, however, so we
+don&#8217;t do this now.</p>
+<p>What we are interested in are the coefficients <span class="math">\(a\)</span> and <span class="math">\(b\)</span>,
+i.e. the extent that we can predict each signal separately based on its
+own past, and then how much that prediction can be improved by knowledge
+of the other signal.</p>
+<p>To plot these coefficients, we can do:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span> <span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+
+<span class="n">labels</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X-&gt;X&#39;</span><span class="p">,</span><span class="s">&#39;X-&gt;Y&#39;</span><span class="p">;</span><span class="s">&#39;Y-&gt;X&#39;</span><span class="p">,</span><span class="s">&#39;Y-&gt;Y&#39;</span><span class="p">};</span> <span class="n">cols</span> <span class="p">=</span> <span class="s">&#39;rgbc&#39;</span><span class="p">;</span>
+<span class="n">nP</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span> <span class="n">iI</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>
+    <span class="k">for</span> <span class="n">iJ</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>
+        <span class="n">nP</span> <span class="p">=</span> <span class="n">nP</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">h</span><span class="p">(</span><span class="n">nP</span><span class="p">)</span> <span class="p">=</span> <span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">cfg_ar</span><span class="p">.</span><span class="n">order</span><span class="p">,</span><span class="n">sq</span><span class="p">(</span><span class="n">mdata</span><span class="p">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">iI</span><span class="p">,</span><span class="n">iJ</span><span class="p">,:)),</span><span class="n">cols</span><span class="p">(</span><span class="n">nP</span><span class="p">));</span>
+        <span class="n">hold</span> <span class="n">on</span><span class="p">;</span>
+        <span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">cfg_ar</span><span class="p">.</span><span class="n">order</span><span class="p">,</span><span class="n">sq</span><span class="p">(</span><span class="n">mdata</span><span class="p">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">iI</span><span class="p">,</span><span class="n">iJ</span><span class="p">,:)),</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="s">&#39;MarkerSize&#39;</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="s">&#39;Color&#39;</span><span class="p">,</span><span class="n">cols</span><span class="p">(</span><span class="n">nP</span><span class="p">));</span>
+
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">set</span><span class="p">(</span><span class="n">gca</span><span class="p">,</span><span class="s">&#39;FontSize&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="s">&#39;LineWidth&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span> <span class="n">box</span> <span class="n">off</span><span class="p">;</span>
+<span class="n">set</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="s">&#39;LineWidth&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;lag (samples)&#39;</span><span class="p">);</span> <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;coefficient&#39;</span><span class="p">);</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;cfg.delay = [0; 0];&#39;</span><span class="p">);</span>
+<span class="n">legend</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">labels</span><span class="p">(:));</span>
+</pre></div>
+</div>
+<p>You should see that the coefficient values are very small (on the order
+of <span class="math">\(10^{-4}\)</span>). This is what we expect from signals that we know to
+be uncorrelated; these values should not be statistically different from
+zero, which would mean that we cannot predict anything about our signal
+based on its past &#8211; the definition of white noise!</p>
+<p>Let&#8217;s now create some signals that do have some structure:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="c">%%</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">mix</span>         <span class="p">=</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">;</span> <span class="mf">0.8</span><span class="p">];</span> <span class="c">% X and Y are identical white noise with amplitude 0.8</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">absnoise</span>    <span class="p">=</span> <span class="mf">0.2</span><span class="p">;</span> <span class="c">% add amplitude 0.2 *independent* noise</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">delay</span>       <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">2</span><span class="p">];</span> <span class="c">% advance Y 2 samples relative to X</span>
+
+<span class="n">data</span>            <span class="p">=</span> <span class="n">ft_connectivitysimulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
+<span class="n">data</span><span class="p">.</span><span class="n">label</span>      <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>** Fit the VAR model again, and plot the coefficients in the next
+subplot. **</p>
+<p>You should get something like:</p>
+<p>Note how for the delay case, we correctly estimate that X can be
+predicted from Y, at the expected delay of 2 samples.</p>
+<p>It is important to be aware of the limitations of Granger causality. The
+term &#8220;Granger-causes&#8221; is often used to indicate the inherently
+descriptive nature of VAR models, which cannot distinguish true
+causality from a number of alternative scenarios. Prominent among these
+is the possibility of a common input Z affecting both X and Y, but with
+different time lags. X may then &#8220;Granger-cause&#8221; Y, without any direct
+anatomical connection between them. A different, all-too common case is
+when signals X and Y have different signal-to-noise ratios; we will
+highlight this issue in the next section. More generally, it is unclear
+what conclusions can be drawn from Granger causality in systems that
+with recurrent (feedback) connections, which are of course ubiquitous in
+the brain &#8211; a nice paper demonstrating and discussing this is
+<a class="reference external" href="http://neuralsystemsandcircuits.biomedcentral.com/articles/10.1186/2042-1001-1-9">Kispersky et al.
+2011</a>.</p>
+</div>
+<div class="section" id="Spectrally-resolved-Granger-causality">
+<h2>Spectrally resolved Granger causality<a class="headerlink" href="#Spectrally-resolved-Granger-causality" title="Permalink to this headline">¶</a></h2>
+<p>Given how ubiquitous oscillations are in neural data, it is often
+informative to not fit VAR models directly in the time domain (as we did
+in the previous section) but go to the frequency domain. Intuitively,
+<em>spectrally resolved</em> Granger causality measures how much of the power
+in <span class="math">\(X\)</span>, not accounted for by <span class="math">\(X\)</span> itself, can be attributed
+to <span class="math">\(Y\)</span> (<a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S1053811908001328">technical
+paper</a>).
+To explore this, we&#8217;ll generate some more artificial data:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">nTrials</span> <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+
+<span class="n">cfg</span>             <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">ntrials</span>     <span class="p">=</span> <span class="n">nTrials</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">triallength</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">fsample</span>     <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>     <span class="p">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="n">cfg</span><span class="p">.</span><span class="n">method</span>      <span class="p">=</span> <span class="s">&#39;linear_mix&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">mix</span>         <span class="p">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">;</span> <span class="mf">0.5</span><span class="p">];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">delay</span>       <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">4</span><span class="p">];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfilter</span>    <span class="p">=</span> <span class="s">&#39;yes&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfreq</span>      <span class="p">=</span> <span class="p">[</span><span class="mi">50</span> <span class="mi">100</span><span class="p">];</span> <span class="c">% white noise gets filtered in this frequency band</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">absnoise</span>    <span class="p">=</span> <span class="mf">0.5</span><span class="p">;</span> <span class="c">% add independent noise to both signals</span>
+
+<span class="n">data</span>            <span class="p">=</span> <span class="n">ft_connectivitysimulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
+<span class="n">data</span><span class="p">.</span><span class="n">label</span>      <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Note that we are now using the &#8216;&#8217;bpfilter&#8217;&#8217; cfg option, which filters
+the original white noise in the specified frequency band. Thus, X and Y
+are 50% identical signal with frequency content between 50 and 100 Hz,
+and 50% independent noise. (You can inspect what this looks like by
+doing &#8216;&#8217;ft_databrowser([],data)&#8217;&#8216;).</p>
+<p>Next, we perform the frequency decomposition, FieldTrip-style:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg_TFR</span> <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">channel</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">channelcmb</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span> <span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">method</span> <span class="p">=</span> <span class="s">&#39;mtmfft&#39;</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">output</span> <span class="p">=</span> <span class="s">&#39;fourier&#39;</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">foi</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">150</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">taper</span> <span class="p">=</span> <span class="s">&#39;hanning&#39;</span><span class="p">;</span>
+
+<span class="n">TFR</span> <span class="p">=</span> <span class="n">ft_freqanalysis</span><span class="p">(</span><span class="n">cfg_TFR</span><span class="p">,</span><span class="n">data</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Now we can compute the Granger spectra:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg_G</span> <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg_G</span><span class="p">.</span><span class="n">method</span> <span class="p">=</span> <span class="s">&#39;granger&#39;</span><span class="p">;</span>
+<span class="n">cfg_G</span><span class="p">.</span><span class="n">channel</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_G</span><span class="p">.</span><span class="n">channelcmb</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span> <span class="s">&#39;Y&#39;</span><span class="p">};</span>
+
+<span class="n">C</span> <span class="p">=</span> <span class="n">ft_connectivityanalysis</span><span class="p">(</span><span class="n">cfg_G</span><span class="p">,</span><span class="n">TFR</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>...and plot the results:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span>
+<span class="k">for</span> <span class="n">iP</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">4</span>
+    <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">iP</span><span class="p">);</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="p">.</span><span class="n">freq</span><span class="p">,</span><span class="n">C</span><span class="p">.</span><span class="n">grangerspctrm</span><span class="p">(</span><span class="n">iP</span><span class="p">,:));</span>
+    <span class="n">set</span><span class="p">(</span><span class="n">gca</span><span class="p">,</span><span class="s">&#39;FontSize&#39;</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="s">&#39;YLim&#39;</span><span class="p">,[</span><span class="mi">0</span> <span class="mf">0.5</span><span class="p">]);</span>
+    <span class="n">title</span><span class="p">([</span><span class="n">C</span><span class="p">.</span><span class="n">labelcmb</span><span class="p">{</span><span class="n">iP</span><span class="p">,:}]);</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>You should get something like</p>
+<p>These panels show how much of the power in X (or Y) can be predicted
+based on itself, or the other signal. You can see that the top right
+panel (Y→X) has higher coefficients than the reverse (X→Y), consistent
+with the 4-sample advancement of Y relative to X.</p>
+<p>** Why are there non-zero coefficients for the X→Y direction? Test
+your hypothesis with artificial data. **</p>
+<p>Now, let&#8217;s consider the following case:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg</span>             <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">ntrials</span>     <span class="p">=</span> <span class="n">nTrials</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">triallength</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">fsample</span>     <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>     <span class="p">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="n">cfg</span><span class="p">.</span><span class="n">method</span>      <span class="p">=</span> <span class="s">&#39;linear_mix&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">mix</span>         <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mf">0.5</span><span class="p">];</span> <span class="c">% X bigger than Y</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">delay</span>       <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">0</span><span class="p">];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfilter</span>    <span class="p">=</span> <span class="s">&#39;yes&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfreq</span>      <span class="p">=</span> <span class="p">[</span><span class="mi">50</span> <span class="mi">100</span><span class="p">];</span> <span class="c">% white noise gets filtered in this frequency band</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">absnoise</span>    <span class="p">=</span> <span class="mf">0.5</span><span class="p">;</span> <span class="c">% add independent noise to both signals</span>
+
+<span class="n">data</span>            <span class="p">=</span> <span class="n">ft_connectivitysimulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
+<span class="n">data</span><span class="p">.</span><span class="n">label</span>      <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Note that <span class="math">\(X\)</span> is the same signal as <span class="math">\(Y\)</span>, but twice as large;
+there is <em>no delay</em> between them. Independent noise is then added to
+both <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> as before.</p>
+<p>** Compute the Granger cross-spectra for these signals as was done
+above. **</p>
+<p>You should see that X Granger-causes Y.</p>
+<p>** How is this possible, given that we generated X and Y to have zero
+delay? **</p>
+<p>This case, in which two (near-)identical signals have different
+signal-to-noise ratios, is very common in neuroscience. As you have
+seen, Granger causality can be easily fooled by this.</p>
+<p>How can we detect if we are dealing with a Granger-causality false
+positive like this? An elegant way is to <em>reverse</em> both signals and test
+again; if the Granger asymmetry persists after this, we have a tell-tale
+of a signal-to-noise Granger artifact.</p>
+<p>Reverse the two signals and compute Granger cross-spectra, both for the
+zero-delay artifact case and for the true causal case above. Verify that
+this reverse-Granger test accurately distinguishes the two cases. <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S105381191401009X">This
+paper</a>
+discusses these issues in more detail and has thoughtful discussion.</p>
+</div>
+<div class="section" id="Phase-slope-index">
+<h2>Phase-slope index<a class="headerlink" href="#Phase-slope-index" title="Permalink to this headline">¶</a></h2>
+<p>If we have a situation such as the above, it is possible that a true lag
+or lead between two signals is obscured by different signal-to-noise
+ratios. If such a case is detected by the reverse-Granger analysis, how
+can we proceed with identifying the true delay?</p>
+<p>A possible solution is offered by the analysis of <strong>phase slopes</strong>: the
+idea that for a given lead or lag between two signals, the phase lag (or
+lead) should systematically depend on frequency (<a class="reference external" href="http://arxiv.org/pdf/0712.2352.pdf">Nolte et al.
+(2008)</a>, see also precedents in
+the literature such as <a class="reference external" href="http://science.sciencemag.org/content/308/5718/111.short">Schoffelen et al.
+(2005)</a>).</p>
+<p><a class="reference external" href="https://github.com/mvdm/papers/tree/master/Catanese_vanderMeer2016">Catanese and van der Meer
+(2016)</a>
+diagram the idea as follows:</p>
+<p>In the example in (<strong>A</strong>) above, the red signal always leads the blue
+signal by 5 ms, which results in a different phase lag across
+frequencies (20, 25 and 33.3 Hz in this example). This is because 5ms is
+a much bigger slice of a full oscillation cycle at 33.3Hz than it is at
+25Hz; the bottom panel shows the linear relationship between phase lag
+and frequency for the above examples, resulting in a positive slope for
+the red-blue phase difference indicating a red signal lead.</p>
+<p>(<strong>B</strong>) shows the raw phase differences for an example real data session
+in the top panel: note that the phase lag as a function of frequency
+contains approximately linear regions in the &#8220;low-gamma&#8221; (45-65 Hz,
+green) and &#8220;high-gamma&#8221; (70-90 Hz, red) frequency bands, with slopes in
+opposite directions. The phase slope (middle panel) is the derivative of
+the raw phase lag, and the reversal of the phase slope sign around 65-70
+Hz indicates that high and low gamma are associated with opposite
+directionality in the vStr-mPFC system, with vStr leading for low gamma
+and mPFC leading for high gamma oscillations. The bottom panel shows the
+phase slope index (PSI) which normalizes the raw phase slope by its
+standard deviation.</p>
+<p>Thus, to summarize, the phase slope index (PSI) is a normalized form of
+the phase slope &#8211; obtained by dividing the raw phase slope at each
+frequency by its standard deviation (estimated using a bootstrap). The
+phase slope itself is obtained by taking the derivative (slope) of the
+raw phase differences across frequencies; as discussed above, these raw
+phase differences can be obtained by estimating the phase (angle) of the
+cross-spectrum.</p>
+<p>The time lag (or lead) between two signals given a phase slope is:</p>
+<div class="math">
+\[t_{a-b} = [\frac{\phi_{a-b}(f+df) - \phi_{a-b}(f)}{df}]/ 360^{\circ}\]</div>
+<p>where <span class="math">\(t_{a-b}\)</span> is the time lag (or lead) in seconds between
+signals <span class="math">\(a\)</span> and <span class="math">\(b\)</span>, to be inferred from the phase
+differences <span class="math">\(\phi_{a-b}\)</span> (in degrees) observed at frequencies
+<span class="math">\(f\)</span> and <span class="math">\(f+df\)</span>. For instance, given a phase difference
+<span class="math">\(\phi_{a-b} = 45^{\circ}\)</span> between signals <span class="math">\(a\)</span> and <span class="math">\(b\)</span>
+at <span class="math">\(f = 25\)</span>Hz, and <span class="math">\(\phi_{a-b} = 36^{\circ}\)</span> at
+<span class="math">\(f = 20\)</span>Hz, <span class="math">\(t_{a-b} = [(45-36)/(25-20)]/360 = 5\)</span>ms (the
+example in panel <strong>A</strong> above). As <span class="math">\(df \to 0\)</span>, the fraction shown
+in square brackets above corresponds to the derivative
+<span class="math">\(\phi_{a-b}'(f)\)</span>, i.e. the phase slope. Positive time lags
+indicate that <span class="math">\(a\)</span> leads <span class="math">\(b\)</span>.</p>
+<p>To test how this works, let&#8217;s generate two signals with an ambiguous
+Granger-relationship:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">nTrials</span> <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+
+<span class="n">cfg</span>             <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">ntrials</span>     <span class="p">=</span> <span class="n">nTrials</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">triallength</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">fsample</span>     <span class="p">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">nsignal</span>     <span class="p">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="n">cfg</span><span class="p">.</span><span class="n">method</span>      <span class="p">=</span> <span class="s">&#39;linear_mix&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">mix</span>         <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mf">0.3</span><span class="p">];</span> <span class="c">% X bigger than Y</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">delay</span>       <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">4</span><span class="p">];</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfilter</span>    <span class="p">=</span> <span class="s">&#39;yes&#39;</span><span class="p">;</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">bpfreq</span>      <span class="p">=</span> <span class="p">[</span><span class="mi">50</span> <span class="mi">100</span><span class="p">];</span> <span class="c">% white noise gets filtered in low gamma band</span>
+<span class="n">cfg</span><span class="p">.</span><span class="n">absnoise</span>    <span class="p">=</span> <span class="mf">0.5</span><span class="p">;</span> <span class="c">% add independent noise to both signals</span>
+
+<span class="n">data</span>            <span class="p">=</span> <span class="n">ft_connectivitysimulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
+<span class="n">data</span><span class="p">.</span><span class="n">label</span>      <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Note that Y leads X, but X has larger amplitude than Y.</p>
+<p>** Verify that according to the Granger spectra, there is no evidence
+to support an asymemtric (Granger-causal) relationship between Y and X.
+Since we generated the signals with a 4 sample lead for Y, we know this
+to be incorrect. **</p>
+<p>Now, let&#8217;s compute the phase slope. We start with the Fourier
+decomposition, as before:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg_TFR</span> <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">channel</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">channelcmb</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span> <span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">method</span> <span class="p">=</span> <span class="s">&#39;mtmfft&#39;</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">output</span> <span class="p">=</span> <span class="s">&#39;fourier&#39;</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">foi</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">150</span><span class="p">;</span>
+<span class="n">cfg_TFR</span><span class="p">.</span><span class="n">taper</span> <span class="p">=</span> <span class="s">&#39;hanning&#39;</span><span class="p">;</span>
+
+<span class="n">TFR</span> <span class="p">=</span> <span class="n">ft_freqanalysis</span><span class="p">(</span><span class="n">cfg_TFR</span><span class="p">,</span><span class="n">data</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>But now, we use a different method for the connectivity analysis:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">cfg_psi</span> <span class="p">=</span> <span class="p">[];</span>
+<span class="n">cfg_psi</span><span class="p">.</span><span class="n">method</span> <span class="p">=</span> <span class="s">&#39;psi&#39;</span><span class="p">;</span>
+<span class="n">cfg_psi</span><span class="p">.</span><span class="n">bandwidth</span> <span class="p">=</span> <span class="mi">8</span><span class="p">;</span> <span class="c">% number of frequencies to compute slope over</span>
+<span class="n">cfg_psi</span><span class="p">.</span><span class="n">channel</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span><span class="p">,</span><span class="s">&#39;Y&#39;</span><span class="p">};</span>
+<span class="n">cfg_psi</span><span class="p">.</span><span class="n">channelcmb</span> <span class="p">=</span> <span class="p">{</span><span class="s">&#39;X&#39;</span> <span class="s">&#39;Y&#39;</span><span class="p">};</span>
+
+<span class="n">C</span> <span class="p">=</span> <span class="n">ft_connectivityanalysis</span><span class="p">(</span><span class="n">cfg_psi</span><span class="p">,</span><span class="n">TFR</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>We plot the phase slope between Y and X:</p>
+<div class="highlight-matlab"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">;</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="p">.</span><span class="n">freq</span><span class="p">,</span><span class="n">sq</span><span class="p">(</span><span class="n">C</span><span class="p">.</span><span class="n">psispctrm</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,:)));</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency&#39;</span><span class="p">);</span> <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Phase slope&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The positive phase slope correctly identified that Y leads X.</p>
+<p>** What are the units on the vertical axis? **</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Module 11 - Signal interactions</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li><a class="reference internal" href="##-Coherence"># Coherence</a></li>
+<li><a class="reference internal" href="##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a><ul>
+<li><a class="reference internal" href="#Compute-vStr-Hipp-coherence-between-experimental-conditions">Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li><a class="reference internal" href="#Beyond-coherence">Beyond coherence</a></li>
+<li><a class="reference internal" href="#Amplitude-cross-correlation">Amplitude cross-correlation</a></li>
+<li><a class="reference internal" href="#Granger-causality:-introduction">Granger causality: introduction</a></li>
+<li><a class="reference internal" href="#Generating-artificial-data">Generating artificial data</a></li>
+<li><a class="reference internal" href="#Spectrally-resolved-Granger-causality">Spectrally resolved Granger causality</a></li>
+<li><a class="reference internal" href="#Phase-slope-index">Phase-slope index</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial07_Signal-interactions-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

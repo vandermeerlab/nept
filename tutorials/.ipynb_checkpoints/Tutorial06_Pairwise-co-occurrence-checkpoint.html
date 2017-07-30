@@ -1,0 +1,805 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Tutorial 06 - Pairwise co-occurrence &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Tutorial-06---Pairwise-co-occurrence">
+<h1># Tutorial 06 - Pairwise co-occurrence<a class="headerlink" href="##-Tutorial-06---Pairwise-co-occurrence" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Implement an analysis of pairwise co-occurrence during sharp-wave
+ripple events</li>
+<li>Apply a permutation test (shuffle) to determine levels of chance
+co-occurrence</li>
+</ul>
+<div class="section" id="Compute-pairwise-co-occurrence-during-SWRs">
+<h2>Compute pairwise co-occurrence during SWRs<a class="headerlink" href="#Compute-pairwise-co-occurrence-during-SWRs" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+import scipy.signal
+
+# define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R042-2013-08-18&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># load the info file, which contains experiment-specific information
+import r042d3 as info
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-167e83d3dd57&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># load the info file, which contains experiment-specific information</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> r042d3 <span class="ansi-green-fg">as</span> info
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;r042d3&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Determine times of interest
+# Here let&#39;s compare the co-occurrence during prerecord and postrecord
+prerecord_start = info.task_times[&#39;prerecord&#39;].start
+prerecord_stop = info.task_times[&#39;prerecord&#39;].stop
+
+postrecord_start = info.task_times[&#39;postrecord&#39;].start
+postrecord_stop = info.task_times[&#39;postrecord&#39;].stop
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-f8eb55b4a16b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Determine times of interest</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># Here let&#39;s compare the co-occurrence during prerecord and postrecord</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>prerecord_start <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;prerecord&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>start
+<span class="ansi-green-intense-fg ansi-bold">      4</span> prerecord_stop <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;prerecord&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>stop
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># load spikes (.t and ._t) from this experiment
+spikes = nept.load_spikes(data_folder)
+
+# restrict the spikes to the prerecord
+spikes_pre = [spiketrain.time_slice(prerecord_start, prerecord_stop) for spiketrain in spikes]
+
+# restrict the spikes to the postrecord
+spikes_post = [spiketrain.time_slice(postrecord_start, postrecord_stop) for spiketrain in spikes]
+
+# plot the spikes
+for idx, spiketrain in enumerate(spikes_pre):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;)
+plt.show()
+
+# plot the spikes
+for idx, spiketrain in enumerate(spikes_post):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;)
+plt.show()
+
+# Print the number of neurons we&#39;re working with
+print(&#39;n_neurons:&#39;, len(spikes))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-58d1fd3ef47b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># load spikes (.t and ._t) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>spikes <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_spikes<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># restrict the spikes to the prerecord</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> spikes_pre <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>spiketrain<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>prerecord_start<span class="ansi-blue-fg">,</span> prerecord_stop<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> spiketrain <span class="ansi-green-fg">in</span> spikes<span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_mclust.py</span> in <span class="ansi-cyan-fg">load_spikes</span><span class="ansi-blue-fg">(filepath, load_questionable)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>     spikes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> os<span class="ansi-blue-fg">.</span>listdir<span class="ansi-blue-fg">(</span>filepath<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> file<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.t&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    110</span>             label <span class="ansi-blue-fg">=</span> file<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">18</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R042-2013-08-18&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load LFP with good sharp-wave ripples
+lfp = nept.load_lfp(os.path.join(data_folder, info.lfp_swr_filename))
+
+# Restrict the LFP to the prerecord
+lfp_pre = lfp.time_slice(prerecord_start, prerecord_stop)
+
+# Restrict the LFP to the postrecord
+lfp_post = lfp.time_slice(postrecord_start, postrecord_stop)
+
+# Plot the LFP during the prerecord
+plt.plot(lfp_pre.time, lfp_pre.data)
+plt.show()
+
+# Plot the LFP during the postrecord
+plt.plot(lfp_post.time, lfp_post.data)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-5-799af38a2a15&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load LFP with good sharp-wave ripples</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>lfp <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>lfp_swr_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Restrict the LFP to the prerecord</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> lfp_pre <span class="ansi-blue-fg">=</span> lfp<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>prerecord_start<span class="ansi-blue-fg">,</span> prerecord_stop<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find sharp-wave ripple (SWR) epochs
+swr_thresh = (140., 250.)
+z_thresh = 3.0
+power_thresh = 5.0
+merge_thresh = 0.02
+min_length = 0.01
+
+swrs_pre = nept.detect_swr_hilbert(lfp_pre,
+                                   fs=info.fs,
+                                   thresh=swr_thresh,
+                                   z_thresh=z_thresh,
+                                   power_thresh=power_thresh,
+                                   merge_thresh=merge_thresh,
+                                   min_length=min_length)
+
+swrs_post = nept.detect_swr_hilbert(lfp_post,
+                                    fs=info.fs,
+                                    thresh=swr_thresh,
+                                    z_thresh=z_thresh,
+                                    power_thresh=power_thresh,
+                                    merge_thresh=merge_thresh,
+                                    min_length=min_length)
+
+print(&#39;Number of prerecord SWRs:&#39;, swrs_pre.n_epochs)
+print(&#39;Number of postrecord SWRs:&#39;, swrs_post.n_epochs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-6-fbb5462141c6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> min_length <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.01</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> swrs_pre = nept.detect_swr_hilbert(lfp_pre,
+</span><span class="ansi-green-intense-fg ansi-bold">      9</span>                                    fs<span class="ansi-blue-fg">=</span>info<span class="ansi-blue-fg">.</span>fs<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span>                                    thresh<span class="ansi-blue-fg">=</span>swr_thresh<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;lfp_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Filter the SWR epochs to only those with a certain minimum number of neurons involved
+min_involved = 4
+
+swrs_pre = nept.find_multi_in_epochs(spikes_pre, swrs_pre, min_involved=min_involved)
+
+swrs_post = nept.find_multi_in_epochs(spikes_post, swrs_post, min_involved=min_involved)
+
+print(&#39;Number of prerecord SWRs:&#39;, swrs_pre.n_epochs)
+print(&#39;Number of postrecord SWRs:&#39;, swrs_post.n_epochs)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-6c2f4c3cd94e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> min_involved <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">4</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>swrs_pre <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>find_multi_in_epochs<span class="ansi-blue-fg">(</span>spikes_pre<span class="ansi-blue-fg">,</span> swrs_pre<span class="ansi-blue-fg">,</span> min_involved<span class="ansi-blue-fg">=</span>min_involved<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> swrs_post <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>find_multi_in_epochs<span class="ansi-blue-fg">(</span>spikes_post<span class="ansi-blue-fg">,</span> swrs_post<span class="ansi-blue-fg">,</span> min_involved<span class="ansi-blue-fg">=</span>min_involved<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;spikes_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Filter and bin spikes to those that occur during the swrs
+counts_swr_pre = nept.spike_counts(spikes_pre, swrs_pre)
+
+counts_swr_post = nept.spike_counts(spikes_post, swrs_post)
+
+# Verify that counts_swr is shape (n_neurons x n_swrs)
+print(&#39;Shape of prerecord counts_swr_pre:&#39;, counts_swr_pre.shape)
+print(&#39;Shape of postrecord counts_swr_post:&#39;, counts_swr_post.shape)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-f17f4687e9e5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Filter and bin spikes to those that occur during the swrs</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>counts_swr_pre <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>spike_counts<span class="ansi-blue-fg">(</span>spikes_pre<span class="ansi-blue-fg">,</span> swrs_pre<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> counts_swr_post <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>spike_counts<span class="ansi-blue-fg">(</span>spikes_post<span class="ansi-blue-fg">,</span> swrs_post<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;spikes_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Make a mask for the neurons recorded from the same tetrode
+tetrode_mask = nept.get_tetrode_mask(spikes)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-9-6323c6934831&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Make a mask for the neurons recorded from the same tetrode</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>tetrode_mask <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>get_tetrode_mask<span class="ansi-blue-fg">(</span>spikes<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Compute the pairwise co-occurrence
+probs_pre = nept.compute_cooccur(counts_swr_pre, tetrode_mask, num_shuffles=100)
+probs_post = nept.compute_cooccur(counts_swr_post, tetrode_mask, num_shuffles=100)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-10-f59618259e5f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Compute the pairwise co-occurrence</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>probs_pre <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>compute_cooccur<span class="ansi-blue-fg">(</span>counts_swr_pre<span class="ansi-blue-fg">,</span> tetrode_mask<span class="ansi-blue-fg">,</span> num_shuffles<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> probs_post <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>compute_cooccur<span class="ansi-blue-fg">(</span>counts_swr_post<span class="ansi-blue-fg">,</span> tetrode_mask<span class="ansi-blue-fg">,</span> num_shuffles<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">100</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;counts_swr_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>probs_pre.keys()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-411621c3d1d4&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>probs_pre<span class="ansi-blue-fg">.</span>keys<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;probs_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>for probs in [probs_pre, probs_post]:
+    plt.bar(probs[&#39;observed&#39;])
+    plt.plot(probs[&#39;expected&#39;])
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-12-774df19354c2&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">for</span> probs <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span>probs_pre<span class="ansi-blue-fg">,</span> probs_post<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span>     plt<span class="ansi-blue-fg">.</span>bar<span class="ansi-blue-fg">(</span>probs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;observed&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>     plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>probs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;expected&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;probs_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Make a function to plot the pairwise co-occurrence
+def plot_cooccur(pre, post, title):
+    fig, ax = plt.subplots()
+
+    ind = np.arange(1)
+    width = 0.5
+
+    ax.bar(ind, pre, width)
+    ax.bar(ind + width, post, width)
+
+    ax.set_xticks([ind, ind+width])
+    ax.set_xticklabels([&#39;Prerecord&#39;, &#39;Postrecord&#39;])
+
+    ax.spines[&#39;right&#39;].set_visible(False)
+    ax.spines[&#39;top&#39;].set_visible(False)
+
+    plt.title(title)
+
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the weighted neuron participation during candidate events
+# e.g. how active individual neurons are during the pre- and postrecord SWRs
+active_pre = np.nansum(probs_pre[&#39;active&#39;]) / swrs_pre.n_epochs
+active_post = np.nansum(probs_post[&#39;active&#39;]) / swrs_post.n_epochs
+title = &#39;Active&#39;
+
+plot_cooccur(active_pre, active_post, title)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-2beae117dfa5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the weighted neuron participation during candidate events</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># e.g. how active individual neurons are during the pre- and postrecord SWRs</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>active_pre <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_pre<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;active&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_pre<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      4</span> active_post <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_post<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;active&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_post<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      5</span> title <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;Active&#39;</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;probs_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the weighted joint probability for neuron pairs
+observed_pre = np.nansum(probs_pre[&#39;observed&#39;]) / swrs_pre.n_epochs
+observed_post = np.nansum(probs_post[&#39;observed&#39;]) / swrs_post.n_epochs
+title = &#39;Observed&#39;
+
+plot_cooccur(observed_pre, observed_post, title)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-4dc7b6505b57&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the weighted joint probability for neuron pairs</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>observed_pre <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_pre<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;observed&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_pre<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      3</span> observed_post <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_post<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;observed&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_post<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      4</span> title <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;Observed&#39;</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;probs_pre&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the weighted z-score coactivity
+# e.g. are neurons co-occurring more often than expected by chance?
+zscore_pre = np.nansum(probs_pre[&#39;zscore&#39;]) / swrs_pre.n_epochs
+zscore_post = np.nansum(probs_post[&#39;zscore&#39;]) / swrs_post.n_epochs
+title = &#39;Z-score&#39;
+
+plot_cooccur(zscore_pre, zscore_post, title)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-16-7fafb7cdf9b3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the weighted z-score coactivity</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># e.g. are neurons co-occurring more often than expected by chance?</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>zscore_pre <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_pre<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;zscore&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_pre<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      4</span> zscore_post <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>nansum<span class="ansi-blue-fg">(</span>probs_post<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;zscore&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> swrs_post<span class="ansi-blue-fg">.</span>n_epochs
+<span class="ansi-green-intense-fg ansi-bold">      5</span> title <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;Z-score&#39;</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;probs_pre&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a><ul>
+<li><a class="reference internal" href="#Compute-pairwise-co-occurrence-during-SWRs">Compute pairwise co-occurrence during SWRs</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial06_Pairwise-co-occurrence-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

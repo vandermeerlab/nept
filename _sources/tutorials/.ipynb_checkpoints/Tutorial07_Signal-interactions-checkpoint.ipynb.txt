@@ -1,0 +1,1145 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Module 11 - Signal interactions\n",
+    "----------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Goals\n",
+    "-----------\n",
+    "\n",
+    "- Compute the Power Spectrum Density (PSD) and coherence between two signals\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Coherence\n",
+    "-----------------\n",
+    "\n",
+    "Let's start by considering how two oscillating signals may be related. \n",
+    "There are various possible relationships between the two, such as illustrated here \n",
+    "(from [Siegel et al. 2012](http://www.ncbi.nlm.nih.gov/pubmed/22233726)):\n",
+    "\n",
+    "<img src=\"11-coherence.png\" style=\"width: 700px;\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)\n",
+    "-------------------------------------------------------------------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Import necessary packages\n",
+    "%matplotlib inline\n",
+    "import os\n",
+    "import sys\n",
+    "import numpy as np\n",
+    "import nept\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.mlab\n",
+    "import scipy.signal\n",
+    "\n",
+    "# Define where your data folder is located\n",
+    "data_path = os.path.join(os.path.abspath('.'), 'data')\n",
+    "data_folder = os.path.join(data_path, 'R016-2012-10-03')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Load the info file, which contains experiment-specific information\n",
+    "sys.path.append(data_folder)\n",
+    "import r016d3 as info"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Load both LFPs (.ncs) from rat ventral striatum and one from the hippocampus\n",
+    "lfp_vstr1 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename1))\n",
+    "lfp_vstr2 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename2))\n",
+    "\n",
+    "lfp_hipp = nept.load_lfp(os.path.join(data_folder, info.lfp_theta_filename))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Let's restrict our LFPs to during task times\n",
+    "task_start = info.task_times['task-value'].start\n",
+    "task_stop = info.task_times['task-reward'].stop\n",
+    "\n",
+    "lfp_vstr1 = lfp_vstr1.time_slice(task_start, task_stop)\n",
+    "lfp_vstr2 = lfp_vstr2.time_slice(task_start, task_stop)\n",
+    "lfp_hipp = lfp_hipp.time_slice(task_start, task_stop)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Plot the LFPs. Notice the break in LFP when the task was switched from 'value' to 'reward'\n",
+    "plt.plot(lfp_vstr1.time, lfp_vstr1.data)\n",
+    "plt.plot(lfp_vstr2.time, lfp_vstr2.data)\n",
+    "plt.plot(lfp_hipp.time, lfp_hipp.data)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Compute the Power Spectral Density (PSD) for each signal with Welch’s average\n",
+    "window = 2048\n",
+    "fs = 2000\n",
+    "\n",
+    "vstr1 = np.squeeze(lfp_vstr1.data)\n",
+    "vstr2 = np.squeeze(lfp_vstr2.data)\n",
+    "hipp = np.squeeze(lfp_hipp.data)\n",
+    "\n",
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "# Theta\n",
+    "ax.axvspan(4, 12, color='#cccccc', alpha=0.3)\n",
+    "# Gamma\n",
+    "ax.axvspan(25, 100, color='#cccccc', alpha=0.3)\n",
+    "\n",
+    "for lfp_data in [vstr1, vstr2, hipp]:\n",
+    "    power, freq = matplotlib.mlab.psd(lfp_data, \n",
+    "                                      Fs=fs,\n",
+    "                                      NFFT=int(window*2),\n",
+    "                                      noverlap=int(window/2))\n",
+    "\n",
+    "    power_db = 10*np.log10(power)\n",
+    "    plt.plot(freq, power_db)\n",
+    "    \n",
+    "    plt.xlim(0, 150)\n",
+    "    plt.ylim(-120, -85)\n",
+    "    plt.ylabel('Power (dB)')\n",
+    "    plt.xlabel('Frequency (Hz)')\n",
+    "    plt.legend(['vStr1', 'vStr2', 'Hipp'])\n",
+    "    \n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "Notice the hippocampus has a clear theta (4 - 12 Hz) peak, \n",
+    "which is visible as only a slight hump in ventral striatum. \n",
+    "Ventral striatum has large gamma (25 - 100 Hz) components,\n",
+    "which are not present in the hippocampus."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Compute the coherence for vStr-vStr and vStr-hipp\n",
+    "\n",
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "# Theta\n",
+    "ax.axvspan(4, 12, color='#cccccc', alpha=0.3)\n",
+    "# Gamma\n",
+    "ax.axvspan(25, 100, color='#cccccc', alpha=0.3)\n",
+    "\n",
+    "for lfp_data in [vstr2, hipp]:\n",
+    "    coherence, freq = matplotlib.mlab.cohere(\n",
+    "        vstr1, lfp_data, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))\n",
+    "\n",
+    "    plt.plot(freq, coherence)\n",
+    "    plt.xlim(0, 150)\n",
+    "    plt.ylim(0, 1)\n",
+    "    plt.ylabel('Coherence')\n",
+    "    plt.xlabel('Frequency (Hz)')\n",
+    "    plt.legend(['vStr1-vStr2', 'vStr1-Hipp'])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "The coherence between the two ventral striatum signals is high overall \n",
+    "compared to that between the ventral striatum and hippocampus.\n",
+    "The ventral striatum gamma frequencies are particularly coherent within the ventral striatum. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "# Compute vStr-Hipp coherence between experimental conditions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Load events from this experiment\n",
+    "events = nept.load_events(os.path.join(data_folder, info.event_filename), info.event_labels)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's see if there is a change in coherence between _approach to the reward site_\n",
+    "and _reward receipt_. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Get the photobeam break times\n",
+    "pb = np.sort(np.append(events['feeder0'], events['feeder1']))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def perievent_slice(analogsignal, events, t_before, t_after, dt=None):\n",
+    "    \"\"\"Slices the analogsignal data into perievent chunks.\n",
+    "    Unlike time_slice, the resulting AnalogSignal will be multidimensional.\n",
+    "    Only works for 1D signals.\n",
+    "    \n",
+    "    Parameters\n",
+    "    ----------\n",
+    "    analogsignal : nept.AnalogSignal\n",
+    "    events : np.array\n",
+    "    t_before : float\n",
+    "    t_after : float\n",
+    "    dt : float\n",
+    "    \n",
+    "    Returns\n",
+    "    -------\n",
+    "    nept.AnalogSignal\n",
+    "    \n",
+    "    \"\"\"\n",
+    "    \n",
+    "    if analogsignal.dimensions != 1:\n",
+    "        raise ValueError(\"AnalogSignal must be 1D.\")\n",
+    "    \n",
+    "    if dt is None:\n",
+    "        dt = np.median(np.diff(analogsignal.time))\n",
+    "        \n",
+    "    time = np.arange(-t_before, t_after+dt, dt)\n",
+    "    \n",
+    "    data = np.zeros((len(time), len(events)))\n",
+    "    for i, event in enumerate(events):\n",
+    "        sliced = analogsignal.time_slice(event-t_before, event+t_after)\n",
+    "        data[:,i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))\n",
+    "    \n",
+    "    return nept.AnalogSignal(data, time)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Compute the perievent slices for the nosepoke times\n",
+    "np_vstr1 = perievent_slice(lfp_vstr1, pb, t_before=2.5, t_after=5.0)\n",
+    "np_vstr2 = perievent_slice(lfp_vstr2, pb, t_before=2.5, t_after=5.0)\n",
+    "np_hipp = perievent_slice(lfp_hipp, pb, t_before=2.5, t_after=5.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def mean_psd(perievent_lfps, window, fs):\n",
+    "    power = np.zeros((window+1, perievent_lfps.dimensions))\n",
+    "    for i, lfp in enumerate(perievent_lfps.data.T):\n",
+    "        power[:,i], freq = matplotlib.mlab.psd(\n",
+    "            lfp, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))\n",
+    "    \n",
+    "    return freq, np.mean(power, axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def power_in_db(power):\n",
+    "    return 10*np.log10(power)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "freq, psd_vstr1 = mean_psd(np_vstr1, window, fs)\n",
+    "freq, psd_vstr2 = mean_psd(np_vstr2, window, fs)\n",
+    "freq, psd_hipp = mean_psd(np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.plot(freq, power_in_db(psd_vstr1))\n",
+    "plt.plot(freq, power_in_db(psd_vstr2))\n",
+    "plt.plot(freq, power_in_db(psd_hipp))\n",
+    "plt.xlim(0, 100)\n",
+    "plt.ylim(-110, -80)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def mean_csd(perievent_lfp1, perievent_lfp2, window, fs):\n",
+    "    freq, power = scipy.signal.csd(perievent_lfp1.data.T, perievent_lfp2.data.T, \n",
+    "                                   fs=fs, nperseg=window, nfft=int(window*2))\n",
+    "    \n",
+    "    return freq, np.mean(power, axis=0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "freq, csd_vstr1_vstr2 = mean_csd(np_vstr1, np_vstr2, window, fs)\n",
+    "freq, csd_vstr1_hipp = mean_csd(np_vstr1, np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.plot(freq, power_in_db(csd_vstr1_vstr2))\n",
+    "plt.plot(freq, power_in_db(csd_vstr1_hipp))\n",
+    "plt.xlim(0, 100)\n",
+    "plt.ylim(-120, -90)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def mean_coherence(perievent_lfp1, perievent_lfp2, window, fs):\n",
+    "    freq, coherence = scipy.signal.coherence(\n",
+    "        perievent_lfp1.data.T, perievent_lfp2.data.T, fs=fs, nperseg=window, nfft=int(window*2))\n",
+    "    \n",
+    "    return freq, np.mean(coherence, axis=0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "freq, coh_vstr1_vstr2 = mean_coherence(np_vstr1, np_vstr2, window, fs)\n",
+    "freq, coh_vstr1_hipp = mean_coherence(np_vstr1, np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.plot(freq, coh_vstr1_vstr2)\n",
+    "plt.plot(freq, coh_vstr1_hipp)\n",
+    "plt.xlim(0, 100)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def mean_coherencegram(perievent_lfp1, perievent_lfp2, dt, window, fs, extend=0.3):\n",
+    "    timebins = np.arange(perievent_lfp1.time[0], perievent_lfp1.time[-1]+dt, dt)\n",
+    "    coherencegram = np.zeros((window+1, len(timebins)))\n",
+    "    \n",
+    "    for i, (t_start, t_stop) in enumerate(zip(timebins[:-2], timebins[1:-1])):\n",
+    "        lfp1 = perievent_lfp1.time_slice(t_start-extend, t_stop+extend)\n",
+    "        lfp2 = perievent_lfp2.time_slice(t_start-extend, t_stop+extend)\n",
+    "        freq, coherencegram[:, i] = mean_coherence(lfp1, lfp2, window, fs)\n",
+    "        \n",
+    "    return timebins, freq, coherencegram"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "time, freq, coherencegram_vstr1_vstr2 = mean_coherencegram(np_vstr1, np_vstr2, dt=0.07, window=256, fs=fs)\n",
+    "time, freq, coherencegram_vstr1_hipp = mean_coherencegram(np_vstr1, np_hipp, dt=0.07, window=256, fs=fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "xx, yy = np.meshgrid(time, freq)\n",
+    "plt.pcolormesh(xx, yy, coherencegram_vstr1_hipp)\n",
+    "plt.ylim(0, 100)\n",
+    "plt.colorbar()\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Beyond coherence\n",
+    "\n",
+    "Coherence is only one of many measures that attempt to characterize the relationship between LFPs. \n",
+    "A glance at the [documentation](http://fieldtrip.fcdonders.nl/reference/ft_connectivityanalysis)\n",
+    "for ''ft_connectivityanalysis()'' reveals a who's who of popular neuroscience tools \n",
+    "for assessing functional connectivity.\n",
+    "A review of these methods is beyond the scope of this module, \n",
+    "but in general they address some of the limitations of the coherence measure. \n",
+    "For instance:\n",
+    "\n",
+    "- Phase slope index (PSI), Granger causality, and partial directed coherence (PDC) are _directional_ measures \n",
+    "that under certain circumstances can capture the direction of the flow of information between two signals. \n",
+    "We will discuss a few of these in this module, below.\n",
+    "- Weighted phase lag index (WPLI) can exclude contributions from a volume-conducted source common to both signals\n",
+    "- Pairwise phase consistency (PPC) addresses some statistical issues \n",
+    "of how coherence estimates are affected by the amount of data\n",
+    "\n",
+    "For an illustration of how these improved methods \n",
+    "can give a more reliable estimate of interactions than coherence, \n",
+    "let's give pairwise phase consistency a try:\n",
+    "\n",
+    "```matlab\n",
+    "cfg            = [];\n",
+    "cfg.method     = 'ppc';\n",
+    "fd             = ft_connectivityanalysis(cfg,TFR_post);\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Plot the coherogram as above, changing ''cohspectrm'' to ''ppcspctrm'' in the plotting code. \n",
+    "You should get (again for the post-nosepoke epoch):\n",
+    "\n",
+    "<img src=\"11-vstr_hc_cohereogram2.png\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that some of the spurious high-frequency events have now been eliminated. \n",
+    "In general, however, estimates of coherence and other connectivity measures\n",
+    "require relatively large amounts of data to obtain \n",
+    "-- more than the small number of trials from one single session considered here."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Amplitude cross-correlation\n",
+    "\n",
+    "As should be clear from the discussion of coherence so far, \n",
+    "it is a non-directional measure -- it doesn't address whether signal A leads or lags signal B. \n",
+    "There are many methods out there that can be used to address this directionality question. \n",
+    "One that you already have the tools to perform is computing the _amplitude cross-correlation_ between two signals,\n",
+    "filtered in a specific frequency band. \n",
+    "Looking at the lower left panel in the figure at the top of the page, \n",
+    "you can see that the amplitude envelope (red line) is clearly correlated between the two signals. \n",
+    "Computing the cross-correlation would establish at what time lead (or lag) that correlation is maximal;\n",
+    "a peak offset from zero would indicate a specific temporal asymmetry suggesting one signal leads the other.\n",
+    "\n",
+    "We will not cover this method in detail here \n",
+    "since you already know how to compute amplitude envelopes and cross-correlations; \n",
+    "however, if you'd like to delve more into this, example code that performs this analysis, \n",
+    "including a very nice shuffling procedure to determine chance level, \n",
+    "can be found on the vandermeerlab papers repository \n",
+    "[here](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_AmplCorr.m). \n",
+    "A recent paper introducing the method is \n",
+    "[Adhikari et al. (2010)](http://www.sciencedirect.com/science/article/pii/S0165027010003432). "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Granger causality: introduction\n",
+    "\n",
+    "The concept of Granger causality \n",
+    "([Granger 1969](http://www.jstor.org/stable/1912791?seq=1#page_scan_tab_contents)) is simple: \n",
+    "if a signal $X$ \"Granger-causes\" signal $Y$, \n",
+    "then knowing the value of $X$ improves your ability to predict $Y$ \n",
+    "beyond what can be predicted from the history of $Y$ alone (see also \n",
+    "[Seth 2007](http://www.scholarpedia.org/article/Granger_causality)). \n",
+    "Thus, Granger-causality is inferred based on the relative fits of statistical models applied to time series data.\n",
+    "\n",
+    "More mathematically:\n",
+    "\n",
+    "$$\n",
+    "M_1: Y(t) = \\sum_{l = 1}^{L} a_l Y(t-l) + \\epsilon_1 \\\\ \n",
+    "M_2: Y(t) = \\sum_{l = 1}^{L} a'_l Y(t-l) + b'_l X(t-l) + \\epsilon_2\n",
+    "$$\n",
+    "\n",
+    "If $M_2$ provides a better fit to the data \n",
+    "(best predicts the value of $Y(t)$) then $X$ is said to Granger-cause $Y$. \n",
+    "The parameter $L$ indicates the number of samples into the past that are included in the model; \n",
+    "as was the case in our discussion of [filters](analysis:course-w16:week6), \n",
+    "the _order_ of the model refers to how many past samples are included (i.e. the value of $L$).\n",
+    "\n",
+    "In general, the above models $M$ are examples of **autoregressive** (AR) models: \n",
+    "the dependent variable $Y(t)$ is regressed against linear combinations of past values of that variable itself, \n",
+    "where the coefficients $a$ and $b$ can be thought of as the regression coefficients or weights of each past value.\n",
+    "You may also encounter the term vector autoregressive (VAR) models, \n",
+    "this is simply the multivariate extension of AR models. \n",
+    "$M_2$ above is a VAR model since it has two variables. \n",
+    "There is a large literature on (V)AR models, \n",
+    "since it is a major tool in forecasting of all sorts of things ranging from the stock market to the weather."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Generating artificial data\n",
+    "\n",
+    "To explore how to fit AR models to data, \n",
+    "it's a good idea to start with some artificial data of which we know the structure. \n",
+    "Earlier in this module we did so \"by hand\", \n",
+    "but here we will use FieldTrip's useful ''ft_connectivitysimulation()'':\n",
+    "\n",
+    "```matlab\n",
+    "cfg             = [];\n",
+    "cfg.ntrials     = 1000;\n",
+    "cfg.triallength = 5; % in seconds\n",
+    "cfg.fsample     = 1000;\n",
+    "cfg.nsignal     = 2; % two signals, X and Y, which start out as identical white noise\n",
+    "\n",
+    "cfg.method      = 'linear_mix';\n",
+    "cfg.mix         = [0; 0]; % multiply white noise for X and Y by this\n",
+    "cfg.delay       = [0; 0]; % Y is n samples delayed relative to X (both 0)\n",
+    "cfg.bpfilter    = 'no';\n",
+    "cfg.absnoise    = 1; % add independent noise to both signals, so now X and Y should be independent\n",
+    "\n",
+    "data            = ft_connectivitysimulation(cfg);\n",
+    "data.label      = {'X','Y'};\n",
+    "```\n",
+    "\n",
+    "The above code generates 1000 trials of 5 seconds each of independent white noise \n",
+    "for two signals $X$ and $Y$. \n",
+    "We do so in a somewhat roundabout way, \n",
+    "by first setting the common signal in A and B to zero for each (''cfg.mix = [0; 0]'') \n",
+    "and then adding independent noise of amplitude 1 to each (''cfg.absnoise = 1'').\n",
+    "Why this is so will become clear later when we generate more interesting combinations of signals."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** Verify that indeed the two signals X and Y are uncorrelated, \n",
+    "as one would expect from independently generated white noise. \n",
+    "One way to do so is to compute a correlation coefficient for each trial \n",
+    "and plot the distribution of resulting correlation coefficients (use ''corrcoef()''). **"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next, we can fit our AR model:\n",
+    "\n",
+    "```matlab\n",
+    "cfg_ar         = [];\n",
+    "cfg_ar.order   = 3;\n",
+    "cfg_ar.toolbox = 'bsmart';\n",
+    "mdata          = ft_mvaranalysis(cfg_ar, data);\n",
+    "```\n",
+    "\n",
+    "Note the ''order'' parameter, which specifies how far back to estimate coefficients for \n",
+    "(the $L$ parameter in the equations above). \n",
+    "Although this is FieldTrip code, it uses the [BSMART](http://www.brain-smart.org/) toolbox \n",
+    "under the hood to fit the model. \n",
+    "The ''ft_mvaranalysis()'' function has some useful options we aren't using right now, \n",
+    "such as the ability to estimate errorbars with the ''jackknife'' option. \n",
+    "This takes a long time, however, so we don't do this now.\n",
+    "\n",
+    "What we are interested in are the coefficients $a$ and $b$, \n",
+    "i.e. the extent that we can predict each signal separately based on its own past, \n",
+    "and then how much that prediction can be improved by knowledge of the other signal.\n",
+    "\n",
+    "To plot these coefficients, we can do:\n",
+    "\n",
+    "```matlab\n",
+    "figure; subplot(221)\n",
+    "\n",
+    "labels = {'X->X','X->Y';'Y->X','Y->Y'}; cols = 'rgbc';\n",
+    "nP = 0;\n",
+    "for iI = 1:cfg.nsignal   \n",
+    "    for iJ = 1:cfg.nsignal\n",
+    "        nP = nP + 1;\n",
+    "    \n",
+    "        h(nP) = plot(1:cfg_ar.order,sq(mdata.coeffs(iI,iJ,:)),cols(nP));\n",
+    "        hold on;\n",
+    "        plot(1:cfg_ar.order,sq(mdata.coeffs(iI,iJ,:)),'.','MarkerSize',20,'Color',cols(nP));\n",
+    "\n",
+    "    end\n",
+    "end\n",
+    "set(gca,'FontSize',18,'LineWidth',1); box off;\n",
+    "set(h,'LineWidth',2);\n",
+    "xlabel('lag (samples)'); ylabel('coefficient');\n",
+    "title('cfg.delay = [0; 0];');\n",
+    "legend(h,labels(:));\n",
+    "```\n",
+    "\n",
+    "You should see that the coefficient values are very small (on the order of $10^{-4}$). \n",
+    "This is what we expect from signals that we know to be uncorrelated; \n",
+    "these values should not be statistically different from zero,\n",
+    "which would mean that we cannot predict anything about our signal based on its past \n",
+    "-- the definition of white noise!\n",
+    "\n",
+    "Let's now create some signals that do have some structure: \n",
+    "\n",
+    "```matlab\n",
+    "%%\n",
+    "cfg.mix         = [0.8; 0.8]; % X and Y are identical white noise with amplitude 0.8\n",
+    "cfg.absnoise    = 0.2; % add amplitude 0.2 *independent* noise\n",
+    "cfg.delay       = [0; 2]; % advance Y 2 samples relative to X\n",
+    "\n",
+    "data            = ft_connectivitysimulation(cfg);\n",
+    "data.label      = {'X','Y'};\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** Fit the VAR model again, and plot the coefficients in the next subplot. **\n",
+    "\n",
+    "You should get something like:\n",
+    "\n",
+    "<img src=\"11-var-model.png\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note how for the delay case, we correctly estimate that X can be predicted from Y, \n",
+    "at the expected delay of 2 samples.\n",
+    "\n",
+    "It is important to be aware of the limitations of Granger causality. \n",
+    "The term \"Granger-causes\" is often used to indicate the inherently descriptive nature of VAR models, \n",
+    "which cannot distinguish true causality from a number of alternative scenarios. \n",
+    "Prominent among these is the possibility of a common input Z affecting both X and Y, \n",
+    "but with different time lags. \n",
+    "X may then \"Granger-cause\" Y, without any direct anatomical connection between them.\n",
+    "A different, all-too common case is when signals X and Y have different signal-to-noise ratios; \n",
+    "we will highlight this issue in the next section. \n",
+    "More generally, it is unclear what conclusions can be drawn from Granger causality \n",
+    "in systems that with recurrent (feedback) connections,\n",
+    "which are of course ubiquitous in the brain -- a nice paper demonstrating and discussing this is\n",
+    "[Kispersky et al. 2011](http://neuralsystemsandcircuits.biomedcentral.com/articles/10.1186/2042-1001-1-9)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Spectrally resolved Granger causality\n",
+    "\n",
+    "Given how ubiquitous oscillations are in neural data, \n",
+    "it is often informative to not fit VAR models directly in the time domain \n",
+    "(as we did in the previous section) but go to the frequency domain. \n",
+    "Intuitively, _spectrally resolved_ Granger causality measures how much of the power in $X$, \n",
+    "not accounted for by $X$ itself, can be attributed to $Y$ \n",
+    "([technical paper](http://www.sciencedirect.com/science/article/pii/S1053811908001328)). \n",
+    "To explore this, we'll generate some more artificial data:\n",
+    "\n",
+    "```matlab\n",
+    "nTrials = 1000;\n",
+    "\n",
+    "cfg             = [];\n",
+    "cfg.ntrials     = nTrials;\n",
+    "cfg.triallength = 5;\n",
+    "cfg.fsample     = 1000;\n",
+    "cfg.nsignal     = 2;\n",
+    "\n",
+    "cfg.method      = 'linear_mix';\n",
+    "cfg.mix         = [0.5; 0.5];\n",
+    "cfg.delay       = [0; 4];\n",
+    "cfg.bpfilter    = 'yes';\n",
+    "cfg.bpfreq      = [50 100]; % white noise gets filtered in this frequency band\n",
+    "cfg.absnoise    = 0.5; % add independent noise to both signals\n",
+    "\n",
+    "data            = ft_connectivitysimulation(cfg);\n",
+    "data.label      = {'X','Y'};\n",
+    "```\n",
+    "\n",
+    "Note that we are now using the ''bpfilter'' cfg option, \n",
+    "which filters the original white noise in the specified frequency band. \n",
+    "Thus, X and Y are 50% identical signal with frequency content between 50 and 100 Hz,\n",
+    "and 50% independent noise.\n",
+    "(You can inspect what this looks like by doing ''ft_databrowser([],data)'').\n",
+    "\n",
+    "Next, we perform the frequency decomposition, FieldTrip-style:\n",
+    "\n",
+    "```matlab\n",
+    "cfg_TFR = [];\n",
+    "cfg_TFR.channel = {'X','Y'};\n",
+    "cfg_TFR.channelcmb = {'X' 'Y'};\n",
+    "cfg_TFR.method = 'mtmfft';\n",
+    "cfg_TFR.output = 'fourier';\n",
+    "cfg_TFR.foi = 1:1:150;\n",
+    "cfg_TFR.taper = 'hanning';\n",
+    "\n",
+    "TFR = ft_freqanalysis(cfg_TFR,data);\n",
+    "```\n",
+    "\n",
+    "Now we can compute the Granger spectra:\n",
+    "\n",
+    "```matlab\n",
+    "cfg_G = [];\n",
+    "cfg_G.method = 'granger';\n",
+    "cfg_G.channel = {'X','Y'};\n",
+    "cfg_G.channelcmb = {'X' 'Y'};\n",
+    "\n",
+    "C = ft_connectivityanalysis(cfg_G,TFR);\n",
+    "```\n",
+    "\n",
+    "...and plot the results:\n",
+    "\n",
+    "```matlab\n",
+    "figure;\n",
+    "for iP = 1:4\n",
+    "    subplot(2,2,iP);\n",
+    "    plot(C.freq,C.grangerspctrm(iP,:));\n",
+    "    set(gca,'FontSize',14,'YLim',[0 0.5]);\n",
+    "    title([C.labelcmb{iP,:}]);\n",
+    "end\n",
+    "```\n",
+    "\n",
+    "You should get something like\n",
+    "\n",
+    "<img src=\"11-granger-spectral.png\">\n",
+    "\n",
+    "These panels show how much of the power in X (or Y) \n",
+    "can be predicted based on itself, or the other signal. \n",
+    "You can see that the top right panel (Y→X) has higher coefficients than the reverse (X→Y),\n",
+    "consistent with the 4-sample advancement of Y relative to X."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** Why are there non-zero coefficients for the X→Y direction? \n",
+    "Test your hypothesis with artificial data. **"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, let's consider the following case:\n",
+    "\n",
+    "```matlab\n",
+    "cfg             = [];\n",
+    "cfg.ntrials     = nTrials;\n",
+    "cfg.triallength = 5;\n",
+    "cfg.fsample     = 1000;\n",
+    "cfg.nsignal     = 2;\n",
+    "\n",
+    "cfg.method      = 'linear_mix';\n",
+    "cfg.mix         = [1; 0.5]; % X bigger than Y\n",
+    "cfg.delay       = [0; 0];\n",
+    "cfg.bpfilter    = 'yes';\n",
+    "cfg.bpfreq      = [50 100]; % white noise gets filtered in this frequency band\n",
+    "cfg.absnoise    = 0.5; % add independent noise to both signals\n",
+    "\n",
+    "data            = ft_connectivitysimulation(cfg);\n",
+    "data.label      = {'X','Y'};\n",
+    "```\n",
+    "\n",
+    "Note that $X$ is the same signal as $Y$, but twice as large; \n",
+    "there is _no delay_ between them. \n",
+    "Independent noise is then added to both $X$ and $Y$ as before."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** Compute the Granger cross-spectra for these signals as was done above. **"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You should see that X Granger-causes Y."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** How is this possible, given that we generated X and Y to have zero delay? **"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This case, in which two (near-)identical signals have different signal-to-noise ratios, \n",
+    "is very common in neuroscience. \n",
+    "As you have seen, Granger causality can be easily fooled by this.\n",
+    "\n",
+    "How can we detect if we are dealing with a Granger-causality false positive like this? \n",
+    "An elegant way is to _reverse_ both signals and test again; \n",
+    "if the Granger asymmetry persists after this, we have a tell-tale of a signal-to-noise Granger artifact."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Reverse the two signals and compute Granger cross-spectra, \n",
+    "both for the zero-delay artifact case and for the true causal case above. \n",
+    "Verify that this reverse-Granger test accurately distinguishes the two cases. \n",
+    "[This paper](http://www.sciencedirect.com/science/article/pii/S105381191401009X) \n",
+    "discusses these issues in more detail and has thoughtful discussion."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Phase-slope index\n",
+    "\n",
+    "If we have a situation such as the above, \n",
+    "it is possible that a true lag or lead between two signals is obscured by different signal-to-noise ratios. \n",
+    "If such a case is detected by the reverse-Granger analysis, \n",
+    "how can we proceed with identifying the true delay?\n",
+    "\n",
+    "A possible solution is offered by the analysis of **phase slopes**: \n",
+    "the idea that for a given lead or lag between two signals, \n",
+    "the phase lag (or lead) should systematically depend on frequency \n",
+    "([Nolte et al. (2008)](http://arxiv.org/pdf/0712.2352.pdf), \n",
+    "see also precedents in the literature such as \n",
+    "[Schoffelen et al. (2005)](http://science.sciencemag.org/content/308/5718/111.short)).\n",
+    "\n",
+    "[Catanese and van der Meer (2016)](https://github.com/mvdm/papers/tree/master/Catanese_vanderMeer2016)\n",
+    "diagram the idea as follows:\n",
+    "\n",
+    "<img src=\"11-phase-slope_index.png\">\n",
+    "\n",
+    "In the example in (**A**) above, the red signal always leads the blue signal by 5 ms, \n",
+    "which results in a different phase lag across frequencies (20, 25 and 33.3 Hz in this example).\n",
+    "This is because 5ms is a much bigger slice of a full oscillation cycle at 33.3Hz than it is at 25Hz; \n",
+    "the bottom panel shows the linear relationship between phase lag and frequency for the above examples, \n",
+    "resulting in a positive slope for the red-blue phase difference indicating a red signal lead.\n",
+    "\n",
+    "(**B**) shows the raw phase differences for an example real data session in the top panel: \n",
+    "note that the phase lag as a function of frequency contains \n",
+    "approximately linear regions in the \"low-gamma\" (45-65 Hz, green) and \"high-gamma\" (70-90 Hz, red) frequency bands,\n",
+    "with slopes in opposite directions. \n",
+    "The phase slope (middle panel) is the derivative of the raw phase lag, \n",
+    "and the reversal of the phase slope sign around 65-70 Hz indicates that high and low gamma \n",
+    "are associated with opposite directionality in the vStr-mPFC system, \n",
+    "with vStr leading for low gamma and mPFC leading for high gamma oscillations. \n",
+    "The bottom panel shows the phase slope index (PSI) which normalizes the raw phase slope by its standard deviation.\n",
+    "\n",
+    "Thus, to summarize, the phase slope index (PSI) is a normalized form of the phase slope \n",
+    "-- obtained by dividing the raw phase slope at each frequency by its standard deviation \n",
+    "(estimated using a bootstrap). \n",
+    "The phase slope itself is obtained by taking the derivative (slope) \n",
+    "of the raw phase differences across frequencies;\n",
+    "as discussed above, these raw phase differences can be obtained by \n",
+    "estimating the phase (angle) of the cross-spectrum.\n",
+    "\n",
+    "The time lag (or lead) between two signals given a phase slope is:\n",
+    "\n",
+    "$$\n",
+    "t_{a-b} = [\\frac{\\phi_{a-b}(f+df) - \\phi_{a-b}(f)}{df}]/ 360^{\\circ}\n",
+    "$$\n",
+    "\n",
+    "where $t_{a-b}$ is the time lag (or lead) in seconds between signals $a$ and $b$, \n",
+    "to be inferred from the phase differences $\\phi_{a-b}$ (in degrees) \n",
+    "observed at frequencies $f$ and $f+df$. \n",
+    "For instance, given a phase difference $\\phi_{a-b} = 45^{\\circ}$ between signals $a$ and $b$ at $f = 25$Hz, \n",
+    "and $\\phi_{a-b} = 36^{\\circ}$ at $f = 20$Hz, $t_{a-b} = [(45-36)/(25-20)]/360 = 5$ms \n",
+    "(the example in panel **A** above). \n",
+    "As $df \\to 0$, the fraction shown in square brackets above corresponds to the derivative $\\phi_{a-b}'(f)$, \n",
+    "i.e. the phase slope. Positive time lags indicate that $a$ leads $b$.\n",
+    "\n",
+    "To test how this works, let's generate two signals with an ambiguous Granger-relationship:\n",
+    "\n",
+    "```matlab\n",
+    "nTrials = 1000;\n",
+    "\n",
+    "cfg             = [];\n",
+    "cfg.ntrials     = nTrials;\n",
+    "cfg.triallength = 5;\n",
+    "cfg.fsample     = 1000;\n",
+    "cfg.nsignal     = 2;\n",
+    "\n",
+    "cfg.method      = 'linear_mix';\n",
+    "cfg.mix         = [1; 0.3]; % X bigger than Y\n",
+    "cfg.delay       = [0; 4];\n",
+    "cfg.bpfilter    = 'yes';\n",
+    "cfg.bpfreq      = [50 100]; % white noise gets filtered in low gamma band\n",
+    "cfg.absnoise    = 0.5; % add independent noise to both signals\n",
+    "\n",
+    "data            = ft_connectivitysimulation(cfg);\n",
+    "data.label      = {'X','Y'};\n",
+    "```\n",
+    "\n",
+    "Note that Y leads X, but X has larger amplitude than Y."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** Verify that according to the Granger spectra, \n",
+    "there is no evidence to support an asymemtric (Granger-causal) relationship between Y and X. \n",
+    "Since we generated the signals with a 4 sample lead for Y, we know this to be incorrect. **"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, let's compute the phase slope. \n",
+    "We start with the Fourier decomposition, as before:\n",
+    "\n",
+    "```matlab\n",
+    "cfg_TFR = [];\n",
+    "cfg_TFR.channel = {'X','Y'};\n",
+    "cfg_TFR.channelcmb = {'X' 'Y'};\n",
+    "cfg_TFR.method = 'mtmfft';\n",
+    "cfg_TFR.output = 'fourier';\n",
+    "cfg_TFR.foi = 1:1:150;\n",
+    "cfg_TFR.taper = 'hanning';\n",
+    "\n",
+    "TFR = ft_freqanalysis(cfg_TFR,data);\n",
+    "```\n",
+    "\n",
+    "But now, we use a different method for the connectivity analysis:\n",
+    "\n",
+    "```matlab\n",
+    "cfg_psi = [];\n",
+    "cfg_psi.method = 'psi';\n",
+    "cfg_psi.bandwidth = 8; % number of frequencies to compute slope over\n",
+    "cfg_psi.channel = {'X','Y'};\n",
+    "cfg_psi.channelcmb = {'X' 'Y'};\n",
+    "\n",
+    "C = ft_connectivityanalysis(cfg_psi,TFR);\n",
+    "```\n",
+    "\n",
+    "We plot the phase slope between Y and X:\n",
+    "\n",
+    "```matlab\n",
+    "figure;\n",
+    "plot(C.freq,sq(C.psispctrm(2,1,:)));\n",
+    "xlabel('Frequency'); ylabel('Phase slope');\n",
+    "```\n",
+    "\n",
+    "The positive phase slope correctly identified that Y leads X."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "** What are the units on the vertical axis? **"
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.1"
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "425px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

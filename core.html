@@ -1,0 +1,793 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept Objects &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="nept Modules" href="modules.html"/>
+        <link rel="prev" title="# Tutorial 08 - MedPC behavior" href="tutorials/Tutorial08_MedPC-behavior.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">nept Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#analogsignal">AnalogSignal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#localfieldpotential">LocalFieldPotential</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#position">Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#epoch">Epoch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiketrain">SpikeTrain</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>nept Objects</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/core.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="nept-objects">
+<h1>nept Objects<a class="headerlink" href="#nept-objects" title="Permalink to this headline">¶</a></h1>
+<p>Objects in nept represent neural electrophysiology
+and behavioral data.</p>
+<div class="section" id="analogsignal">
+<h2>AnalogSignal<a class="headerlink" href="#analogsignal" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.AnalogSignal">
+<em class="property">class </em><code class="descclassname">nept.</code><code class="descname">AnalogSignal</code><span class="sig-paren">(</span><em>data</em>, <em>time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/analogsignal.html#AnalogSignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.AnalogSignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A continuous analog timestamped signal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array</p>
+<p class="last"><strong>time</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>data</td>
+<td>(np.array) With shape (n_samples, dimensionality).</td>
+</tr>
+<tr class="row-even"><td>time</td>
+<td>(np.array) With shape (n_samples,).</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="nept.AnalogSignal.dimensions">
+<code class="descname">dimensions</code><a class="headerlink" href="#nept.AnalogSignal.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>(int) Dimensionality of data attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.AnalogSignal.isempty">
+<code class="descname">isempty</code><a class="headerlink" href="#nept.AnalogSignal.isempty" title="Permalink to this definition">¶</a></dt>
+<dd><p>(bool) Empty AnalogSignal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.AnalogSignal.n_samples">
+<code class="descname">n_samples</code><a class="headerlink" href="#nept.AnalogSignal.n_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>(int) Number of samples.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.AnalogSignal.time_slice">
+<code class="descname">time_slice</code><span class="sig-paren">(</span><em>t_starts</em>, <em>t_stops</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/analogsignal.html#AnalogSignal.time_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.AnalogSignal.time_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new object corresponding to the time slice of
+the original between (and including) times t_start and t_stop. Setting
+either parameter to None uses infinite endpoints for the time interval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>analogsignal</strong> : nept.AnalogSignal</p>
+<p><strong>t_starts</strong> : float or list or None</p>
+<p><strong>t_stops</strong> : float or list or None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sliced_analogsignal</strong> : nept.AnalogSignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="localfieldpotential">
+<h2>LocalFieldPotential<a class="headerlink" href="#localfieldpotential" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.LocalFieldPotential">
+<em class="property">class </em><code class="descclassname">nept.</code><code class="descname">LocalFieldPotential</code><span class="sig-paren">(</span><em>data</em>, <em>time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/localfieldpotential.html#LocalFieldPotential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.LocalFieldPotential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nept.core.analogsignal.AnalogSignal</span></code></p>
+<p>Subclass of AnalogSignal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array</p>
+<p class="last"><strong>time</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>data</td>
+<td>(np.array) With shape (n_samples, 1).</td>
+</tr>
+<tr class="row-even"><td>time</td>
+<td>(np.array) With shape (n_samples,).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="position">
+<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.Position">
+<em class="property">class </em><code class="descclassname">nept.</code><code class="descname">Position</code><span class="sig-paren">(</span><em>data</em>, <em>time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/position.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nept.core.analogsignal.AnalogSignal</span></code></p>
+<p>Subclass of AnalogSignal. Handles both 1D and 2d positions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array</p>
+<p class="last"><strong>time</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>data</td>
+<td>(np.array) With shape (n_samples, dimensionality).</td>
+</tr>
+<tr class="row-even"><td>time</td>
+<td>(np.array) With shape (n_samples,).</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="nept.Position.distance">
+<code class="descname">distance</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/position.html#Position.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Position.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the euclidean distance from this position to the given &#8216;pos&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> : nept.Position</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>dist</strong> : np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Position.linearize">
+<code class="descname">linearize</code><span class="sig-paren">(</span><em>ideal_path</em>, <em>zone</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/position.html#Position.linearize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Position.linearize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects 2D positions into an &#8216;ideal&#8217; linear trajectory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ideal_path</strong> : shapely.LineString</p>
+<p><strong>zone</strong> : shapely.Polygon</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pos</strong> : nept.Position</p>
+<blockquote class="last">
+<div><p>1D position.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Position.speed">
+<code class="descname">speed</code><span class="sig-paren">(</span><em>t_smooth=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/position.html#Position.speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Position.speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the speed of the animal from position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pos</strong> : nept.Position</p>
+<p><strong>t_smooth</strong> : float or None</p>
+<blockquote>
+<div><p>Range over which smoothing occurs in seconds.
+Default is None (no smoothing).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>speed</strong> : nept.AnalogSignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Position.x">
+<code class="descname">x</code><a class="headerlink" href="#nept.Position.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The &#8216;x&#8217; position attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Position.y">
+<code class="descname">y</code><a class="headerlink" href="#nept.Position.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The &#8216;y&#8217; position attribute for 2D position data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="epoch">
+<h2>Epoch<a class="headerlink" href="#epoch" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.Epoch">
+<em class="property">class </em><code class="descclassname">nept.</code><code class="descname">Epoch</code><span class="sig-paren">(</span><em>time</em>, <em>duration=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>An array of epochs, where each epoch has a start and stop time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>time</strong> : np.array</p>
+<blockquote>
+<div><p>If shape (n_epochs, 1) or (n_epochs,), the start time for each epoch.
+If shape (n_epochs, 2), the start and stop times for each epoch.</p>
+</div></blockquote>
+<p><strong>duration</strong> : np.array or None, optional</p>
+<blockquote class="last">
+<div><p>The length of the epoch.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>time</td>
+<td>(np.array) The start and stop times for each epoch. With shape (n_epochs, 2).</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="nept.Epoch.centers">
+<code class="descname">centers</code><a class="headerlink" href="#nept.Epoch.centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The center of each epoch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.contains">
+<code class="descname">contains</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether value is in any epoch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>epochs: nept.Epoch</strong></p>
+<p><strong>value: float or int</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.durations">
+<code class="descname">durations</code><a class="headerlink" href="#nept.Epoch.durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The duration of each epoch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.expand">
+<code class="descname">expand</code><span class="sig-paren">(</span><em>amount</em>, <em>direction='both'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.expand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands epoch by the given amount.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>amount</strong> : float</p>
+<blockquote>
+<div><p>Amount (in time) to expand each epoch.</p>
+</div></blockquote>
+<p><strong>direction</strong> : str</p>
+<blockquote>
+<div><p>Can be &#8216;both&#8217;, &#8216;start&#8217;, or &#8216;stop&#8217;. This specifies
+which direction to resize epoch.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>expanded_epochs</strong> : nept.Epoch</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.intersect">
+<code class="descname">intersect</code><span class="sig-paren">(</span><em>epoch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds intersection between two sets of epochs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epoch</strong> : nept.Epoch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>intersect_epochs</strong> : nept.Epoch</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.isempty">
+<code class="descname">isempty</code><a class="headerlink" href="#nept.Epoch.isempty" title="Permalink to this definition">¶</a></dt>
+<dd><p>(boolean) Whether the epoch array is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>epoch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines two sets of epochs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epoch</strong> : nept.Epoch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>joined_epochs</strong> : nept.Epoch</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.merge">
+<code class="descname">merge</code><span class="sig-paren">(</span><em>gap=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges epochs that are close or overlapping.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gap</strong> : float, optional</p>
+<blockquote>
+<div><p>Amount (in time) to consider epochs close enough to merge.
+Defaults to 0.0 (no gap).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>merged_epochs</strong> : nept.Epoch</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.n_epochs">
+<code class="descname">n_epochs</code><a class="headerlink" href="#nept.Epoch.n_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>(int) The number of epochs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.overlaps">
+<code class="descname">overlaps</code><span class="sig-paren">(</span><em>epoch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.overlaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds overlap between template epochs and epoch of interest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epoch</strong> : nept.Epoch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>overlaps_epochs</strong> : nept.Epoch</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.Epoch.shrink">
+<code class="descname">shrink</code><span class="sig-paren">(</span><em>amount</em>, <em>direction='both'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/epoch.html#Epoch.shrink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.Epoch.shrink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shrinks epoch by the given amount.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>amount</strong> : float</p>
+<blockquote>
+<div><p>Amount (in time) to shrink each epoch.</p>
+</div></blockquote>
+<p><strong>direction</strong> : str</p>
+<blockquote>
+<div><p>Can be &#8216;both&#8217;, &#8216;start&#8217;, or &#8216;stop&#8217;. This specifies
+which direction to resize epoch.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>shrinked_epochs</strong> : nept.Epoch</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.start">
+<code class="descname">start</code><a class="headerlink" href="#nept.Epoch.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The start of the first epoch.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.starts">
+<code class="descname">starts</code><a class="headerlink" href="#nept.Epoch.starts" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The start of each epoch.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.stop">
+<code class="descname">stop</code><a class="headerlink" href="#nept.Epoch.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The stop of the last epoch.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nept.Epoch.stops">
+<code class="descname">stops</code><a class="headerlink" href="#nept.Epoch.stops" title="Permalink to this definition">¶</a></dt>
+<dd><p>(np.array) The stop of each epoch.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="spiketrain">
+<h2>SpikeTrain<a class="headerlink" href="#spiketrain" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.SpikeTrain">
+<em class="property">class </em><code class="descclassname">nept.</code><code class="descname">SpikeTrain</code><span class="sig-paren">(</span><em>time</em>, <em>label=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/spiketrain.html#SpikeTrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.SpikeTrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A set of spike times associated with an individual putative neuron.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>time</strong> : np.array</p>
+<p><strong>label</strong> : str or None, optional</p>
+<blockquote class="last">
+<div><p>Information pertaining to the source of the spiketrain.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>time</td>
+<td>(np.array) With shape (n_samples,).</td>
+</tr>
+<tr class="row-even"><td>label</td>
+<td>(str or None) Information pertaining to the source of the spiketrain.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="nept.SpikeTrain.time_slice">
+<code class="descname">time_slice</code><span class="sig-paren">(</span><em>t_starts</em>, <em>t_stops</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/core/spiketrain.html#SpikeTrain.time_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.SpikeTrain.time_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new object corresponding to the time slice of
+the original between (and including) times t_start and t_stop. Setting
+either parameter to None uses infinite endpoints for the time interval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>spiketrain</strong> : nept.SpikeTrain</p>
+<p><strong>t_starts</strong> : float or list or None</p>
+<p><strong>t_stops</strong> : float or list or None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sliced_spiketrain</strong> : nept.SpikeTrain</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="nept Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorials/Tutorial08_MedPC-behavior.html" class="btn btn-neutral" title="# Tutorial 08 - MedPC behavior" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

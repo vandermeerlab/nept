@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.lfp_filtering &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.lfp_filtering</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.lfp_filtering</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="kn">import</span> <span class="nn">matplotlib.mlab</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="butter_bandpass"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.butter_bandpass">[docs]</a><span class="k">def</span> <span class="nf">butter_bandpass</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Filters signal using butterworth filter</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : nept.LFP</span>
+<span class="sd">    fs : int</span>
+<span class="sd">        Eg. 2000. Should get this from experiment-specifics.</span>
+<span class="sd">    thresh : tuple</span>
+<span class="sd">        With format (lowcut, highcut).</span>
+<span class="sd">        Typically (140.0, 250.0) for sharp-wave ripple detection.</span>
+<span class="sd">    order : int</span>
+<span class="sd">        Default set to 4.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    filtered_butter : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">nyquist</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">fs</span>
+
+    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="p">[</span><span class="n">thresh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">nyquist</span><span class="p">,</span> <span class="n">thresh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">nyquist</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;band&#39;</span><span class="p">)</span>
+    <span class="n">filtered_butter</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filtered_butter</span></div>
+
+
+<div class="viewcode-block" id="detect_swr_hilbert"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.detect_swr_hilbert">[docs]</a><span class="k">def</span> <span class="nf">detect_swr_hilbert</span><span class="p">(</span><span class="n">lfp</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">z_thresh</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">power_thresh</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">merge_thresh</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds sharp-wave ripple (SWR) times and indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lfp : nept.LocalFieldPotential</span>
+<span class="sd">    fs : int</span>
+<span class="sd">        Experiment-specific, something in the range of 2000 typical.</span>
+<span class="sd">    thresh : tuple</span>
+<span class="sd">        With format (lowcut, highcut).</span>
+<span class="sd">        Typically (140.0, 250.0) for sharp-wave ripple detection.</span>
+<span class="sd">    z_thres : int or float</span>
+<span class="sd">        The default is set to 3</span>
+<span class="sd">    power_thres : int or float</span>
+<span class="sd">        The default is set to 3</span>
+<span class="sd">    merge_thres : int or float</span>
+<span class="sd">        The default is set to 0.02</span>
+<span class="sd">    min_length : float</span>
+<span class="sd">        Any sequence less than this amount is not considered a sharp-wave ripple.</span>
+<span class="sd">        The default is set to 0.01.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    swrs : nept.Epoch</span>
+<span class="sd">        Containing nept.LocalFieldPotential for each SWR event</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Filtering signal with butterworth fitler</span>
+    <span class="n">filtered_butter</span> <span class="o">=</span> <span class="n">butter_bandpass</span><span class="p">(</span><span class="n">lfp</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+    <span class="c1"># Get LFP power (using Hilbert) and z-score the power</span>
+    <span class="c1"># Zero padding to nearest regular number to speed up fast fourier transforms (FFT) computed in the hilbert function.</span>
+    <span class="c1"># Regular numbers are composites of the prime factors 2, 3, and 5.</span>
+    <span class="n">hilbert_n</span> <span class="o">=</span> <span class="n">next_regular</span><span class="p">(</span><span class="n">lfp</span><span class="o">.</span><span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">power_lfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">hilbert</span><span class="p">(</span><span class="n">filtered_butter</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">hilbert_n</span><span class="p">))</span>
+    <span class="n">power_lfp</span> <span class="o">=</span> <span class="n">power_lfp</span><span class="p">[:</span><span class="n">lfp</span><span class="o">.</span><span class="n">n_samples</span><span class="p">]</span>  <span class="c1"># removing the zero padding now that the power is computed</span>
+    <span class="n">zpower_lfp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">power_lfp</span><span class="p">)</span>
+
+    <span class="c1"># Finding locations where the power changes</span>
+    <span class="n">detect</span> <span class="o">=</span> <span class="n">zpower_lfp</span> <span class="o">&gt;</span> <span class="n">z_thresh</span>
+    <span class="n">detect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">detect</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># pad to detect first or last element change</span>
+    <span class="n">signal_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">detect</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+    <span class="n">start_swr_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signal_change</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">stop_swr_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signal_change</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># Getting times associated with these power changes</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">start_swr_idx</span><span class="p">]</span>
+    <span class="n">stop_time</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">stop_swr_idx</span><span class="p">]</span>
+
+    <span class="c1"># Merging ranges that are closer - in time - than the merge_threshold.</span>
+    <span class="n">no_double</span> <span class="o">=</span> <span class="n">start_time</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">stop_time</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">merge_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">no_double</span> <span class="o">&lt;</span> <span class="n">merge_thresh</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">merge_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">stop_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_time</span><span class="p">,</span> <span class="n">merge_idx</span><span class="p">)</span>
+    <span class="n">start_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_swr_idx</span><span class="p">,</span> <span class="n">merge_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">stop_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_swr_idx</span><span class="p">,</span> <span class="n">merge_idx</span><span class="p">)</span>
+
+    <span class="c1"># Removing ranges that are shorter - in time - than the min_length value.</span>
+    <span class="n">swr_len</span> <span class="o">=</span> <span class="n">stop_merged</span> <span class="o">-</span> <span class="n">start_merged</span>
+    <span class="n">short_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">swr_len</span> <span class="o">&lt;</span> <span class="n">min_length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_merged</span><span class="p">,</span> <span class="n">short_idx</span><span class="p">)</span>
+    <span class="n">stop_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_merged</span><span class="p">,</span> <span class="n">short_idx</span><span class="p">)</span>
+    <span class="n">start_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_merged_idx</span><span class="p">,</span> <span class="n">short_idx</span><span class="p">)</span>
+    <span class="n">stop_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_merged_idx</span><span class="p">,</span> <span class="n">short_idx</span><span class="p">)</span>
+
+    <span class="c1"># Removing ranges that have powers less than the power_threshold if sufficiently different.</span>
+    <span class="k">if</span> <span class="n">power_thresh</span> <span class="o">&gt;</span> <span class="n">z_thresh</span><span class="p">:</span>
+        <span class="n">max_z</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">start_idx</span><span class="p">,</span> <span class="n">stop_idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">start_merged_idx</span><span class="p">,</span> <span class="n">stop_merged_idx</span><span class="p">):</span>
+            <span class="n">max_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">zpower_lfp</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">stop_idx</span><span class="p">]))</span>
+        <span class="n">max_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">max_z</span><span class="p">)</span>
+
+        <span class="n">z_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">max_z</span> <span class="o">&lt;</span> <span class="n">power_thresh</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">start_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_merged</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">)</span>
+        <span class="n">stop_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_merged</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">)</span>
+        <span class="n">start_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">start_merged_idx</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">)</span>
+        <span class="n">stop_merged_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">stop_merged_idx</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">)</span>
+
+    <span class="n">swrs</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">start_merged</span><span class="p">,</span> <span class="n">stop_merged</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">swrs</span></div>
+
+
+<div class="viewcode-block" id="next_regular"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.next_regular">[docs]</a><span class="k">def</span> <span class="nf">next_regular</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the next regular number greater than or equal to target.</span>
+<span class="sd">    Regular numbers are composites of the prime factors 2, 3, and 5.</span>
+<span class="sd">    Also known as 5-smooth numbers or Hamming numbers, these are the optimal</span>
+<span class="sd">    size for inputs to fast-fourier transforms (FFTPACK).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target : positive int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    match : int</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function was taken from the scipy.signal.signaltools module.</span>
+<span class="sd">    See http://scipy.org/scipylib/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">target</span>
+
+    <span class="c1"># Quickly check if it&#39;s already a power of 2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">target</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">target</span>
+
+    <span class="n">match</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>  <span class="c1"># Anything found will be smaller</span>
+    <span class="n">p5</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">p5</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+        <span class="n">p35</span> <span class="o">=</span> <span class="n">p5</span>
+        <span class="k">while</span> <span class="n">p35</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+            <span class="c1"># Ceiling integer division, avoiding conversion to float</span>
+            <span class="c1"># (quotient = ceil(target / p35))</span>
+            <span class="n">quotient</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">target</span> <span class="o">//</span> <span class="n">p35</span><span class="p">)</span>
+
+            <span class="c1"># Quickly find next power of 2 &gt;= quotient</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">((</span><span class="n">quotient</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">())</span>
+
+            <span class="n">N</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">*</span> <span class="n">p35</span>
+            <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">N</span>
+            <span class="k">elif</span> <span class="n">N</span> <span class="o">&lt;</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">N</span>
+            <span class="n">p35</span> <span class="o">*=</span> <span class="mi">3</span>
+            <span class="k">if</span> <span class="n">p35</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">p35</span>
+        <span class="k">if</span> <span class="n">p35</span> <span class="o">&lt;</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">p35</span>
+        <span class="n">p5</span> <span class="o">*=</span> <span class="mi">5</span>
+        <span class="k">if</span> <span class="n">p5</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">p5</span>
+    <span class="k">if</span> <span class="n">p5</span> <span class="o">&lt;</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">p5</span>
+    <span class="k">return</span> <span class="n">match</span></div>
+
+
+<div class="viewcode-block" id="power_in_db"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.power_in_db">[docs]</a><span class="k">def</span> <span class="nf">power_in_db</span><span class="p">(</span><span class="n">power</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the power in dB for plotting</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    power : np.array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">power</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mean_psd"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.mean_psd">[docs]</a><span class="k">def</span> <span class="nf">mean_psd</span><span class="p">(</span><span class="n">perievent_lfps</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the mean Power Spectral Density (PSD) of perievent slices</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    perievent_lfps : nept.AnalogSignal</span>
+<span class="sd">    window : int</span>
+<span class="sd">    fs : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    freq : np.array</span>
+<span class="sd">    power : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">window</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">perievent_lfps</span><span class="o">.</span><span class="n">dimensions</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lfp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">perievent_lfps</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+        <span class="n">power</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">mlab</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span>
+            <span class="n">lfp</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span> <span class="n">noverlap</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mean_csd"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.mean_csd">[docs]</a><span class="k">def</span> <span class="nf">mean_csd</span><span class="p">(</span><span class="n">perievent_lfp1</span><span class="p">,</span> <span class="n">perievent_lfp2</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the mean Cross-Spectral Density (CSD) between perievent slices</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    perievent_lfp1 : nept.AnalogSignal</span>
+<span class="sd">    perievent_lfp2 : nept.AnalogSignal</span>
+<span class="sd">    window : int</span>
+<span class="sd">    fs : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    freq : np.array</span>
+<span class="sd">    power : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">freq</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">csd</span><span class="p">(</span><span class="n">perievent_lfp1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">perievent_lfp2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                                   <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mean_coherence"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.mean_coherence">[docs]</a><span class="k">def</span> <span class="nf">mean_coherence</span><span class="p">(</span><span class="n">perievent_lfp1</span><span class="p">,</span> <span class="n">perievent_lfp2</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the mean coherence between perievent slices</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    perievent_lfp1 : nept.AnalogSignal</span>
+<span class="sd">    perievent_lfp2 : nept.AnalogSignal</span>
+<span class="sd">    window : int</span>
+<span class="sd">    fs : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    freq : np.array</span>
+<span class="sd">    coherence : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">freq</span><span class="p">,</span> <span class="n">coherence</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">coherence</span><span class="p">(</span>
+        <span class="n">perievent_lfp1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">perievent_lfp2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coherence</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mean_coherencegram"><a class="viewcode-back" href="../../modules.html#nept.lfp_filtering.mean_coherencegram">[docs]</a><span class="k">def</span> <span class="nf">mean_coherencegram</span><span class="p">(</span><span class="n">perievent_lfp1</span><span class="p">,</span> <span class="n">perievent_lfp2</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Computes the mean coherence over time between perievent slices</span>
+<span class="sd">        (e.g. &quot;coherencegram&quot; because it&#39;s a combination of a coherence and a spectrogram)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    perievent_lfp1 : nept.AnalogSignal</span>
+<span class="sd">    perievent_lfp2 : nept.AnalogSignal</span>
+<span class="sd">    dt : float</span>
+<span class="sd">    window : int</span>
+<span class="sd">    fs : int</span>
+<span class="sd">    extend : float</span>
+<span class="sd">        Defaults to 0.3</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timebins : np.array</span>
+<span class="sd">    freq : np.array</span>
+<span class="sd">    coherencegram : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timebins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">perievent_lfp1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">perievent_lfp1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="n">coherencegram</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">window</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">timebins</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_stop</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">timebins</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">timebins</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="n">lfp1</span> <span class="o">=</span> <span class="n">perievent_lfp1</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">t_start</span><span class="o">-</span><span class="n">extend</span><span class="p">,</span> <span class="n">t_stop</span><span class="o">+</span><span class="n">extend</span><span class="p">)</span>
+        <span class="n">lfp2</span> <span class="o">=</span> <span class="n">perievent_lfp2</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">t_start</span><span class="o">-</span><span class="n">extend</span><span class="p">,</span> <span class="n">t_stop</span><span class="o">+</span><span class="n">extend</span><span class="p">)</span>
+        <span class="n">freq</span><span class="p">,</span> <span class="n">coherencegram</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_coherence</span><span class="p">(</span><span class="n">lfp1</span><span class="p">,</span> <span class="n">lfp2</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">timebins</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">coherencegram</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

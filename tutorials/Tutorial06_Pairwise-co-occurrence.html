@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title># Tutorial 06 - Pairwise co-occurrence &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="# Tutorial 07 - Signal interactions" href="Tutorial07_Signal-interactions.html"/>
+        <link rel="prev" title="# Tutorial 05 - Tuning curves and decoding" href="Tutorial05_Tuning-curves-and-decoding.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial01_Principles-of-(neural)-data-analysis.html">Tutorial 01 - Principles of careful (neural) data analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html##-Goals"># Goals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li># Tutorial 06 - Pairwise co-occurrence</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial06_Pairwise-co-occurrence.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="#-Tutorial-06---Pairwise-co-occurrence">
+<h1># Tutorial 06 - Pairwise co-occurrence<a class="headerlink" href="##-Tutorial-06---Pairwise-co-occurrence" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Implement an analysis of pairwise co-occurrence during sharp-wave
+ripple events</li>
+<li>Apply a permutation test (shuffle) to determine levels of chance
+co-occurrence</li>
+</ul>
+</div>
+<div class="section" id="#-Compute-pairwise-co-occurrence-during-SWRs">
+<h1># Compute pairwise co-occurrence during SWRs<a class="headerlink" href="##-Compute-pairwise-co-occurrence-during-SWRs" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+<span class="c1"># Define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R042-2013-08-18&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load the info file, which contains experiment-specific information</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">r042d3</span> <span class="k">as</span> <span class="nn">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Determine times of interest</span>
+<span class="c1"># Here let&#39;s compare the co-occurrence during prerecord and postrecord</span>
+<span class="n">prerecord_start</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;prerecord&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">start</span>
+<span class="n">prerecord_stop</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;prerecord&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span>
+
+<span class="n">postrecord_start</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;postrecord&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">start</span>
+<span class="n">postrecord_stop</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">task_times</span><span class="p">[</span><span class="s1">&#39;postrecord&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load spikes (.t and ._t) from this experiment</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_spikes</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+
+<span class="c1"># Restrict the spikes to the prerecord</span>
+<span class="n">spikes_pre</span> <span class="o">=</span> <span class="p">[</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">prerecord_start</span><span class="p">,</span> <span class="n">prerecord_stop</span><span class="p">)</span> <span class="k">for</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">]</span>
+
+<span class="c1"># Restrict the spikes to the postrecord</span>
+<span class="n">spikes_post</span> <span class="o">=</span> <span class="p">[</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">postrecord_start</span><span class="p">,</span> <span class="n">postrecord_stop</span><span class="p">)</span> <span class="k">for</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">]</span>
+
+<span class="c1"># Plot the spikes</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes_pre</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">+</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Plot the spikes</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes_post</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">+</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Print the number of neurons we&#39;re working with</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;n_neurons:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_6_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_6_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_6_1.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_6_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+n_neurons: 107
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load LFP with good sharp-wave ripples</span>
+<span class="n">lfp</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_lfp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">lfp_swr_filename</span><span class="p">))</span>
+
+<span class="c1"># Restrict the LFP to the prerecord</span>
+<span class="n">lfp_pre</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">prerecord_start</span><span class="p">,</span> <span class="n">prerecord_stop</span><span class="p">)</span>
+
+<span class="c1"># Restrict the LFP to the postrecord</span>
+<span class="n">lfp_post</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">postrecord_start</span><span class="p">,</span> <span class="n">postrecord_stop</span><span class="p">)</span>
+
+<span class="c1"># Plot the LFP during the prerecord</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lfp_pre</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">lfp_pre</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Plot the LFP during the postrecord</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lfp_post</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">lfp_post</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_7_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_7_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_7_1.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_7_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Find sharp-wave ripple (SWR) epochs</span>
+<span class="n">swr_thresh</span> <span class="o">=</span> <span class="p">(</span><span class="mf">140.</span><span class="p">,</span> <span class="mf">250.</span><span class="p">)</span>
+<span class="n">z_thresh</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">power_thresh</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">merge_thresh</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">min_length</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="n">swrs_pre</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">detect_swr_hilbert</span><span class="p">(</span><span class="n">lfp_pre</span><span class="p">,</span>
+                                   <span class="n">fs</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                                   <span class="n">thresh</span><span class="o">=</span><span class="n">swr_thresh</span><span class="p">,</span>
+                                   <span class="n">z_thresh</span><span class="o">=</span><span class="n">z_thresh</span><span class="p">,</span>
+                                   <span class="n">power_thresh</span><span class="o">=</span><span class="n">power_thresh</span><span class="p">,</span>
+                                   <span class="n">merge_thresh</span><span class="o">=</span><span class="n">merge_thresh</span><span class="p">,</span>
+                                   <span class="n">min_length</span><span class="o">=</span><span class="n">min_length</span><span class="p">)</span>
+
+<span class="n">swrs_post</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">detect_swr_hilbert</span><span class="p">(</span><span class="n">lfp_post</span><span class="p">,</span>
+                                    <span class="n">fs</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                                    <span class="n">thresh</span><span class="o">=</span><span class="n">swr_thresh</span><span class="p">,</span>
+                                    <span class="n">z_thresh</span><span class="o">=</span><span class="n">z_thresh</span><span class="p">,</span>
+                                    <span class="n">power_thresh</span><span class="o">=</span><span class="n">power_thresh</span><span class="p">,</span>
+                                    <span class="n">merge_thresh</span><span class="o">=</span><span class="n">merge_thresh</span><span class="p">,</span>
+                                    <span class="n">min_length</span><span class="o">=</span><span class="n">min_length</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of prerecord SWRs:&#39;</span><span class="p">,</span> <span class="n">swrs_pre</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of postrecord SWRs:&#39;</span><span class="p">,</span> <span class="n">swrs_post</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of prerecord SWRs: 432
+Number of postrecord SWRs: 413
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Filter the SWR epochs to only those with a certain minimum number of neurons involved</span>
+<span class="n">min_involved</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">swrs_pre</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">find_multi_in_epochs</span><span class="p">(</span><span class="n">spikes_pre</span><span class="p">,</span> <span class="n">swrs_pre</span><span class="p">,</span> <span class="n">min_involved</span><span class="o">=</span><span class="n">min_involved</span><span class="p">)</span>
+
+<span class="n">swrs_post</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">find_multi_in_epochs</span><span class="p">(</span><span class="n">spikes_post</span><span class="p">,</span> <span class="n">swrs_post</span><span class="p">,</span> <span class="n">min_involved</span><span class="o">=</span><span class="n">min_involved</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of prerecord SWRs:&#39;</span><span class="p">,</span> <span class="n">swrs_pre</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of postrecord SWRs:&#39;</span><span class="p">,</span> <span class="n">swrs_post</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of prerecord SWRs: 406
+Number of postrecord SWRs: 403
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Filter and bin spikes to those that occur during the swrs</span>
+<span class="n">counts_swr_pre</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">spike_counts</span><span class="p">(</span><span class="n">spikes_pre</span><span class="p">,</span> <span class="n">swrs_pre</span><span class="p">)</span>
+
+<span class="n">counts_swr_post</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">spike_counts</span><span class="p">(</span><span class="n">spikes_post</span><span class="p">,</span> <span class="n">swrs_post</span><span class="p">)</span>
+
+<span class="c1"># Verify that counts_swr is shape (n_neurons x n_swrs)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of prerecord counts_swr_pre:&#39;</span><span class="p">,</span> <span class="n">counts_swr_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of postrecord counts_swr_post:&#39;</span><span class="p">,</span> <span class="n">counts_swr_post</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Shape of prerecord counts_swr_pre: (107, 406)
+Shape of postrecord counts_swr_post: (107, 403)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Make a mask for the neurons recorded from the same tetrode</span>
+<span class="n">tetrode_mask</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">get_tetrode_mask</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Compute the pairwise co-occurrence</span>
+<span class="n">probs_pre</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">compute_cooccur</span><span class="p">(</span><span class="n">counts_swr_pre</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">,</span> <span class="n">num_shuffles</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">probs_post</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">compute_cooccur</span><span class="p">(</span><span class="n">counts_swr_post</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">,</span> <span class="n">num_shuffles</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">probs_pre</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;shuffle&#39;, &#39;active&#39;, &#39;observed&#39;, &#39;expected&#39;, &#39;zscore&#39;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">probs</span> <span class="ow">in</span> <span class="p">[</span><span class="n">probs_pre</span><span class="p">,</span> <span class="n">probs_post</span><span class="p">]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Observed&#39;</span><span class="p">,</span> <span class="s1">&#39;Expected&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_13_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_13_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_13_1.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_13_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Make a function to plot the pairwise co-occurrence</span>
+<span class="k">def</span> <span class="nf">plot_cooccur</span><span class="p">(</span><span class="n">pre</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">ind</span><span class="p">,</span> <span class="n">ind</span><span class="o">+</span><span class="n">width</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;Prerecord&#39;</span><span class="p">,</span> <span class="s1">&#39;Postrecord&#39;</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fraction&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the weighted neuron participation during candidate events</span>
+<span class="c1"># e.g. how active individual neurons are during the pre- and postrecord SWRs</span>
+<span class="n">active_pre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_pre</span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_pre</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">active_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_post</span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_post</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Active&#39;</span>
+
+<span class="n">plot_cooccur</span><span class="p">(</span><span class="n">active_pre</span><span class="p">,</span> <span class="n">active_post</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_15_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_15_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the weighted joint probability for neuron pairs</span>
+<span class="n">observed_pre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_pre</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_pre</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">observed_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_post</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_post</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Observed&#39;</span>
+
+<span class="n">plot_cooccur</span><span class="p">(</span><span class="n">observed_pre</span><span class="p">,</span> <span class="n">observed_post</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_16_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_16_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the weighted z-score coactivity</span>
+<span class="c1"># e.g. are neurons co-occurring more often than expected by chance?</span>
+<span class="n">zscore_pre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_pre</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_pre</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">zscore_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">probs_post</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">swrs_post</span><span class="o">.</span><span class="n">n_epochs</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Z-score&#39;</span>
+
+<span class="n">plot_cooccur</span><span class="p">(</span><span class="n">zscore_pre</span><span class="p">,</span> <span class="n">zscore_post</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_17_0.png" src="../_images/tutorials_Tutorial06_Pairwise-co-occurrence_17_0.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorial07_Signal-interactions.html" class="btn btn-neutral float-right" title="# Tutorial 07 - Signal interactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Tutorial05_Tuning-curves-and-decoding.html" class="btn btn-neutral" title="# Tutorial 05 - Tuning curves and decoding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.decoding &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.decoding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.decoding</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="bayesian_prob"><a class="viewcode-back" href="../../modules.html#nept.decoding.bayesian_prob">[docs]</a><span class="k">def</span> <span class="nf">bayesian_prob</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">tuning_curves</span><span class="p">,</span> <span class="n">binsize</span><span class="p">,</span> <span class="n">min_neurons</span><span class="p">,</span> <span class="n">min_spikes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the bayesian probability of location based on spike counts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    counts : nept.AnalogSignal</span>
+<span class="sd">        Where each inner array is the number of spikes (int) in each bin for an individual neuron.</span>
+<span class="sd">    tuning_curves : np.array</span>
+<span class="sd">        Where each inner array is the tuning curve (floats) for an individual neuron.</span>
+<span class="sd">    binsize : float</span>
+<span class="sd">        Size of the time bins.</span>
+<span class="sd">    min_neurons : int</span>
+<span class="sd">        Mininum number of neurons active in a given bin.</span>
+<span class="sd">    min_spikes : int</span>
+<span class="sd">        Mininum number of spikes in a given bin.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob : np.array</span>
+<span class="sd">        Where each inner array is the probability (floats) for an individual neuron by location bins.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If a bin does not meet the min_neuron/min_spikes requirement, that bin&#39;s probability</span>
+<span class="sd">    is set to nan. To convert it to 0s instead, use : prob[np.isnan(prob)] = 0 on the output.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_time_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">time</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_position_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tuning_curves</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_time_bins</span><span class="p">,</span> <span class="n">n_position_bins</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Ignore warnings when inf created in this loop</span>
+    <span class="n">error_settings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_position_bins</span><span class="p">):</span>
+        <span class="n">valid_idx</span> <span class="o">=</span> <span class="n">tuning_curves</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span>  <span class="c1"># log of 1 or less is negative or invalid</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid_idx</span><span class="p">):</span>
+            <span class="c1"># event_rate is the lambda in this poisson distribution</span>
+            <span class="n">event_rate</span> <span class="o">=</span> <span class="n">tuning_curves</span><span class="p">[</span><span class="n">valid_idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">**</span> <span class="n">counts</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">valid_idx</span><span class="p">]</span>
+            <span class="n">prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">binsize</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">tuning_curves</span><span class="p">[</span><span class="n">valid_idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">]))</span>
+
+            <span class="c1"># Below is the same as</span>
+            <span class="c1"># likelihood[:, idx] = np.prod(event_rate, axis=0) * prior * (1/n_position_bins)</span>
+            <span class="c1"># only less likely to have floating point issues, though slower</span>
+            <span class="n">likelihood</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">event_rate</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">prior</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n_position_bins</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="o">**</span><span class="n">error_settings</span><span class="p">)</span>
+
+    <span class="c1"># Set any inf value to be largest float</span>
+    <span class="n">largest_float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">likelihood</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">likelihood</span><span class="p">)]</span> <span class="o">=</span> <span class="n">largest_float</span>
+    <span class="n">likelihood</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">likelihood</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="c1"># Remove bins with too few neurons that that are active</span>
+    <span class="c1"># a neuron is considered active by having at least min_spikes in a bin</span>
+    <span class="n">n_active_neurons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;=</span> <span class="n">min_spikes</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">likelihood</span><span class="p">[</span><span class="n">n_active_neurons</span> <span class="o">&lt;</span> <span class="n">min_neurons</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="n">likelihood</span></div>
+
+
+<div class="viewcode-block" id="decode_location"><a class="viewcode-back" href="../../modules.html#nept.decoding.decode_location">[docs]</a><span class="k">def</span> <span class="nf">decode_location</span><span class="p">(</span><span class="n">likelihood</span><span class="p">,</span> <span class="n">pos_centers</span><span class="p">,</span> <span class="n">time_centers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds the decoded location based on the centers of the position bins.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    likelihood : np.array</span>
+<span class="sd">        With shape(n_timebins, n_positionbins)</span>
+<span class="sd">    pos_centers : np.array</span>
+<span class="sd">    time_centers : np.array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    decoded : nept.Position</span>
+<span class="sd">        Estimate of decoded position.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">likelihood</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">max_decoded_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">likelihood</span><span class="p">[</span><span class="n">prob_rows</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">prob_decoded</span> <span class="o">=</span> <span class="n">pos_centers</span><span class="p">[</span><span class="n">max_decoded_idx</span><span class="p">]</span>
+
+    <span class="n">decoded_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">likelihood</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">decoded_pos</span><span class="p">[</span><span class="n">prob_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_decoded</span>
+
+    <span class="n">decoded_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">decoded_pos</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">Position</span><span class="p">(</span><span class="n">decoded_pos</span><span class="p">,</span> <span class="n">time_centers</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remove_teleports"><a class="viewcode-back" href="../../modules.html#nept.decoding.remove_teleports">[docs]</a><span class="k">def</span> <span class="nf">remove_teleports</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">speed_thresh</span><span class="p">,</span> <span class="n">min_length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Removes positions above a certain speed threshold</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position : nept.Position</span>
+<span class="sd">    speed_thresh : int</span>
+<span class="sd">        Maximum speed to consider natural rat movements. Anything</span>
+<span class="sd">        above this theshold will not be included in the filtered positions.</span>
+<span class="sd">    min_length : int</span>
+<span class="sd">        Minimum length for a sequence to be included in filtered positions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    filtered_position : nept.Epoch</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">split_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">velocity</span> <span class="o">&gt;=</span> <span class="n">speed_thresh</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">keep_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">n_samples</span><span class="p">),</span> <span class="n">split_idx</span><span class="p">)</span> <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">min_length</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keep_idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">([],</span> <span class="p">[])</span>
+
+    <span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">idx_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">idx_sequence</span> <span class="ow">in</span> <span class="n">keep_idx</span><span class="p">]</span>
+    <span class="n">stops</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">idx_sequence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">idx_sequence</span> <span class="ow">in</span> <span class="n">keep_idx</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">starts</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stops</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]]))</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

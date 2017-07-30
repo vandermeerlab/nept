@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.loaders_neuralynx &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.loaders_neuralynx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.loaders_neuralynx</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Adapted from nlxio written by Bernard Willards &lt;https://github.com/bwillers/nlxio&gt;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="load_events"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_events">[docs]</a><span class="k">def</span> <span class="nf">load_events</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads neuralynx events</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+<span class="sd">    labels: dict</span>
+<span class="sd">        With event name as the key and Neuralynx event string as the value.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timestamps: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nev_data</span> <span class="o">=</span> <span class="n">load_nev</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nev_data</span><span class="p">[</span><span class="s1">&#39;event_str&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="o">==</span> <span class="n">labels</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">idx</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">timestamps</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">}</span>
+
+    <span class="n">times</span> <span class="o">=</span> <span class="n">nev_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">timestamps</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">label</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">timestamps</span></div>
+
+
+<div class="viewcode-block" id="load_lfp"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_lfp">[docs]</a><span class="k">def</span> <span class="nf">load_lfp</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads LFP as nept.LocalFieldPotential</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lfp: nept.LocalFieldPotential</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">load_ncs</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">LocalFieldPotential</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_position"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_position">[docs]</a><span class="k">def</span> <span class="nf">load_position</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pxl_to_cm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads videotracking position as nept.Position</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+<span class="sd">    pxl_to_cm: tuple</span>
+<span class="sd">        With (x, y) conversion factors</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    position: nept.Position</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nvt_data</span> <span class="o">=</span> <span class="n">load_nvt</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">pxl_to_cm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">pxl_to_cm</span><span class="p">[</span><span class="mi">1</span><span class="p">]])[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">Position</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="load_neuralynx_header"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_neuralynx_header">[docs]</a><span class="k">def</span> <span class="nf">load_neuralynx_header</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a neuralynx header.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    header: byte str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Neuralynx files have a 16kbyte header</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">header</span></div>
+
+
+<div class="viewcode-block" id="load_ncs"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_ncs">[docs]</a><span class="k">def</span> <span class="nf">load_ncs</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a neuralynx .ncs electrode file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cscs: np.array</span>
+<span class="sd">        Voltage trace (V)</span>
+<span class="sd">    times: np.array</span>
+<span class="sd">        Timestamps (microseconds)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Neuralynx files have a 16kbyte header</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># The format for a .ncs files according the the neuralynx docs is</span>
+    <span class="c1"># uint64 - timestamp in microseconds</span>
+    <span class="c1"># uint32 - channel number</span>
+    <span class="c1"># uint32 - sample freq</span>
+    <span class="c1"># uint32 - number of valid samples</span>
+    <span class="c1"># int16 x 512 - actual csc samples</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;Q&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;freq&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;csc&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">512</span><span class="p">,))])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="c1"># unpack the csc matrix</span>
+    <span class="n">csc</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;csc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;csc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">,))</span>
+
+    <span class="n">data_times</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+
+    <span class="c1"># find the frequency</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;freq&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;only one frequency allowed&quot;</span><span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">frequency</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># .ncs files have a timestamp for every ~512 data points.</span>
+    <span class="c1"># Here, we assign timestamps for each data sample based on the sampling frequency</span>
+    <span class="c1"># for each of the 512 data points. Sometimes a block will have fewer than 512 data entries,</span>
+    <span class="c1"># number is set in data[&#39;valid&#39;].</span>
+    <span class="n">this_idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_block</span> <span class="o">=</span> <span class="mf">512.</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_block</span> <span class="o">/</span> <span class="n">frequency</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">frequency</span><span class="p">)</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">csc</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">n_valid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">data_times</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;valid&#39;</span><span class="p">])):</span>
+        <span class="n">times</span><span class="p">[</span><span class="n">this_idx</span><span class="p">:</span><span class="n">this_idx</span> <span class="o">+</span> <span class="n">n_valid</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">[:</span><span class="n">n_valid</span><span class="p">]</span>
+        <span class="n">this_idx</span> <span class="o">+=</span> <span class="n">n_valid</span>
+
+    <span class="c1"># now find analog_to_digital conversion factor in the header</span>
+        <span class="n">analog_to_digital</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;-ADBitVolts&#39;</span><span class="p">):</span>
+            <span class="n">analog_to_digital</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()))</span>
+
+    <span class="k">if</span> <span class="n">analog_to_digital</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;ADBitVolts not found in .ncs header for &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">cscs</span> <span class="o">=</span> <span class="n">csc</span> <span class="o">*</span> <span class="n">analog_to_digital</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">cscs</span><span class="p">,</span> <span class="n">times</span></div>
+
+
+<div class="viewcode-block" id="load_nev"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_nev">[docs]</a><span class="k">def</span> <span class="nf">load_nev</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a neuralynx .nev file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nev_data: dict</span>
+<span class="sd">        With time (uint64), id (uint16), nttl (uint16), and event_str (charx128) as the most usable keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="c1"># There&#39;s nothing useful in the header for .nev files, so skip past it</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span>
+
+    <span class="c1"># An event record is as follows:</span>
+    <span class="c1"># int16 - nstx - reserved</span>
+    <span class="c1"># int16 - npkt_id - id of the originating system</span>
+    <span class="c1"># int16 - npkt_data_size - this value should always be 2</span>
+    <span class="c1"># uint64 - timestamp, microseconds</span>
+    <span class="c1"># int16 - nevent_id - ID value for event</span>
+    <span class="c1"># int16 - nttl - decimal TTL value read from the TTL input port</span>
+    <span class="c1"># int16 - ncrc - record crc check, not used in consumer applications</span>
+    <span class="c1"># int16 - ndummy1 - reserved</span>
+    <span class="c1"># int16 - ndummy2 - reserved</span>
+    <span class="c1"># int32x8 - dnExtra - extra bit values for this event</span>
+    <span class="c1"># string(128) - event string</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;filler1&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;Q&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;nttl&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;filler2&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;extra&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;event_str&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;a128&#39;</span><span class="p">))])</span>
+    <span class="n">nev_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">nev_data</span></div>
+
+
+<div class="viewcode-block" id="load_ntt"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_ntt">[docs]</a><span class="k">def</span> <span class="nf">load_ntt</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a neuralynx .ntt tetrode spike file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timestamps: np.array</span>
+<span class="sd">        Spikes as (num_spikes, length_waveform, num_channels)</span>
+<span class="sd">    spikes: np.array</span>
+<span class="sd">        Spike times as uint64 (us)</span>
+<span class="sd">    frequency: float</span>
+<span class="sd">        Sampling frequency in waveforms (Hz)</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">    timestamps, spikes, frequency = load_ntt(&#39;TT13.ntt&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="c1"># A tetrode spike record is as folows:</span>
+    <span class="c1"># uint64 - timestamp                    bytes 0:8</span>
+    <span class="c1"># uint32 - acquisition entity number    bytes 8:12</span>
+    <span class="c1"># uint32 - classified cel number        bytes 12:16</span>
+    <span class="c1"># 8 * uint32- params                    bytes 16:48</span>
+    <span class="c1"># 32 * 4 * int16 - waveform points</span>
+    <span class="c1"># hence total record size is 2432 bits, 304 bytes</span>
+
+    <span class="c1"># header is 16kbyte, i.e. 16 * 2^10 = 2^14</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Read the header and find the conversion factors / sampling frequency</span>
+    <span class="n">analog_to_digital</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;-ADBitVolts&#39;</span><span class="p">):</span>
+            <span class="n">analog_to_digital</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;-SamplingFrequency&#39;</span><span class="p">):</span>
+            <span class="n">frequency</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span>  <span class="c1"># start of the spike, records</span>
+    <span class="c1"># Neuralynx write little endian for some dumb reason</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;Q&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;filer&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;spikes&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;&lt;h&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">4</span><span class="p">))])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">analog_to_digital</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;ADBitVolts not found in .ntt header for &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">frequency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Frequency not found in .ntt header for &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spikes&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">analog_to_digital</span><span class="p">,</span> <span class="n">frequency</span></div>
+
+
+<div class="viewcode-block" id="load_nvt"><a class="viewcode-back" href="../../modules.html#nept.loaders_neuralynx.load_nvt">[docs]</a><span class="k">def</span> <span class="nf">load_nvt</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a neuralynx .nvt file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nvt_data: dict</span>
+<span class="sd">        With time, x, and y as keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Neuralynx files have a 16kbyte header</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># The format for .nvt files according the the neuralynx docs is</span>
+    <span class="c1"># uint16 - beginning of the record</span>
+    <span class="c1"># uint16 - ID for the system</span>
+    <span class="c1"># uint16 - size of videorec in bytes</span>
+    <span class="c1"># uint64 - timestamp in microseconds</span>
+    <span class="c1"># uint32 x 400 - points with the color bitfield values</span>
+    <span class="c1"># int16 - unused</span>
+    <span class="c1"># int32 - extracted X location of target</span>
+    <span class="c1"># int32 - extracted Y location of target</span>
+    <span class="c1"># int32 - calculated head angle in degrees clockwise from the positive Y axis</span>
+    <span class="c1"># int32 x 50 - colored targets using the same bitfield format used to extract colors earlier</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;filler1&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;Q&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;points&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;filler2&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;head_angle&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;targets&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;i&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="n">nvt_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+    <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">nvt_data</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">empty_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nvt_data</span><span class="p">:</span>
+        <span class="n">nvt_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvt_data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">~</span><span class="n">empty_idx</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">nvt_data</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

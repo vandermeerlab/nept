@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.medpc_core &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.medpc_core</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.medpc_core</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Session">[docs]</a><span class="k">class</span> <span class="nc">Session</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mags</span><span class="p">,</span> <span class="n">pellets</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mags</span> <span class="o">=</span> <span class="n">mags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pellets</span> <span class="o">=</span> <span class="n">pellets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trials</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Session.add_trial"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Session.add_trial">[docs]</a>    <span class="k">def</span> <span class="nf">add_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">cue</span><span class="p">,</span> <span class="n">trial_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds trial to session</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epoch: nept.Epoch object</span>
+<span class="sd">        cue: str</span>
+<span class="sd">            Typically either &#39;light&#39; or &#39;sound&#39;</span>
+<span class="sd">        trial_type: int</span>
+<span class="sd">            Typically 1, 2, 3, or 4</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cue_mag</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mags</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Trial</span><span class="p">(</span><span class="n">cue</span><span class="o">=</span><span class="n">cue</span><span class="p">,</span>
+                  <span class="n">trial_type</span><span class="o">=</span><span class="n">trial_type</span><span class="p">,</span>
+                  <span class="n">durations</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cue_mag</span><span class="o">.</span><span class="n">durations</span><span class="p">),</span>
+                  <span class="n">numbers</span><span class="o">=</span><span class="n">cue_mag</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">,</span>
+                  <span class="n">latency</span><span class="o">=</span><span class="n">cue_mag</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">epoch</span><span class="o">.</span><span class="n">start</span> <span class="k">if</span> <span class="n">cue_mag</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">10.0</span><span class="p">,</span>
+                  <span class="n">responses</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">cue_mag</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Session.add_missing_trial"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Session.add_missing_trial">[docs]</a>    <span class="k">def</span> <span class="nf">add_missing_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cue</span><span class="p">,</span> <span class="n">trial_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds trial placeholders for missing trials.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cue: str</span>
+<span class="sd">            Typically either &#39;light&#39; or &#39;sound&#39;</span>
+<span class="sd">        trial_type: int</span>
+<span class="sd">            Typically 1, 2, 3, or 4</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Trial</span><span class="p">(</span><span class="n">cue</span><span class="o">=</span><span class="n">cue</span><span class="p">,</span>
+                  <span class="n">trial_type</span><span class="o">=</span><span class="n">trial_type</span><span class="p">,</span>
+                  <span class="n">durations</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                  <span class="n">numbers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                  <span class="n">latency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                  <span class="n">responses</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="Trial"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Trial">[docs]</a><span class="k">class</span> <span class="nc">Trial</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cue</span><span class="p">,</span> <span class="n">trial_type</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">numbers</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cue</span> <span class="o">=</span> <span class="n">cue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trial_type</span> <span class="o">=</span> <span class="n">trial_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">durations</span> <span class="o">=</span> <span class="n">durations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numbers</span> <span class="o">=</span> <span class="n">numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latency</span> <span class="o">=</span> <span class="n">latency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span></div>
+
+
+<div class="viewcode-block" id="Rat"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Rat">[docs]</a><span class="k">class</span> <span class="nc">Rat</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rat_id</span><span class="p">,</span> <span class="n">group1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">group2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rat_id</span> <span class="o">=</span> <span class="n">rat_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group1</span> <span class="o">=</span> <span class="n">group1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group2</span> <span class="o">=</span> <span class="n">group2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sound_trials</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;sounds2&#39;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;sounds1&#39;</span><span class="p">,</span>
+                             <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;sounds1&#39;</span><span class="p">,</span>
+                             <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;sounds2&#39;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">group1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rat_id</span> <span class="ow">in</span> <span class="n">group1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">light_trials</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;lights1&#39;</span><span class="p">,</span>
+                                 <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;lights1&#39;</span><span class="p">,</span>
+                                 <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;lights2&#39;</span><span class="p">,</span>
+                                 <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;lights2&#39;</span><span class="p">}</span>
+
+        <span class="k">elif</span> <span class="n">group2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rat_id</span> <span class="ow">in</span> <span class="n">group2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">light_trials</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;lights2&#39;</span><span class="p">,</span>
+                                 <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;lights2&#39;</span><span class="p">,</span>
+                                 <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;lights1&#39;</span><span class="p">,</span>
+                                 <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;lights1&#39;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;rat id is incorrect. Should be in group1 or group2&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Rat.add_session"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Rat.add_session">[docs]</a>    <span class="k">def</span> <span class="nf">add_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mags</span><span class="p">,</span> <span class="n">pellets</span><span class="p">,</span> <span class="n">lights1</span><span class="p">,</span> <span class="n">lights2</span><span class="p">,</span> <span class="n">sounds1</span><span class="p">,</span> <span class="n">sounds2</span><span class="p">,</span> <span class="n">trial1</span><span class="p">,</span> <span class="n">trial2</span><span class="p">,</span> <span class="n">trial3</span><span class="p">,</span> <span class="n">trial4</span><span class="p">,</span>
+                    <span class="n">group</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sorts cues into appropriate trials (1, 2, 3, 4), using intersect between trial and cue epochs.&quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">mags</span><span class="p">,</span> <span class="n">pellets</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial1</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights1</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds2</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial2</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights1</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds1</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial3</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights2</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds1</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial4</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights2</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds2</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">group</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial1</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights2</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds2</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial2</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights2</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds1</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial3</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights1</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds1</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">single_trial</span> <span class="ow">in</span> <span class="n">trial4</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lights1</span><span class="p">),</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">single_trial</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sounds2</span><span class="p">),</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;must specify a group&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">session</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Rat.add_session_medpc"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.Rat.add_session_medpc">[docs]</a>    <span class="k">def</span> <span class="nf">add_session_medpc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mags</span><span class="p">,</span> <span class="n">pellets</span><span class="p">,</span> <span class="n">lights1</span><span class="p">,</span> <span class="n">lights2</span><span class="p">,</span> <span class="n">sounds1</span><span class="p">,</span> <span class="n">sounds2</span><span class="p">,</span> <span class="n">n_unique</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">5.02</span><span class="p">,</span>
+                          <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">08</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sorts cues into appropriate trials (1, 2, 3, 4), using specified delay between light and sound cues.&quot;&quot;&quot;</span>
+
+        <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">mags</span><span class="p">,</span> <span class="n">pellets</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_trials</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;lights1&#39;</span><span class="p">:</span>
+                <span class="n">light_cues</span> <span class="o">=</span> <span class="n">lights1</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_trials</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;lights2&#39;</span><span class="p">:</span>
+                <span class="n">light_cues</span> <span class="o">=</span> <span class="n">lights2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sound_trials</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sounds1&#39;</span><span class="p">:</span>
+                <span class="n">sound_cues</span> <span class="o">=</span> <span class="n">sounds1</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sound_trials</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sounds2&#39;</span><span class="p">:</span>
+                <span class="n">sound_cues</span> <span class="o">=</span> <span class="n">sounds2</span>
+
+            <span class="n">n_trials</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">light</span> <span class="ow">in</span> <span class="n">light_cues</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">sound</span> <span class="ow">in</span> <span class="n">sound_cues</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">light</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+                        <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">light</span><span class="p">,</span> <span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="n">trial</span><span class="p">)</span>
+                        <span class="n">session</span><span class="o">.</span><span class="n">add_trial</span><span class="p">(</span><span class="n">sound</span><span class="p">,</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="n">trial</span><span class="p">)</span>
+                        <span class="n">n_trials</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_unique</span> <span class="o">-</span> <span class="n">n_trials</span><span class="p">):</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_missing_trial</span><span class="p">(</span><span class="s1">&#39;light&#39;</span><span class="p">,</span> <span class="n">trial</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add_missing_trial</span><span class="p">(</span><span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="n">trial</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">session</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="f_analyze"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.f_analyze">[docs]</a><span class="k">def</span> <span class="nf">f_analyze</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">measure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extracts appropriate analysis metric.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trial: emi_biconditional Trial object</span>
+<span class="sd">    measure: str</span>
+<span class="sd">        One of &#39;durations&#39;, &#39;numbers&#39;, &#39;latency&#39;, or &#39;responses&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    output: analysis metric for a given trial</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;durations&#39;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">durations</span>
+    <span class="k">if</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;numbers&#39;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">numbers</span>
+    <span class="k">if</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;latency&#39;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">latency</span>
+    <span class="k">if</span> <span class="n">measure</span> <span class="o">==</span> <span class="s1">&#39;responses&#39;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">responses</span> <span class="o">*</span> <span class="mf">100.</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="combine_rats"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.combine_rats">[docs]</a><span class="k">def</span> <span class="nf">combine_rats</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">rats</span><span class="p">,</span> <span class="n">n_sessions</span><span class="p">,</span> <span class="n">only_sound</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Combines behavioral measures from multiple rats, sessions and trials.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: dict</span>
+<span class="sd">        With rat (str) as key, contains Rat objects for each rat</span>
+<span class="sd">    rats: list</span>
+<span class="sd">        With rat_id (str)</span>
+<span class="sd">    n_sessions: int</span>
+<span class="sd">    only_sound: boolean</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    df: pd.DataFrame</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">measures</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;durations&#39;</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="s1">&#39;latency&#39;</span><span class="p">,</span> <span class="s1">&#39;responses&#39;</span><span class="p">]</span>
+    <span class="n">together</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">trial</span><span class="o">=</span><span class="p">[],</span> <span class="n">rat</span><span class="o">=</span><span class="p">[],</span> <span class="n">session</span><span class="o">=</span><span class="p">[],</span> <span class="n">trial_type</span><span class="o">=</span><span class="p">[],</span> <span class="n">rewarded</span><span class="o">=</span><span class="p">[],</span>
+                    <span class="n">cue</span><span class="o">=</span><span class="p">[],</span> <span class="n">value</span><span class="o">=</span><span class="p">[],</span> <span class="n">measure</span><span class="o">=</span><span class="p">[],</span> <span class="n">condition</span><span class="o">=</span><span class="p">[])</span>
+
+    <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sessions</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="n">rats</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="n">session</span><span class="p">]</span><span class="o">.</span><span class="n">trials</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">measures</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">only_sound</span> <span class="ow">or</span> <span class="n">trial</span><span class="o">.</span><span class="n">cue</span> <span class="o">==</span> <span class="s1">&#39;sound&#39;</span><span class="p">:</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;trial&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rat</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;rat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rat</span><span class="p">)</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;session&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">session</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;trial_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">trial_type</span><span class="p">)</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;rewarded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                                    <span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">cue</span><span class="p">,</span> <span class="s1">&#39;rewarded&#39;</span> <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">trial_type</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;unrewarded&#39;</span><span class="p">))</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;cue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">cue</span><span class="p">)</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">cue</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">trial_type</span><span class="p">))</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;measure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">measure</span><span class="p">)</span>
+                        <span class="n">together</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_analyze</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">measure</span><span class="p">))</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">together</span><span class="p">)</span>
+
+    <span class="n">fix_missing_trials</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="fix_missing_trials"><a class="viewcode-back" href="../../modules.html#nept.medpc_core.fix_missing_trials">[docs]</a><span class="k">def</span> <span class="nf">fix_missing_trials</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Replaces nan values with mean for that trial type</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df: pd.DataFrame</span>
+
+<span class="sd">    Note: this is a hack to handle sessions where there were fewer trials than expected.</span>
+<span class="sd">    This function finds those trials and replaces the values with the mean for that</span>
+<span class="sd">    trial type across the session.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nan_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">nan_idx</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;rat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;rat&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+                       <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;session&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;session&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+                       <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+                       <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;measure&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;measure&#39;</span><span class="p">])]</span><span class="o">.</span><span class="n">mean</span><span class="p">()[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

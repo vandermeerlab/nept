@@ -1,0 +1,360 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Tutorial 08 - MedPC behavior\n",
+    "------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Goals\n",
+    "-----------\n",
+    "\n",
+    "- Implement a behavioral analysis for a Pavlovian task measured in epochs "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Compute the duration in food cup for rewarded and unrewarded trials"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This data is from a Pavlovian biconditional discrimination experiment where two lights (steady, flashing)\n",
+    "and two sounds (tone, white noise) were presented for 10 seconds at a time. \n",
+    "A trial consisted of one light presentation followed by a 5 second gap, then one sound presentation.\n",
+    "There were four different trial types (AX-, AY+, BX+, BY-), \n",
+    "such that each individual cue is equally presented with and without food reward.\n",
+    "A successful discrimination in this task is when AY+ and BX+ trials have a greater response \n",
+    "than AX- and BY- trials."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:01.428429Z",
+     "start_time": "2017-07-26T19:10:00.350600Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Import necessary packages\n",
+    "%matplotlib inline\n",
+    "import os\n",
+    "import numpy as np\n",
+    "import nept\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "\n",
+    "# Define where your data folder is located\n",
+    "data_path = os.path.join(os.path.abspath('.'), 'data')\n",
+    "data_folder = os.path.join(data_path, 'biconditional-tutorial')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:03.097508Z",
+     "start_time": "2017-07-26T19:10:03.093021Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Let's look at Rat 5\n",
+    "rats = ['5']\n",
+    "group1 = ['1', '3', '5', '7']\n",
+    "group2 = ['2', '4', '6', '8']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:04.170934Z",
+     "start_time": "2017-07-26T19:10:04.156942Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Get the sessions. MedPC data is stored in a file that is is in the format !YYYY-MM-DD.\n",
+    "# The a and b indicate morning and afternoon sessions.\n",
+    "sessions = []\n",
+    "for file in sorted(os.listdir(data_folder)):\n",
+    "    if file[0] == '!':\n",
+    "        sessions.append(os.path.join(data_folder, file))\n",
+    "\n",
+    "# Find out the number of sessions\n",
+    "n_sessions = len(sessions)\n",
+    "print('Number of sessions:', n_sessions)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:06.663496Z",
+     "start_time": "2017-07-26T19:10:06.613461Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Write a function that dictates the maping between the medpc values and the experimental conditions\n",
+    "def assign_medpc_label(data):\n",
+    "    \"\"\"Assigns events to proper labels.\n",
+    "\n",
+    "    Parameters\n",
+    "    ----------\n",
+    "    data: dict\n",
+    "\n",
+    "    Returns\n",
+    "    -------\n",
+    "    rats_data: dict\n",
+    "        With mags, pellets, lights1, lights2, sounds1, sounds2, trial1, trial2, trial3, trial4 as keys.\n",
+    "        Each contains nept.Epoch objects\n",
+    "\n",
+    "    \"\"\"\n",
+    "    mag_start = np.array(data[1])\n",
+    "    mag_end = np.array(data[2])\n",
+    "    if len(mag_start) > len(mag_end):\n",
+    "        mag_start = np.array(data[1][:-1])\n",
+    "    pel_start = np.array(data[3])\n",
+    "    pel_end = pel_start + 1\n",
+    "    light1_start = np.array(data[4])\n",
+    "    light1_end = np.array(data[5])\n",
+    "    light2_start = np.array(data[6])\n",
+    "    light2_end = np.array(data[7])\n",
+    "    sound1_start = np.array(data[8])\n",
+    "    sound1_end = np.array(data[9])\n",
+    "    sound2_start = np.array(data[10])\n",
+    "    sound2_end = np.array(data[11])\n",
+    "\n",
+    "    rats_data = dict()\n",
+    "    rats_data['mags'] = nept.Epoch(mag_start, mag_end-mag_start)\n",
+    "    rats_data['pellets'] = nept.Epoch(pel_start, pel_end-pel_start)\n",
+    "    rats_data['lights1'] = nept.Epoch(light1_start, light1_end-light1_start)\n",
+    "    rats_data['lights2'] = nept.Epoch(light2_start, light2_end-light2_start)\n",
+    "    rats_data['sounds1'] = nept.Epoch(sound1_start, sound1_end-sound1_start)\n",
+    "    rats_data['sounds2'] = nept.Epoch(sound2_start, sound2_end-sound2_start)\n",
+    "\n",
+    "    return rats_data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:12.384875Z",
+     "start_time": "2017-07-26T19:10:12.380353Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Set up the data in a dictionary, which is most useful when handling multiple rats\n",
+    "data = dict()\n",
+    "for rat in rats:\n",
+    "    data[rat] = nept.Rat(rat, group1, group2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:30.734247Z",
+     "start_time": "2017-07-26T19:10:14.005332Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Gather the data from all the sessions and add them to the dictionary\n",
+    "for session in sessions:\n",
+    "    rats_data = nept.load_medpc(os.path.join(data_folder, session), assign_medpc_label)\n",
+    "\n",
+    "    for rat in rats:\n",
+    "        data[rat].add_session_medpc(**rats_data[rat])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:30.779278Z",
+     "start_time": "2017-07-26T19:10:30.735748Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Make a dataframe from the dictionary\n",
+    "df = nept.combine_rats(data, rats, n_sessions, only_sound=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:10:30.797291Z",
+     "start_time": "2017-07-26T19:10:30.780780Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Take a look at the first few entries of the dataframe. \n",
+    "# Notice we're computing more than only the food cup duration here.\n",
+    "# We can filter it to only the values of interest in our plotting.\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:14:06.084070Z",
+     "start_time": "2017-07-26T19:14:06.020525Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the duration in food cup behavior\n",
+    "sns.set_style(\"white\")\n",
+    "\n",
+    "def plot_measure(measure):\n",
+    "    \"\"\"Plots the measure overtime for one rat.\n",
+    "    \n",
+    "    Parameters\n",
+    "    ----------\n",
+    "    measure: str\n",
+    "        Must be 'durations', 'numbers', 'latency', or 'responses'.\n",
+    "    \n",
+    "    \"\"\"\n",
+    "    # Filter the dataframe by rat\n",
+    "    rat_idx = np.zeros(len(df), dtype=bool)\n",
+    "\n",
+    "    for rat in rats:\n",
+    "        rat_idx = rat_idx | (df['rat'] == rat)\n",
+    "    rats_df = df[rat_idx]\n",
+    "\n",
+    "    # Filter the dataframe by measure, here let's look at the duration of food cup entries\n",
+    "    duration = df.loc[df.measure == measure]\n",
+    "\n",
+    "    # Plot using seaborn since seaborn and pandas (the dataframe) work well together\n",
+    "    colours = [\"#9970ab\", \"#d6604d\", \"#1b7837\", \"#2166ac\"]\n",
+    "    ax = sns.tsplot(data=duration, time=\"session\", unit=\"trial\", condition=\"rewarded\", value=\"value\",\n",
+    "                    err_style=\"ci_band\", ci=68, color=colours)\n",
+    "\n",
+    "    # Set plotting parameters\n",
+    "    legend_dist = 1.\n",
+    "\n",
+    "    if measure == 'durations':\n",
+    "        ax.set(xlabel='Session', ylabel='Duration in food cup (s)')\n",
+    "    elif measure == 'numbers':\n",
+    "        ax.set(xlabel='Session', ylabel='Number of food cup entries')\n",
+    "    elif measure == 'latency':\n",
+    "        ax.set(xlabel='Session', ylabel='Latency to first entry (s)')\n",
+    "    elif measure == 'responses':\n",
+    "        ax.set(xlabel='Session', ylabel='Percent responses')\n",
+    "\n",
+    "    sns.despine()\n",
+    "    plt.tight_layout()\n",
+    "    plt.legend(bbox_to_anchor=(legend_dist, 1.))\n",
+    "    plt.title('Rat 5 duration in food cup by outcome')\n",
+    "\n",
+    "    # Show the plot\n",
+    "    plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:14:07.318916Z",
+     "start_time": "2017-07-26T19:14:06.428284Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "plot_measure('durations')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:14:08.148522Z",
+     "start_time": "2017-07-26T19:14:07.320917Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "plot_measure('numbers')"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.1"
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "82px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

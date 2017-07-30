@@ -1,0 +1,11 @@
+.. toctree::
+
+    tutorials/Tutorial01_Principles-of-(neural)-data-analysis
+    tutorials/Tutorial02_Setting-up
+    tutorials/Tutorial03_Data-types
+    tutorials/Tutorial04_Handling-spiking-data
+    tutorials/Tutorial05_Tuning-curves-and-decoding
+    tutorials/Tutorial06_Pairwise-co-occurrence
+    tutorials/Tutorial07_Signal-interactions
+    tutorials/Tutorial08_MedPC-behavior
+

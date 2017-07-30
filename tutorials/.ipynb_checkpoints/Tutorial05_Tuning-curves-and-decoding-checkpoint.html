@@ -1,0 +1,925 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Module 10 - Tuning curves and decoding &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Module-10---Tuning-curves-and-decoding">
+<h1># Module 10 - Tuning curves and decoding<a class="headerlink" href="##-Module-10---Tuning-curves-and-decoding" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Learn to estimate and plot 2D tuning curves</li>
+<li>Implement a Bayesian decoding algorithm</li>
+<li>Compare the decoded and actual positions by computing the decoding
+error</li>
+</ul>
+</div>
+<div class="section" id="#-Find-tuning-curves">
+<h1># Find tuning curves<a class="headerlink" href="##-Find-tuning-curves" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+
+# define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R042-2013-08-18&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># load the info file, which contains experiment-specific information
+import r042d3 as info
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-167e83d3dd57&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># load the info file, which contains experiment-specific information</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> r042d3 <span class="ansi-green-fg">as</span> info
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;r042d3&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load position (.nvt) from this experiment
+position = nept.load_position(os.path.join(data_folder, info.position_filename), info.pxl_to_cm)
+
+# Plot the position
+plt.plot(position.x, position.y, &#39;k.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-edd1dd390924&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load position (.nvt) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>position <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_position<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>position_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>pxl_to_cm<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the position</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>position<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;k.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load spikes (.t and ._t) from this experiment
+spikes = nept.load_spikes(data_folder)
+
+# Plot the spikes
+for idx, spiketrain in enumerate(spikes):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-d5651c4c80e6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load spikes (.t and ._t) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>spikes <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_spikes<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">for</span> idx<span class="ansi-blue-fg">,</span> spiketrain <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>spikes<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_mclust.py</span> in <span class="ansi-cyan-fg">load_spikes</span><span class="ansi-blue-fg">(filepath, load_questionable)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>     spikes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> os<span class="ansi-blue-fg">.</span>listdir<span class="ansi-blue-fg">(</span>filepath<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> file<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.t&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    110</span>             label <span class="ansi-blue-fg">=</span> file<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">18</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R042-2013-08-18&#39;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>def speed_threshold(position, t_smooth=0.5, speed_limit=0.4):
+    &quot;&quot;&quot;Finds positions above a certain speed threshold
+    Parameters
+    ----------
+    position: nept.Position
+    t_smooth: float
+    speed_limit: float
+    Returns
+    -------
+    position_run: nept.Position
+    &quot;&quot;&quot;
+
+    speed = position.speed(t_smooth)
+    run_idx = np.squeeze(speed.data) &gt;= speed_limit
+
+    return position[run_idx]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># limit position and spikes to task times
+task_start = info.task_times[&#39;task&#39;].start
+task_stop = info.task_times[&#39;task&#39;].stop
+
+task_position = position.time_slice(task_start, task_stop)
+task_spikes = [spiketrain.time_slice(task_start, task_stop) for spiketrain in spikes]
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-6-163898718bb4&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># limit position and spikes to task times</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>task_start <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>start
+<span class="ansi-green-intense-fg ansi-bold">      3</span> task_stop <span class="ansi-blue-fg">=</span> info<span class="ansi-blue-fg">.</span>task_times<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;task&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>stop
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> task_position <span class="ansi-blue-fg">=</span> position<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>task_start<span class="ansi-blue-fg">,</span> task_stop<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># limit position to those where the rat is running
+run_position = speed_threshold(task_position, speed_limit=1.1)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-d697a62e195c&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># limit position to those where the rat is running</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>run_position <span class="ansi-blue-fg">=</span> speed_threshold<span class="ansi-blue-fg">(</span>task_position<span class="ansi-blue-fg">,</span> speed_limit<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.1</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;task_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the running Y position over time
+plt.plot(run_position.time, run_position.y, &#39;b.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-921ebc1b9076&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the running Y position over time</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>run_position<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;b.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;run_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the running position
+plt.plot(run_position.x, run_position.y, &#39;b.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-9-af3e1810405d&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the running position</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>run_position<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;b.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;run_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the task spikes
+for idx, spiketrain in enumerate(task_spikes):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;, color=&#39;k&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-10-348729289401&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the task spikes</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">for</span> idx<span class="ansi-blue-fg">,</span> spiketrain <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>task_spikes<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>     plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>spiketrain<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>ones<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>spiketrain<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">+</span>idx<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;|&#39;</span><span class="ansi-blue-fg">,</span> color<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;k&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;task_spikes&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Define the X and Y boundaries from the unfiltered position, with 3 cm bins
+xedges, yedges = nept.get_xyedges(position, binsize=3)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-0335de73f075&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Define the X and Y boundaries from the unfiltered position, with 3 cm bins</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>xedges<span class="ansi-blue-fg">,</span> yedges <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>get_xyedges<span class="ansi-blue-fg">(</span>position<span class="ansi-blue-fg">,</span> binsize<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>tuning_curves = nept.tuning_curve_2d(run_position, np.array(task_spikes), xedges, yedges,
+                                     occupied_thresh=0.2, gaussian_sigma=0.1)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-12-8eab09a314cb&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> tuning_curves = nept.tuning_curve_2d(run_position, np.array(task_spikes), xedges, yedges,
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                                      occupied_thresh=0.2, gaussian_sigma=0.1)
+
+<span class="ansi-red-fg">NameError</span>: name &#39;run_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot a few of the neuron&#39;s tuning curves
+xx, yy = np.meshgrid(xedges, yedges)
+
+for i in [7, 33, 41]:
+    print(&#39;neuron:&#39;, i)
+    plt.figure(figsize=(6, 5))
+    pp = plt.pcolormesh(xx, yy, tuning_curves[i], cmap=&#39;bone_r&#39;)
+    plt.colorbar(pp)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-13-e9eefb8e4aa5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot a few of the neuron&#39;s tuning curves</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>xx<span class="ansi-blue-fg">,</span> yy <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>meshgrid<span class="ansi-blue-fg">(</span>xedges<span class="ansi-blue-fg">,</span> yedges<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">7</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">33</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">41</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;neuron:&#39;</span><span class="ansi-blue-fg">,</span> i<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;xedges&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Decoding">
+<h1># Decoding<a class="headerlink" href="##-Decoding" title="Permalink to this headline">¶</a></h1>
+<p>Next, let&#8217;s decode the location of the subject using a Bayesian
+algorithm.</p>
+<p>Specifically, this is a method known as &#8220;one-step Bayesian decoding&#8221; and
+is illustrated in this figure from van der Meer et al., 2010.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Bin the spikes
+window_size = 0.0125
+window_advance = 0.0125
+
+time_edges = nept.get_edges(run_position, window_advance, lastbin=True)
+counts = nept.bin_spikes(task_spikes, run_position, window_size, window_advance,
+                         gaussian_std=None, normalized=True)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-3115d920d5c1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> window_advance <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0.0125</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>time_edges <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>get_edges<span class="ansi-blue-fg">(</span>run_position<span class="ansi-blue-fg">,</span> window_advance<span class="ansi-blue-fg">,</span> lastbin<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> counts = nept.bin_spikes(task_spikes, run_position, window_size, window_advance,
+<span class="ansi-green-intense-fg ansi-bold">      7</span>                          gaussian_std=None, normalized=True)
+
+<span class="ansi-red-fg">NameError</span>: name &#39;run_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Reshape the 2D tuning curves (essentially flatten them, while keeping the 2D information intact)
+tc_shape = tuning_curves.shape
+decode_tuning_curves = tuning_curves.reshape(tc_shape[0], tc_shape[1] * tc_shape[2])
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-4e102ec6fd62&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Reshape the 2D tuning curves (essentially flatten them, while keeping the 2D information intact)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>tc_shape <span class="ansi-blue-fg">=</span> tuning_curves<span class="ansi-blue-fg">.</span>shape
+<span class="ansi-green-intense-fg ansi-bold">      3</span> decode_tuning_curves <span class="ansi-blue-fg">=</span> tuning_curves<span class="ansi-blue-fg">.</span>reshape<span class="ansi-blue-fg">(</span>tc_shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> tc_shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">*</span> tc_shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;tuning_curves&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the likelihoods
+likelihood = nept.bayesian_prob(counts, decode_tuning_curves, window_size, min_neurons=2, min_spikes=1)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-16-c4688ee23096&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the likelihoods</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>likelihood <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>bayesian_prob<span class="ansi-blue-fg">(</span>counts<span class="ansi-blue-fg">,</span> decode_tuning_curves<span class="ansi-blue-fg">,</span> window_size<span class="ansi-blue-fg">,</span> min_neurons<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span> min_spikes<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;counts&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the center of the position bins
+xcenters = (xedges[1:] + xedges[:-1]) / 2.
+ycenters = (yedges[1:] + yedges[:-1]) / 2.
+xy_centers = nept.cartesian(xcenters, ycenters)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-17-6d2a714967e2&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the center of the position bins</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>xcenters <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>xedges<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">+</span> xedges<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> <span class="ansi-cyan-fg">2.</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> ycenters <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>yedges<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">+</span> yedges<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> <span class="ansi-cyan-fg">2.</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> xy_centers <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>cartesian<span class="ansi-blue-fg">(</span>xcenters<span class="ansi-blue-fg">,</span> ycenters<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;xedges&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Based on the likelihoods, find the decoded location
+decoded = nept.decode_location(likelihood, xy_centers, time_edges)
+nan_idx = np.logical_and(np.isnan(decoded.x), np.isnan(decoded.y))
+decoded = decoded[~nan_idx]
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-18-0e80f67f321f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Based on the likelihoods, find the decoded location</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>decoded <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>decode_location<span class="ansi-blue-fg">(</span>likelihood<span class="ansi-blue-fg">,</span> xy_centers<span class="ansi-blue-fg">,</span> time_edges<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> nan_idx <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>logical_and<span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>isnan<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>isnan<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> decoded <span class="ansi-blue-fg">=</span> decoded<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">~</span>nan_idx<span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;likelihood&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the decoded position
+plt.plot(decoded.x, decoded.y, &#39;r.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-19-c9d781dfdaad&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the decoded position</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> decoded<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;r.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;decoded&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="#-Compare-the-decoded-to-actual-positions">
+<h1># Compare the decoded to actual positions<a class="headerlink" href="##-Compare-the-decoded-to-actual-positions" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the actual position for every decoded time point
+actual_x = np.interp(decoded.time, run_position.time, run_position.x)
+actual_y = np.interp(decoded.time, run_position.time, run_position.y)
+actual_position = nept.Position(np.hstack((actual_x[..., np.newaxis],
+                                           actual_y[..., np.newaxis])), decoded.time)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-20-c16be80444f9&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the actual position for every decoded time point</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>actual_x <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>interp<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> actual_y <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>interp<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">,</span> run_position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> actual_position = nept.Position(np.hstack((actual_x[..., np.newaxis],
+<span class="ansi-green-intense-fg ansi-bold">      5</span>                                            actual_y[..., np.newaxis])), decoded.time)
+
+<span class="ansi-red-fg">NameError</span>: name &#39;decoded&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the actual position
+plt.plot(actual_position.x, actual_position.y, &#39;g.&#39;, ms=1)
+plt.show()
+
+# Notice the pedestal is not represented as round, as before.
+# This is because we are interpolating to find an actual position that corresponds to each decoded time.
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-21-325a2ad5af87&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Plot the actual position</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>actual_position<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> actual_position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;g.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># Notice the pedestal is not represented as round, as before.</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;actual_position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Find the error between actual and decoded positions
+errors = actual_position.distance(decoded)
+print(&#39;Mean error:&#39;, np.mean(errors), &#39;cm&#39;)
+
+# Plot the errors
+plt.hist(errors)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-22-b2459f7da4ae&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Find the error between actual and decoded positions</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>errors <span class="ansi-blue-fg">=</span> actual_position<span class="ansi-blue-fg">.</span>distance<span class="ansi-blue-fg">(</span>decoded<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Mean error:&#39;</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>mean<span class="ansi-blue-fg">(</span>errors<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;cm&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># Plot the errors</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;actual_position&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Module 10 - Tuning curves and decoding</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li><a class="reference internal" href="##-Find-tuning-curves"># Find tuning curves</a></li>
+<li><a class="reference internal" href="##-Decoding"># Decoding</a></li>
+<li><a class="reference internal" href="##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial05_Tuning-curves-and-decoding-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

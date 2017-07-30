@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Tutorial 08 - MedPC behavior &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Tutorial-08---MedPC-behavior">
+<h1># Tutorial 08 - MedPC behavior<a class="headerlink" href="##-Tutorial-08---MedPC-behavior" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Implement a behavioral analysis for a Pavlovian task measured in
+epochs</li>
+</ul>
+<div class="section" id="Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials">
+<h2>Compute the duration in food cup for rewarded and unrewarded trials<a class="headerlink" href="#Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials" title="Permalink to this headline">¶</a></h2>
+<p>This data is from a Pavlovian biconditional discrimination experiment
+where two lights (steady, flashing) and two sounds (tone, white noise)
+were presented for 10 seconds at a time. A trial consisted of one light
+presentation followed by a 5 second gap, then one sound presentation.
+There were four different trial types (AX-, AY+, BX+, BY-), such that
+each individual cue is equally presented with and without food reward. A
+successful discrimination in this task is when AY+ and BX+ trials have a
+greater response than AX- and BY- trials.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;biconditional-tutorial&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Let&#39;s look at Rat 5
+rats = [&#39;5&#39;]
+group1 = [&#39;1&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;]
+group2 = [&#39;2&#39;, &#39;4&#39;, &#39;6&#39;, &#39;8&#39;]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Get the sessions. MedPC data is stored in a file that is is in the format !YYYY-MM-DD.
+# The a and b indicate morning and afternoon sessions.
+sessions = []
+for file in sorted(os.listdir(data_folder)):
+    if file[0] == &#39;!&#39;:
+        sessions.append(os.path.join(data_folder, file))
+
+# Find out the number of sessions
+n_sessions = len(sessions)
+print(&#39;Number of sessions:&#39;, n_sessions)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-077f8c6d91bb&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># The a and b indicate morning and afternoon sessions.</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> sessions <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> sorted<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>listdir<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     <span class="ansi-green-fg">if</span> file<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;!&#39;</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>         sessions<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> file<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/biconditional-tutorial&#39;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Write a function that dictates the maping between the medpc values and the experimental conditions
+def assign_medpc_label(data):
+    &quot;&quot;&quot;Assigns events to proper labels.
+
+    Parameters
+    ----------
+    data: dict
+
+    Returns
+    -------
+    rats_data: dict
+        With mags, pellets, lights1, lights2, sounds1, sounds2, trial1, trial2, trial3, trial4 as keys.
+        Each contains nept.Epoch objects
+
+    &quot;&quot;&quot;
+    mag_start = np.array(data[1])
+    mag_end = np.array(data[2])
+    if len(mag_start) &gt; len(mag_end):
+        mag_start = np.array(data[1][:-1])
+    pel_start = np.array(data[3])
+    pel_end = pel_start + 1
+    light1_start = np.array(data[4])
+    light1_end = np.array(data[5])
+    light2_start = np.array(data[6])
+    light2_end = np.array(data[7])
+    sound1_start = np.array(data[8])
+    sound1_end = np.array(data[9])
+    sound2_start = np.array(data[10])
+    sound2_end = np.array(data[11])
+
+    rats_data = dict()
+    rats_data[&#39;mags&#39;] = nept.Epoch(mag_start, mag_end-mag_start)
+    rats_data[&#39;pellets&#39;] = nept.Epoch(pel_start, pel_end-pel_start)
+    rats_data[&#39;lights1&#39;] = nept.Epoch(light1_start, light1_end-light1_start)
+    rats_data[&#39;lights2&#39;] = nept.Epoch(light2_start, light2_end-light2_start)
+    rats_data[&#39;sounds1&#39;] = nept.Epoch(sound1_start, sound1_end-sound1_start)
+    rats_data[&#39;sounds2&#39;] = nept.Epoch(sound2_start, sound2_end-sound2_start)
+
+    return rats_data
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Set up the data in a dictionary, which is most useful when handling multiple rats
+data = dict()
+for rat in rats:
+    data[rat] = nept.Rat(rat, group1, group2)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Gather the data from all the sessions and add them to the dictionary
+for session in sessions:
+    rats_data = nept.load_medpc(os.path.join(data_folder, session), assign_medpc_label)
+
+    for rat in rats:
+        data[rat].add_session_medpc(**rats_data[rat])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Make a dataframe from the dictionary
+df = nept.combine_rats(data, rats, n_sessions, only_sound=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-936033f8940c&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Make a dataframe from the dictionary</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>df <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>combine_rats<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> rats<span class="ansi-blue-fg">,</span> n_sessions<span class="ansi-blue-fg">,</span> only_sound<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;n_sessions&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Take a look at the first few entries of the dataframe.
+# Notice we&#39;re computing more than only the food cup duration here.
+# We can filter it to only the values of interest in our plotting.
+df.head()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-0182ee5ed832&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># Notice we&#39;re computing more than only the food cup duration here.</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-red-fg"># We can filter it to only the values of interest in our plotting.</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>df<span class="ansi-blue-fg">.</span>head<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;df&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Plot the duration in food cup behavior
+sns.set_style(&quot;white&quot;)
+
+def plot_measure(measure):
+    &quot;&quot;&quot;Plots the measure overtime for one rat.
+
+    Parameters
+    ----------
+    measure: str
+        Must be &#39;durations&#39;, &#39;numbers&#39;, &#39;latency&#39;, or &#39;responses&#39;.
+
+    &quot;&quot;&quot;
+    # Filter the dataframe by rat
+    rat_idx = np.zeros(len(df), dtype=bool)
+
+    for rat in rats:
+        rat_idx = rat_idx | (df[&#39;rat&#39;] == rat)
+    rats_df = df[rat_idx]
+
+    # Filter the dataframe by measure, here let&#39;s look at the duration of food cup entries
+    duration = df.loc[df.measure == measure]
+
+    # Plot using seaborn since seaborn and pandas (the dataframe) work well together
+    colours = [&quot;#9970ab&quot;, &quot;#d6604d&quot;, &quot;#1b7837&quot;, &quot;#2166ac&quot;]
+    ax = sns.tsplot(data=duration, time=&quot;session&quot;, unit=&quot;trial&quot;, condition=&quot;rewarded&quot;, value=&quot;value&quot;,
+                    err_style=&quot;ci_band&quot;, ci=68, color=colours)
+
+    # Set plotting parameters
+    legend_dist = 1.
+
+    ax.set(xlabel=&#39;Session&#39;, ylabel=&#39;Duration in food cup (s)&#39;)
+
+    sns.despine()
+    plt.tight_layout()
+    plt.legend(bbox_to_anchor=(legend_dist, 1.))
+    plt.title(&#39;Rat 5 duration in food cup by outcome&#39;)
+
+    # Show the plot
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>plot_measure(&#39;durations&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-10-7928d16f6fb9&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plot_measure<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;durations&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-9-3c183757922f&gt;</span> in <span class="ansi-cyan-fg">plot_measure</span><span class="ansi-blue-fg">(measure)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">     13</span>     <span class="ansi-red-fg"># Filter the dataframe by rat</span>
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>rat_idx <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>zeros<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>df<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>bool<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     <span class="ansi-green-fg">for</span> rat <span class="ansi-green-fg">in</span> rats<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;df&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>plot_measure(&#39;numbers&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-eda9fd23a563&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plot_measure<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;numbers&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-9-3c183757922f&gt;</span> in <span class="ansi-cyan-fg">plot_measure</span><span class="ansi-blue-fg">(measure)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">     13</span>     <span class="ansi-red-fg"># Filter the dataframe by rat</span>
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>rat_idx <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>zeros<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>df<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>bool<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     <span class="ansi-green-fg">for</span> rat <span class="ansi-green-fg">in</span> rats<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;df&#39; is not defined
+</pre></div></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Tutorial 08 - MedPC behavior</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a><ul>
+<li><a class="reference internal" href="#Compute-the-duration-in-food-cup-for-rewarded-and-unrewarded-trials">Compute the duration in food cup for rewarded and unrewarded trials</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial08_MedPC-behavior-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

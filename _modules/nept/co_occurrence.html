@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.co_occurrence &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.co_occurrence</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.co_occurrence</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="spike_counts"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.spike_counts">[docs]</a><span class="k">def</span> <span class="nf">spike_counts</span><span class="p">(</span><span class="n">spikes</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get spike counts for specific interval.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spikes : list</span>
+<span class="sd">        Containing nept.SpikeTrain for each neuron.</span>
+<span class="sd">    interval_times : nept.Epoch</span>
+<span class="sd">    window : float</span>
+<span class="sd">        When window is set, takes the spike times for this window length</span>
+<span class="sd">        around the center of the interval times. The default is set to None.</span>
+<span class="sd">        Suggested window size is 0.1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    count_matrix : np.array</span>
+<span class="sd">        num_neurons x num_bins</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">epochs</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">centers</span><span class="o">-</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span><span class="o">*</span><span class="n">window</span><span class="p">)</span>
+
+    <span class="n">n_neurons</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span>
+    <span class="n">count_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_neurons</span><span class="p">,</span> <span class="n">epochs</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">epochs</span><span class="o">.</span><span class="n">stops</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">neuron</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_neurons</span><span class="p">):</span>
+            <span class="n">count_matrix</span><span class="p">[</span><span class="n">neuron</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">spikes</span><span class="p">[</span><span class="n">neuron</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">spikes</span><span class="p">[</span><span class="n">neuron</span><span class="p">]</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;=</span> <span class="n">stop</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">count_matrix</span></div>
+
+
+<div class="viewcode-block" id="get_tetrode_mask"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.get_tetrode_mask">[docs]</a><span class="k">def</span> <span class="nf">get_tetrode_mask</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+    <span class="n">tetrode_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">:</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ilabel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">jlabel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ilabel</span> <span class="o">==</span> <span class="n">jlabel</span><span class="p">:</span>
+                <span class="n">tetrode_mask</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">tetrode_mask</span></div>
+
+
+<div class="viewcode-block" id="compute_cooccur"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.compute_cooccur">[docs]</a><span class="k">def</span> <span class="nf">compute_cooccur</span><span class="p">(</span><span class="n">count_matrix</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">,</span> <span class="n">num_shuffles</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the probabilities for co-occurrence</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    count_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins</span>
+<span class="sd">    tetrode_mask : np.array</span>
+<span class="sd">        n_neurons by n_neurons. Boolean of True (same tetrode) or</span>
+<span class="sd">        False (different tetrode)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_active : np.array</span>
+<span class="sd">    prob_expected : ap.array</span>
+<span class="sd">    prob_observed : ap.array</span>
+<span class="sd">    prob_zscore : np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">activity_matrix</span> <span class="o">=</span> <span class="n">bool_counts</span><span class="p">(</span><span class="n">count_matrix</span><span class="p">)</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_active_neuron</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">)</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expected_cooccur</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">],</span> <span class="n">tetrode_mask</span><span class="p">)</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">observed_cooccur</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">)</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;shuffle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shuffle_cooccur</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">,</span> <span class="n">num_shuffles</span><span class="p">)</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zscore_cooccur</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">],</span> <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;shuffle&#39;</span><span class="p">])</span>
+
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_from_array</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">])</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_from_array</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="s1">&#39;observed&#39;</span><span class="p">])</span>
+    <span class="n">prob</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_from_array</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">prob</span></div>
+
+
+<div class="viewcode-block" id="vector_from_array"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.vector_from_array">[docs]</a><span class="k">def</span> <span class="nf">vector_from_array</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get triangle of output in vector from a correlation-type array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : np.array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vector (np.array)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Old Matlab code indexes by column (aka.Fortran-style), so to get the indices</span>
+<span class="sd">    of the top triangle, we have to do some reshaping.</span>
+<span class="sd">    Otherwise, if the vector made up by rows is OK, then simply :</span>
+<span class="sd">    triangle = np.triu_indices(array.size, k=1), out = array[triangle]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">triangle_lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">flatten_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="n">triangle_lower</span><span class="p">]</span>
+    <span class="n">triangle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">flatten_idx</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+    <span class="c1"># triangle = np.triu_indices(array.size, k=1)</span>
+    <span class="c1"># out = array[triangle]</span>
+
+    <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="n">triangle</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="bool_counts"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.bool_counts">[docs]</a><span class="k">def</span> <span class="nf">bool_counts</span><span class="p">(</span><span class="n">count_matrix</span><span class="p">,</span> <span class="n">min_spikes</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts count matrix to boolean of whether bin active or not</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    count_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins</span>
+<span class="sd">    min_spikes : int</span>
+<span class="sd">        Minimum number of spikes in a bin for that bin to be considered active.</span>
+<span class="sd">        The defaule is set to 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    activity_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins, boolean (1 or 0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">activity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">count_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">activity_matrix</span><span class="p">[</span><span class="n">count_matrix</span> <span class="o">&gt;=</span> <span class="n">min_spikes</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">activity_matrix</span></div>
+
+<div class="viewcode-block" id="prob_active_neuron"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.prob_active_neuron">[docs]</a><span class="k">def</span> <span class="nf">prob_active_neuron</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get expected co-occurrence under independence assumption</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    activity_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins, boolean (1 or 0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_active : np.array</span>
+<span class="sd">        Fraction of bins each cell participates in individually</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_active</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prob_active</span></div>
+
+
+<div class="viewcode-block" id="expected_cooccur"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.expected_cooccur">[docs]</a><span class="k">def</span> <span class="nf">expected_cooccur</span><span class="p">(</span><span class="n">prob_active</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Expected co-occurrence, multiply single cell probabilities</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prob_active : np.array</span>
+<span class="sd">        Fraction of bins each cell participates in individually</span>
+<span class="sd">    tetrode_mask : np.array</span>
+<span class="sd">        n_neurons by n_neurons. Boolean of True (same tetrode) or</span>
+<span class="sd">        False (different tetrode).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_expected : np.array</span>
+<span class="sd">        .. math:: p(x|y)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">prob_active</span><span class="p">,</span> <span class="n">prob_active</span><span class="p">)</span>
+
+    <span class="c1"># Remove probability of cell co-occurring with itself or</span>
+    <span class="c1"># cells from the same tetrode due to inaccurate spike sorting.</span>
+    <span class="n">prob_expected</span><span class="p">[</span><span class="n">tetrode_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="n">prob_expected</span></div>
+
+
+<div class="viewcode-block" id="observed_cooccur"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.observed_cooccur">[docs]</a><span class="k">def</span> <span class="nf">observed_cooccur</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">,</span> <span class="n">tetrode_mask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Observed co-occurrences</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    activity_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins, boolean (1 or 0)</span>
+<span class="sd">    tetrode_mask : np.array</span>
+<span class="sd">        n_neurons by n_neurons. Boolean of True (same tetrode) or</span>
+<span class="sd">        False (different tetrode).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_observed : np.array</span>
+<span class="sd">        .. math:: p(x,y)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_neurons</span> <span class="o">=</span> <span class="n">activity_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">prob_observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_neurons</span><span class="p">,</span> <span class="n">num_neurons</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neurons</span><span class="p">):</span>
+        <span class="n">neuron_activities</span> <span class="o">=</span> <span class="n">activity_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">prob_observed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">neuron_activities</span> <span class="o">*</span> <span class="n">activity_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Remove probability of cell co-occurring with itself or</span>
+    <span class="c1"># cells from the same tetrode due to inaccurate spike sorting.</span>
+    <span class="n">prob_observed</span><span class="p">[</span><span class="n">tetrode_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="n">prob_observed</span></div>
+
+
+<div class="viewcode-block" id="shuffle_cooccur"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.shuffle_cooccur">[docs]</a><span class="k">def</span> <span class="nf">shuffle_cooccur</span><span class="p">(</span><span class="n">activity_matrix</span><span class="p">,</span> <span class="n">num_shuffles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute shuffle matrices from experimental observations</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    activity_matrix : np.array</span>
+<span class="sd">        num_neurons by num_bins, boolean (1 or 0)</span>
+<span class="sd">    num_shuffle : int</span>
+<span class="sd">        Number of times to shuffle the activity matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_shuffle : np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shuffled_matrix</span> <span class="o">=</span> <span class="n">activity_matrix</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">shuffled_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">shuffled_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">prob_shuffle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_shuffles</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">rows</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_shuffles</span><span class="p">):</span>
+        <span class="n">this_matrix</span> <span class="o">=</span> <span class="n">shuffled_matrix</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">this_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">neuron_activities</span> <span class="o">=</span> <span class="n">this_matrix</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">prob_shuffle</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">neuron_activities</span> <span class="o">*</span> <span class="n">this_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prob_shuffle</span></div>
+
+
+<div class="viewcode-block" id="zscore_cooccur"><a class="viewcode-back" href="../../modules.html#nept.co_occurrence.zscore_cooccur">[docs]</a><span class="k">def</span> <span class="nf">zscore_cooccur</span><span class="p">(</span><span class="n">prob_observed</span><span class="p">,</span> <span class="n">prob_shuffle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compare co-occurrence observed probabilities with shuffle</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prob_observed : np.array</span>
+<span class="sd">    prob_shuffle : np.array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prob_zscore : np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_neurons</span> <span class="o">=</span> <span class="n">prob_observed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">prob_zscore</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_neurons</span><span class="p">,</span> <span class="n">num_neurons</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neurons</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neurons</span><span class="p">):</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
+                <span class="n">prob_zscore</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">prob_observed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span>
+                                     <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prob_shuffle</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prob_shuffle</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">prob_zscore</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

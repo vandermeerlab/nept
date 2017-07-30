@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.utils &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">signal</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="find_nearest_idx"><a class="viewcode-back" href="../../modules.html#nept.utils.find_nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">find_nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds nearest index in array to value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : np.array</span>
+<span class="sd">    val : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Index into array that is closest to val</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">val</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="find_nearest_indices"><a class="viewcode-back" href="../../modules.html#nept.utils.find_nearest_indices">[docs]</a><span class="k">def</span> <span class="nf">find_nearest_indices</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds nearest index in array to value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : np.array</span>
+<span class="sd">        This is the array you wish to index into.</span>
+<span class="sd">    vals : np.array</span>
+<span class="sd">        This is the array that you are getting your indices from.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Indices into array that is closest to vals.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Wrapper around find_nearest_idx().</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">find_nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="find_multi_in_epochs"><a class="viewcode-back" href="../../modules.html#nept.utils.find_multi_in_epochs">[docs]</a><span class="k">def</span> <span class="nf">find_multi_in_epochs</span><span class="p">(</span><span class="n">spikes</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">min_involved</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds epochs with minimum number of participating neurons.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spikes: np.array</span>
+<span class="sd">        Of nept.SpikeTrain objects</span>
+<span class="sd">    epochs: nept.Epoch</span>
+<span class="sd">    min_involved: int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    multi_epochs: nept.Epoch</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multi_starts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">multi_stops</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">n_neurons</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">epochs</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+        <span class="n">involved</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">this_neuron</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">this_neuron</span><span class="o">.</span><span class="n">time</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">this_neuron</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;=</span> <span class="n">stop</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">involved</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">involved</span> <span class="o">&gt;=</span> <span class="n">min_involved</span><span class="p">:</span>
+            <span class="n">multi_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+            <span class="n">multi_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+
+    <span class="n">multi_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">multi_starts</span><span class="p">)</span>
+    <span class="n">multi_stops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">multi_stops</span><span class="p">)</span>
+
+    <span class="n">multi_epochs</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">multi_starts</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">multi_stops</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]]))</span>
+
+    <span class="k">return</span> <span class="n">multi_epochs</span></div>
+
+
+<div class="viewcode-block" id="get_sort_idx"><a class="viewcode-back" href="../../modules.html#nept.utils.get_sort_idx">[docs]</a><span class="k">def</span> <span class="nf">get_sort_idx</span><span class="p">(</span><span class="n">tuning_curves</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds indices to sort neurons by max firing in tuning curve.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tuning_curves : list of lists</span>
+<span class="sd">        Where each inner list is the tuning curves for an individual</span>
+<span class="sd">        neuron.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    sorted_idx : list</span>
+<span class="sd">        List of integers that correspond to the neuron in sorted order.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tc_max_loc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">neuron_tc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tuning_curves</span><span class="p">):</span>
+        <span class="n">tc_max_loc</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">neuron_tc</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">neuron_tc</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">sorted_by_tc</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tc_max_loc</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">sorted_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sorted_by_tc</span><span class="p">:</span>
+        <span class="n">sorted_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">sorted_idx</span></div>
+
+
+<div class="viewcode-block" id="get_edges"><a class="viewcode-back" href="../../modules.html#nept.utils.get_edges">[docs]</a><span class="k">def</span> <span class="nf">get_edges</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">binsize</span><span class="p">,</span> <span class="n">lastbin</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds edges based on linear time</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position : nept.AnalogSignal</span>
+<span class="sd">    binsize : float</span>
+<span class="sd">        This is the desired size of bin.</span>
+<span class="sd">        Typically set around 0.020 to 0.040 seconds.</span>
+<span class="sd">    lastbin : boolean</span>
+<span class="sd">        Determines whether to include the last bin. This last bin may</span>
+<span class="sd">        not have the same binsize as the other bins.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    edges : np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">binsize</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lastbin</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">edges</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">edges</span></div>
+
+
+<div class="viewcode-block" id="bin_spikes"><a class="viewcode-back" href="../../modules.html#nept.utils.bin_spikes">[docs]</a><span class="k">def</span> <span class="nf">bin_spikes</span><span class="p">(</span><span class="n">spikes</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">window_advance</span><span class="p">,</span>
+               <span class="n">gaussian_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_gaussian_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bins spikes using a sliding window.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spikes: list</span>
+<span class="sd">        Of nept.SpikeTrain</span>
+<span class="sd">    position: nept.AnalogSignal</span>
+<span class="sd">    window_size: float</span>
+<span class="sd">    window_advance: float</span>
+<span class="sd">    gaussian_std: float or None</span>
+<span class="sd">    n_gaussian_std: int</span>
+<span class="sd">    normalized: boolean</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    binned_spikes: nept.AnalogSignal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">get_edges</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">window_advance</span><span class="p">,</span> <span class="n">lastbin</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">given_n_bins</span> <span class="o">=</span> <span class="n">window_size</span> <span class="o">/</span> <span class="n">window_advance</span>
+    <span class="n">n_bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">given_n_bins</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n_bins</span> <span class="o">-</span> <span class="n">given_n_bins</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;window advance does not divide the window size evenly. &quot;</span>
+                      <span class="s2">&quot;Using window size </span><span class="si">%g</span><span class="s2"> instead.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_bins</span><span class="o">*</span><span class="n">window_advance</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+        <span class="n">square_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n_bins</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">square_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                                             <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])]),</span>
+                                  <span class="n">square_filter</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">gaussian_std</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gaussian_std</span> <span class="o">&gt;</span> <span class="n">window_advance</span><span class="p">:</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">n_gaussian_std</span> <span class="o">*</span> <span class="n">gaussian_std</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">window_advance</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_points</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">n_points</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
+        <span class="n">gaussian_filter</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">gaussian_std</span> <span class="o">/</span> <span class="n">window_advance</span><span class="p">)</span>
+        <span class="n">gaussian_filter</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gaussian_filter</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gaussian_filter</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">counts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">gaussian_filter</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;gaussian filter too long for this length of time&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">AnalogSignal</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">bin_edges</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cartesian"><a class="viewcode-back" href="../../modules.html#nept.utils.cartesian">[docs]</a><span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="n">xcenters</span><span class="p">,</span> <span class="n">ycenters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds every combination of elements in two arrays.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xcenters : np.array</span>
+<span class="sd">    ycenters : np.array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cartesian : np.array</span>
+<span class="sd">        With shape(n_sample, 2).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">xcenters</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ycenters</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">ycenters</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">xcenters</span><span class="p">))])</span></div>
+
+
+<div class="viewcode-block" id="get_xyedges"><a class="viewcode-back" href="../../modules.html#nept.utils.get_xyedges">[docs]</a><span class="k">def</span> <span class="nf">get_xyedges</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">binsize</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gets edges based on position min and max.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position: 2D nept.Position</span>
+<span class="sd">    binsize: int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xedges: np.array</span>
+<span class="sd">    yedges: np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xedges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">binsize</span><span class="p">,</span> <span class="n">binsize</span><span class="p">)</span>
+    <span class="n">yedges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">binsize</span><span class="p">,</span> <span class="n">binsize</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">xedges</span><span class="p">,</span> <span class="n">yedges</span></div>
+
+
+<div class="viewcode-block" id="expand_line"><a class="viewcode-back" href="../../modules.html#nept.utils.expand_line">[docs]</a><span class="k">def</span> <span class="nf">expand_line</span><span class="p">(</span><span class="n">start_pt</span><span class="p">,</span> <span class="n">stop_pt</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">expand_by</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Creates buffer zone around a line.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    start_pt : Shapely&#39;s Point object</span>
+<span class="sd">    stop_pt : Shapely&#39;s Point object</span>
+<span class="sd">    line : Shapely&#39;s LineString object</span>
+<span class="sd">    expand_by : int</span>
+<span class="sd">        This sets by how much you wish to expand the line.</span>
+<span class="sd">        Defaults to 6.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    zone : Shapely&#39;s Polygon object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">line_expanded</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">expand_by</span><span class="p">)</span>
+    <span class="n">zone</span> <span class="o">=</span> <span class="n">start_pt</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">line_expanded</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">stop_pt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zone</span></div>
+
+
+<div class="viewcode-block" id="perievent_slice"><a class="viewcode-back" href="../../modules.html#nept.utils.perievent_slice">[docs]</a><span class="k">def</span> <span class="nf">perievent_slice</span><span class="p">(</span><span class="n">analogsignal</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">t_before</span><span class="p">,</span> <span class="n">t_after</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Slices the analogsignal data into perievent chunks.</span>
+<span class="sd">    Unlike time_slice, the resulting AnalogSignal will be multidimensional.</span>
+<span class="sd">    Only works for 1D signals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analogsignal : nept.AnalogSignal</span>
+<span class="sd">    events : np.array</span>
+<span class="sd">    t_before : float</span>
+<span class="sd">    t_after : float</span>
+<span class="sd">    dt : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nept.AnalogSignal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">analogsignal</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;AnalogSignal must be 1D.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">analogsignal</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">t_before</span><span class="p">,</span> <span class="n">t_after</span><span class="o">+</span><span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+        <span class="n">sliced</span> <span class="o">=</span> <span class="n">analogsignal</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">event</span><span class="o">-</span><span class="n">t_before</span><span class="p">,</span> <span class="n">event</span><span class="o">+</span><span class="n">t_after</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">time</span><span class="o">+</span><span class="n">event</span><span class="p">,</span> <span class="n">sliced</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">sliced</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">nept</span><span class="o">.</span><span class="n">AnalogSignal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="speed_threshold"><a class="viewcode-back" href="../../modules.html#nept.utils.speed_threshold">[docs]</a><span class="k">def</span> <span class="nf">speed_threshold</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">t_smooth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">speed_limit</span><span class="o">=</span><span class="mf">0.4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds positions above a certain speed threshold</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position : nept.Position</span>
+<span class="sd">    t_smooth : float</span>
+<span class="sd">    speed_limit : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    position_run : nept.Position</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">t_smooth</span><span class="p">)</span>
+    <span class="n">run_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">speed</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">speed_limit</span>
+
+    <span class="k">return</span> <span class="n">position</span><span class="p">[</span><span class="n">run_idx</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

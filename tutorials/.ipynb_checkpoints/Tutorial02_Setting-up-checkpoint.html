@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Module01 - Setting up &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="Module01---Setting-up">
+<h1>Module01 - Setting up<a class="headerlink" href="#Module01---Setting-up" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="Goals">
+<h1>Goals<a class="headerlink" href="#Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Establish a sensible folder structure</li>
+<li>Install python and nept</li>
+<li>Introduction to git and GitHub</li>
+<li>Download a data set and test your path setup</li>
+</ul>
+</div>
+<div class="section" id="Establish-a-sensible-folder-structure">
+<h1>Establish a sensible folder structure<a class="headerlink" href="#Establish-a-sensible-folder-structure" title="Permalink to this headline">¶</a></h1>
+<p>So far, you have a local nept repository, with code common to many
+analyses. As you work on your own project, you will write your own
+analysis code that may not be relevant to others. You will also have
+data files for each project. We can now consider where all of these
+files can go and how you will manage them. We recommend using two main
+locations:</p>
+<ul class="simple">
+<li><strong>Code.</strong> Repositories (folders) here are linked to remote GitHub
+repositories (either public or private). This may mean that some
+project code repositories depend on other repositories, which is
+fine. Just be aware that you need to keep your code up-to-date in
+every location where it is used (by doing <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code>).</li>
+<li><strong>Data.</strong> Data should not be put on GitHub because it takes up a lot
+of space and never changes, so it does not benefit from being tracked
+with the version control of git. Raw data should be in a separate
+location on your computer than where your code lives, but processed
+data and intermediate files can be in a folder within your project
+code <em>as long as you specify git to ignore that location within your
+.gitignore file</em>.</li>
+</ul>
+<p>If you are an owner or collaborator of a GitHub repository, such as when
+you make a repository for your own project, you will be able to push
+changes you make and manage the repository as you like. Generally, when
+you want to contribute to another repository, you can make your changes
+in a Fork of the repository and create a <a class="reference external" href="https://help.github.com/articles/about-pull-requests/">pull
+request</a>.
+These pull requests allows the maintainers to see your code and ask for
+changes before it is merged into master, which helps to ensure that the
+code in master is working and stable.</p>
+</div>
+<div class="section" id="Install-python-and-nept">
+<h1>Install python and nept<a class="headerlink" href="#Install-python-and-nept" title="Permalink to this headline">¶</a></h1>
+<p>Python is a free and open-source programming language, with a core
+language and many additional useful scientific libraries. Follow the
+getting started directions in
+<a class="reference external" href="https://github.com/vandermeerlab/nept">nept</a>, our lab&#8217;s codebase, if
+you wish to make this tutorial interactive. Any code in this tutorial
+can be modified and run in the <a class="reference external" href="http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html">Jupyter
+notebook</a>.</p>
+</div>
+<div class="section" id="Introduction-to-git-and-GitHub">
+<h1>Introduction to git and GitHub<a class="headerlink" href="#Introduction-to-git-and-GitHub" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/">GitHub</a> is a platform for distributed version
+control. So, you can get access to the latest codebase and it provides a
+<a class="reference external" href="https://github.com/vandermeerlab/nept/blob/master/CONTRIBUTING.rst">platform</a>
+for you to submit changes should you find any bugs or desire
+improvements to what is currently available.</p>
+<p>If you don&#8217;t already have an account, you can make one
+<a class="reference external" href="https://github.com/">here</a>. And GitHub provides some (free) benefits
+to educators and students, check out if you qualify for them
+<a class="reference external" href="https://education.github.com/">here</a>.</p>
+<p>There are
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">many</a>
+<a class="reference external" href="http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1/#awesm=~ov691XRLABIiU0">excellent</a>
+<a class="reference external" href="http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners">resources</a>
+dedicated to showing beginners how to effective use git and GitHub, so
+take a moment to go through those if they&#8217;re unfamiliar to you. After
+going through those, you should be familiar with the commands
+<code class="docutils literal"><span class="pre">status</span></code>, <code class="docutils literal"><span class="pre">push</span></code>, <code class="docutils literal"><span class="pre">pull</span></code>, <code class="docutils literal"><span class="pre">add</span></code>, <code class="docutils literal"><span class="pre">commit</span></code>, and have some idea
+of how git and GitHub track changes so you know when your code is saved
+under version control.</p>
+</div>
+<div class="section" id="Get-a-data-session-from-the-vandermeerlab-server">
+<h1>Get a data session from the vandermeerlab server<a class="headerlink" href="#Get-a-data-session-from-the-vandermeerlab-server" title="Permalink to this headline">¶</a></h1>
+<p>Use a FTP client such as <a class="reference external" href="https://filezilla-project.org/">Filezilla</a>
+to connect to the lab FTP server, using the following settings:</p>
+<ul class="simple">
+<li>Host: <strong>LAB SERVER IP</strong></li>
+<li>Protocol: &#8220;FTP - File Transfer Protocol&#8221;</li>
+<li>Encryption: &#8220;Use explicit FTP over TLS if available&#8221;</li>
+<li>Logon Type: &#8220;Normal&#8221;</li>
+<li>User: <strong>LAB USER NAME</strong></li>
+<li>Passwork: <strong>LAB PASSWORD</strong></li>
+</ul>
+<p><em>Note, contact us for the lab server ip, user, and password.</em></p>
+<p>If you cannot log in to the server, send me your IP address and I will
+enable access for you. If you still can&#8217;t login, try changing the
+Filezilla login settings to use &#8220;FTP&#8221; as the Protocol, &#8220;Use explicit FTP
+over TLS if available&#8221;, and Logon Type &#8220;Normal&#8221;.</p>
+<p>For this module you will need the
+/datavault/promoted/R016/R016-2012-10-08 folder. (Rxxx indicate
+different rats, followed by the date of each session). In general you
+want to keep your data separate from your code, so put it in your data/
+folder. Multiple analysis projects may use the same data, which you
+don&#8217;t want to duplicate it.</p>
+<p>The choice of the folder name &#8216;&#8217;promoted&#8217;&#8217; indicates that these are data
+folders for which processing is completed, which typically includes the
+renaming of raw data files, annotation, spike sorting, and a few other
+steps.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import nept
+import matplotlib.pyplot as plt
+
+# Load LFP (.ncs) from rat ventral striatum
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R016-2012-10-08&#39;)
+data_lfp = &#39;R016-2012-10-08-CSC02d.ncs&#39;
+lfp = nept.load_lfp(os.path.join(data_folder, data_lfp))
+
+# Slice the LFP to [1338.6, 1339.2]
+sliced_lfp = lfp.time_slice(1338.6, 1339.2)
+
+# Plot the data
+plt.plot(sliced_lfp.time, sliced_lfp.data)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/emily/miniconda3/envs/py33/lib/python3.4/site-packages/matplotlib/font_manager.py:280: UserWarning: Matplotlib is building the font cache using fc-list. This may take a moment.
+  &#39;Matplotlib is building the font cache using fc-list. &#39;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-1c46fd2d18ef&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> data_folder <span class="ansi-blue-fg">=</span> os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_path<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;R016-2012-10-08&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> data_lfp <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;R016-2012-10-08-CSC02d.ncs&#39;</span>
+<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg"> </span>lfp <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> data_lfp<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-red-fg"># Slice the LFP to [1338.6, 1339.2]</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_lfp</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">     49</span>
+<span class="ansi-green-intense-fg ansi-bold">     50</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 51</span><span class="ansi-red-fg">     </span>data<span class="ansi-blue-fg">,</span> time <span class="ansi-blue-fg">=</span> load_ncs<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     52</span>
+<span class="ansi-green-intense-fg ansi-bold">     53</span>     <span class="ansi-green-fg">return</span> nept<span class="ansi-blue-fg">.</span>LocalFieldPotential<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> time<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_ncs</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">    113</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    114</span>
+<span class="ansi-green-fg">--&gt; 115</span><span class="ansi-red-fg">     </span>f <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;rb&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    116</span>
+<span class="ansi-green-intense-fg ansi-bold">    117</span>     <span class="ansi-red-fg"># Neuralynx files have a 16kbyte header</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R016-2012-10-08/R016-2012-10-08-CSC02d.ncs&#39;
+</pre></div></div>
+</div>
+<p>If you see the local field potential (LFP) plotted, then great job!
+Next, let&#8217;s get more into how we represent our neural data.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Module01 - Setting up</a></li>
+<li><a class="reference internal" href="#Goals">Goals</a></li>
+<li><a class="reference internal" href="#Establish-a-sensible-folder-structure">Establish a sensible folder structure</a></li>
+<li><a class="reference internal" href="#Install-python-and-nept">Install python and nept</a></li>
+<li><a class="reference internal" href="#Introduction-to-git-and-GitHub">Introduction to git and GitHub</a></li>
+<li><a class="reference internal" href="#Get-a-data-session-from-the-vandermeerlab-server">Get a data session from the vandermeerlab server</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial02_Setting-up-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

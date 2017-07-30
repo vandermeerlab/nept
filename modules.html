@@ -1,0 +1,1842 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept Modules &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="nept Objects" href="core.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">nept Objects</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">nept Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.co_occurrence">nept.co_occurrence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.decoding">nept.decoding module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.lfp_filtering">nept.lfp_filtering module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.loaders_mclust">nept.loaders_mclust module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.loaders_medpc">nept.loaders_medpc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.loaders_neuralynx">nept.loaders_neuralynx module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.medpc_core">nept.medpc_core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.place_fields">nept.place_fields module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.tuning_curves">nept.tuning_curves module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nept.utils">nept.utils module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>nept Modules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="nept-modules">
+<h1>nept Modules<a class="headerlink" href="#nept-modules" title="Permalink to this headline">¶</a></h1>
+<p>The nept modules are used for the analysis
+of neural electrophysiological
+recording data and associated behaviors.</p>
+<div class="section" id="module-nept.co_occurrence">
+<span id="nept-co-occurrence-module"></span><h2>nept.co_occurrence module<a class="headerlink" href="#module-nept.co_occurrence" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.co_occurrence.bool_counts">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">bool_counts</code><span class="sig-paren">(</span><em>count_matrix</em>, <em>min_spikes=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#bool_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.bool_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts count matrix to boolean of whether bin active or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>count_matrix</strong> : np.array</p>
+<blockquote>
+<div><p>num_neurons by num_bins</p>
+</div></blockquote>
+<p><strong>min_spikes</strong> : int</p>
+<blockquote>
+<div><p>Minimum number of spikes in a bin for that bin to be considered active.
+The defaule is set to 1.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>activity_matrix</strong> : np.array</p>
+<blockquote class="last">
+<div><p>num_neurons by num_bins, boolean (1 or 0)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.compute_cooccur">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">compute_cooccur</code><span class="sig-paren">(</span><em>count_matrix</em>, <em>tetrode_mask</em>, <em>num_shuffles=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#compute_cooccur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.compute_cooccur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the probabilities for co-occurrence</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>count_matrix</strong> : np.array</p>
+<blockquote>
+<div><p>num_neurons by num_bins</p>
+</div></blockquote>
+<p><strong>tetrode_mask</strong> : np.array</p>
+<blockquote>
+<div><p>n_neurons by n_neurons. Boolean of True (same tetrode) or
+False (different tetrode)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prob_active</strong> : np.array</p>
+<p><strong>prob_expected</strong> : ap.array</p>
+<p><strong>prob_observed</strong> : ap.array</p>
+<p class="last"><strong>prob_zscore</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.expected_cooccur">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">expected_cooccur</code><span class="sig-paren">(</span><em>prob_active</em>, <em>tetrode_mask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#expected_cooccur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.expected_cooccur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expected co-occurrence, multiply single cell probabilities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prob_active</strong> : np.array</p>
+<blockquote>
+<div><p>Fraction of bins each cell participates in individually</p>
+</div></blockquote>
+<p><strong>tetrode_mask</strong> : np.array</p>
+<blockquote>
+<div><p>n_neurons by n_neurons. Boolean of True (same tetrode) or
+False (different tetrode).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prob_expected</strong> : np.array</p>
+<blockquote class="last">
+<div><div class="math">
+\[p(x|y)\]</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.get_tetrode_mask">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">get_tetrode_mask</code><span class="sig-paren">(</span><em>spikes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#get_tetrode_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.get_tetrode_mask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.observed_cooccur">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">observed_cooccur</code><span class="sig-paren">(</span><em>activity_matrix</em>, <em>tetrode_mask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#observed_cooccur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.observed_cooccur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observed co-occurrences</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>activity_matrix</strong> : np.array</p>
+<blockquote>
+<div><p>num_neurons by num_bins, boolean (1 or 0)</p>
+</div></blockquote>
+<p><strong>tetrode_mask</strong> : np.array</p>
+<blockquote>
+<div><p>n_neurons by n_neurons. Boolean of True (same tetrode) or
+False (different tetrode).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prob_observed</strong> : np.array</p>
+<blockquote class="last">
+<div><div class="math">
+\[p(x,y)\]</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.prob_active_neuron">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">prob_active_neuron</code><span class="sig-paren">(</span><em>activity_matrix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#prob_active_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.prob_active_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get expected co-occurrence under independence assumption</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>activity_matrix</strong> : np.array</p>
+<blockquote>
+<div><p>num_neurons by num_bins, boolean (1 or 0)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prob_active</strong> : np.array</p>
+<blockquote class="last">
+<div><p>Fraction of bins each cell participates in individually</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.shuffle_cooccur">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">shuffle_cooccur</code><span class="sig-paren">(</span><em>activity_matrix</em>, <em>num_shuffles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#shuffle_cooccur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.shuffle_cooccur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute shuffle matrices from experimental observations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>activity_matrix</strong> : np.array</p>
+<blockquote>
+<div><p>num_neurons by num_bins, boolean (1 or 0)</p>
+</div></blockquote>
+<p><strong>num_shuffle</strong> : int</p>
+<blockquote>
+<div><p>Number of times to shuffle the activity matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>prob_shuffle</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.spike_counts">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">spike_counts</code><span class="sig-paren">(</span><em>spikes</em>, <em>epochs</em>, <em>window=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#spike_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.spike_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get spike counts for specific interval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>spikes</strong> : list</p>
+<blockquote>
+<div><p>Containing nept.SpikeTrain for each neuron.</p>
+</div></blockquote>
+<p><strong>interval_times</strong> : nept.Epoch</p>
+<p><strong>window</strong> : float</p>
+<blockquote>
+<div><p>When window is set, takes the spike times for this window length
+around the center of the interval times. The default is set to None.
+Suggested window size is 0.1.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>count_matrix</strong> : np.array</p>
+<blockquote class="last">
+<div><p>num_neurons x num_bins</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.vector_from_array">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">vector_from_array</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#vector_from_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.vector_from_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get triangle of output in vector from a correlation-type array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>array</strong> : np.array</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">vector (np.array)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Old Matlab code indexes by column (aka.Fortran-style), so to get the indices
+of the top triangle, we have to do some reshaping.
+Otherwise, if the vector made up by rows is OK, then simply :
+triangle = np.triu_indices(array.size, k=1), out = array[triangle]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.co_occurrence.zscore_cooccur">
+<code class="descclassname">nept.co_occurrence.</code><code class="descname">zscore_cooccur</code><span class="sig-paren">(</span><em>prob_observed</em>, <em>prob_shuffle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/co_occurrence.html#zscore_cooccur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.co_occurrence.zscore_cooccur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare co-occurrence observed probabilities with shuffle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prob_observed</strong> : np.array</p>
+<p><strong>prob_shuffle</strong> : np.array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>prob_zscore</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.decoding">
+<span id="nept-decoding-module"></span><h2>nept.decoding module<a class="headerlink" href="#module-nept.decoding" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.decoding.bayesian_prob">
+<code class="descclassname">nept.decoding.</code><code class="descname">bayesian_prob</code><span class="sig-paren">(</span><em>counts</em>, <em>tuning_curves</em>, <em>binsize</em>, <em>min_neurons</em>, <em>min_spikes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/decoding.html#bayesian_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.decoding.bayesian_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the bayesian probability of location based on spike counts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>counts</strong> : nept.AnalogSignal</p>
+<blockquote>
+<div><p>Where each inner array is the number of spikes (int) in each bin for an individual neuron.</p>
+</div></blockquote>
+<p><strong>tuning_curves</strong> : np.array</p>
+<blockquote>
+<div><p>Where each inner array is the tuning curve (floats) for an individual neuron.</p>
+</div></blockquote>
+<p><strong>binsize</strong> : float</p>
+<blockquote>
+<div><p>Size of the time bins.</p>
+</div></blockquote>
+<p><strong>min_neurons</strong> : int</p>
+<blockquote>
+<div><p>Mininum number of neurons active in a given bin.</p>
+</div></blockquote>
+<p><strong>min_spikes</strong> : int</p>
+<blockquote>
+<div><p>Mininum number of spikes in a given bin.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prob</strong> : np.array</p>
+<blockquote class="last">
+<div><p>Where each inner array is the probability (floats) for an individual neuron by location bins.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a bin does not meet the min_neuron/min_spikes requirement, that bin&#8217;s probability
+is set to nan. To convert it to 0s instead, use : prob[np.isnan(prob)] = 0 on the output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.decoding.decode_location">
+<code class="descclassname">nept.decoding.</code><code class="descname">decode_location</code><span class="sig-paren">(</span><em>likelihood</em>, <em>pos_centers</em>, <em>time_centers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/decoding.html#decode_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.decoding.decode_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the decoded location based on the centers of the position bins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>likelihood</strong> : np.array</p>
+<blockquote>
+<div><p>With shape(n_timebins, n_positionbins)</p>
+</div></blockquote>
+<p><strong>pos_centers</strong> : np.array</p>
+<p><strong>time_centers</strong> : np.array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>decoded</strong> : nept.Position</p>
+<blockquote class="last">
+<div><p>Estimate of decoded position.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.decoding.remove_teleports">
+<code class="descclassname">nept.decoding.</code><code class="descname">remove_teleports</code><span class="sig-paren">(</span><em>position</em>, <em>speed_thresh</em>, <em>min_length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/decoding.html#remove_teleports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.decoding.remove_teleports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes positions above a certain speed threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.Position</p>
+<p><strong>speed_thresh</strong> : int</p>
+<blockquote>
+<div><p>Maximum speed to consider natural rat movements. Anything
+above this theshold will not be included in the filtered positions.</p>
+</div></blockquote>
+<p><strong>min_length</strong> : int</p>
+<blockquote>
+<div><p>Minimum length for a sequence to be included in filtered positions.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>filtered_position</strong> : nept.Epoch</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.lfp_filtering">
+<span id="nept-lfp-filtering-module"></span><h2>nept.lfp_filtering module<a class="headerlink" href="#module-nept.lfp_filtering" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.lfp_filtering.butter_bandpass">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">butter_bandpass</code><span class="sig-paren">(</span><em>signal</em>, <em>thresh</em>, <em>fs</em>, <em>order=4</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#butter_bandpass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.butter_bandpass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters signal using butterworth filter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>signal</strong> : nept.LFP</p>
+<p><strong>fs</strong> : int</p>
+<blockquote>
+<div><p>Eg. 2000. Should get this from experiment-specifics.</p>
+</div></blockquote>
+<p><strong>thresh</strong> : tuple</p>
+<blockquote>
+<div><p>With format (lowcut, highcut).
+Typically (140.0, 250.0) for sharp-wave ripple detection.</p>
+</div></blockquote>
+<p><strong>order</strong> : int</p>
+<blockquote>
+<div><p>Default set to 4.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>filtered_butter</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.detect_swr_hilbert">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">detect_swr_hilbert</code><span class="sig-paren">(</span><em>lfp</em>, <em>fs</em>, <em>thresh</em>, <em>z_thresh=3</em>, <em>power_thresh=3</em>, <em>merge_thresh=0.02</em>, <em>min_length=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#detect_swr_hilbert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.detect_swr_hilbert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds sharp-wave ripple (SWR) times and indices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lfp</strong> : nept.LocalFieldPotential</p>
+<p><strong>fs</strong> : int</p>
+<blockquote>
+<div><p>Experiment-specific, something in the range of 2000 typical.</p>
+</div></blockquote>
+<p><strong>thresh</strong> : tuple</p>
+<blockquote>
+<div><p>With format (lowcut, highcut).
+Typically (140.0, 250.0) for sharp-wave ripple detection.</p>
+</div></blockquote>
+<p><strong>z_thres</strong> : int or float</p>
+<blockquote>
+<div><p>The default is set to 3</p>
+</div></blockquote>
+<p><strong>power_thres</strong> : int or float</p>
+<blockquote>
+<div><p>The default is set to 3</p>
+</div></blockquote>
+<p><strong>merge_thres</strong> : int or float</p>
+<blockquote>
+<div><p>The default is set to 0.02</p>
+</div></blockquote>
+<p><strong>min_length</strong> : float</p>
+<blockquote>
+<div><p>Any sequence less than this amount is not considered a sharp-wave ripple.
+The default is set to 0.01.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>swrs</strong> : nept.Epoch</p>
+<blockquote class="last">
+<div><p>Containing nept.LocalFieldPotential for each SWR event</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.mean_coherence">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">mean_coherence</code><span class="sig-paren">(</span><em>perievent_lfp1</em>, <em>perievent_lfp2</em>, <em>window</em>, <em>fs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#mean_coherence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.mean_coherence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the mean coherence between perievent slices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>perievent_lfp1</strong> : nept.AnalogSignal</p>
+<p><strong>perievent_lfp2</strong> : nept.AnalogSignal</p>
+<p><strong>window</strong> : int</p>
+<p><strong>fs</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>freq</strong> : np.array</p>
+<p class="last"><strong>coherence</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.mean_coherencegram">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">mean_coherencegram</code><span class="sig-paren">(</span><em>perievent_lfp1</em>, <em>perievent_lfp2</em>, <em>dt</em>, <em>window</em>, <em>fs</em>, <em>extend=0.3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#mean_coherencegram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.mean_coherencegram" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Computes the mean coherence over time between perievent slices</dt>
+<dd>(e.g. &#8220;coherencegram&#8221; because it&#8217;s a combination of a coherence and a spectrogram)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>perievent_lfp1</strong> : nept.AnalogSignal</p>
+<p><strong>perievent_lfp2</strong> : nept.AnalogSignal</p>
+<p><strong>dt</strong> : float</p>
+<p><strong>window</strong> : int</p>
+<p><strong>fs</strong> : int</p>
+<p><strong>extend</strong> : float</p>
+<blockquote>
+<div><p>Defaults to 0.3</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>timebins</strong> : np.array</p>
+<p><strong>freq</strong> : np.array</p>
+<p class="last"><strong>coherencegram</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.mean_csd">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">mean_csd</code><span class="sig-paren">(</span><em>perievent_lfp1</em>, <em>perievent_lfp2</em>, <em>window</em>, <em>fs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#mean_csd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.mean_csd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the mean Cross-Spectral Density (CSD) between perievent slices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>perievent_lfp1</strong> : nept.AnalogSignal</p>
+<p><strong>perievent_lfp2</strong> : nept.AnalogSignal</p>
+<p><strong>window</strong> : int</p>
+<p><strong>fs</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>freq</strong> : np.array</p>
+<p class="last"><strong>power</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.mean_psd">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">mean_psd</code><span class="sig-paren">(</span><em>perievent_lfps</em>, <em>window</em>, <em>fs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#mean_psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.mean_psd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the mean Power Spectral Density (PSD) of perievent slices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>perievent_lfps</strong> : nept.AnalogSignal</p>
+<p><strong>window</strong> : int</p>
+<p><strong>fs</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>freq</strong> : np.array</p>
+<p class="last"><strong>power</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.next_regular">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">next_regular</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#next_regular"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.next_regular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the next regular number greater than or equal to target.
+Regular numbers are composites of the prime factors 2, 3, and 5.
+Also known as 5-smooth numbers or Hamming numbers, these are the optimal
+size for inputs to fast-fourier transforms (FFTPACK).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> : positive int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>match</strong> : int</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function was taken from the scipy.signal.signaltools module.
+See <a class="reference external" href="http://scipy.org/scipylib/">http://scipy.org/scipylib/</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.lfp_filtering.power_in_db">
+<code class="descclassname">nept.lfp_filtering.</code><code class="descname">power_in_db</code><span class="sig-paren">(</span><em>power</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/lfp_filtering.html#power_in_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.lfp_filtering.power_in_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the power in dB for plotting</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>power</strong> : np.array</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.loaders_mclust">
+<span id="nept-loaders-mclust-module"></span><h2>nept.loaders_mclust module<a class="headerlink" href="#module-nept.loaders_mclust" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.loaders_mclust.get_spiketrain">
+<code class="descclassname">nept.loaders_mclust.</code><code class="descname">get_spiketrain</code><span class="sig-paren">(</span><em>spike_times</em>, <em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_mclust.html#get_spiketrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_mclust.get_spiketrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts spike times to nept.SpikeTrain.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>spike_times: np.array</strong></p>
+<p><strong>label: str</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">spiketrain: nept.SpikeTrain</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_mclust.load_mclust_header">
+<code class="descclassname">nept.loaders_mclust.</code><code class="descname">load_mclust_header</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_mclust.html#load_mclust_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_mclust.load_mclust_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a mclust .t tetrode file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename: str</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">times: np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_mclust.load_mclust_t">
+<code class="descclassname">nept.loaders_mclust.</code><code class="descname">load_mclust_t</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_mclust.html#load_mclust_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_mclust.load_mclust_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a mclust .t tetrode file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename: str</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">times: np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_mclust.load_spikes">
+<code class="descclassname">nept.loaders_mclust.</code><code class="descname">load_spikes</code><span class="sig-paren">(</span><em>filepath</em>, <em>load_questionable=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_mclust.html#load_spikes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_mclust.load_spikes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads spikes from multiple tetrode spike files from a given session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filepath: str</strong></p>
+<blockquote>
+<div><p>Session folder</p>
+</div></blockquote>
+<p><strong>load_questionable: boolean</strong></p>
+<blockquote>
+<div><p>Loads <code class="docutils literal"><span class="pre">*.t</span></code> and <code class="docutils literal"><span class="pre">*._t</span></code> spiketrains if True (default).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">spikes: list of nept.SpikeTrain</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.loaders_medpc">
+<span id="nept-loaders-medpc-module"></span><h2>nept.loaders_medpc module<a class="headerlink" href="#module-nept.loaders_medpc" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.loaders_medpc.get_data">
+<code class="descclassname">nept.loaders_medpc.</code><code class="descname">get_data</code><span class="sig-paren">(</span><em>contents</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_medpc.html#get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_medpc.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts content from a <code class="docutils literal"><span class="pre">*.mpc</span></code> file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>contents: list</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">header: dict</p>
+<p class="last">data: dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_medpc.get_events">
+<code class="descclassname">nept.loaders_medpc.</code><code class="descname">get_events</code><span class="sig-paren">(</span><em>event_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_medpc.html#get_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_medpc.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds timestamps associated with each event.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>event_list</strong> : list</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>events</strong> : dict</p>
+<blockquote class="last">
+<div><p>With event type as key, timestamps as values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_medpc.get_subject">
+<code class="descclassname">nept.loaders_medpc.</code><code class="descname">get_subject</code><span class="sig-paren">(</span><em>subject_content</em>, <em>data_key='b'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_medpc.html#get_subject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_medpc.get_subject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets header and data from MedPC file for a single subject.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>subject_content: str</strong></p>
+<p><strong>data_key: str</strong></p>
+<blockquote>
+<div><p>Default set to &#8216;b&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">header: dict</p>
+<p class="last">data: list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_medpc.load_medpc">
+<code class="descclassname">nept.loaders_medpc.</code><code class="descname">load_medpc</code><span class="sig-paren">(</span><em>filename</em>, <em>f_assign_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_medpc.html#load_medpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_medpc.load_medpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads MedPC data file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: MedPC file</strong></p>
+<p><strong>f_assign_label: module</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">rats_data: dict</p>
+<blockquote class="last">
+<div><p>With each subject as keys. Contains dict of event as nept.Epochs.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_medpc.read_file">
+<code class="descclassname">nept.loaders_medpc.</code><code class="descname">read_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_medpc.html#read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_medpc.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the contents of a <code class="docutils literal"><span class="pre">*.mpc</span></code> file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename: str</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">contents: list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.loaders_neuralynx">
+<span id="nept-loaders-neuralynx-module"></span><h2>nept.loaders_neuralynx module<a class="headerlink" href="#module-nept.loaders_neuralynx" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_events">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_events</code><span class="sig-paren">(</span><em>filename</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads neuralynx events</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+<p><strong>labels: dict</strong></p>
+<blockquote>
+<div><p>With event name as the key and Neuralynx event string as the value.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">timestamps: dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_lfp">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_lfp</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_lfp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_lfp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads LFP as nept.LocalFieldPotential</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename: str</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">lfp: nept.LocalFieldPotential</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_ncs">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_ncs</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_ncs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_ncs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a neuralynx .ncs electrode file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">cscs: np.array</p>
+<blockquote>
+<div><p>Voltage trace (V)</p>
+</div></blockquote>
+<p>times: np.array</p>
+<blockquote class="last">
+<div><p>Timestamps (microseconds)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_neuralynx_header">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_neuralynx_header</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_neuralynx_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_neuralynx_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a neuralynx header.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename: str</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">header: byte str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_nev">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_nev</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_nev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_nev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a neuralynx .nev file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">nev_data: dict</p>
+<blockquote class="last">
+<div><p>With time (uint64), id (uint16), nttl (uint16), and event_str (charx128) as the most usable keys.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_ntt">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_ntt</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_ntt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_ntt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a neuralynx .ntt tetrode spike file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">timestamps: np.array</p>
+<blockquote>
+<div><p>Spikes as (num_spikes, length_waveform, num_channels)</p>
+</div></blockquote>
+<p>spikes: np.array</p>
+<blockquote>
+<div><p>Spike times as uint64 (us)</p>
+</div></blockquote>
+<p>frequency: float</p>
+<blockquote>
+<div><p>Sampling frequency in waveforms (Hz)</p>
+</div></blockquote>
+<p>Usage:</p>
+<p class="last">timestamps, spikes, frequency = load_ntt(&#8216;TT13.ntt&#8217;)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_nvt">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_nvt</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_nvt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_nvt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a neuralynx .nvt file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">nvt_data: dict</p>
+<blockquote class="last">
+<div><p>With time, x, and y as keys.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.loaders_neuralynx.load_position">
+<code class="descclassname">nept.loaders_neuralynx.</code><code class="descname">load_position</code><span class="sig-paren">(</span><em>filename</em>, <em>pxl_to_cm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/loaders_neuralynx.html#load_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.loaders_neuralynx.load_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads videotracking position as nept.Position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename: str</strong></p>
+<p><strong>pxl_to_cm: tuple</strong></p>
+<blockquote>
+<div><p>With (x, y) conversion factors</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">position: nept.Position</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.medpc_core">
+<span id="nept-medpc-core-module"></span><h2>nept.medpc_core module<a class="headerlink" href="#module-nept.medpc_core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nept.medpc_core.Rat">
+<em class="property">class </em><code class="descclassname">nept.medpc_core.</code><code class="descname">Rat</code><span class="sig-paren">(</span><em>rat_id</em>, <em>group1=None</em>, <em>group2=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Rat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Rat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="nept.medpc_core.Rat.add_session">
+<code class="descname">add_session</code><span class="sig-paren">(</span><em>mags</em>, <em>pellets</em>, <em>lights1</em>, <em>lights2</em>, <em>sounds1</em>, <em>sounds2</em>, <em>trial1</em>, <em>trial2</em>, <em>trial3</em>, <em>trial4</em>, <em>group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Rat.add_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Rat.add_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts cues into appropriate trials (1, 2, 3, 4), using intersect between trial and cue epochs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.medpc_core.Rat.add_session_medpc">
+<code class="descname">add_session_medpc</code><span class="sig-paren">(</span><em>mags</em>, <em>pellets</em>, <em>lights1</em>, <em>lights2</em>, <em>sounds1</em>, <em>sounds2</em>, <em>n_unique=8</em>, <em>delay=5.02</em>, <em>tolerance=1e-08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Rat.add_session_medpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Rat.add_session_medpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts cues into appropriate trials (1, 2, 3, 4), using specified delay between light and sound cues.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nept.medpc_core.Session">
+<em class="property">class </em><code class="descclassname">nept.medpc_core.</code><code class="descname">Session</code><span class="sig-paren">(</span><em>mags</em>, <em>pellets</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="nept.medpc_core.Session.add_missing_trial">
+<code class="descname">add_missing_trial</code><span class="sig-paren">(</span><em>cue</em>, <em>trial_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Session.add_missing_trial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Session.add_missing_trial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds trial placeholders for missing trials.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cue: str</strong></p>
+<blockquote>
+<div><p>Typically either &#8216;light&#8217; or &#8216;sound&#8217;</p>
+</div></blockquote>
+<p><strong>trial_type: int</strong></p>
+<blockquote class="last">
+<div><p>Typically 1, 2, 3, or 4</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nept.medpc_core.Session.add_trial">
+<code class="descname">add_trial</code><span class="sig-paren">(</span><em>epoch</em>, <em>cue</em>, <em>trial_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Session.add_trial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Session.add_trial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds trial to session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>epoch: nept.Epoch object</strong></p>
+<p><strong>cue: str</strong></p>
+<blockquote>
+<div><p>Typically either &#8216;light&#8217; or &#8216;sound&#8217;</p>
+</div></blockquote>
+<p><strong>trial_type: int</strong></p>
+<blockquote class="last">
+<div><p>Typically 1, 2, 3, or 4</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nept.medpc_core.Trial">
+<em class="property">class </em><code class="descclassname">nept.medpc_core.</code><code class="descname">Trial</code><span class="sig-paren">(</span><em>cue</em>, <em>trial_type</em>, <em>durations</em>, <em>numbers</em>, <em>latency</em>, <em>responses</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#Trial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.Trial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.medpc_core.combine_rats">
+<code class="descclassname">nept.medpc_core.</code><code class="descname">combine_rats</code><span class="sig-paren">(</span><em>data</em>, <em>rats</em>, <em>n_sessions</em>, <em>only_sound=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#combine_rats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.combine_rats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines behavioral measures from multiple rats, sessions and trials.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data: dict</strong></p>
+<blockquote>
+<div><p>With rat (str) as key, contains Rat objects for each rat</p>
+</div></blockquote>
+<p><strong>rats: list</strong></p>
+<blockquote>
+<div><p>With rat_id (str)</p>
+</div></blockquote>
+<p><strong>n_sessions: int</strong></p>
+<p><strong>only_sound: boolean</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">df: pd.DataFrame</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.medpc_core.f_analyze">
+<code class="descclassname">nept.medpc_core.</code><code class="descname">f_analyze</code><span class="sig-paren">(</span><em>trial</em>, <em>measure</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#f_analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.f_analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts appropriate analysis metric.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>trial: emi_biconditional Trial object</strong></p>
+<p><strong>measure: str</strong></p>
+<blockquote>
+<div><p>One of &#8216;durations&#8217;, &#8216;numbers&#8217;, &#8216;latency&#8217;, or &#8216;responses&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">output: analysis metric for a given trial</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.medpc_core.fix_missing_trials">
+<code class="descclassname">nept.medpc_core.</code><code class="descname">fix_missing_trials</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/medpc_core.html#fix_missing_trials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.medpc_core.fix_missing_trials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces nan values with mean for that trial type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df: pd.DataFrame</strong></p>
+<p><strong>Note: this is a hack to handle sessions where there were fewer trials than expected.</strong></p>
+<p><strong>This function finds those trials and replaces the values with the mean for that</strong></p>
+<p class="last"><strong>trial type across the session.</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.place_fields">
+<span id="nept-place-fields-module"></span><h2>nept.place_fields module<a class="headerlink" href="#module-nept.place_fields" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.place_fields.consecutive">
+<code class="descclassname">nept.place_fields.</code><code class="descname">consecutive</code><span class="sig-paren">(</span><em>array</em>, <em>stepsize=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/place_fields.html#consecutive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.place_fields.consecutive" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>array</strong> : np.array</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of np.arrays, split when jump greater than stepsize</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.place_fields.find_fields">
+<code class="descclassname">nept.place_fields.</code><code class="descname">find_fields</code><span class="sig-paren">(</span><em>tuning</em>, <em>hz_thresh=5</em>, <em>min_length=1</em>, <em>max_length=20</em>, <em>max_mean_firing=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/place_fields.html#find_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.place_fields.find_fields" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tuning</strong> : list of np.arrays</p>
+<blockquote>
+<div><p>Where each inner array contains the tuning curves for an
+individual neuron.</p>
+</div></blockquote>
+<p><strong>hz_thresh</strong> : int or float</p>
+<blockquote>
+<div><p>Any bin with firing above this value is considered to be part of a field.</p>
+</div></blockquote>
+<p><strong>min_length</strong> : int</p>
+<blockquote>
+<div><p>Minimum length of field (in tuning curve bin units, eg. if bin size is 3cm,
+min_length=1 is 3cm.</p>
+</div></blockquote>
+<p><strong>max_length</strong> : int</p>
+<blockquote>
+<div><p>Maximum length of field (in tuning curve bin units, eg. if bin size is 3cm,
+min_length=10 is 3cm*10 = 30cm.</p>
+</div></blockquote>
+<p><strong>max_mean_firing</strong> : int or float</p>
+<blockquote>
+<div><p>Only neurons with a mean firing rate less than this amount are considered for
+having place fields. The default is set to 10.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>with_fields</strong> : dict</p>
+<blockquote class="last">
+<div><p>Where the key is the neuron number (int), value is a list of arrays (int)
+that are indices into the tuning curve where the field occurs.
+Each inner array contains the indices for a given place field.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.place_fields.get_heatmaps">
+<code class="descclassname">nept.place_fields.</code><code class="descname">get_heatmaps</code><span class="sig-paren">(</span><em>neuron_list</em>, <em>spikes</em>, <em>pos</em>, <em>num_bins=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/place_fields.html#get_heatmaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.place_fields.get_heatmaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the 2D heatmaps for firing of a given set of neurons.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>neuron_list</strong> : list of ints</p>
+<blockquote>
+<div><p>These will be the indices into the full list of neuron spike times</p>
+</div></blockquote>
+<p><strong>spikes</strong> : list</p>
+<blockquote>
+<div><p>Containing nept.SpikeTrain for each neuron.</p>
+</div></blockquote>
+<p><strong>pos</strong> : nept.Position</p>
+<blockquote>
+<div><p>Must be 2D.</p>
+</div></blockquote>
+<p><strong>num_bins</strong> : int</p>
+<blockquote>
+<div><p>This will specify how the 2D space is broken up, the greater the number
+the more specific the heatmap will be. The default is set at 100.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>heatmaps</strong> : dict of lists</p>
+<blockquote class="last">
+<div><p>Where the key is the neuron number and the value is the heatmap for
+that individual neuron.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.place_fields.get_single_field">
+<code class="descclassname">nept.place_fields.</code><code class="descname">get_single_field</code><span class="sig-paren">(</span><em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/place_fields.html#get_single_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.place_fields.get_single_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds neurons with and indices of single fields.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fields</strong> : dict</p>
+<blockquote>
+<div><p>Where the key is the neuron number (int), value is a list of arrays (int).
+Each inner array contains the indices for a given place field.
+Eg. Neurons 7, 3, 11 that have 2, 1, and 3 place fields respectively would be:
+{7: [[field], [field]], 3: [[field]], 11: [[field], [field], [field]]}</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fields</strong> : dict</p>
+<blockquote class="last">
+<div><p>Where the key is the neuron number (int), value is a list of arrays (int).
+Each inner array contains the indices for a given place field.
+Eg. For the above input, only neuron 3 would be output in this dict:
+{3: [[field]]}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.tuning_curves">
+<span id="nept-tuning-curves-module"></span><h2>nept.tuning_curves module<a class="headerlink" href="#module-nept.tuning_curves" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.tuning_curves.binned_position">
+<code class="descclassname">nept.tuning_curves.</code><code class="descname">binned_position</code><span class="sig-paren">(</span><em>position</em>, <em>binsize</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/tuning_curves.html#binned_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.tuning_curves.binned_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bins 1D position by the binsize.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.Position</p>
+<blockquote>
+<div><p>Must be a 1D position</p>
+</div></blockquote>
+<p><strong>binsize</strong> : int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>edges</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.tuning_curves.tuning_curve">
+<code class="descclassname">nept.tuning_curves.</code><code class="descname">tuning_curve</code><span class="sig-paren">(</span><em>position</em>, <em>spikes</em>, <em>binsize</em>, <em>gaussian_std=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/tuning_curves.html#tuning_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.tuning_curves.tuning_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes tuning curves for neurons relative to linear position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.Position</p>
+<blockquote>
+<div><p>Must be a linear position (1D).</p>
+</div></blockquote>
+<p><strong>spikes</strong> : list</p>
+<blockquote>
+<div><p>Containing nept.SpikeTrain for each neuron.</p>
+</div></blockquote>
+<p><strong>binsize</strong> : int</p>
+<p><strong>gaussian_std</strong> : int or None</p>
+<blockquote>
+<div><p>No smoothing if None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out_tc</strong> : list of np.arrays</p>
+<blockquote class="last">
+<div><p>Where each inner array contains the tuning curves for an
+individual neuron.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Input position and spikes should be from the same time
+period. Eg. when the animal is running on the track.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.tuning_curves.tuning_curve_2d">
+<code class="descclassname">nept.tuning_curves.</code><code class="descname">tuning_curve_2d</code><span class="sig-paren">(</span><em>position</em>, <em>spikes</em>, <em>xedges</em>, <em>yedges</em>, <em>occupied_thresh=0</em>, <em>gaussian_sigma=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/tuning_curves.html#tuning_curve_2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.tuning_curves.tuning_curve_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates 2D tuning curves based on spikes and 2D position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.Position</p>
+<blockquote>
+<div><p>Must be a 2D position.</p>
+</div></blockquote>
+<p><strong>spikes</strong> : list</p>
+<blockquote>
+<div><p>Containing nept.SpikeTrain for each neuron.</p>
+</div></blockquote>
+<p><strong>xedges</strong> : np.array</p>
+<p><strong>yedges</strong> : np.array</p>
+<p><strong>sampling_rate</strong> : float</p>
+<p><strong>occupied_thresh: float</strong></p>
+<p><strong>gaussian_sigma</strong> : float</p>
+<blockquote>
+<div><p>Sigma used in gaussian filter if filtering.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tuning_curves</strong> : np.array</p>
+<blockquote class="last">
+<div><p>Where each inner array is the tuning curve for an individual neuron.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nept.utils">
+<span id="nept-utils-module"></span><h2>nept.utils module<a class="headerlink" href="#module-nept.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nept.utils.bin_spikes">
+<code class="descclassname">nept.utils.</code><code class="descname">bin_spikes</code><span class="sig-paren">(</span><em>spikes</em>, <em>position</em>, <em>window_size</em>, <em>window_advance</em>, <em>gaussian_std=None</em>, <em>n_gaussian_std=5</em>, <em>normalized=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#bin_spikes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.bin_spikes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bins spikes using a sliding window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>spikes: list</strong></p>
+<blockquote>
+<div><p>Of nept.SpikeTrain</p>
+</div></blockquote>
+<p><strong>position: nept.AnalogSignal</strong></p>
+<p><strong>window_size: float</strong></p>
+<p><strong>window_advance: float</strong></p>
+<p><strong>gaussian_std: float or None</strong></p>
+<p><strong>n_gaussian_std: int</strong></p>
+<p><strong>normalized: boolean</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">binned_spikes: nept.AnalogSignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.cartesian">
+<code class="descclassname">nept.utils.</code><code class="descname">cartesian</code><span class="sig-paren">(</span><em>xcenters</em>, <em>ycenters</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds every combination of elements in two arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xcenters</strong> : np.array</p>
+<p><strong>ycenters</strong> : np.array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>cartesian</strong> : np.array</p>
+<blockquote class="last">
+<div><p>With shape(n_sample, 2).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.expand_line">
+<code class="descclassname">nept.utils.</code><code class="descname">expand_line</code><span class="sig-paren">(</span><em>start_pt</em>, <em>stop_pt</em>, <em>line</em>, <em>expand_by=6</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#expand_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.expand_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates buffer zone around a line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start_pt</strong> : Shapely&#8217;s Point object</p>
+<p><strong>stop_pt</strong> : Shapely&#8217;s Point object</p>
+<p><strong>line</strong> : Shapely&#8217;s LineString object</p>
+<p><strong>expand_by</strong> : int</p>
+<blockquote>
+<div><p>This sets by how much you wish to expand the line.
+Defaults to 6.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>zone</strong> : Shapely&#8217;s Polygon object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.find_multi_in_epochs">
+<code class="descclassname">nept.utils.</code><code class="descname">find_multi_in_epochs</code><span class="sig-paren">(</span><em>spikes</em>, <em>epochs</em>, <em>min_involved</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#find_multi_in_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.find_multi_in_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds epochs with minimum number of participating neurons.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>spikes: np.array</strong></p>
+<blockquote>
+<div><p>Of nept.SpikeTrain objects</p>
+</div></blockquote>
+<p><strong>epochs: nept.Epoch</strong></p>
+<p><strong>min_involved: int</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">multi_epochs: nept.Epoch</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.find_nearest_idx">
+<code class="descclassname">nept.utils.</code><code class="descname">find_nearest_idx</code><span class="sig-paren">(</span><em>array</em>, <em>val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#find_nearest_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.find_nearest_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds nearest index in array to value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : np.array</p>
+<p><strong>val</strong> : float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Index into array that is closest to val</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.find_nearest_indices">
+<code class="descclassname">nept.utils.</code><code class="descname">find_nearest_indices</code><span class="sig-paren">(</span><em>array</em>, <em>vals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#find_nearest_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.find_nearest_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds nearest index in array to value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : np.array</p>
+<blockquote>
+<div><p>This is the array you wish to index into.</p>
+</div></blockquote>
+<p><strong>vals</strong> : np.array</p>
+<blockquote>
+<div><p>This is the array that you are getting your indices from.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Indices into array that is closest to vals.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Wrapper around find_nearest_idx().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.get_edges">
+<code class="descclassname">nept.utils.</code><code class="descname">get_edges</code><span class="sig-paren">(</span><em>position</em>, <em>binsize</em>, <em>lastbin=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#get_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.get_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds edges based on linear time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.AnalogSignal</p>
+<p><strong>binsize</strong> : float</p>
+<blockquote>
+<div><p>This is the desired size of bin.
+Typically set around 0.020 to 0.040 seconds.</p>
+</div></blockquote>
+<p><strong>lastbin</strong> : boolean</p>
+<blockquote>
+<div><p>Determines whether to include the last bin. This last bin may
+not have the same binsize as the other bins.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>edges</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.get_sort_idx">
+<code class="descclassname">nept.utils.</code><code class="descname">get_sort_idx</code><span class="sig-paren">(</span><em>tuning_curves</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#get_sort_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.get_sort_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds indices to sort neurons by max firing in tuning curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tuning_curves</strong> : list of lists</p>
+<blockquote>
+<div><p>Where each inner list is the tuning curves for an individual
+neuron.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>sorted_idx</strong> : list</p>
+<blockquote class="last">
+<div><p>List of integers that correspond to the neuron in sorted order.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.get_xyedges">
+<code class="descclassname">nept.utils.</code><code class="descname">get_xyedges</code><span class="sig-paren">(</span><em>position</em>, <em>binsize=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#get_xyedges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.get_xyedges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets edges based on position min and max.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position: 2D nept.Position</strong></p>
+<p><strong>binsize: int</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xedges: np.array</p>
+<p class="last">yedges: np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.perievent_slice">
+<code class="descclassname">nept.utils.</code><code class="descname">perievent_slice</code><span class="sig-paren">(</span><em>analogsignal</em>, <em>events</em>, <em>t_before</em>, <em>t_after</em>, <em>dt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#perievent_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.perievent_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slices the analogsignal data into perievent chunks.
+Unlike time_slice, the resulting AnalogSignal will be multidimensional.
+Only works for 1D signals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>analogsignal</strong> : nept.AnalogSignal</p>
+<p><strong>events</strong> : np.array</p>
+<p><strong>t_before</strong> : float</p>
+<p><strong>t_after</strong> : float</p>
+<p><strong>dt</strong> : float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nept.AnalogSignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nept.utils.speed_threshold">
+<code class="descclassname">nept.utils.</code><code class="descname">speed_threshold</code><span class="sig-paren">(</span><em>position</em>, <em>t_smooth=0.5</em>, <em>speed_limit=0.4</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nept/utils.html#speed_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nept.utils.speed_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds positions above a certain speed threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>position</strong> : nept.Position</p>
+<p><strong>t_smooth</strong> : float</p>
+<p><strong>speed_limit</strong> : float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>position_run</strong> : nept.Position</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="core.html" class="btn btn-neutral" title="nept Objects" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

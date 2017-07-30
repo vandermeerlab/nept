@@ -1,0 +1,425 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Tutorial 06 - Pairwise co-occurrence\n",
+    "----------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Goals\n",
+    "-----------\n",
+    "\n",
+    "- Implement an analysis of pairwise co-occurrence during sharp-wave ripple events\n",
+    "- Apply a permutation test (shuffle) to determine levels of chance co-occurrence"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Compute pairwise co-occurrence during SWRs\n",
+    "-----------------------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:02.208874Z",
+     "start_time": "2017-07-26T19:04:01.261143Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Import necessary packages\n",
+    "%matplotlib inline\n",
+    "import os\n",
+    "import sys\n",
+    "import numpy as np\n",
+    "import nept\n",
+    "import matplotlib.pyplot as plt\n",
+    "import scipy.signal\n",
+    "\n",
+    "# Define where your data folder is located\n",
+    "data_path = os.path.join(os.path.abspath('.'), 'data')\n",
+    "data_folder = os.path.join(data_path, 'R042-2013-08-18')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:02.217883Z",
+     "start_time": "2017-07-26T19:04:02.210378Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Load the info file, which contains experiment-specific information\n",
+    "sys.path.append(data_folder)\n",
+    "import r042d3 as info"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:02.907286Z",
+     "start_time": "2017-07-26T19:04:02.900781Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Determine times of interest\n",
+    "# Here let's compare the co-occurrence during prerecord and postrecord\n",
+    "prerecord_start = info.task_times['prerecord'].start\n",
+    "prerecord_stop = info.task_times['prerecord'].stop\n",
+    "\n",
+    "postrecord_start = info.task_times['postrecord'].start\n",
+    "postrecord_stop = info.task_times['postrecord'].stop"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:05.526200Z",
+     "start_time": "2017-07-26T19:04:04.555511Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Load spikes (.t and ._t) from this experiment\n",
+    "spikes = nept.load_spikes(data_folder)\n",
+    "\n",
+    "# Restrict the spikes to the prerecord\n",
+    "spikes_pre = [spiketrain.time_slice(prerecord_start, prerecord_stop) for spiketrain in spikes]\n",
+    "\n",
+    "# Restrict the spikes to the postrecord\n",
+    "spikes_post = [spiketrain.time_slice(postrecord_start, postrecord_stop) for spiketrain in spikes]\n",
+    "\n",
+    "# Plot the spikes\n",
+    "for idx, spiketrain in enumerate(spikes_pre):\n",
+    "    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, '|')\n",
+    "plt.show()\n",
+    "\n",
+    "# Plot the spikes\n",
+    "for idx, spiketrain in enumerate(spikes_post):\n",
+    "    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, '|')\n",
+    "plt.show()\n",
+    "\n",
+    "# Print the number of neurons we're working with\n",
+    "print('n_neurons:', len(spikes))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:08.234979Z",
+     "start_time": "2017-07-26T19:04:06.092440Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Load LFP with good sharp-wave ripples\n",
+    "lfp = nept.load_lfp(os.path.join(data_folder, info.lfp_swr_filename))\n",
+    "\n",
+    "# Restrict the LFP to the prerecord\n",
+    "lfp_pre = lfp.time_slice(prerecord_start, prerecord_stop)\n",
+    "\n",
+    "# Restrict the LFP to the postrecord\n",
+    "lfp_post = lfp.time_slice(postrecord_start, postrecord_stop)\n",
+    "\n",
+    "# Plot the LFP during the prerecord\n",
+    "plt.plot(lfp_pre.time, lfp_pre.data)\n",
+    "plt.show()\n",
+    "\n",
+    "# Plot the LFP during the postrecord\n",
+    "plt.plot(lfp_post.time, lfp_post.data)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:12.675396Z",
+     "start_time": "2017-07-26T19:04:11.805779Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Find sharp-wave ripple (SWR) epochs\n",
+    "swr_thresh = (140., 250.)\n",
+    "z_thresh = 3.0\n",
+    "power_thresh = 5.0\n",
+    "merge_thresh = 0.02\n",
+    "min_length = 0.01\n",
+    "\n",
+    "swrs_pre = nept.detect_swr_hilbert(lfp_pre, \n",
+    "                                   fs=info.fs, \n",
+    "                                   thresh=swr_thresh, \n",
+    "                                   z_thresh=z_thresh,\n",
+    "                                   power_thresh=power_thresh, \n",
+    "                                   merge_thresh=merge_thresh, \n",
+    "                                   min_length=min_length)\n",
+    "\n",
+    "swrs_post = nept.detect_swr_hilbert(lfp_post, \n",
+    "                                    fs=info.fs, \n",
+    "                                    thresh=swr_thresh, \n",
+    "                                    z_thresh=z_thresh,\n",
+    "                                    power_thresh=power_thresh, \n",
+    "                                    merge_thresh=merge_thresh, \n",
+    "                                    min_length=min_length)\n",
+    "\n",
+    "print('Number of prerecord SWRs:', swrs_pre.n_epochs)\n",
+    "print('Number of postrecord SWRs:', swrs_post.n_epochs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:15.793272Z",
+     "start_time": "2017-07-26T19:04:14.980214Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Filter the SWR epochs to only those with a certain minimum number of neurons involved\n",
+    "min_involved = 4\n",
+    "\n",
+    "swrs_pre = nept.find_multi_in_epochs(spikes_pre, swrs_pre, min_involved=min_involved)\n",
+    "\n",
+    "swrs_post = nept.find_multi_in_epochs(spikes_post, swrs_post, min_involved=min_involved)\n",
+    "\n",
+    "print('Number of prerecord SWRs:', swrs_pre.n_epochs)\n",
+    "print('Number of postrecord SWRs:', swrs_post.n_epochs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:17.482598Z",
+     "start_time": "2017-07-26T19:04:16.663517Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Filter and bin spikes to those that occur during the swrs\n",
+    "counts_swr_pre = nept.spike_counts(spikes_pre, swrs_pre)\n",
+    "\n",
+    "counts_swr_post = nept.spike_counts(spikes_post, swrs_post)\n",
+    "\n",
+    "# Verify that counts_swr is shape (n_neurons x n_swrs)\n",
+    "print('Shape of prerecord counts_swr_pre:', counts_swr_pre.shape)\n",
+    "print('Shape of postrecord counts_swr_post:', counts_swr_post.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:04:18.217324Z",
+     "start_time": "2017-07-26T19:04:18.212301Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Make a mask for the neurons recorded from the same tetrode\n",
+    "tetrode_mask = nept.get_tetrode_mask(spikes)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:05:04.205681Z",
+     "start_time": "2017-07-26T19:04:54.083888Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Compute the pairwise co-occurrence\n",
+    "probs_pre = nept.compute_cooccur(counts_swr_pre, tetrode_mask, num_shuffles=100)\n",
+    "probs_post = nept.compute_cooccur(counts_swr_post, tetrode_mask, num_shuffles=100)\n",
+    "\n",
+    "print(probs_pre.keys())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:05:58.610805Z",
+     "start_time": "2017-07-26T19:05:58.132449Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "for probs in [probs_pre, probs_post]:\n",
+    "    plt.plot(probs['observed'])\n",
+    "    plt.plot(probs['expected'])\n",
+    "    plt.legend(['Observed', 'Expected'])\n",
+    "    plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:06:56.874633Z",
+     "start_time": "2017-07-26T19:06:56.852617Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Make a function to plot the pairwise co-occurrence\n",
+    "def plot_cooccur(pre, post, title):\n",
+    "    fig, ax = plt.subplots()\n",
+    "\n",
+    "    ind = np.arange(1)\n",
+    "    width = 0.5\n",
+    "\n",
+    "    ax.bar(ind, pre, width)\n",
+    "    ax.bar(ind + width, post, width)\n",
+    "    \n",
+    "    ax.set_xticks([ind, ind+width])\n",
+    "    ax.set_xticklabels(['Prerecord', 'Postrecord'])\n",
+    "    \n",
+    "    ax.spines['right'].set_visible(False)\n",
+    "    ax.spines['top'].set_visible(False)\n",
+    "    \n",
+    "    plt.title(title)\n",
+    "    plt.ylabel('Fraction')\n",
+    "    \n",
+    "    plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:06:57.401958Z",
+     "start_time": "2017-07-26T19:06:57.260360Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the weighted neuron participation during candidate events\n",
+    "# e.g. how active individual neurons are during the pre- and postrecord SWRs\n",
+    "active_pre = np.nansum(probs_pre['active']) / swrs_pre.n_epochs\n",
+    "active_post = np.nansum(probs_post['active']) / swrs_post.n_epochs\n",
+    "title = 'Active'\n",
+    "\n",
+    "plot_cooccur(active_pre, active_post, title)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:07:00.405746Z",
+     "start_time": "2017-07-26T19:07:00.268632Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the weighted joint probability for neuron pairs\n",
+    "observed_pre = np.nansum(probs_pre['observed']) / swrs_pre.n_epochs\n",
+    "observed_post = np.nansum(probs_post['observed']) / swrs_post.n_epochs\n",
+    "title = 'Observed'\n",
+    "\n",
+    "plot_cooccur(observed_pre, observed_post, title)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:07:00.650588Z",
+     "start_time": "2017-07-26T19:07:00.508487Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the weighted z-score coactivity\n",
+    "# e.g. are neurons co-occurring more often than expected by chance?\n",
+    "zscore_pre = np.nansum(probs_pre['zscore']) / swrs_pre.n_epochs\n",
+    "zscore_post = np.nansum(probs_post['zscore']) / swrs_post.n_epochs\n",
+    "title = 'Z-score'\n",
+    "\n",
+    "plot_cooccur(zscore_pre, zscore_post, title)"
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.1"
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "389px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

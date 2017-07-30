@@ -1,0 +1,956 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title># Module 02 - Introduction to neural data types &#8212; nept 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="#-Module-02---Introduction-to-neural-data-types">
+<h1># Module 02 - Introduction to neural data types<a class="headerlink" href="##-Module-02---Introduction-to-neural-data-types" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Become aware of the processing steps typically applied to raw data
+acquired with a Neuralynx system</li>
+<li>Learn the data types used for neural data analysis</li>
+<li>Use the loading functions for all these files</li>
+</ul>
+</div>
+<div class="section" id="#-Data-processing">
+<h1># Data processing<a class="headerlink" href="##-Data-processing" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="Renaming">
+<h1>Renaming<a class="headerlink" href="#Renaming" title="Permalink to this headline">¶</a></h1>
+<p>The naming convention in our lab is: R###-YYYY-MM-DD-filetype.extension</p>
+<p>By default, Neuralynx will name files filetype.extension, so the ratID
+and date need to be added as a prefix. This can be done with a script,
+just be careful to double-check that your script only renames the files.</p>
+</div>
+<div class="section" id="Manual-annotation">
+<h1>Manual annotation<a class="headerlink" href="#Manual-annotation" title="Permalink to this headline">¶</a></h1>
+<p>Some common features that are manually annotated are: - experimenter
+name - subject ID - session ID - experiment time blocks</p>
+<p>These are stored for easy access in an <code class="docutils literal"><span class="pre">info.py</span></code> file within your
+project folder.</p>
+</div>
+<div class="section" id="Spike-sorting">
+<h1>Spike sorting<a class="headerlink" href="#Spike-sorting" title="Permalink to this headline">¶</a></h1>
+<p>Spike sorting is the process of automated and manual detection of
+individual units from a tetrode or probe recording. See Module08 for
+details.</p>
+</div>
+<div class="section" id="#-Data-files-overview">
+<h1># Data files overview<a class="headerlink" href="##-Data-files-overview" title="Permalink to this headline">¶</a></h1>
+<p>A typical recording session from a Neuralynx system contains:</p>
+<ul class="simple">
+<li>&#8216;&#8217;.ncs&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>C</strong>ontinuously <strong>S</strong>ampled&#8221;) files
+typically contain local field potentials (LFPs) sampled at 2kHz and
+filtered between 1 and 475 Hz.</li>
+<li>&#8216;&#8217;.t&#8217; or &#8216;&#8217;._t&#8217;&#8217; (&#8220;<strong>T</strong>etrode&#8221;) files, which are generated by
+MClust from the raw &#8216;&#8217;.ntt&#8217;&#8217; (&#8220;<strong>N</strong>euralynx
+<strong>T</strong>e<strong>T</strong>rode&#8221;) files contains a set of times from individual
+putative neurons.</li>
+<li>&#8216;&#8217;.nvt&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>V</strong>ideo <strong>T</strong>racking&#8221;) file contains
+the location of the rat as tracked by an overhead camera, typically
+sampled at 30 Hz.</li>
+<li>&#8216;&#8217;.nev&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>EV</strong>ents&#8221;) file contains timestamps
+and labels of events</li>
+<li>&#8216;&#8217;info.py&#8217;&#8217; file contains experimenter-provided information that
+describes this data set.</li>
+</ul>
+</div>
+<div class="section" id="#-Nept-data-types">
+<h1># Nept data types<a class="headerlink" href="##-Nept-data-types" title="Permalink to this headline">¶</a></h1>
+<p>Documentation for all the data types we use in Nept can be found
+<a class="reference external" href="http://nept.readthedocs.io/en/latest/core.html">here</a>. But we&#8217;ll
+also briefly describe them in this module.</p>
+</div>
+<div class="section" id="AnalogSignal">
+<h1>AnalogSignal<a class="headerlink" href="#AnalogSignal" title="Permalink to this headline">¶</a></h1>
+<p>Genrally, data acquisition systems work by <em>sampling</em> some quantity of
+interest, so often only periodically measurements are taken. A sampled
+signal is essentially a list of values (data points), taken at specific
+times. Thus, what we need to fully describe such a signal is two arrays
+of the same length: one with the timestamps and the other with the
+corresponding data. For this, we use an <code class="docutils literal"><span class="pre">AnalogSignal</span></code>, which has
+<code class="docutils literal"><span class="pre">time</span></code> and <code class="docutils literal"><span class="pre">data</span></code> fields.</p>
+</div>
+<div class="section" id="LocalFieldPotential">
+<h1>LocalFieldPotential<a class="headerlink" href="#LocalFieldPotential" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal"><span class="pre">LocalFieldPotential</span></code> is a subclass of <code class="docutils literal"><span class="pre">AnalogSignal</span></code>.</p>
+</div>
+<div class="section" id="Position">
+<h1>Position<a class="headerlink" href="#Position" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal"><span class="pre">Position</span></code> is a subclass of <code class="docutils literal"><span class="pre">AnalogSignal</span></code>, with some unique
+methods that are useful when dealing with positions. This includes
+computing the <code class="docutils literal"><span class="pre">distance</span></code> between two positions, or computing the
+<code class="docutils literal"><span class="pre">speed</span></code> of the position.</p>
+</div>
+<div class="section" id="Epoch">
+<h1>Epoch<a class="headerlink" href="#Epoch" title="Permalink to this headline">¶</a></h1>
+<p>Epochs describe occurrences that have start and stop times, such as a
+<em>trial</em> of an experiment or the presence of a cue (e.g. a light or a
+tone).</p>
+</div>
+<div class="section" id="SpikeTrain">
+<h1>SpikeTrain<a class="headerlink" href="#SpikeTrain" title="Permalink to this headline">¶</a></h1>
+<p>Much of neuroscience analyses attributes particular significance to
+action potentials, or &#8220;spikes&#8221;, which are typically understood as
+all-or-none events that occur at a specific point in time. It is not
+necessary to state all the times at which there was no spike to describe
+a train of spikes; it suffices to maintain a list of those times (known
+as &#8220;timestamps&#8221;) at which a spike was emitted.</p>
+</div>
+<div class="section" id="#-Loading-real-data">
+<h1># Loading real data<a class="headerlink" href="##-Loading-real-data" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+
+# define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R016-2012-10-08&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load LFP (.ncs) from rat ventral striatum (same as Module01)
+data_lfp = &#39;R016-2012-10-08-CSC02d.ncs&#39;
+lfp = nept.load_lfp(os.path.join(data_folder, data_lfp))
+
+# Slice the LFP to our time of interest
+start = 1261
+stop = 1262
+sliced_lfp = lfp.time_slice(start, stop)
+
+# Plot the sliced LFP
+plt.plot(sliced_lfp.time, sliced_lfp.data)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-eba233869416&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load LFP (.ncs) from rat ventral striatum (same as Module01)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> data_lfp <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;R016-2012-10-08-CSC02d.ncs&#39;</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> </span>lfp <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> data_lfp<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg"># Slice the LFP to our time of interest</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_lfp</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">     49</span>
+<span class="ansi-green-intense-fg ansi-bold">     50</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 51</span><span class="ansi-red-fg">     </span>data<span class="ansi-blue-fg">,</span> time <span class="ansi-blue-fg">=</span> load_ncs<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     52</span>
+<span class="ansi-green-intense-fg ansi-bold">     53</span>     <span class="ansi-green-fg">return</span> nept<span class="ansi-blue-fg">.</span>LocalFieldPotential<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> time<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_ncs</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">    113</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    114</span>
+<span class="ansi-green-fg">--&gt; 115</span><span class="ansi-red-fg">     </span>f <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;rb&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    116</span>
+<span class="ansi-green-intense-fg ansi-bold">    117</span>     <span class="ansi-red-fg"># Neuralynx files have a 16kbyte header</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R016-2012-10-08/R016-2012-10-08-CSC02d.ncs&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load position (.nvt) from this experiment
+data_position = &#39;R016-2012-10-08-VT1.nvt&#39;
+pxl_to_cm = (1., 1.)
+position = nept.load_position(os.path.join(data_folder, data_position), pxl_to_cm)
+
+# Plot the position
+plt.plot(position.x, position.y, &#39;k.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-07d156f6e00f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> data_position <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;R016-2012-10-08-VT1.nvt&#39;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> pxl_to_cm <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1.</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1.</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>position <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_position<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> data_position<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> pxl_to_cm<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-red-fg"># Plot the position</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_position</span><span class="ansi-blue-fg">(filename, pxl_to_cm)</span>
+<span class="ansi-green-intense-fg ansi-bold">     68</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 70</span><span class="ansi-red-fg">     </span>nvt_data <span class="ansi-blue-fg">=</span> load_nvt<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     71</span>
+<span class="ansi-green-intense-fg ansi-bold">     72</span>     xy <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>hstack<span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>nvt_data<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;x&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">/</span> pxl_to_cm<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> nvt_data<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;y&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">/</span> pxl_to_cm<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">...</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>newaxis<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_nvt</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">    281</span>
+<span class="ansi-green-intense-fg ansi-bold">    282</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 283</span><span class="ansi-red-fg">     </span>f <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;rb&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    284</span>
+<span class="ansi-green-intense-fg ansi-bold">    285</span>     <span class="ansi-red-fg"># Neuralynx files have a 16kbyte header</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R016-2012-10-08/R016-2012-10-08-VT1.nvt&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load events (.nev) from this experiment
+data_event = &#39;R016-2012-10-08-Events.nev&#39;
+# This data set has about 109 events, let&#39;s only load the first 3
+labels = dict(oneorfivecue=&#39;TTL Input on AcqSystem1_0 board 0 port 1 value (0x0006).&#39;,
+              onepellet=&#39;TTL Input on AcqSystem1_0 board 0 port 1 value (0x0004).&#39;,
+              onecue=&#39;TTL Input on AcqSystem1_0 board 0 port 1 value (0x0006).&#39;)
+events = nept.load_events(os.path.join(data_folder, data_event), labels)
+
+# Plot the events
+plt.plot(events[&#39;oneorfivecue&#39;], np.ones(len(events[&#39;oneorfivecue&#39;])), &#39;o&#39;)
+plt.plot(events[&#39;onepellet&#39;], np.ones(len(events[&#39;onepellet&#39;]))+1, &#39;o&#39;)
+plt.plot(events[&#39;onecue&#39;], np.ones(len(events[&#39;onecue&#39;]))+2, &#39;o&#39;)
+plt.legend([&#39;oneorfivecue&#39;, &#39;onepellet&#39;, &#39;onecue&#39;])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-b20b212e1a33&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>               onepellet<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;TTL Input on AcqSystem1_0 board 0 port 1 value (0x0004).&#39;</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>               onecue=&#39;TTL Input on AcqSystem1_0 board 0 port 1 value (0x0006).&#39;)
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg"> </span>events <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_events<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> data_event<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> labels<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> <span class="ansi-red-fg"># Plot the events</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_events</span><span class="ansi-blue-fg">(filename, labels)</span>
+<span class="ansi-green-intense-fg ansi-bold">     19</span>
+<span class="ansi-green-intense-fg ansi-bold">     20</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 21</span><span class="ansi-red-fg">     </span>nev_data <span class="ansi-blue-fg">=</span> load_nev<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span>
+<span class="ansi-green-intense-fg ansi-bold">     23</span>     idx <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">{</span>key<span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> key <span class="ansi-green-fg">in</span> labels<span class="ansi-blue-fg">}</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_neuralynx.py</span> in <span class="ansi-cyan-fg">load_nev</span><span class="ansi-blue-fg">(filename)</span>
+<span class="ansi-green-intense-fg ansi-bold">    181</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    182</span>
+<span class="ansi-green-fg">--&gt; 183</span><span class="ansi-red-fg">     </span>f <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;rb&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    184</span>
+<span class="ansi-green-intense-fg ansi-bold">    185</span>     <span class="ansi-red-fg"># There&#39;s nothing useful in the header for .nev files, so skip past it</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R016-2012-10-08/R016-2012-10-08-Events.nev&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load spikes (.t and ._t) from this experiment
+spikes = nept.load_spikes(data_folder)
+
+# Plot the spikes
+for idx, spiketrain in enumerate(spikes):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;)
+plt.show()
+
+# Print the number of spikes emitted from each neuron
+for idx, spiketrain in enumerate(spikes):
+    print(&#39;Neuron&#39;, idx+1, &#39;has&#39;, len(spiketrain.time), &#39;spikes&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-5-b2a06588b2aa&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load spikes (.t and ._t) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>spikes <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_spikes<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the spikes</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">for</span> idx<span class="ansi-blue-fg">,</span> spiketrain <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>spikes<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/home/emily/code/nept/nept/loaders_mclust.py</span> in <span class="ansi-cyan-fg">load_spikes</span><span class="ansi-blue-fg">(filepath, load_questionable)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>     spikes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> os<span class="ansi-blue-fg">.</span>listdir<span class="ansi-blue-fg">(</span>filepath<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> file<span class="ansi-blue-fg">.</span>endswith<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;.t&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    110</span>             label <span class="ansi-blue-fg">=</span> file<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">18</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/emily/code/nept/docs/tutorials/.ipynb_checkpoints/data/R016-2012-10-08&#39;
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h1>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h1>
+<p>Together, these three types of data can describe most data sets
+encountered in neuroscience. Putting them together in a simple
+visualization might look something like this, with LFP in black,
+position in cyan, epochs in red and green, and spikes in blue:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>import random
+
+# Construct LFP
+time = np.arange(100)
+data = np.array(random.sample(range(100), 100)) / 100
+
+toy_lfp = nept.LocalFieldPotential(data, time)
+
+# Plot the LFP
+plt.plot(toy_lfp.time, toy_lfp.data, &#39;k&#39;)
+
+# Construct 1D position
+time = np.arange(100)
+x = np.array(random.sample(range(100), 100)) / -100
+
+toy_position = nept.Position(x, time)
+
+# Plot the position
+plt.plot(toy_position.time, toy_position.x, &#39;c&#39;)
+
+# Construct some epochs, which might be something like a light cue and a sound cue
+toy_light = nept.Epoch(np.array([[10, 15],
+                                 [70, 75]]))
+
+toy_sound = nept.Epoch(np.array([[50, 60]]))
+
+# Plot the epochs
+for light_start, light_stop in zip(toy_light.starts, toy_light.stops):
+    plt.axvspan(light_start, light_stop, color=&#39;g&#39;, alpha=0.5, lw=0)
+
+for sound_start, sound_stop in zip(toy_sound.starts, toy_sound.stops):
+    plt.axvspan(sound_start, sound_stop, color=&#39;r&#39;, alpha=0.5, lw=0)
+
+# Construct some spikes
+toy_spikes = [nept.SpikeTrain(np.array(random.sample(range(100), 80))),
+              nept.SpikeTrain(np.array(random.sample(range(100), 30))),
+              nept.SpikeTrain(np.array(random.sample(range(100), 50)))]
+
+# Plot the spikes
+for idx, spiketrain in enumerate(toy_spikes):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx+0.5, &#39;|&#39;, color=&#39;b&#39;, ms=20, mew=2)
+
+# Turn off axis
+plt.axis(&#39;off&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_.ipynb_checkpoints_Tutorial03_Data-types-checkpoint_20_0.png" src="../../_images/tutorials_.ipynb_checkpoints_Tutorial03_Data-types-checkpoint_20_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># With real data, this might look something more like this:
+
+# Define our time of interest
+start = 1203
+stop = 1211
+
+# Slice the LFP to our time of interest
+sliced_lfp = lfp.time_slice(start, stop)
+
+# Plot the LFP
+plt.plot(sliced_lfp.time, sliced_lfp.data*1000, &#39;k&#39;)
+
+# Slice the position to our time of interest
+sliced_position = position.time_slice(start, stop)
+
+# Plot the position
+plt.plot(sliced_position.time, sliced_position.x*-0.001-0.3, &#39;c&#39;)
+
+# Let&#39;s only work with one event, our event of interest
+event_of_interest = events[&#39;onepellet&#39;]
+
+# Slice our event to the time of interest
+sliced_event = event_of_interest[(start &lt; event_of_interest) &amp; (event_of_interest &lt; stop)]
+if len(sliced_event) % 2 != 0: # remove last sample if odd number of events
+    sliced_event = sliced_event[:-1]
+
+# For visualization purposes, let&#39;s say this event was present for a certain amount of time
+# and can be represented as an epoch, with a start and a stop
+event_epoch = nept.Epoch([sliced_event[::2], sliced_event[1::2]])
+
+# Plot the epoch
+for epoch_start, epoch_stop in zip(event_epoch.starts, event_epoch.stops):
+    plt.axvspan(epoch_start, epoch_stop, color=&#39;r&#39;, alpha=0.5, lw=0)
+
+# Slice our spikes to the time of interest
+sliced_spikes = [spiketrain.time_slice(start, stop) for spiketrain in spikes]
+
+# Plot the spikes
+for idx, spiketrain in enumerate(sliced_spikes):
+    plt.plot(spiketrain.time, np.ones(len(spiketrain.time))+idx, &#39;|&#39;, color=&#39;b&#39;, ms=20, mew=2)
+
+# Turn off axis
+plt.axis(&#39;off&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-7-1907284e1f36&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg"># Slice the LFP to our time of interest</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span>sliced_lfp <span class="ansi-blue-fg">=</span> lfp<span class="ansi-blue-fg">.</span>time_slice<span class="ansi-blue-fg">(</span>start<span class="ansi-blue-fg">,</span> stop<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-red-fg"># Plot the LFP</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;lfp&#39; is not defined
+</pre></div></div>
+</div>
+<div class="section" id="Real-world-examples">
+<h2>Real world examples<a class="headerlink" href="#Real-world-examples" title="Permalink to this headline">¶</a></h2>
+<p>Here are two examples that illustrate some simple operations. You should
+run them and make sure you understand how the raw data is transformed.
+For this, we will use a more involved data set R042-2013-08-18, which
+has recordings from hippocampal CA1 neurons.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># import necessary packages
+%matplotlib inline
+import os
+import numpy as np
+import nept
+import matplotlib.pyplot as plt
+
+# define where your data folder is located
+data_path = os.path.join(os.path.abspath(&#39;.&#39;), &#39;data&#39;)
+data_folder = os.path.join(data_path, &#39;R042-2013-08-18&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># load the info file, which contains experiment-specific information
+import r042d3 as info
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-9-167e83d3dd57&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># load the info file, which contains experiment-specific information</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> r042d3 <span class="ansi-green-fg">as</span> info
+
+<span class="ansi-red-fg">ImportError</span>: No module named &#39;r042d3&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load position (.nvt) from this experiment
+position = nept.load_position(os.path.join(data_folder, info.position_filename), info.pxl_to_cm)
+
+# Plot the position
+plt.plot(position.x, position.y, &#39;k.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-10-edd1dd390924&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load position (.nvt) from this experiment</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>position <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_position<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>position_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>pxl_to_cm<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Plot the position</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>position<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> position<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;k.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>left = position.time_slice(info.experiment_times[&#39;left_trials&#39;].starts,
+                           info.experiment_times[&#39;left_trials&#39;].stops)
+
+plt.plot(left.x, left.y, &#39;b.&#39;, ms=1)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-ce1ef9a5c428&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> left = position.time_slice(info.experiment_times[&#39;left_trials&#39;].starts,
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                            info.experiment_times[&#39;left_trials&#39;].stops)
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>left<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> left<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;b.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;position&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># This looks like right trials because the camera reverses the image.
+# We can fix this by reversing the y_axis
+
+plt.plot(left.x, left.y, &#39;b.&#39;, ms=1)
+plt.gca().invert_yaxis()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-12-d9fe5b0dad0e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-red-fg"># We can fix this by reversing the y_axis</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>left<span class="ansi-blue-fg">.</span>x<span class="ansi-blue-fg">,</span> left<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;b.&#39;</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plt<span class="ansi-blue-fg">.</span>gca<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>invert_yaxis<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;left&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Now let&#39;s look at how these data types can work together
+# to detect potential artifacts in the LFP.
+
+import scipy.stats
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span># Load LFP with good sharp-wave ripples
+lfp_swr = nept.load_lfp(os.path.join(data_folder, info.lfp_swr_filename))
+
+# Normalize the LFP
+lfp_norm = nept.LocalFieldPotential(scipy.stats.zscore(lfp_swr.data), lfp_swr.time)
+
+# Detect possible artifacts, save as epochs
+thresh = -8
+below_thresh = np.squeeze(lfp_norm.data &lt; thresh)
+below_thresh = np.hstack([[False], below_thresh, [False]]) # pad start and end to properly compute the diff
+
+get_diff = np.diff(below_thresh.astype(int))
+
+artifact_starts = lfp_norm.time[np.where(get_diff == 1)[0]]
+artifact_stops = lfp_norm.time[np.where(get_diff == -1)[0]]
+
+artifacts = nept.Epoch([artifact_starts, artifact_stops])
+
+# Plot the LFP and artifact epochs
+plt.plot(lfp_norm.time, lfp_norm.data)
+
+for epoch_start, epoch_stop in zip(artifacts.starts, artifacts.stops):
+    plt.axvspan(epoch_start, epoch_stop, color=&#39;r&#39;, alpha=0.5, lw=1)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-5ed42bdb8bfc&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Load LFP with good sharp-wave ripples</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>lfp_swr <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>load_lfp<span class="ansi-blue-fg">(</span>os<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">.</span>join<span class="ansi-blue-fg">(</span>data_folder<span class="ansi-blue-fg">,</span> info<span class="ansi-blue-fg">.</span>lfp_swr_filename<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Normalize the LFP</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> lfp_norm <span class="ansi-blue-fg">=</span> nept<span class="ansi-blue-fg">.</span>LocalFieldPotential<span class="ansi-blue-fg">(</span>scipy<span class="ansi-blue-fg">.</span>stats<span class="ansi-blue-fg">.</span>zscore<span class="ansi-blue-fg">(</span>lfp_swr<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> lfp_swr<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;info&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"># Module 02 - Introduction to neural data types</a></li>
+<li><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li><a class="reference internal" href="##-Data-processing"># Data processing</a></li>
+<li><a class="reference internal" href="#Renaming">Renaming</a></li>
+<li><a class="reference internal" href="#Manual-annotation">Manual annotation</a></li>
+<li><a class="reference internal" href="#Spike-sorting">Spike sorting</a></li>
+<li><a class="reference internal" href="##-Data-files-overview"># Data files overview</a></li>
+<li><a class="reference internal" href="##-Nept-data-types"># Nept data types</a></li>
+<li><a class="reference internal" href="#AnalogSignal">AnalogSignal</a></li>
+<li><a class="reference internal" href="#LocalFieldPotential">LocalFieldPotential</a></li>
+<li><a class="reference internal" href="#Position">Position</a></li>
+<li><a class="reference internal" href="#Epoch">Epoch</a></li>
+<li><a class="reference internal" href="#SpikeTrain">SpikeTrain</a></li>
+<li><a class="reference internal" href="##-Loading-real-data"># Loading real data</a></li>
+<li><a class="reference internal" href="#Summary">Summary</a><ul>
+<li><a class="reference internal" href="#Real-world-examples">Real world examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/.ipynb_checkpoints/Tutorial03_Data-types-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nept 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, van der Meer lab.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

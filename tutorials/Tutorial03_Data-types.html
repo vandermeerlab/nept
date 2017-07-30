@@ -1,0 +1,1027 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title># Tutorial 03 - Introduction to neural data types &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="# Tutorial 04 - Handling spiking data" href="Tutorial04_Handling-spiking-data.html"/>
+        <link rel="prev" title="# Tutorial 02 - Setting up" href="Tutorial02_Setting-up.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial01_Principles-of-(neural)-data-analysis.html">Tutorial 01 - Principles of careful (neural) data analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html##-Goals"># Goals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li># Tutorial 03 - Introduction to neural data types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial03_Data-types.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="#-Tutorial-03---Introduction-to-neural-data-types">
+<h1># Tutorial 03 - Introduction to neural data types<a class="headerlink" href="##-Tutorial-03---Introduction-to-neural-data-types" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="#-Goals">
+<h1># Goals<a class="headerlink" href="##-Goals" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Become aware of the processing steps typically applied to raw data
+acquired with a Neuralynx system</li>
+<li>Learn the data types used for neural data analysis</li>
+<li>Use the loading functions for all these files</li>
+</ul>
+</div>
+<div class="section" id="#-Data-processing">
+<h1># Data processing<a class="headerlink" href="##-Data-processing" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="Renaming">
+<h1>Renaming<a class="headerlink" href="#Renaming" title="Permalink to this headline">¶</a></h1>
+<p>The naming convention in our lab is: R###-YYYY-MM-DD-filetype.extension</p>
+<p>By default, Neuralynx will name files filetype.extension, so the ratID
+and date need to be added as a prefix. This can be done with a script,
+just be careful to double-check that your script only renames the files.</p>
+</div>
+<div class="section" id="Manual-annotation">
+<h1>Manual annotation<a class="headerlink" href="#Manual-annotation" title="Permalink to this headline">¶</a></h1>
+<p>Some common features that are manually annotated are: - experimenter
+name - subject ID - session ID - experiment time blocks</p>
+<p>These are stored for easy access in an <code class="docutils literal"><span class="pre">info.py</span></code> file within your
+project folder.</p>
+</div>
+<div class="section" id="Spike-sorting">
+<h1>Spike sorting<a class="headerlink" href="#Spike-sorting" title="Permalink to this headline">¶</a></h1>
+<p>Spike sorting is the process of automated and manual detection of
+individual units from a tetrode or probe recording. See Module08 for
+details.</p>
+</div>
+<div class="section" id="#-Data-files-overview">
+<h1># Data files overview<a class="headerlink" href="##-Data-files-overview" title="Permalink to this headline">¶</a></h1>
+<p>A typical recording session from a Neuralynx system contains:</p>
+<ul class="simple">
+<li>&#8216;&#8217;.ncs&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>C</strong>ontinuously <strong>S</strong>ampled&#8221;) files
+typically contain local field potentials (LFPs) sampled at 2kHz and
+filtered between 1 and 475 Hz.</li>
+<li>&#8216;&#8217;.t&#8217; or &#8216;&#8217;._t&#8217;&#8217; (&#8220;<strong>T</strong>etrode&#8221;) files, which are generated by
+MClust from the raw &#8216;&#8217;.ntt&#8217;&#8217; (&#8220;<strong>N</strong>euralynx
+<strong>T</strong>e<strong>T</strong>rode&#8221;) files contains a set of times from individual
+putative neurons.</li>
+<li>&#8216;&#8217;.nvt&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>V</strong>ideo <strong>T</strong>racking&#8221;) file contains
+the location of the rat as tracked by an overhead camera, typically
+sampled at 30 Hz.</li>
+<li>&#8216;&#8217;.nev&#8217;&#8217; (&#8220;<strong>N</strong>euralynx <strong>EV</strong>ents&#8221;) file contains timestamps
+and labels of events</li>
+<li>&#8216;&#8217;info.py&#8217;&#8217; file contains experimenter-provided information that
+describes this data set.</li>
+</ul>
+</div>
+<div class="section" id="#-Nept-data-types">
+<h1># Nept data types<a class="headerlink" href="##-Nept-data-types" title="Permalink to this headline">¶</a></h1>
+<p>Documentation for all the data types we use in Nept can be found
+<a class="reference external" href="http://nept.readthedocs.io/en/latest/core.html">here</a>. But we&#8217;ll
+also briefly describe them in this module.</p>
+</div>
+<div class="section" id="AnalogSignal">
+<h1>AnalogSignal<a class="headerlink" href="#AnalogSignal" title="Permalink to this headline">¶</a></h1>
+<p>Genrally, data acquisition systems work by <em>sampling</em> some quantity of
+interest, so often only periodically measurements are taken. A sampled
+signal is essentially a list of values (data points), taken at specific
+times. Thus, what we need to fully describe such a signal is two arrays
+of the same length: one with the timestamps and the other with the
+corresponding data. For this, we use an <code class="docutils literal"><span class="pre">AnalogSignal</span></code>, which has
+<code class="docutils literal"><span class="pre">time</span></code> and <code class="docutils literal"><span class="pre">data</span></code> fields.</p>
+</div>
+<div class="section" id="LocalFieldPotential">
+<h1>LocalFieldPotential<a class="headerlink" href="#LocalFieldPotential" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal"><span class="pre">LocalFieldPotential</span></code> is a subclass of <code class="docutils literal"><span class="pre">AnalogSignal</span></code>.</p>
+</div>
+<div class="section" id="Position">
+<h1>Position<a class="headerlink" href="#Position" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal"><span class="pre">Position</span></code> is a subclass of <code class="docutils literal"><span class="pre">AnalogSignal</span></code>, with some unique
+methods that are useful when dealing with positions. This includes
+computing the <code class="docutils literal"><span class="pre">distance</span></code> between two positions, or computing the
+<code class="docutils literal"><span class="pre">speed</span></code> of the position.</p>
+</div>
+<div class="section" id="Epoch">
+<h1>Epoch<a class="headerlink" href="#Epoch" title="Permalink to this headline">¶</a></h1>
+<p>Epochs describe occurrences that have start and stop times, such as a
+<em>trial</em> of an experiment or the presence of a cue (e.g. a light or a
+tone).</p>
+</div>
+<div class="section" id="SpikeTrain">
+<h1>SpikeTrain<a class="headerlink" href="#SpikeTrain" title="Permalink to this headline">¶</a></h1>
+<p>Much of neuroscience analyses attributes particular significance to
+action potentials, or &#8220;spikes&#8221;, which are typically understood as
+all-or-none events that occur at a specific point in time. It is not
+necessary to state all the times at which there was no spike to describe
+a train of spikes; it suffices to maintain a list of those times (known
+as &#8220;timestamps&#8221;) at which a spike was emitted.</p>
+</div>
+<div class="section" id="#-Loading-real-data">
+<h1># Loading real data<a class="headerlink" href="##-Loading-real-data" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R016-2012-10-03&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load the info file, which contains experiment-specific information</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">r016d3</span> <span class="k">as</span> <span class="nn">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load LFP (.ncs) from rat ventral striatum (same as Module01)</span>
+<span class="n">lfp</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_lfp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">lfp_theta_filename</span><span class="p">))</span>
+
+<span class="c1"># Slice the LFP to our time of interest</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">1261</span>
+<span class="n">stop</span> <span class="o">=</span> <span class="mi">1262</span>
+<span class="n">sliced_lfp</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+
+<span class="c1"># Plot the sliced LFP</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sliced_lfp</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">sliced_lfp</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_16_0.png" src="../_images/tutorials_Tutorial03_Data-types_16_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load position (.nvt) from this experiment</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_position</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">position_filename</span><span class="p">),</span>
+                              <span class="n">info</span><span class="o">.</span><span class="n">pxl_to_cm</span><span class="p">)</span>
+
+<span class="c1"># Plot the position</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;k.&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_17_0.png" src="../_images/tutorials_Tutorial03_Data-types_17_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load events (.nev) from this experiment</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_events</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">event_filename</span><span class="p">),</span>
+                          <span class="n">info</span><span class="o">.</span><span class="n">event_labels</span><span class="p">)</span>
+
+<span class="c1"># Print what events we&#39;re working with</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;feeder1&#39;, &#39;pellet3&#39;, &#39;cue1&#39;, &#39;cue2or4&#39;, &#39;pellet1&#39;, &#39;feeder0&#39;, &#39;cue3&#39;, &#39;cue5&#39;, &#39;pellet4&#39;, &#39;start&#39;, &#39;pellet5&#39;, &#39;cue1or5&#39;, &#39;pellet2&#39;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Plot the events</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;cue1or5&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;cue1or5&#39;</span><span class="p">])),</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;cue2or4&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;cue2or4&#39;</span><span class="p">]))</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;feeder0&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;feeder0&#39;</span><span class="p">]))</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;cue1or5&#39;</span><span class="p">,</span> <span class="s1">&#39;cue2or4&#39;</span><span class="p">,</span> <span class="s1">&#39;feeder0&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_19_0.png" src="../_images/tutorials_Tutorial03_Data-types_19_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load spikes (.t and ._t) from this experiment</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_spikes</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+
+<span class="c1"># Plot the spikes</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">+</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Print the number of spikes emitted from each neuron</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Neuron&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;has&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">),</span> <span class="s1">&#39;spikes&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_20_0.png" src="../_images/tutorials_Tutorial03_Data-types_20_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Neuron 1 has 4536 spikes
+Neuron 2 has 32457 spikes
+Neuron 3 has 4257 spikes
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Summary">
+<h1>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h1>
+<p>Together, these three types of data can describe most data sets
+encountered in neuroscience. Putting them together in a simple
+visualization might look something like this, with LFP in black,
+position in cyan, epochs in red and green, and spikes in blue:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># Construct LFP</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">100</span><span class="p">))</span> <span class="o">/</span> <span class="mi">100</span>
+
+<span class="n">toy_lfp</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">LocalFieldPotential</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+<span class="c1"># Plot the LFP</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">toy_lfp</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">toy_lfp</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="c1"># Construct 1D position</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">100</span><span class="p">))</span> <span class="o">/</span> <span class="o">-</span><span class="mi">100</span>
+
+<span class="n">toy_position</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Position</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+<span class="c1"># Plot the position</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">toy_position</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">toy_position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="c1"># Construct some epochs, which might be something like a light cue and a sound cue</span>
+<span class="n">toy_light</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+                                 <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">75</span><span class="p">]]))</span>
+
+<span class="n">toy_sound</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">]]))</span>
+
+<span class="c1"># Plot the epochs</span>
+<span class="k">for</span> <span class="n">light_start</span><span class="p">,</span> <span class="n">light_stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">toy_light</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">toy_light</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">light_start</span><span class="p">,</span> <span class="n">light_stop</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">sound_start</span><span class="p">,</span> <span class="n">sound_stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">toy_sound</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">toy_sound</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">sound_start</span><span class="p">,</span> <span class="n">sound_stop</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Construct some spikes</span>
+<span class="n">toy_spikes</span> <span class="o">=</span> <span class="p">[</span><span class="n">nept</span><span class="o">.</span><span class="n">SpikeTrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">80</span><span class="p">))),</span>
+              <span class="n">nept</span><span class="o">.</span><span class="n">SpikeTrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">30</span><span class="p">))),</span>
+              <span class="n">nept</span><span class="o">.</span><span class="n">SpikeTrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">50</span><span class="p">)))]</span>
+
+<span class="c1"># Plot the spikes</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">toy_spikes</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">+</span><span class="n">idx</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Turn off axis</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_22_0.png" src="../_images/tutorials_Tutorial03_Data-types_22_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># With real data, this might look something more like this:</span>
+
+<span class="c1"># Define our time of interest</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">1240</span>
+<span class="n">stop</span> <span class="o">=</span> <span class="mi">1250</span>
+
+<span class="c1"># Slice the LFP to our time of interest</span>
+<span class="n">sliced_lfp</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+
+<span class="c1"># Plot the LFP</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sliced_lfp</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">sliced_lfp</span><span class="o">.</span><span class="n">data</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="c1"># Slice the position to our time of interest</span>
+<span class="n">sliced_position</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+
+<span class="c1"># Plot the position</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sliced_position</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">sliced_position</span><span class="o">.</span><span class="n">x</span><span class="o">*-</span><span class="mf">0.001</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s only work with one event, our event of interest</span>
+<span class="n">event_of_interest</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s1">&#39;pellet1&#39;</span><span class="p">]</span>
+
+<span class="c1"># Slice our event to the time of interest</span>
+<span class="n">sliced_event</span> <span class="o">=</span> <span class="n">event_of_interest</span><span class="p">[(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">event_of_interest</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">event_of_interest</span> <span class="o">&lt;</span> <span class="n">stop</span><span class="p">)]</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sliced_event</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># remove last sample if odd number of events</span>
+    <span class="n">sliced_event</span> <span class="o">=</span> <span class="n">sliced_event</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># For visualization purposes, let&#39;s say this event was present for a certain amount of time</span>
+<span class="c1"># and can be represented as an epoch, with a start and a stop</span>
+<span class="n">event_epoch</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">([</span><span class="n">sliced_event</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">sliced_event</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]])</span>
+
+<span class="c1"># Plot the epoch</span>
+<span class="k">for</span> <span class="n">epoch_start</span><span class="p">,</span> <span class="n">epoch_stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">event_epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">event_epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">epoch_start</span><span class="p">,</span> <span class="n">epoch_stop</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Slice our spikes to the time of interest</span>
+<span class="n">sliced_spikes</span> <span class="o">=</span> <span class="p">[</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span> <span class="k">for</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="n">spikes</span><span class="p">]</span>
+
+<span class="c1"># Plot the spikes</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spiketrain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sliced_spikes</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spiketrain</span><span class="o">.</span><span class="n">time</span><span class="p">))</span><span class="o">+</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Turn off axis</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_23_0.png" src="../_images/tutorials_Tutorial03_Data-types_23_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="#-Real-world-examples">
+<h1># Real world examples<a class="headerlink" href="##-Real-world-examples" title="Permalink to this headline">¶</a></h1>
+<p>Here are two examples that illustrate some simple operations. You should
+run them and make sure you understand how the raw data is transformed.
+For this, we will use a more involved data set R042-2013-08-18, which
+has recordings from hippocampal CA1 neurons.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># import necessary packages</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+
+<span class="c1"># define where your data folder is located</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R042-2013-08-18&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># load the info file, which contains experiment-specific information</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">r042d3</span> <span class="k">as</span> <span class="nn">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load position (.nvt) from this experiment</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_position</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">position_filename</span><span class="p">),</span> <span class="n">info</span><span class="o">.</span><span class="n">pxl_to_cm</span><span class="p">)</span>
+
+<span class="c1"># Plot the position</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;k.&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_27_0.png" src="../_images/tutorials_Tutorial03_Data-types_27_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">left</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">experiment_times</span><span class="p">[</span><span class="s1">&#39;left_trials&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span>
+                           <span class="n">info</span><span class="o">.</span><span class="n">experiment_times</span><span class="p">[</span><span class="s1">&#39;left_trials&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stops</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b.&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_28_0.png" src="../_images/tutorials_Tutorial03_Data-types_28_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># This looks like right trials because the camera reverses the image.</span>
+<span class="c1"># We can fix this by reversing the y_axis</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b.&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_29_0.png" src="../_images/tutorials_Tutorial03_Data-types_29_0.png" />
+</div>
+</div>
+<p>Now let&#8217;s look at how these data types can work together to detect
+potential artifacts in the LFP.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Load LFP with good sharp-wave ripples</span>
+<span class="n">lfp_swr</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_lfp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">lfp_swr_filename</span><span class="p">))</span>
+
+<span class="c1"># Normalize the LFP</span>
+<span class="n">lfp_norm</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">LocalFieldPotential</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">lfp_swr</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">lfp_swr</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+
+<span class="c1"># Detect possible artifacts, save as epochs</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span>
+<span class="n">below_thresh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">lfp_norm</span><span class="o">.</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">thresh</span><span class="p">)</span>
+<span class="n">below_thresh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([[</span><span class="kc">False</span><span class="p">],</span> <span class="n">below_thresh</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]])</span> <span class="c1"># pad start and end to properly compute the diff</span>
+
+<span class="n">get_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">below_thresh</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+<span class="n">artifact_starts</span> <span class="o">=</span> <span class="n">lfp_norm</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">get_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">artifact_stops</span> <span class="o">=</span> <span class="n">lfp_norm</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">get_diff</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="n">artifacts</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">([</span><span class="n">artifact_starts</span><span class="p">,</span> <span class="n">artifact_stops</span><span class="p">])</span>
+
+<span class="c1"># Plot the LFP and artifact epochs</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lfp_norm</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">lfp_norm</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch_start</span><span class="p">,</span> <span class="n">epoch_stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">artifacts</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">artifacts</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">epoch_start</span><span class="p">,</span> <span class="n">epoch_stop</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial03_Data-types_31_0.png" src="../_images/tutorials_Tutorial03_Data-types_31_0.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorial04_Handling-spiking-data.html" class="btn btn-neutral float-right" title="# Tutorial 04 - Handling spiking data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Tutorial02_Setting-up.html" class="btn btn-neutral" title="# Tutorial 02 - Setting up" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

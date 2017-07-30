@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tutorial 01 - Principles of careful (neural) data analysis &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Tutorials for Nept" href="index.html"/>
+        <link rel="next" title="# Tutorial 02 - Setting up" href="Tutorial02_Setting-up.html"/>
+        <link rel="prev" title="Tutorials for Nept" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials for Nept</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#interactive">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#contributing-and-expanding-the-tutorial-scope">Contributing and expanding the tutorial scope</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial 01 - Principles of careful (neural) data analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#1.-Keep-data-and-analysis-secure">1. Keep data and analysis secure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2.-Look-at-the-data">2. Look at the data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3.-Start-simple">3. Start simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4.-Test-and-document-acquisition-and-analysis-code">4. Test and document acquisition and analysis code</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html"># Tutorial 02 - Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Establish-a-sensible-folder-structure"># Establish a sensible folder structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Install-python-and-nept"># Install python and nept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Introduction-to-git-and-GitHub"># Introduction to git and GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial02_Setting-up.html##-Get-a-data-session-from-the-vandermeerlab-server"># Get a data session from the vandermeerlab server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html"># Tutorial 03 - Introduction to neural data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-processing"># Data processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Renaming">Renaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Manual-annotation">Manual annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Spike-sorting">Spike sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Data-files-overview"># Data files overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Nept-data-types"># Nept data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#AnalogSignal">AnalogSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#LocalFieldPotential">LocalFieldPotential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Epoch">Epoch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#SpikeTrain">SpikeTrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Loading-real-data"># Loading real data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html#Summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial03_Data-types.html##-Real-world-examples"># Real world examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html"># Tutorial 04 - Handling spiking data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Determine-firing-rates"># Determine firing rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Interspike-intervals-(ISIs)"># Interspike intervals (ISIs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-autocorrelation-function-(ACF)"># Spike autocorrelation function (ACF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Spike-cross-correlation-function-(CCF)"># Spike cross-correlation function (CCF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial04_Handling-spiking-data.html##-Generating-fake-spike-data"># Generating fake spike data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html"># Tutorial 05 - Tuning curves and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compute-the-tuning-curves"># Compute the tuning curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Decoding"># Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial05_Tuning-curves-and-decoding.html##-Compare-the-decoded-to-actual-positions"># Compare the decoded to actual positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html"># Tutorial 06 - Pairwise co-occurrence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial06_Pairwise-co-occurrence.html##-Compute-pairwise-co-occurrence-during-SWRs"># Compute pairwise co-occurrence during SWRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html"># Tutorial 07 - Signal interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Goals"># Goals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence"># Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Coherence-within-the-ventral-striatum-(vStr)-and-between-vStr-and-hippocampus-(hipp)"># Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial07_Signal-interactions.html##-Compute-vStr-Hipp-coherence-between-experimental-conditions"># Compute vStr-Hipp coherence between experimental conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html"># Tutorial 08 - MedPC behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial08_MedPC-behavior.html##-Goals"># Goals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials for Nept</a> &raquo;</li>
+        
+      <li>Tutorial 01 - Principles of careful (neural) data analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/Tutorial01_Principles-of-(neural)-data-analysis.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Tutorial-01---Principles-of-careful-(neural)-data-analysis">
+<h1>Tutorial 01 - Principles of careful (neural) data analysis<a class="headerlink" href="#Tutorial-01---Principles-of-careful-(neural)-data-analysis" title="Permalink to this headline">¶</a></h1>
+<p>This module sketches some of the overall principles for careful neural
+data analysis.</p>
+<ol class="arabic simple">
+<li>Keep data and analysis secure using servers and version control</li>
+<li>Look at the data</li>
+<li>Start simple</li>
+<li>Test and document acquisition and analysis code</li>
+</ol>
+<div class="section" id="1.-Keep-data-and-analysis-secure">
+<h2>1. Keep data and analysis secure<a class="headerlink" href="#1.-Keep-data-and-analysis-secure" title="Permalink to this headline">¶</a></h2>
+<p>One of the worst things that can happen to researchers is the loss of
+data or hours/days of analysis. Although there&#8217;s not much that we can do
+about floods in the lab or unplanned subject deaths, we can reduce the
+risk of losing data once it&#8217;s acquired by saving it in multiple places
+and on secure servers. You should never use the raw data in your
+analysis without first making a copy, so that the raw (or promoted) data
+is always available to return to if needed. This means that when doing
+an analysis, it should always be on a copy of &#8220;working data&#8221;.</p>
+<p>Similarily, analyses can take a lot of time and effort and should be
+protected against loss. The best way to do this is to use version
+control, such as git. Git is a version control system that tracks
+changes between files and allows you to return to previously committed
+code. Our lab uses <a class="reference external" href="https://github.com/vandermeerlab">GitHub</a> to
+store different analyses.</p>
+</div>
+<div class="section" id="2.-Look-at-the-data">
+<h2>2. Look at the data<a class="headerlink" href="#2.-Look-at-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Analysis will be meaningless if performed on bad data. But, even if you
+start out with good data there are many analysis steps that have the
+power to corrupt.</p>
+<p>Be conscious to look at your data at every step to ensure you are
+working with what you expect. Two habits that help with this are
+<strong>visualization</strong> (explored in Module03) and <strong>testing</strong> (both unit
+testing and tests with fake data).</p>
+<p>To see why this principle is critical, consider an analogy: a complex
+multistep experimental procedure such as surgically implanting a
+recording probe into the brain. In this setting, the surgeon <em>always</em>
+verifies the success of the previous step before proceeding. It would be
+disastrous to attempt to insert a delicate probe without making sure the
+skull bone is removed first; or to apply dental cement to the skull
+without first making sure the craniotomy is sealed!</p>
+<p>Start by looking at the raw data to ensure it is as expected, without
+<strong>contamination</strong> or <strong>missing pieces</strong>. Then, apply the same mindset
+during your analysis to confirm the success of every step before
+proceeding.</p>
+</div>
+<div class="section" id="3.-Start-simple">
+<h2>3. Start simple<a class="headerlink" href="#3.-Start-simple" title="Permalink to this headline">¶</a></h2>
+<p>Before the start of data collection, you should identify the major steps
+in your data processing &#8220;workflow&#8221; &#8211; that is, the flow from raw data to
+the figures in the resulting publication. Doing this can often highlight
+key dependencies and important controls that help you collect the data
+such that you will can thoroughly test what you set out to do.</p>
+<p>This sort of planning is especially important when performing
+experiments with long timelines, such as when chronically implanting
+animals for <em>in vivo</em> recording, where it may take up to two months to
+collect data from a single animal.</p>
+<p>There are two main steps to this planning process:</p>
+<ol class="arabic simple">
+<li>Create a schematic that illustrates your analysis workflow</li>
+</ol>
+<p>Think in terms of raw data and data transformations to illustrate a
+workflow at a conceptual level.</p>
+<p>For example, let&#8217;s create a workflow which seeks to determine whether
+the number of sharp wave-ripple (SWRs; these are candidate &#8220;replay&#8221;
+events in the hippocampus) events depend on an experimental
+manipulation.</p>
+<p>The above workflow shows how SWR times are derived from the raw local
+field potential (LFP) data, and the event of interest is a component of
+all the events. Next, the number of SWR events is determined by finding
+the overlap between SWR times and the event of interest.</p>
+<ol class="arabic simple" start="2">
+<li>Organize your data analysis workflow into pseudocode that can later
+be implemented in python</li>
+</ol>
+<p>For the workflow above, it might look something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Load LFP (.ncs)</span>
+
+<span class="c1"># Slice lfp to the experiment time of interest</span>
+
+<span class="c1"># Find SWR epochs using a Hilbert transform with a filter of 150-220Hz on the sliced_lfp</span>
+
+<span class="c1"># Find epochs during the event_of_interest</span>
+
+<span class="c1"># Find intersection between the swr_epochs and the event_of_interest</span>
+
+<span class="c1"># Count the number of epochs</span>
+</pre></div>
+</div>
+<p>With this pseudocode, you can determine which parts are best done with a
+function, and which are easiest to access using a method on the data
+type. Many of these steps exist as functions or methods in the Nept
+codebase, but making the analysis steps explicit in this way provides a
+good foundation for well organized code.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+<span class="c1"># Load LFP (.ncs)</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;R042-2013-08-18&#39;</span><span class="p">)</span>
+<span class="n">data_lfp</span> <span class="o">=</span> <span class="s1">&#39;R042-2013-08-18-CSC11a.ncs&#39;</span>
+
+<span class="n">lfp</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">load_lfp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">data_lfp</span><span class="p">))</span>
+
+<span class="c1"># Slice lfp to the experiment time of interest</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mf">3238.7</span>
+<span class="n">stop</span> <span class="o">=</span> <span class="mf">5645.2</span>
+<span class="n">lfp_sliced</span> <span class="o">=</span> <span class="n">lfp</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+
+<span class="c1"># Find SWR epochs using a Hilbert transform with a filter of 150-220Hz on the sliced_lfp</span>
+<span class="n">z_thresh</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">power_thresh</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">merge_thresh</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">min_length</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">220</span><span class="p">)</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">swr</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">detect_swr_hilbert</span><span class="p">(</span><span class="n">lfp_sliced</span><span class="p">,</span>
+                              <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+                              <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span>
+                              <span class="n">z_thresh</span><span class="o">=</span><span class="n">z_thresh</span><span class="p">,</span>
+                              <span class="n">power_thresh</span><span class="o">=</span><span class="n">power_thresh</span><span class="p">,</span>
+                              <span class="n">merge_thresh</span><span class="o">=</span><span class="n">merge_thresh</span><span class="p">,</span>
+                              <span class="n">min_length</span><span class="o">=</span><span class="n">min_length</span><span class="p">)</span>
+
+<span class="c1"># Find epochs during the event_of_interest</span>
+<span class="c1"># Let&#39;s say our events of interest are the first and last 200 seconds of the task time</span>
+<span class="n">event_time</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">event_of_interest</span> <span class="o">=</span> <span class="n">nept</span><span class="o">.</span><span class="n">Epoch</span><span class="p">([[</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span><span class="o">+</span><span class="n">event_time</span><span class="p">],</span> <span class="p">[</span><span class="n">stop</span><span class="o">-</span><span class="n">event_time</span><span class="p">,</span> <span class="n">stop</span><span class="p">]])</span>
+
+<span class="c1"># Find intersection between the swr_epochs and the event_of_interest</span>
+<span class="n">swr_of_interest</span> <span class="o">=</span> <span class="n">swr</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">event_of_interest</span><span class="p">)</span>
+
+<span class="c1"># Count the number of epochs</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of SWR events during task time of interest:&#39;</span><span class="p">,</span> <span class="n">swr_of_interest</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of SWR events during task time of interest: 66
+</pre></div></div>
+</div>
+<div class="section" id="Use-good-programming-practice">
+<h3>Use good programming practice<a class="headerlink" href="#Use-good-programming-practice" title="Permalink to this headline">¶</a></h3>
+<p>There are
+<a class="reference external" href="http://stackoverflow.com/questions/550861/improving-code-readability">many</a>
+resources and opinions on what constitutes good programming practice. A
+good resource is <a class="reference external" href="https://jeffknupp.com/writing-idiomatic-python-ebook/">Writing Idiomatic
+Python</a>.</p>
+<p>A few of the most important are:</p>
+<ol class="arabic simple">
+<li><em>Avoid reinventing the wheel.</em> Make use of available open-source
+libraries that have your desired functionality, such as those
+available on <a class="reference external" href="https://pypi.python.org/pypi">PyPI</a>. In your own
+code, use functions effectively to make it easier to troubleshoot,
+re-use and extend.</li>
+<li><em>Test your code.</em> Use an automated testing tool, such as
+<a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a>, for unit tests and
+tests with fake data. These tests will be helpful in instilling
+confidence in your data analysis, as well as checking that changes to
+your code do not break its functionality.</li>
+<li><em>Promote readability.</em> Good documentation can save your future self
+and collaborators from struggling to understand your code. But
+readability doesn&#8217;t stop at documentation, it&#8217;s also about using
+useful variable names and idiomatic programming. The more programming
+you do, the better you will become at producing readable code <em>if</em>
+you make an effort to promote the readability of your code. This will
+mean that every now and then you spend some time to refactor your
+code with readability in mind, as well as choosing appropriate
+variable names and documenting while writing your code in the first
+place.</li>
+</ol>
+<p>Neuroscience labs are moving towards being able to share the analysis
+code and raw data of published work, making it possible for anyone to be
+able to generate all the results and figures in the paper. An example of
+this is <a class="reference external" href="http://www.jneurosci.org/content/34/5/1892.full">Bekolay et al.
+(2014)</a>, where the
+Notes section gives the link to a GitHub release with very nicely
+organized and documented code that reproduces the results.</p>
+<p>Primarily, this means that you need to: - <em>Annotate your data.</em> Our lab
+uses an info file, which contains common descriptors as well as
+experiment-specific information. Check out <a class="reference external" href="https://github.com/vandermeerlab/emi_shortcut/blob/master/info/r063d2.py">an example info
+file</a>,
+used in the analysis of a task involving shortcuts. As a bonus,
+standardizing annotation systems can reduce the effort required to
+combine data sets, such as in [van der Meer et al. Neuron
+2010](<a class="reference external" href="http://www.cell.com/neuron/abstract/S0896-6273(1000507-6">http://www.cell.com/neuron/abstract/S0896-6273(1000507-6</a>), where
+three large data sets recorded by three different people from different
+brain regions were combined.</p>
+<ul class="simple">
+<li><em>Use relative locations for files.</em> For code to be run on another
+machine, it&#8217;s important that the specific location of files are not
+hard-coded, but instead used relative to the location of the code.</li>
+<li><em>Specify dependencies.</em> Including which version of your own code you
+used to generate the results. This is especially important since we
+are often working with open-source code that is frequently updated.
+It is also useful to specify the exact operating system version and
+shared libraries, which may be best addressed using containers like
+<a class="reference external" href="https://www.docker.com/">Docker</a> (see <a class="reference external" href="http://www.russpoldrack.org/2015_12_01_archive.html">this
+blogpost</a> by
+Russ Poldrack for discussion). A nice way to handle this is keeping
+code under version control on GitHub and making code releases with an
+updated version number for each publication.</li>
+</ul>
+</div>
+<div class="section" id="Apply-appropriate-statistical-concepts">
+<h3>Apply appropriate statistical concepts<a class="headerlink" href="#Apply-appropriate-statistical-concepts" title="Permalink to this headline">¶</a></h3>
+<p>For most projects, careful consideration of what statistics will
+eventually be done should begin before you collect any data at all. This
+will help you determine whether your experimental design and power are
+appropriate to answer your question. As such, you should be aware of
+major statistical concepts, including:</p>
+<ol class="arabic simple">
+<li>The downfalls of <a class="reference external" href="http://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html">underfitting and
+overfitting</a>:
+modeling noise instead of the process of interest.</li>
+<li><a class="reference external" href="http://scikit-learn.org/stable/modules/cross_validation.html">Cross-validation</a>:
+a powerful, general purpose tool for evaluating the &#8220;goodness&#8221; of a
+statistical model (and prevent overfitting).</li>
+<li><a class="reference external" href="http://machinelearningmastery.com/resample-interpolate-time-series-data-python/">Resampling</a>
+(aka bootstrapping, shuffling or permutation testing): generating
+synthetic data sets based on some known distribution, usually to
+compare to actual data.</li>
+<li><a class="reference external" href="http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/">Model
+comparison</a>:
+the process of determining which model best describes the data.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="4.-Test-and-document-acquisition-and-analysis-code">
+<h2>4. Test and document acquisition and analysis code<a class="headerlink" href="#4.-Test-and-document-acquisition-and-analysis-code" title="Permalink to this headline">¶</a></h2>
+<p>Both the acquisition code and analysis code need to be thoroughly tested
+and documented. Acquisition code is often dealing with hardware
+components that can malfunction, so it&#8217;s important that at the beginning
+of every experiment to thoroughly test that your code properly
+interfaces with the hardware and runs as expected.</p>
+<p>Analysis pipelines can get complicated quickly, such that it can be
+difficult to track down bugs or other issues. You can use unit tests and
+fake data to limit the number of potential bugs and issues. For
+instance, if you input Poisson (random) spike data with a constant
+firing rate, totally independent of your experimental conditions, it
+better not be the case that your analysis reports a significant
+difference! And if instead you specify an increase firing rate during an
+experimental condition, your analysis should be able to handle that as
+well.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorial02_Setting-up.html" class="btn btn-neutral float-right" title="# Tutorial 02 - Setting up" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Tutorials for Nept" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

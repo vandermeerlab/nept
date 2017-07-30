@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nept.core.epoch &mdash; nept 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="nept 0.1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> nept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials for Nept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">nept Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">nept Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">nept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>nept.core.epoch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nept.core.epoch</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nept</span>
+
+
+<div class="viewcode-block" id="Epoch"><a class="viewcode-back" href="../../../core.html#nept.Epoch">[docs]</a><span class="k">class</span> <span class="nc">Epoch</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;An array of epochs, where each epoch has a start and stop time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    time : np.array</span>
+<span class="sd">        If shape (n_epochs, 1) or (n_epochs,), the start time for each epoch.</span>
+<span class="sd">        If shape (n_epochs, 2), the start and stop times for each epoch.</span>
+<span class="sd">    duration : np.array or None, optional</span>
+<span class="sd">        The length of the epoch.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    time : np.array</span>
+<span class="sd">        The start and stop times for each epoch. With shape (n_epochs, 2).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;must have the same number of start and stop times&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">duration</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">duration</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;duration not allowed when using start and stop times&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">duration</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;must have same number of time and duration samples&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">duration</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">stop_epoch</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">duration</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">stop_epoch</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;time cannot have more than 2 dimensions&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;start must be less than stop&quot;</span><span class="p">)</span>
+
+        <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">[</span><span class="n">idx</span><span class="p">])[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">idx</span><span class="p">])[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]]))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The center of each epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">durations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The duration of each epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isempty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(boolean) Whether the epoch array is empty.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">starts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The start of each epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The start of the first epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The stop of each epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(np.array) The stop of the last epoch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_epochs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(int) The number of epochs.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+
+<div class="viewcode-block" id="Epoch.copy"><a class="viewcode-back" href="../../../core.html#nept.Epoch.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stops</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">new_starts</span><span class="p">,</span> <span class="n">new_stops</span><span class="o">-</span><span class="n">new_starts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Epoch.intersect"><a class="viewcode-back" href="../../../core.html#nept.Epoch.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds intersection between two sets of epochs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epoch : nept.Epoch</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        intersect_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Epoch</span><span class="p">([],</span> <span class="p">[])</span>
+
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">epoch_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">()</span>
+        <span class="n">epoch_b</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">epoch_a</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">bb</span> <span class="ow">in</span> <span class="n">epoch_b</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_starts</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_stops</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]]))</span></div>
+
+<div class="viewcode-block" id="Epoch.overlaps"><a class="viewcode-back" href="../../../core.html#nept.Epoch.overlaps">[docs]</a>    <span class="k">def</span> <span class="nf">overlaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds overlap between template epochs and epoch of interest.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epoch : nept.Epoch</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        overlaps_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Epoch</span><span class="p">([],</span> <span class="p">[])</span>
+
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">()</span>
+        <span class="n">epoch_interest</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">bb</span> <span class="ow">in</span> <span class="n">epoch_interest</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">new_starts</span><span class="p">)</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">new_stops</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_starts</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_stops</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]]))</span></div>
+
+<div class="viewcode-block" id="Epoch.merge"><a class="viewcode-back" href="../../../core.html#nept.Epoch.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Merges epochs that are close or overlapping.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gap : float, optional</span>
+<span class="sd">            Amount (in time) to consider epochs close enough to merge.</span>
+<span class="sd">            Defaults to 0.0 (no gap).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        merged_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">gap</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;gap cannot be negative&quot;</span><span class="p">)</span>
+
+        <span class="n">epoch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">stops</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">gap</span>
+        <span class="n">starts</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">to_merge</span> <span class="o">=</span> <span class="p">(</span><span class="n">stops</span> <span class="o">-</span> <span class="n">starts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="p">[</span><span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">next_stop</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">this_stop</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">next_stop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">next_stop</span><span class="p">,</span> <span class="n">this_stop</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">to_merge</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_stop</span><span class="p">)</span>
+                <span class="n">new_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">new_stops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">new_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_starts</span><span class="p">)</span>
+        <span class="n">new_stops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_stops</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">new_starts</span><span class="p">,</span> <span class="n">new_stops</span><span class="o">-</span><span class="n">new_starts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Epoch.expand"><a class="viewcode-back" href="../../../core.html#nept.Epoch.expand">[docs]</a>    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Expands epoch by the given amount.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        amount : float</span>
+<span class="sd">            Amount (in time) to expand each epoch.</span>
+<span class="sd">        direction : str</span>
+<span class="sd">            Can be &#39;both&#39;, &#39;start&#39;, or &#39;stop&#39;. This specifies</span>
+<span class="sd">            which direction to resize epoch.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        expanded_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;both&#39;</span><span class="p">:</span>
+            <span class="n">resize_starts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">amount</span>
+            <span class="n">resize_stops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">amount</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;start&#39;</span><span class="p">:</span>
+            <span class="n">resize_starts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">amount</span>
+            <span class="n">resize_stops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
+            <span class="n">resize_starts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">resize_stops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">amount</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;direction must be &#39;both&#39;, &#39;start&#39;, or &#39;stop&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">resize_starts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                                <span class="n">resize_stops</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])))</span></div>
+
+<div class="viewcode-block" id="Epoch.shrink"><a class="viewcode-back" href="../../../core.html#nept.Epoch.shrink">[docs]</a>    <span class="k">def</span> <span class="nf">shrink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shrinks epoch by the given amount.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        amount : float</span>
+<span class="sd">            Amount (in time) to shrink each epoch.</span>
+<span class="sd">        direction : str</span>
+<span class="sd">            Can be &#39;both&#39;, &#39;start&#39;, or &#39;stop&#39;. This specifies</span>
+<span class="sd">            which direction to resize epoch.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        shrinked_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">both_limit</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">durations</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;</span> <span class="n">both_limit</span> <span class="ow">and</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;both&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shrink amount too large&quot;</span><span class="p">)</span>
+
+        <span class="n">single_limit</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">durations</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;</span> <span class="n">single_limit</span> <span class="ow">and</span> <span class="n">direction</span> <span class="o">!=</span> <span class="s1">&#39;both&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shrink amount too large&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">-</span><span class="n">amount</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Epoch.join"><a class="viewcode-back" href="../../../core.html#nept.Epoch.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines two sets of epochs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epoch : nept.Epoch</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        joined_epochs : nept.Epoch</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">join_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">starts</span><span class="p">))</span>
+        <span class="n">join_stops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">stops</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">stops</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">Epoch</span><span class="p">(</span><span class="n">join_starts</span><span class="p">,</span> <span class="n">join_stops</span><span class="o">-</span><span class="n">join_starts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Epoch.contains"><a class="viewcode-back" href="../../../core.html#nept.Epoch.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks whether value is in any epoch.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epochs: nept.Epoch</span>
+<span class="sd">        value: float or int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">stop</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2017, van der Meer lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

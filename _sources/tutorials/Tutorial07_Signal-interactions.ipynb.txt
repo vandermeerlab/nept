@@ -1,0 +1,535 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Tutorial 07 - Signal interactions\n",
+    "-----------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Goals\n",
+    "-----------\n",
+    "\n",
+    "- Compute the Power Spectrum Density (PSD) and coherence between two signals\n",
+    "- Compute vStr-Hipp coherence between experimental conditions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Coherence\n",
+    "-----------------\n",
+    "\n",
+    "Let's start by considering how two oscillating signals may be related. \n",
+    "There are various possible relationships between the two, such as illustrated here \n",
+    "(from [Siegel et al. 2012](http://www.ncbi.nlm.nih.gov/pubmed/22233726)):\n",
+    "\n",
+    "<img src=\"07-coherence.png\" style=\"width: 500px;\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Coherence within the ventral striatum (vStr) and between vStr and hippocampus (hipp)\n",
+    "-------------------------------------------------------------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:12.428535Z",
+     "start_time": "2017-07-26T19:08:11.470337Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Import necessary packages\n",
+    "%matplotlib inline\n",
+    "import os\n",
+    "import sys\n",
+    "import numpy as np\n",
+    "import nept\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.mlab\n",
+    "import scipy.signal\n",
+    "\n",
+    "# Define where your data folder is located\n",
+    "data_path = os.path.join(os.path.abspath('.'), 'data')\n",
+    "data_folder = os.path.join(data_path, 'R016-2012-10-03')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:12.446548Z",
+     "start_time": "2017-07-26T19:08:12.430020Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Load the info file, which contains experiment-specific information\n",
+    "sys.path.append(data_folder)\n",
+    "import r016d3 as info"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:12.930272Z",
+     "start_time": "2017-07-26T19:08:12.448032Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Load both LFPs (.ncs) from rat ventral striatum and one from the hippocampus\n",
+    "lfp_vstr1 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename1))\n",
+    "lfp_vstr2 = nept.load_lfp(os.path.join(data_folder, info.lfp_gamma_filename2))\n",
+    "\n",
+    "lfp_hipp = nept.load_lfp(os.path.join(data_folder, info.lfp_theta_filename))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:13.254002Z",
+     "start_time": "2017-07-26T19:08:12.931773Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Let's restrict our LFPs to during task times\n",
+    "task_start = info.task_times['task-value'].start\n",
+    "task_stop = info.task_times['task-reward'].stop\n",
+    "\n",
+    "lfp_vstr1 = lfp_vstr1.time_slice(task_start, task_stop)\n",
+    "lfp_vstr2 = lfp_vstr2.time_slice(task_start, task_stop)\n",
+    "lfp_hipp = lfp_hipp.time_slice(task_start, task_stop)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:18.929041Z",
+     "start_time": "2017-07-26T19:08:13.255504Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the LFPs. Notice the break in LFP when the task was switched from 'value' to 'reward'\n",
+    "plt.plot(lfp_vstr1.time, lfp_vstr1.data)\n",
+    "plt.plot(lfp_vstr2.time, lfp_vstr2.data)\n",
+    "plt.plot(lfp_hipp.time, lfp_hipp.data)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:20.013329Z",
+     "start_time": "2017-07-26T19:08:18.930543Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Compute the Power Spectral Density (PSD) for each signal with Welch’s average\n",
+    "window = 2048\n",
+    "fs = 2000\n",
+    "\n",
+    "vstr1 = np.squeeze(lfp_vstr1.data)\n",
+    "vstr2 = np.squeeze(lfp_vstr2.data)\n",
+    "hipp = np.squeeze(lfp_hipp.data)\n",
+    "\n",
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "# Theta\n",
+    "ax.axvspan(4, 12, color='#cccccc', alpha=0.3)\n",
+    "# Gamma\n",
+    "ax.axvspan(25, 100, color='#cccccc', alpha=0.3)\n",
+    "\n",
+    "for lfp_data in [vstr1, vstr2, hipp]:\n",
+    "    power, freq = matplotlib.mlab.psd(lfp_data, \n",
+    "                                      Fs=fs,\n",
+    "                                      NFFT=int(window*2),\n",
+    "                                      noverlap=int(window/2))\n",
+    "\n",
+    "    power_db = 10*np.log10(power)\n",
+    "    plt.plot(freq, power_db)\n",
+    "    \n",
+    "    plt.xlim(0, 150)\n",
+    "    plt.ylim(-120, -85)\n",
+    "    plt.ylabel('Power (dB)')\n",
+    "    plt.xlabel('Frequency (Hz)')\n",
+    "    plt.legend(['vStr1', 'vStr2', 'Hipp'])\n",
+    "    \n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "Notice the hippocampus has a clear theta (4 - 12 Hz) peak, \n",
+    "which is visible as only a slight hump in ventral striatum. \n",
+    "Ventral striatum has large gamma (25 - 100 Hz) components,\n",
+    "which are not present in the hippocampus."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:26.934072Z",
+     "start_time": "2017-07-26T19:08:24.692980Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Compute the coherence for vStr-vStr and vStr-hipp\n",
+    "\n",
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "# Theta\n",
+    "ax.axvspan(4, 12, color='#cccccc', alpha=0.3)\n",
+    "# Gamma\n",
+    "ax.axvspan(25, 100, color='#cccccc', alpha=0.3)\n",
+    "\n",
+    "for lfp_data in [vstr2, hipp]:\n",
+    "    coherence, freq = matplotlib.mlab.cohere(\n",
+    "        vstr1, lfp_data, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))\n",
+    "\n",
+    "    plt.plot(freq, coherence)\n",
+    "    plt.xlim(0, 150)\n",
+    "    plt.ylim(0, 1)\n",
+    "    plt.ylabel('Coherence')\n",
+    "    plt.xlabel('Frequency (Hz)')\n",
+    "    plt.legend(['vStr1-vStr2', 'vStr1-Hipp'])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "The coherence between the two ventral striatum signals is high overall \n",
+    "compared to that between the ventral striatum and hippocampus.\n",
+    "The ventral striatum gamma frequencies are particularly coherent within the ventral striatum. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "# Compute vStr-Hipp coherence between experimental conditions\n",
+    "---------------------------------------------------------------------------------------------------"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:28.336696Z",
+     "start_time": "2017-07-26T19:08:28.324688Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Load events from this experiment\n",
+    "events = nept.load_events(os.path.join(data_folder, info.event_filename), info.event_labels)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's see if there is a change in coherence between _approach to the reward site_\n",
+    "and _reward receipt_. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:29.576407Z",
+     "start_time": "2017-07-26T19:08:29.572404Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Get the photobeam break times\n",
+    "pb = np.sort(np.append(events['feeder0'], events['feeder1']))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:38.733642Z",
+     "start_time": "2017-07-26T19:08:30.893523Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Compute the perievent slices for the nosepoke times\n",
+    "np_vstr1 = nept.perievent_slice(lfp_vstr1, pb, t_before=2.5, t_after=5.0)\n",
+    "np_vstr2 = nept.perievent_slice(lfp_vstr2, pb, t_before=2.5, t_after=5.0)\n",
+    "np_hipp = nept.perievent_slice(lfp_hipp, pb, t_before=2.5, t_after=5.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:39.102940Z",
+     "start_time": "2017-07-26T19:08:38.735143Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Get the mean PSD for each of our signals\n",
+    "freq, psd_vstr1 = nept.mean_psd(np_vstr1, window, fs)\n",
+    "freq, psd_vstr2 = nept.mean_psd(np_vstr2, window, fs)\n",
+    "freq, psd_hipp = nept.mean_psd(np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:39.295558Z",
+     "start_time": "2017-07-26T19:08:39.104922Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the PSDs\n",
+    "plt.plot(freq, nept.power_in_db(psd_vstr1))\n",
+    "plt.plot(freq, nept.power_in_db(psd_vstr2))\n",
+    "plt.plot(freq, nept.power_in_db(psd_hipp))\n",
+    "plt.xlim(0, 100)\n",
+    "plt.ylim(-110, -80)\n",
+    "plt.xlabel('Frequency (Hz)')\n",
+    "plt.ylabel('Power (dB)')\n",
+    "plt.legend(['vStr1', 'vStr2', 'Hipp'])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:40.139641Z",
+     "start_time": "2017-07-26T19:08:39.297043Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Get the mean PSD for our signals of interest, e.g. vStr1-vStr2 and vStr1-Hipp\n",
+    "freq, csd_vstr1_vstr2 = nept.mean_csd(np_vstr1, np_vstr2, window, fs)\n",
+    "freq, csd_vstr1_hipp = nept.mean_csd(np_vstr1, np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:42.270469Z",
+     "start_time": "2017-07-26T19:08:42.076330Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the CSDs\n",
+    "plt.plot(freq, nept.power_in_db(csd_vstr1_vstr2))\n",
+    "plt.plot(freq, nept.power_in_db(csd_vstr1_hipp))\n",
+    "plt.xlim(0, 100)\n",
+    "plt.ylim(-120, -90)\n",
+    "plt.xlabel('Frequency (Hz)')\n",
+    "plt.ylabel('Power (dB)')\n",
+    "plt.legend(['vStr1-vStr2', 'vStr1-Hipp'])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:44.853833Z",
+     "start_time": "2017-07-26T19:08:42.988902Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Get the mean coherence for our signals of interest, e.g. vStr1-vStr2 and vStr1-Hipp\n",
+    "freq, coh_vstr1_vstr2 = nept.mean_coherence(np_vstr1, np_vstr2, window, fs)\n",
+    "freq, coh_vstr1_hipp = nept.mean_coherence(np_vstr1, np_hipp, window, fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:45.027958Z",
+     "start_time": "2017-07-26T19:08:44.855317Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the coherences\n",
+    "plt.plot(freq, coh_vstr1_vstr2)\n",
+    "plt.plot(freq, coh_vstr1_hipp)\n",
+    "plt.xlim(0, 100)\n",
+    "plt.xlabel('Frequency (Hz)')\n",
+    "plt.ylabel('Coherence')\n",
+    "plt.legend(['vStr1-vStr2', 'vStr1-Hipp'])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:59.576089Z",
+     "start_time": "2017-07-26T19:08:46.102028Z"
+    },
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# Get the mean coherencegram for our signals of interest, e.g. vStr1-vStr2 and vStr1-Hipp\n",
+    "time, freq, coherencegram_vstr1_vstr2 = nept.mean_coherencegram(np_vstr1, np_vstr2, dt=0.07, \n",
+    "                                                                window=500, fs=fs)\n",
+    "time, freq, coherencegram_vstr1_hipp = nept.mean_coherencegram(np_vstr1, np_hipp, dt=0.07, \n",
+    "                                                               window=500, fs=fs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:08:59.920334Z",
+     "start_time": "2017-07-26T19:08:59.577590Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the vStr1-vStr2 coherencegram\n",
+    "xx, yy = np.meshgrid(time, freq)\n",
+    "plt.pcolormesh(xx, yy, coherencegram_vstr1_vstr2)\n",
+    "plt.ylim(0, 100)\n",
+    "plt.colorbar()\n",
+    "plt.xlabel('Time (s)')\n",
+    "plt.ylabel('Frequency (Hz)')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-07-26T19:09:00.199533Z",
+     "start_time": "2017-07-26T19:08:59.921835Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Plot the vStr1-Hipp coherencegram\n",
+    "xx, yy = np.meshgrid(time, freq)\n",
+    "plt.pcolormesh(xx, yy, coherencegram_vstr1_hipp)\n",
+    "plt.ylim(0, 100)\n",
+    "plt.colorbar()\n",
+    "plt.xlabel('Time (s)')\n",
+    "plt.ylabel('Frequency (Hz)')\n",
+    "plt.show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.1"
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "425px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}
