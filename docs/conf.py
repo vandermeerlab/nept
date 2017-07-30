@@ -18,20 +18,7 @@ import sys
 import os
 import shlex
 
-import mock
-
-sys.path.insert(0, os.path.abspath('..'))
-
-MOCK_MODULES = ['numpy',
-                'scipy',
-                'scipy.stats',
-                'scipy.signal',
-                'shapely',
-                'shapely.geometry',
-                'scipy.ndimage.filters',
-                'scipy.ndimage']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -49,9 +36,11 @@ for mod_name in MOCK_MODULES:
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'sphinx.ext.githubpages',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'numpydoc',
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -70,7 +59,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'nept'
-copyright = '2016, van der Meer lab'
+copyright = '2016-2017, van der Meer lab'
 author = 'van der Meer lab'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -97,7 +86,7 @@ language = None
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '**.ipynb_checkpoints', 'tutorials/data/README.rst']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -132,7 +121,8 @@ numpydoc_show_class_members = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

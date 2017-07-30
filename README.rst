@@ -60,7 +60,7 @@ Documentation
 Users
 -----
 
-Check `Read The Docs <http://nept.readthedocs.io/en/latest/index.html>`_ 
+Check `GitHub Pages <https://vandermeerlab.github.io/nept/>`_
 for the latest version of the nept documentation.
 
 Developers
@@ -68,12 +68,20 @@ Developers
 
 Ensure you have sphinx, numpydic, and mock::
 
-  conda install sphinx numpydoc mock
+  conda install ghp-import sphinx numpydoc sphinx_rtd_theme
+
+Install nbsphinx so notebooks in the documentations can be executed::
+  
+  pip install nbsphinx --user
 
 Build the latest version of the documentation using 
 in the nept directory prior to pushing it to Github::
 
-  python setup.py build_sphinx
+  sphinx-build docs docs/_build
+
+And push it to Github::
+
+  docs/update.sh
 
 Testing
 =======

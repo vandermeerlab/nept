@@ -11,4 +11,4 @@ dist
 .cache/
 .coverage
 htmlcov
-tutorials/data/
+docs/tutorials/data/

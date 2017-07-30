@@ -11,6 +11,9 @@ class Session:
 
     def add_trial(self, epoch, cue, trial_type):
         """Adds trial to session
+
+        Parameters
+        ----------
         epoch: nept.Epoch object
         cue: str
             Typically either 'light' or 'sound'
@@ -29,6 +32,9 @@ class Session:
 
     def add_missing_trial(self, cue, trial_type):
         """Adds trial placeholders for missing trials.
+
+        Parameters
+        ----------
         cue: str
             Typically either 'light' or 'sound'
         trial_type: int
@@ -177,6 +183,8 @@ def f_analyze(trial, measure):
 def combine_rats(data, rats, n_sessions, only_sound=False):
     """Combines behavioral measures from multiple rats, sessions and trials.
 
+    Parameters
+    ----------
     data: dict
         With rat (str) as key, contains Rat objects for each rat
     rats: list

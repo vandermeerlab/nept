@@ -1,3 +1,4 @@
+ghp-import
 numpydoc
 sphinx
-mock
+sphinx_rtd_theme

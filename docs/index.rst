@@ -1,6 +1,3 @@
-.. This file should at least
-   contain the root `toctree` directive.
-
 nept
 ====
 
@@ -16,15 +13,8 @@ Documentation
    :maxdepth: 1
 
    getting_started
-
-.. toctree::
-   :maxdepth: 1
-
+   tutorials/index
    core
-
-.. toctree::
-   :maxdepth: 1
-
    modules
 
 * :ref:`genindex`

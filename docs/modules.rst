@@ -38,6 +38,14 @@ nept.loaders_mclust module
     :undoc-members:
     :show-inheritance:
 
+nept.loaders_medpc module
+-------------------------
+
+.. automodule:: nept.loaders_medpc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 nept.loaders_neuralynx module
 ------------------------------
 
@@ -46,18 +54,10 @@ nept.loaders_neuralynx module
     :undoc-members:
     :show-inheritance:
 
-nept.maze_breakdown module
---------------------------
+nept.medpc_core module
+----------------------
 
-.. automodule:: nept.maze_breakdown
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nept.medpc module
------------------
-
-.. automodule:: nept.medpc
+.. automodule:: nept.medpc_core
     :members:
     :undoc-members:
     :show-inheritance:

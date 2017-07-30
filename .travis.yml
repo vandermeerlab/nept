@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.5"
+  - "3.6"
 sudo: false
 
 # Setup miniconda
@@ -19,9 +19,10 @@ install:
   - pip install --only-binary=shapely shapely
   - python setup.py develop
 
-# run tests
+# run tests and build documentation
 script: 
   - coverage run --source nept -m py.test
+  - sphinx-build docs docs/_build
 
 # coverage tests
 after_success:
