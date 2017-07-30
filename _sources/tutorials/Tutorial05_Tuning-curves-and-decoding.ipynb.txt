@@ -4,16 +4,14 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Tutorial 05 - Tuning curves and decoding\n",
-    "---------------------------------------------------------------------"
+    "# Tutorial 05 - Tuning curves and decoding"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Goals\n",
-    "-----------\n",
+    "## Goals\n",
     "\n",
     "- Learn to estimate and plot 2D tuning curves\n",
     "- Implement a Bayesian decoding algorithm\n",
@@ -24,8 +22,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Compute the tuning curves\n",
-    "----------------------------------------------"
+    "## Compute the tuning curves"
    ]
   },
   {
@@ -77,7 +74,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:20.110400Z",
      "start_time": "2017-07-27T14:50:19.573019Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -96,7 +94,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:20.784880Z",
      "start_time": "2017-07-27T14:50:20.111902Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -152,7 +151,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:20.971013Z",
      "start_time": "2017-07-27T14:50:20.817403Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -168,7 +168,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:21.128143Z",
      "start_time": "2017-07-27T14:50:20.974014Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -184,7 +185,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:21.609967Z",
      "start_time": "2017-07-27T14:50:21.129625Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -234,6 +236,7 @@
      "end_time": "2017-07-27T14:50:24.497020Z",
      "start_time": "2017-07-27T14:50:23.800025Z"
     },
+    "collapsed": true,
     "scrolled": true
    },
    "outputs": [],
@@ -255,14 +258,8 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Decoding\n",
-    "----------------"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
+    "## Decoding\n",
+    "\n",
     "Next, let's decode the location of the subject using a Bayesian algorithm.\n",
     "\n",
     "Specifically, this is a method known as \"one-step Bayesian decoding\" and is\n",
@@ -316,7 +313,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:53.900455Z",
      "start_time": "2017-07-27T14:50:25.603306Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -349,7 +347,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:56.555359Z",
      "start_time": "2017-07-27T14:50:53.912964Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -366,7 +365,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:56.719959Z",
      "start_time": "2017-07-27T14:50:56.556843Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -379,8 +379,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Compare the decoded to actual positions\n",
-    "------------------------------------------------------------"
+    "## Compare the decoded to actual positions"
    ]
   },
   {
@@ -409,7 +408,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:56.916600Z",
      "start_time": "2017-07-27T14:50:56.729466Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -434,7 +434,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-27T14:50:57.096253Z",
      "start_time": "2017-07-27T14:50:56.918601Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -465,7 +466,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.1"
+   "version": "3.4.5"
   },
   "toc": {
    "colors": {

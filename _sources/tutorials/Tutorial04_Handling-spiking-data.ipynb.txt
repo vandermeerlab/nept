@@ -4,16 +4,14 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Tutorial 04 - Handling spiking data\n",
-    "----------------------------------------------------------"
+    "# Tutorial 04 - Handling spiking data"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Goals\n",
-    "-----------\n",
+    "## Goals\n",
     "\n",
     "- Describe spike trains through binning and spike density functions\n",
     "- Describe spike trains by their interspike intervals (ISIs)\n",
@@ -25,8 +23,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Determine firing rates\n",
-    "---------------------------------"
+    "## Determine firing rates"
    ]
   },
   {
@@ -117,7 +114,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:12:40.896727Z",
      "start_time": "2017-07-26T18:12:40.747620Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -133,7 +131,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:12:30.834267Z",
      "start_time": "2017-07-26T18:12:30.683161Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -182,7 +181,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:21:41.745201Z",
      "start_time": "2017-07-26T18:21:41.579559Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -235,7 +235,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:21:26.504260Z",
      "start_time": "2017-07-26T18:21:26.307135Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -251,8 +252,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Interspike intervals (ISIs)\n",
-    "-------------------------------------"
+    "## Interspike intervals (ISIs)"
    ]
   },
   {
@@ -262,7 +262,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:21:49.680886Z",
      "start_time": "2017-07-26T18:21:49.546422Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -295,7 +296,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:21:58.076295Z",
      "start_time": "2017-07-26T18:21:57.827827Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -309,8 +311,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Spike autocorrelation function (ACF)\n",
-    "------------------------------------------------------"
+    "## Spike autocorrelation function (ACF)"
    ]
   },
   {
@@ -364,7 +365,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:22:08.024446Z",
      "start_time": "2017-07-26T18:22:07.820764Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -380,8 +382,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Spike cross-correlation function (CCF)\n",
-    "--------------------------------------------------------"
+    "## Spike cross-correlation function (CCF)"
    ]
   },
   {
@@ -437,6 +438,7 @@
      "end_time": "2017-07-26T18:22:12.673015Z",
      "start_time": "2017-07-26T18:22:12.363520Z"
     },
+    "collapsed": true,
     "scrolled": true
    },
    "outputs": [],
@@ -463,8 +465,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Generating fake spike data\n",
-    "----------------------------------------"
+    "## Generating fake spike data"
    ]
   },
   {
@@ -474,7 +475,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T18:22:39.580026Z",
      "start_time": "2017-07-26T18:22:39.418912Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -510,7 +512,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.1"
+   "version": "3.4.5"
   },
   "toc": {
    "colors": {

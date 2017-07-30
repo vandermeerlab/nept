@@ -1,6 +1,6 @@
-******************
-Tutorials for Nept
-******************
+*********
+Tutorials
+*********
 
 Here you can find the tutorials for uses of `nept`,
 with some general neural data analysis focus.
@@ -25,8 +25,8 @@ If you wish to expand the scope of the tutorial suite,
 feel free to submit pull requests adhering to the 
 `style guide <https://github.com/vandermeerlab/nept/blob/master/style_guide.rst>`_.
 
-Tutorials
-=========
+nept tutorials
+==============
 
 .. toctree::
     :maxdepth: 1

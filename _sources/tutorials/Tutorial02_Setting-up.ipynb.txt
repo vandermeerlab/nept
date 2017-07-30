@@ -4,16 +4,15 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Tutorial 02 - Setting up\n",
-    "----------------------------------------"
+    "# Tutorial 02 - Setting up"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Goals\n",
-    "-------------\n",
+    "## Goals\n",
+    "\n",
     "- Establish a sensible folder structure\n",
     "- Install python and nept\n",
     "- Introduction to git and GitHub\n",
@@ -24,8 +23,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Establish a sensible folder structure\n",
-    "-------------------------------------------------------------\n",
+    "## Establish a sensible folder structure\n",
     "\n",
     "So far, you have a local nept repository, with code common to many analyses.\n",
     "As you work on your own project, you will write your own analysis code that may not be relevant to others.\n",
@@ -66,8 +64,7 @@
     }
    },
    "source": [
-    "# Install python and nept\n",
-    "----------------------------------------\n",
+    "## Install python and nept\n",
     "\n",
     "Python is a free and open-source programming language, \n",
     "with a core language and many additional useful scientific libraries.\n",
@@ -81,8 +78,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Introduction to git and GitHub\n",
-    "---------------------------------------------------\n",
+    "## Introduction to git and GitHub\n",
     "\n",
     "[GitHub](https://github.com/) is a platform for distributed version control. \n",
     "So, you can get access to the latest codebase and it provides a \n",
@@ -107,8 +103,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Get a data session from the vandermeerlab server\n",
-    "-----------------------------------------------------------------------\n",
+    "## Get a data session from the vandermeerlab server\n",
     "\n",
     "Use a FTP client such as [Filezilla](https://filezilla-project.org/) \n",
     "to connect to the lab FTP server, using the following settings:\n",
@@ -142,7 +137,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T17:37:03.270509Z",
      "start_time": "2017-07-26T17:37:02.313829Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -165,7 +161,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T17:37:03.279015Z",
      "start_time": "2017-07-26T17:37:03.272010Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -181,7 +178,8 @@
     "ExecuteTime": {
      "end_time": "2017-07-26T17:37:04.063035Z",
      "start_time": "2017-07-26T17:37:03.746320Z"
-    }
+    },
+    "collapsed": true
    },
    "outputs": [],
    "source": [
@@ -222,7 +220,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.1"
+   "version": "3.4.5"
   },
   "toc": {
    "colors": {
