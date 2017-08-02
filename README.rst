@@ -6,8 +6,8 @@
   :target: https://codecov.io/gh/vandermeerlab/nept/branch/master
   :alt: Test coverage
 
-.. image:: https://readthedocs.org/projects/nept/badge/?version=latest
-  :target: http://nept.readthedocs.io/en/latest/?badge=latest
+.. image:: https://img.shields.io/badge/docs-latest-blue.svg
+  :target: https://vandermeerlab.github.io/nept/
   :alt: Documentation Status
 
 **********************************
