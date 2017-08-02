@@ -28,7 +28,7 @@ Once downloaded, install with wheel.
   pip install yourshapelyinstall.whl
 
 Installation
-============
+------------
 
 Clone nept from Github and use a developer installation::
 
