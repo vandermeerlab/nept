@@ -120,4 +120,4 @@ def remove_teleports(position, speed_thresh, min_length):
     stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx]
 
     return nept.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
-                                np.array(stops)[..., np.newaxis]]))
+                                 np.array(stops)[..., np.newaxis]]))
