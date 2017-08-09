@@ -11,6 +11,16 @@ AnalogSignal
     :undoc-members:
     :show-inheritance:
 
+
+Epoch
+-----
+
+.. autoclass:: nept.Epoch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 LocalFieldPotential
 -------------------
 
@@ -18,6 +28,7 @@ LocalFieldPotential
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 Position
 --------
@@ -27,13 +38,15 @@ Position
     :undoc-members:
     :show-inheritance:
 
-Epoch
------
 
-.. autoclass:: nept.Epoch
+Neurons
+-------
+
+.. autoclass:: nept.Neurons
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 SpikeTrain
 ----------
