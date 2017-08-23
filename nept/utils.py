@@ -29,7 +29,7 @@ def bin_spikes(spikes, time, dt,
     if window is None:
         window = dt
 
-    bin_edges = get_edges(time, dt, lastbin=True)
+    bin_edges = get_edges(time, dt, lastbin=False)
 
     given_n_bins = window / dt
     n_bins = int(round(given_n_bins))
