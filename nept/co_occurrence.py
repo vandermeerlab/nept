@@ -51,7 +51,7 @@ def get_tetrode_mask(spikes):
 
 
 def compute_cooccur(count_matrix, tetrode_mask, num_shuffles=10000):
-    """Computes the probabilities for co-occurrence
+    """Computes the probabilities for co-occurrence.
 
     Parameters
     ----------
@@ -84,7 +84,7 @@ def compute_cooccur(count_matrix, tetrode_mask, num_shuffles=10000):
 
 
 def vector_from_array(array):
-    """Get triangle of output in vector from a correlation-type array
+    """Get triangle of output in vector from a correlation-type array.
 
     Parameters
     ----------
@@ -112,7 +112,7 @@ def vector_from_array(array):
 
 
 def bool_counts(count_matrix, min_spikes=1):
-    """Converts count matrix to boolean of whether bin active or not
+    """Converts count matrix to boolean of whether bin active or not.
 
     Parameters
     ----------
@@ -133,7 +133,7 @@ def bool_counts(count_matrix, min_spikes=1):
     return activity_matrix
 
 def prob_active_neuron(activity_matrix):
-    """Get expected co-occurrence under independence assumption
+    """Get expected co-occurrence under independence assumption.
 
     Parameters
     ----------
@@ -151,7 +151,7 @@ def prob_active_neuron(activity_matrix):
 
 
 def expected_cooccur(prob_active, tetrode_mask):
-    """Expected co-occurrence, multiply single cell probabilities
+    """Expected co-occurrence, multiply single cell probabilities.
 
     Parameters
     ----------
@@ -176,7 +176,7 @@ def expected_cooccur(prob_active, tetrode_mask):
 
 
 def observed_cooccur(activity_matrix, tetrode_mask):
-    """Observed co-occurrences
+    """Observed co-occurrences.
 
     Parameters
     ----------
@@ -206,7 +206,7 @@ def observed_cooccur(activity_matrix, tetrode_mask):
 
 
 def shuffle_cooccur(activity_matrix, num_shuffles):
-    """Compute shuffle matrices from experimental observations
+    """Compute shuffle matrices from experimental observations.
 
     Parameters
     ----------
@@ -238,7 +238,7 @@ def shuffle_cooccur(activity_matrix, num_shuffles):
 
 
 def zscore_cooccur(prob_observed, prob_shuffle):
-    """Compare co-occurrence observed probabilities with shuffle
+    """Compare co-occurrence observed probabilities with shuffle.
 
     Parameters
     ----------

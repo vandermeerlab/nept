@@ -6,7 +6,7 @@ import nept
 
 
 def butter_bandpass(signal, thresh, fs, order=4):
-    """ Filters signal using butterworth filter
+    """Filters signal using butterworth filter.
 
     Parameters
     ----------
@@ -118,8 +118,8 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
 
 
 def next_regular(target):
-    """
-    Find the next regular number greater than or equal to target.
+    """Finds the next regular number greater than or equal to target.
+
     Regular numbers are composites of the prime factors 2, 3, and 5.
     Also known as 5-smooth numbers or Hamming numbers, these are the optimal
     size for inputs to fast-fourier transforms (FFTPACK).

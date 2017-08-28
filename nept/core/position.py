@@ -51,7 +51,7 @@ class Position(AnalogSignal):
         self.data[:, 1] = val
 
     def distance(self, pos):
-        """ Return the euclidean distance from this position to the given 'pos'.
+        """Return the euclidean distance from this position to the given 'pos'.
 
         Parameters
         ----------
@@ -74,7 +74,7 @@ class Position(AnalogSignal):
         return np.sqrt(dist)
 
     def linearize(self, ideal_path, zone):
-        """ Projects 2D positions into an 'ideal' linear trajectory.
+        """Projects 2D positions into an 'ideal' linear trajectory.
 
         Parameters
         ----------

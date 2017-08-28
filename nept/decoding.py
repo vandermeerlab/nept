@@ -92,7 +92,7 @@ def decode_location(likelihood, pos_centers, time_centers):
 
 
 def remove_teleports(position, speed_thresh, min_length):
-    """Removes positions above a certain speed threshold
+    """Removes positions above a certain speed threshold.
 
     Parameters
     ----------

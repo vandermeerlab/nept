@@ -4,7 +4,7 @@ from .utils import find_nearest_idx
 
 
 def consecutive(array, stepsize=1):
-    """
+    """Splits array when distance between neighbouring points is further than the stepsize.
 
     Parameters
     ----------
@@ -20,7 +20,7 @@ def consecutive(array, stepsize=1):
 
 
 def find_fields(tuning, hz_thresh=5, min_length=1, max_length=20, max_mean_firing=10):
-    """
+    """Finds the location of maximum spiking.
 
     Parameters
     ----------

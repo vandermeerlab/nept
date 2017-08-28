@@ -6,8 +6,7 @@ import warnings
 import nept
 
 
-def bin_spikes(spikes, time, dt,
-               window=None, gaussian_std=None, normalized=True):
+def bin_spikes(spikes, time, dt, window=None, gaussian_std=None, normalized=True):
     """Bins spikes using a sliding window.
 
     Parameters
@@ -170,7 +169,24 @@ def find_nearest_idx(array, val):
 n_stds = 3
 
 
-def gaussian_filter(signal, std, dt=1, normalized=True, axis=-1):
+def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1):
+    """Filters a signal with a gaussian kernel.
+
+    Parameters
+    ----------
+    signal : np.array
+    std : float
+    dt : float
+        Defaults to 1.0
+    normalized : bool
+    axis : int
+        Defaults to -1
+
+    Returns
+    -------
+    Filtered signal
+
+    """
     n_points = (n_stds * std * 2) / dt
     n_points = int(round(n_points))
     if n_points % 2 == 0:
@@ -254,6 +270,9 @@ def get_xyedges(position, binsize=3):
     yedges: np.array
 
     """
+    if position.dimensions < 2:
+        raise ValueError("position must be 2-dimensional")
+
     xedges = np.arange(position.x.min(), position.x.max() + binsize, binsize)
     yedges = np.arange(position.y.min(), position.y.max() + binsize, binsize)
 

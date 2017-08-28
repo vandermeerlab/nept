@@ -3,7 +3,7 @@ import nept
 
 
 class Neurons:
-    """ A grouping of spiketrains and tuning curves
+    """A grouping of spiketrains and tuning curves.
 
     Parameters
     ----------
