@@ -126,7 +126,7 @@ def test_bin_spikes():
     counts = nept.bin_spikes(spikes, time, dt=2.,
                              window=2., gaussian_std=None, normalized=False)
 
-    assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.], [2.]]))
+    assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.]]))
 
 
 def test_bin_spikes_normalized():
@@ -135,7 +135,7 @@ def test_bin_spikes_normalized():
 
     counts = nept.bin_spikes(spikes, time, dt=0.5, window=2., gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[1.], [1.], [1.25], [1.], [0.5], [0.5], [0.25], [0.5]]))
+    assert np.allclose(counts.data, np.array([[1.], [1.], [1.25], [1.], [0.5], [0.75], [0.5]]))
 
 
 def test_bin_spikes_actual():
@@ -145,7 +145,7 @@ def test_bin_spikes_actual():
     counts = nept.bin_spikes(spikes, time, dt=0.5,
                              window=2., gaussian_std=None, normalized=False)
 
-    assert np.allclose(counts.data, np.array([[4.], [4.], [5.], [4.], [2.], [2.], [1.], [2.]]))
+    assert np.allclose(counts.data, np.array([[4.], [4.], [5.], [4.], [2.], [3.], [2.]]))
 
 
 def test_bin_spikes_gaussian():
@@ -166,7 +166,6 @@ def test_bin_spikes_gaussian():
                                               [0.07738638],
                                               [0.01560105],
                                               [0.00129411],
-                                              [0.],
                                               [0.],
                                               [0.],
                                               [0.],
@@ -202,7 +201,6 @@ def test_bin_spikes_gaussian_even():
                                               [0.],
                                               [0.],
                                               [0.],
-                                              [0.],
                                               [0.]]))
 
 
@@ -218,8 +216,7 @@ def test_bin_spikes_mult_neurons():
                                               [1.25, 1.25],
                                               [1., 1.],
                                               [0.5, 0.5],
-                                              [0.5, 0.5],
-                                              [0.25, 0.25],
+                                              [0.75, 0.75],
                                               [0.5, 0.5]]))
 
 
@@ -235,8 +232,7 @@ def test_bin_spikes_mult_neurons_adjust_window():
                                               [1.25, 1.25],
                                               [1., 1.],
                                               [0.5, 0.5],
-                                              [0.5, 0.5],
-                                              [0.25, 0.25],
+                                              [0.75, 0.75],
                                               [0.5, 0.5]]))
 
 

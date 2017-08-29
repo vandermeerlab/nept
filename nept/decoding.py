@@ -116,8 +116,8 @@ def remove_teleports(position, speed_thresh, min_length):
     if len(keep_idx) == 0:
         return nept.Epoch([], [])
 
-    starts = [position.time[idx_sequence[0]] for idx_sequence in keep_idx]
-    stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx]
+    starts = [position.time[idx_sequence[0]] for idx_sequence in keep_idx if len(idx_sequence) > 1]
+    stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx if len(idx_sequence) > 1]
 
     return nept.Epoch(np.hstack([np.array(starts)[..., np.newaxis],
                                  np.array(stops)[..., np.newaxis]]))
