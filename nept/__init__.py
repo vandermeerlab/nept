@@ -23,8 +23,7 @@ from .loaders_neuralynx import (load_events,
                                 load_nvt,
                                 load_nev)
 from .medpc_core import Rat, combine_rats
-from .place_fields import (consecutive,
-                           find_fields,
+from .place_fields import (find_fields,
                            get_single_field,
                            get_heatmaps)
 from .tuning_curves import (binned_position,
@@ -32,6 +31,7 @@ from .tuning_curves import (binned_position,
                             tuning_curve_2d)
 from .utils import (bin_spikes,
                     cartesian,
+                    consecutive,
                     expand_line,
                     find_multi_in_epochs,
                     find_nearest_idx,

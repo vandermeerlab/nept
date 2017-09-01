@@ -1,22 +1,5 @@
 import numpy as np
-
-from .utils import find_nearest_idx
-
-
-def consecutive(array, stepsize=1):
-    """Splits array when distance between neighbouring points is further than the stepsize.
-
-    Parameters
-    ----------
-    array : np.array
-
-    Returns
-    -------
-    List of np.arrays, split when jump greater than stepsize
-
-    """
-
-    return np.split(array, np.where(np.diff(array) != stepsize)[0]+1)
+import nept
 
 
 def find_fields(tuning, hz_thresh=5, min_length=1, max_length=20, max_mean_firing=10):
@@ -62,7 +45,7 @@ def find_fields(tuning, hz_thresh=5, min_length=1, max_length=20, max_mean_firin
     fields_idx = dict()
     for i, neuron_fields in enumerate(fields):
         field_idx = np.nonzero(neuron_fields)[0]
-        fields_idx[i] = consecutive(field_idx)
+        fields_idx[i] = nept.consecutive(field_idx, stepsize=1)
 
     with_fields = dict()
     for key in fields_idx:
@@ -135,7 +118,7 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
         field_x = []
         field_y = []
         for spike in spikes[neuron].time:
-            spike_idx = find_nearest_idx(pos.time, spike)
+            spike_idx = nept.find_nearest_idx(pos.time, spike)
             field_x.append(pos.x[spike_idx])
             field_y.append(pos.y[spike_idx])
             heatmap, out_xedges, out_yedges = np.histogram2d(field_x, field_y, bins=[xedges, yedges])

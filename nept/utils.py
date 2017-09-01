@@ -69,6 +69,23 @@ def cartesian(xcenters, ycenters):
     return np.transpose([np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))])
 
 
+def consecutive(array, stepsize):
+    """Splits array when distance between neighbouring points is further than the stepsize.
+
+    Parameters
+    ----------
+    array : np.array
+    stepsize : int
+
+    Returns
+    -------
+    List of np.arrays, split when jump greater than stepsize
+
+    """
+
+    return np.split(array, np.where(np.diff(array) > stepsize)[0]+1)
+
+
 def expand_line(start_pt, stop_pt, line, expand_by=6):
     """ Creates buffer zone around a line.
 
