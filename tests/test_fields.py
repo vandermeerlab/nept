@@ -10,18 +10,6 @@ tuning = [np.array([0., 1., 0., 0., 0., 0., 0., 2., 0., 0., 0., 0.]),
           np.array([0., 1., 0., 0., 0., 0., 0., 4., 0., 0., 0., 0.])]
 
 
-def test_consecutive():
-    array = np.array([0, 3, 4, 5, 9, 12, 13, 14])
-
-    groups = nept.consecutive(array, stepsize=1)
-
-    assert np.allclose(len(groups), 4)
-    assert np.allclose(groups[0], [0])
-    assert np.allclose(groups[1], [3, 4, 5])
-    assert np.allclose(groups[2], [9])
-    assert np.allclose(groups[3], [12, 13, 14])
-
-
 def test_find_fields():
     with_fields = nept.find_fields(tuning, hz_thresh=2, min_length=1, max_length=5, max_mean_firing=8)
 

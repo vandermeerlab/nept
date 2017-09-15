@@ -1,5 +1,4 @@
 import numpy as np
-import nept
 import pandas as pd
 
 
@@ -85,8 +84,8 @@ class Rat:
         else:
             raise ValueError("rat id is incorrect. Should be in group1 or group2")
 
-    def add_session(self, mags, pellets, lights1, lights2, sounds1, sounds2, trial1, trial2, trial3, trial4,
-                    group=False):
+    def add_biconditional_session(self, mags, pellets, lights1, lights2, sounds1, sounds2,
+                                  trial1, trial2, trial3, trial4, group=False):
         """Sorts cues into appropriate trials (1, 2, 3, 4), using intersect between trial and cue epochs."""
         session = Session(mags, pellets)
 
@@ -123,8 +122,50 @@ class Rat:
 
         self.sessions.append(session)
 
-    def add_session_medpc(self, mags, pellets, lights1, lights2, sounds1, sounds2, n_unique=8, delay=5.02,
-                          tolerance=1e-08):
+    def add_long_feature_session(self, mags, pellets, lights1=None, lights2=None, sounds1=None, sounds2=None,
+                                 trial1=None, trial2=None, trial3=None, trial4=None, group=False):
+        """Sorts cues into appropriate trials (1, 2, 3, 4), using intersect between trial and cue epochs."""
+        session = Session(mags, pellets)
+
+        if group == 1:
+            for single_trial in trial1:
+                session.add_trial(single_trial.intersect(lights2), 'light', 1)
+                session.add_trial(single_trial.intersect(sounds1), 'sound', 1)
+            for single_trial in trial2:
+                session.add_trial(single_trial.intersect(lights1), 'light', 2)
+                session.add_trial(single_trial.intersect(sounds1), 'sound', 2)
+            if trial3 is not None:
+                for single_trial in trial3:
+                    session.add_trial(single_trial.intersect(lights1), 'light', 3)
+                    session.add_trial(single_trial.intersect(sounds2), 'sound', 3)
+            if trial4 is not None:
+                for single_trial in trial4:
+                    session.add_trial(single_trial.intersect(lights2), 'light', 4)
+                    session.add_trial(single_trial.intersect(sounds2), 'sound', 4)
+
+        elif group == 2:
+            for single_trial in trial1:
+                session.add_trial(single_trial.intersect(lights1), 'light', 1)
+                session.add_trial(single_trial.intersect(sounds1), 'sound', 1)
+            for single_trial in trial2:
+                session.add_trial(single_trial.intersect(lights2), 'light', 2)
+                session.add_trial(single_trial.intersect(sounds1), 'sound', 2)
+            if trial3 is not None:
+                for single_trial in trial3:
+                    session.add_trial(single_trial.intersect(lights2), 'light', 3)
+                    session.add_trial(single_trial.intersect(sounds2), 'sound', 3)
+            if trial4 is not None:
+                for single_trial in trial4:
+                    session.add_trial(single_trial.intersect(lights1), 'light', 4)
+                    session.add_trial(single_trial.intersect(sounds2), 'sound', 4)
+
+        else:
+            raise ValueError("must specify a group")
+
+        self.sessions.append(session)
+
+    def add_session_medpc(self, mags, pellets, lights1, lights2, sounds1, sounds2,
+                          n_unique=8, delay=5.02, tolerance=1e-08):
         """Sorts cues into appropriate trials (1, 2, 3, 4), using specified delay between light and sound cues."""
 
         session = Session(mags, pellets)

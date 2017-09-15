@@ -75,7 +75,7 @@ def consecutive(array, stepsize):
     Parameters
     ----------
     array : np.array
-    stepsize : int
+    stepsize : float
 
     Returns
     -------

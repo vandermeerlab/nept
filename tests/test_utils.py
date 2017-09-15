@@ -236,6 +236,44 @@ def test_bin_spikes_mult_neurons_adjust_window():
                                               [0.5, 0.5]]))
 
 
+def test_cartesian():
+    xcenters = np.array([0., 4., 8.])
+    ycenters = np.array([0., 2., 4.])
+    xy_centers = nept.cartesian(xcenters, ycenters)
+
+    assert np.allclose(xy_centers, np.array([[0., 0.], [4., 0.], [8., 0.],
+                                             [0., 2.], [4., 2.], [8., 2.],
+                                             [0., 4.], [4., 4.], [8., 4.]]))
+
+
+def test_consecutive():
+    array = np.array([0, 3, 4, 5, 9, 12, 13, 14])
+
+    groups = nept.consecutive(array, stepsize=1)
+
+    assert len(groups) == 4
+    assert np.allclose(groups[0], [0])
+    assert np.allclose(groups[1], [3, 4, 5])
+    assert np.allclose(groups[2], [9])
+    assert np.allclose(groups[3], [12, 13, 14])
+
+
+def test_consecutive_equal_stepsize():
+    array = np.arange(0, 10, 1)
+
+    groups = nept.consecutive(array, stepsize=1)
+
+    assert np.all(groups == np.array([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]))
+
+
+def test_consecutive_all_split():
+    array = np.arange(0, 10, 1)
+
+    groups = nept.consecutive(array, stepsize=0.9)
+
+    assert np.all(groups == np.array([[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]))
+
+
 def test_get_edges_no_lastbin():
     time = np.array([0., 4.1])
     edges = nept.get_edges(time, binsize=0.5, lastbin=False)
@@ -248,16 +286,6 @@ def test_get_edges_simple():
     edges = nept.get_edges(time, binsize=0.5)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.1]))
-
-
-def test_cartesian():
-    xcenters = np.array([0., 4., 8.])
-    ycenters = np.array([0., 2., 4.])
-    xy_centers = nept.cartesian(xcenters, ycenters)
-
-    assert np.allclose(xy_centers, np.array([[0., 0.], [4., 0.], [8., 0.],
-                                             [0., 2.], [4., 2.], [8., 2.],
-                                             [0., 4.], [4., 4.], [8., 4.]]))
 
 
 def test_perievent_slice_simple():
