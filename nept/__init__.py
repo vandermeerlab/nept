@@ -22,7 +22,6 @@ from .loaders_neuralynx import (load_events,
                                 load_neuralynx_header,
                                 load_nvt,
                                 load_nev)
-from .medpc_core import Rat, combine_rats
 from .place_fields import (find_fields,
                            get_single_field,
                            get_heatmaps)
@@ -42,4 +41,3 @@ from .utils import (bin_spikes,
                     get_xyedges,
                     perievent_slice,
                     speed_threshold)
-

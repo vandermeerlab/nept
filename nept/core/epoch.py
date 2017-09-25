@@ -64,6 +64,10 @@ class Epoch:
         return Epoch(np.hstack([np.array(self.starts[idx])[..., np.newaxis],
                                 np.array(self.stops[idx])[..., np.newaxis]]))
 
+    def __iter__(self):
+        for start, stop in self.time:
+            yield Epoch([start, stop])
+
     @property
     def centers(self):
         """(np.array) The center of each epoch."""
