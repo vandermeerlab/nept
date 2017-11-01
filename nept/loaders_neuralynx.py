@@ -328,6 +328,24 @@ def write_ntt_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
                      dualthresh=None, featurepeak1=None, featurepeak2=None,
                      featurepeak3=None, featurepeak4=None, featurevalley1=None,
                      featurevalley2=None, featurevalley3=None, featurevalley4=None):
+    """
+    Returns a .ntt header
+
+    Parameters
+    ----------
+    nlx_headersize: float
+        Default is 16*2**10
+    name: str
+        Default is None
+    ...
+
+
+    Returns
+    -------
+    header: byte string
+
+    """
+
     header = '######## Neuralynx Data File Header'
     if name is not None:
         header += '## File Name ' + name
@@ -353,7 +371,7 @@ def write_ntt_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
     if recordsize is not None:
         header += '-RecordSize ' + recordsize
     else:
-        header += '-RecordSize ' + '304'
+        header += '-RecordSize '
     header += '\r\n'
     if cheetahrev is not None:
         header += '-CheetahRev ' + cheetahrev
@@ -371,11 +389,11 @@ def write_ntt_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
     if samplingfreq is not None:
         header += '-SamplingFrequency ' + samplingfreq
     else:
-        header += '-SamplingFrequency ' + '32000'
+        header += '-SamplingFrequency '
     if admaxvalue is not None:
         header += '-ADMaxValue ' + admaxvalue
     else:
-        header += '-ADMaxValue ' + '32767'
+        header += '-ADMaxValue '
     if adbitvolts is not None:
         header += '-ADBitVolts ' + adbitvolts
     else:
@@ -517,6 +535,24 @@ def write_ncs_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
                      dsplowcutfreq=None, dsplowcutnumtaps=None, dsplowcutfiltertype=None,
                      dsphighcutfilterenabled=None, dsphighcutfreq=None, dsphighcutnumtaps=None,
                      dsphighcutfiltertype=None, dspdelaycomp=None, dspfilterdelay=None):
+    """
+    Returns a .ncs header
+
+    Parameters
+    ----------
+    nlx_headersize: float
+        Default is 16*2**10
+    name: str
+        Default is None
+    ...
+
+
+    Returns
+    -------
+    header: byte string
+
+    """
+
     header = '######## Neuralynx Data File Header'
     if name is not None:
         header += '## File Name ' + name
@@ -542,7 +578,7 @@ def write_ncs_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
     if recordsize is not None:
         header += '-RecordSize ' + recordsize
     else:
-        header += '-RecordSize ' + '304'
+        header += '-RecordSize '
     header += '\r\n'
     if cheetahrev is not None:
         header += '-CheetahRev ' + cheetahrev
@@ -560,11 +596,11 @@ def write_ncs_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=No
     if samplingfreq is not None:
         header += '-SamplingFrequency ' + samplingfreq
     else:
-        header += '-SamplingFrequency ' + '32000'
+        header += '-SamplingFrequency '
     if admaxvalue is not None:
         header += '-ADMaxValue ' + admaxvalue
     else:
-        header += '-ADMaxValue ' + '32767'
+        header += '-ADMaxValue '
     if adbitvolts is not None:
         header += '-ADBitVolts ' + adbitvolts
     else:
