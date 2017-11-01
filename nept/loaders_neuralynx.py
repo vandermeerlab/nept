@@ -89,7 +89,7 @@ def load_neuralynx_header(filename):
     f = open(filename, 'rb')
 
     # Neuralynx files have a 16kbyte header
-    header = f.read(2 ** 14).strip(b'\x00')
+    header = f.read(16 * 2**10)
 
     f.close()
 
@@ -115,7 +115,7 @@ def load_ncs(filename):
     f = open(filename, 'rb')
 
     # Neuralynx files have a 16kbyte header
-    header = f.read(2 ** 14).strip(b'\x00')
+    header = f.read(16 * 2**10)
 
     # The format for a .ncs files according the the neuralynx docs is
     # uint64 - timestamp in microseconds
@@ -239,7 +239,7 @@ def load_ntt(filename):
     # hence total record size is 2432 bits, 304 bytes
 
     # header is 16kbyte, i.e. 16 * 2^10 = 2^14
-    header = f.read(2 ** 14).strip(b'\x00')
+    header = f.read(16 * 2**10)
 
     # Read the header and find the conversion factors / sampling frequency
     analog_to_digital = None
@@ -283,7 +283,7 @@ def load_nvt(filename):
     f = open(filename, 'rb')
 
     # Neuralynx files have a 16kbyte header
-    header = f.read(2 ** 14).strip(b'\x00')
+    header = f.read(16 * 2**10)
 
     # The format for .nvt files according the the neuralynx docs is
     # uint16 - beginning of the record
