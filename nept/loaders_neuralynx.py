@@ -314,7 +314,7 @@ def load_nvt(filename):
     return nvt_data
 
 
-def write_ntt_header(nlx_headersize=16 * 2 ** 10, name=None, t_open=None, t_close=None,
+def write_ntt_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=None,
                      filetype=None, fileversion=None, recordsize=None,
                      cheetahrev=None, hardwaresubname=None, hardwaresubtype=None,
                      samplingfreq=None, admaxvalue=None, adbitvolts=None,
@@ -507,3 +507,133 @@ def write_ntt_header(nlx_headersize=16 * 2 ** 10, name=None, t_open=None, t_clos
 
     return header.encode()
 
+
+def write_ncs_header(nlx_headersize=16*2**10, name=None, t_open=None, t_close=None,
+                     filetype=None, fileversion=None, recordsize=None,
+                     cheetahrev=None, hardwaresubname=None, hardwaresubtype=None,
+                     samplingfreq=None, admaxvalue=None, adbitvolts=None,
+                     acqentname=None, numadchannels=None, adchannel=None,
+                     inputrange=None, inputinverted=None, dsplowcutfilterenabled=None,
+                     dsplowcutfreq=None, dsplowcutnumtaps=None, dsplowcutfiltertype=None,
+                     dsphighcutfilterenabled=None, dsphighcutfreq=None, dsphighcutnumtaps=None,
+                     dsphighcutfiltertype=None, dspdelaycomp=None, dspfilterdelay=None):
+    header = '######## Neuralynx Data File Header'
+    if name is not None:
+        header += '## File Name ' + name
+    else:
+        header += '## File Name '
+    if t_open is not None:
+        header += '## Time Opened (m/d/y): ' + t_open
+    else:
+        header += '## Time Opened (m/d/y): '
+    if t_close is not None:
+        header += '## Time Closed (m/d/y): ' + t_close
+    else:
+        header += '## Time Closed (m/d/y): '
+    header += '\r\n'
+    if filetype is not None:
+        header += '-FileType ' + filetype
+    else:
+        header += '-FileType '
+    if fileversion is not None:
+        header += '-FileVersion ' + fileversion
+    else:
+        header += '-FileVersion '
+    if recordsize is not None:
+        header += '-RecordSize ' + recordsize
+    else:
+        header += '-RecordSize ' + '304'
+    header += '\r\n'
+    if cheetahrev is not None:
+        header += '-CheetahRev ' + cheetahrev
+    else:
+        header += '-CheetahRev '
+    header += '\r\n'
+    if hardwaresubname is not None:
+        header += '-HardwareSubSystemName ' + hardwaresubname
+    else:
+        header += '-HardwareSubSystemName '
+    if hardwaresubtype is not None:
+        header += '-HardwareSubSystemType ' + hardwaresubtype
+    else:
+        header += '-HardwareSubSystemType '
+    if samplingfreq is not None:
+        header += '-SamplingFrequency ' + samplingfreq
+    else:
+        header += '-SamplingFrequency ' + '32000'
+    if admaxvalue is not None:
+        header += '-ADMaxValue ' + admaxvalue
+    else:
+        header += '-ADMaxValue ' + '32767'
+    if adbitvolts is not None:
+        header += '-ADBitVolts ' + adbitvolts
+    else:
+        header += '-ADBitVolts '
+    header += '\r\n'
+    if acqentname is not None:
+        header += '-AcqEntName ' + acqentname
+    else:
+        header += '-AcqEntName '
+    if numadchannels is not None:
+        header += '-NumADChannels ' + numadchannels
+    else:
+        header += '-NumADChannels '
+    if adchannel is not None:
+        header += 'ADChannel ' + adchannel
+    else:
+        header += 'ADChannel '
+    if inputrange is not None:
+        header += '-InputRange ' + inputrange
+    else:
+        header += '-InputRange '
+    if inputinverted is not None:
+        header += '-InputInverted ' + inputinverted
+    else:
+        header += '-InputInverted '
+    header += '\r\n'
+    if dsplowcutfilterenabled is not None:
+        header += '-DSPLowCutFilterEnabled ' + dsplowcutfilterenabled
+    else:
+        header += '-DSPLowCutFilterEnabled '
+    if dsplowcutfreq is not None:
+        header += '-DspLowCutFrequency ' + dsplowcutfreq
+    else:
+        header += '-DspLowCutFrequency '
+    if dsplowcutnumtaps is not None:
+        header += '-DspLowCutNumTaps ' + dsplowcutnumtaps
+    else:
+        header += '-DspLowCutNumTaps '
+    if dsplowcutfiltertype is not None:
+        header += '-DspLowCutFilterType ' + dsplowcutfiltertype
+    else:
+        header += '-DspLowCutFilterType '
+    if dsphighcutfilterenabled is not None:
+        header += '-DSPHighCutFilterEnabled ' + dsphighcutfilterenabled
+    else:
+        header += '-DSPHighCutFilterEnabled '
+    if dsphighcutfreq is not None:
+        header += '-DspHighCutFrequency ' + dsphighcutfreq
+    else:
+        header += '-DspHighCutFrequency '
+    if dsphighcutnumtaps is not None:
+        header += '-DspHighCutNumTaps ' + dsphighcutnumtaps
+    else:
+        header += '-DspHighCutNumTaps '
+    if dsphighcutfiltertype is not None:
+        header += '-DspHighCutFilterType ' + dsphighcutfiltertype
+    else:
+        header += '-DspHighCutFilterType '
+    if dspdelaycomp is not None:
+        header += '-DspDelayCompensation ' + dspdelaycomp
+    else:
+        header += '-DspDelayCompensation '
+    if dspfilterdelay is not None:
+        header += '-DspFilterDelay_µs ' + dspfilterdelay
+    else:
+        header += '-DspFilterDelay_µs '
+    header += '\r\n'
+
+    offset = nlx_headersize - len(header)
+    header = header.ljust(offset, '\x00')
+
+    return header.encode()
