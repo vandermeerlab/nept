@@ -117,13 +117,9 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
 
     tuning_curves = np.zeros((len(spikes),) + shape)
     for i, spiketrain in enumerate(spikes):
-        spikes_x = []
-        spikes_y = []
-        for spike_time in spiketrain.time:
-            spike_idx = find_nearest_idx(position.time, spike_time)
-            if np.abs(position.time[spike_idx] - spike_time) < sampling_rate:
-                spikes_x.append(position.x[spike_idx])
-                spikes_y.append(position.y[spike_idx])
+        spikes_x = np.interp(spiketrain.time, position.time, position.x)
+        spikes_y = np.interp(spiketrain.time, position.time, position.y)
+        
         spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_y, spikes_x, bins=[yedges, xedges])
         tuning_curves[i, occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
 
