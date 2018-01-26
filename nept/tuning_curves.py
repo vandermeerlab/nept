@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import signal
+import scipy
 
 from .utils import find_nearest_idx, gaussian_filter
 
@@ -70,12 +70,10 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
 
     tc = []
     for spiketrain in spikes:
-        counts_idx = []
-        for spike_time in spiketrain.time:
-            bin_idx = find_nearest_idx(position.time, spike_time)
-            if np.abs(position.time[bin_idx] - spike_time) < sampling_rate:
-                counts_idx.append(position.x[bin_idx])
-        spike_counts = np.histogram(counts_idx, bins=edges)[0]
+        f_xy = scipy.interpolate.interp1d(position.time, position.data.T, kind="nearest")
+        spikes_x = f_xy(spiketrain.time)
+
+        spike_counts = np.histogram(spikes_x, bins=edges)[0]
 
         firing_rate = np.zeros(len(edges)-1)
         firing_rate[occupied_idx] = spike_counts[occupied_idx] / position_counts[occupied_idx]
@@ -117,10 +115,10 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
 
     tuning_curves = np.zeros((len(spikes),) + shape)
     for i, spiketrain in enumerate(spikes):
-        spikes_x = np.interp(spiketrain.time, position.time, position.x)
-        spikes_y = np.interp(spiketrain.time, position.time, position.y)
-        
-        spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_y, spikes_x, bins=[yedges, xedges])
+        f_xy = scipy.interpolate.interp1d(position.time, position.data.T, kind="nearest")
+        spikes_xy = f_xy(spiketrain.time)
+
+        spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_xy[1], spikes_xy[0], bins=[yedges, xedges])
         tuning_curves[i, occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
 
     if gaussian_std is not None:
