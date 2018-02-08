@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Adapted from nlxio written by Bernard Willards <https://github.com/bwillers/nlxio>
 
 import numpy as np
