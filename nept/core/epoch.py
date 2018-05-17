@@ -229,7 +229,7 @@ class Epoch:
                 new_stops.append(next_stop)
                 new_starts.append(epoch.starts[i+1])
 
-        new_stops.append(epoch.stops[-1])
+        new_stops.append(max(epoch.stops))
 
         new_starts = np.array(new_starts)
         new_stops = np.array(new_stops)
