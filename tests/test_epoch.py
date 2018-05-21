@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 import nept
+import collections
 
 
 def test_epoch_duration():
@@ -603,3 +604,14 @@ def test_epoch_mismatch_start_stop():
         nept.Epoch([[0.0, 1.0], [0.5]])
 
     assert str(excinfo.value) == "must have the same number of start and stop times"
+
+
+def test_epoch_iter():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+
+    epoch = nept.Epoch(times)
+    epoch_iter = iter(epoch)
+
+    assert isinstance(epoch_iter, collections.Iterable)
