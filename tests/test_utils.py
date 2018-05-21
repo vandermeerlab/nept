@@ -118,6 +118,18 @@ def test_get_xyedges_one_full():
     assert np.allclose(yedges, np.array([1.1, 11.1]))
 
 
+def test_get_xyedges_1d_position():
+    times = np.array([1.0, 2.0, 3.0])
+    data = np.array([1.0, 5.0, 10.0])
+
+    position = nept.Position(data, times)
+
+    with pytest.raises(ValueError) as excinfo:
+        xedges, yedges = nept.get_xyedges(position, binsize=3)
+
+    assert str(excinfo.value) == "position must be 2-dimensional"
+
+
 def test_bin_spikes():
     spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
     spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
@@ -236,6 +248,16 @@ def test_bin_spikes_mult_neurons_adjust_window():
                                               [0.5, 0.5]]))
 
 
+def test_bin_spikes_no_window():
+    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
+    spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
+
+    time = np.array([0, 2, 4, 6, 8, 10])
+    counts = nept.bin_spikes(spikes, time, dt=4., gaussian_std=None, normalized=False)
+
+    assert np.allclose(counts.data, np.array([[16.], [6.]]))
+
+
 def test_cartesian():
     xcenters = np.array([0., 4., 8.])
     ycenters = np.array([0., 2., 4.])
@@ -344,3 +366,12 @@ def test_speed_threshold_simple():
                                                [3.4],
                                                [3.3],
                                                [1.2]]))
+
+
+def test_gaussian_filter_unchanged():
+    signal = np.array([1., 3., 7.])
+    std = 0.1
+
+    filtered_signal = nept.gaussian_filter(signal, std, dt=1.0)
+
+    assert(filtered_signal.all() == signal.all())
