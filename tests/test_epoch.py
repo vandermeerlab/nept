@@ -627,3 +627,16 @@ def test_epoch_iter():
     epoch_iter = iter(epoch)
 
     assert isinstance(epoch_iter, collections.Iterable)
+
+
+def test_epoch_using_iter():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+
+    epoch = nept.Epoch(times)
+    epoch_iter = iter(epoch)
+    this_instance = next(epoch_iter)
+
+    assert(this_instance.starts == np.array([0.0]))
+    assert(this_instance.stops == np.array([1.0]))
