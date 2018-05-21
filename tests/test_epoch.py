@@ -418,15 +418,27 @@ def test_epoch_merge_unordered_stops():
     times = np.array([[-0.2, 0.8],
                       [0., 0.8],
                       [1., 3.6],
-                      [2.2, 3.],
-                      [4., 4.4]])
+                      [2.2, 3.]])
 
     epoch = nept.Epoch(times)
 
     merged = epoch.merge()
-    assert np.allclose(merged.starts, np.array([-0.2, 1., 4.]))
-    assert np.allclose(merged.stops, np.array([0.8, 3.6, 4.4]))
+    assert np.allclose(merged.starts, np.array([-0.2, 1.]))
+    assert np.allclose(merged.stops, np.array([0.8, 3.6]))
 
+
+def test_epoch_merge_mult_unordered_stops():
+    times = np.array([[1., 3.],
+                      [3., 4.],
+                      [4., 8.],
+                      [6., 7.],
+                      [9., 10.]])
+
+    epoch = nept.Epoch(times)
+    merged = epoch.merge()
+
+    assert np.allclose(merged.starts, np.array([1., 9.]))
+    assert np.allclose(merged.stops, np.array([8., 10.]))
 
 def test_epoch_expand_both():
     times = np.array([[0.0, 1.0],
