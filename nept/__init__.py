@@ -21,9 +21,7 @@ from .loaders_neuralynx import (load_events,
                                 load_ntt,
                                 load_neuralynx_header,
                                 load_nvt,
-                                load_nev,
-                                write_ncs_header,
-                                write_ntt_header)
+                                load_nev)
 from .place_fields import (find_fields,
                            get_single_field,
                            get_heatmaps)
