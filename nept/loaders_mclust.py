@@ -18,15 +18,13 @@ def load_mclust_header(filename):
     # The format for a .t file according the the mclust docs is
     # header - beginning with %%BEGINHEADER and ending with %%ENDHEADER
     # uint64 - timestamp in tenths of ms
-    f = open(filename, 'rb')
-    file_contents = f.read()
+    with open(filename, 'rb') as f:
+        file_contents = f.read()
 
     # Here we separate the header from the timestamps (data).
     header_begin_idx = file_contents.find(b'%%BEGINHEADER')
     header_end_idx = file_contents.find(b'%%ENDHEADER') + len(b'%%ENDHEADER\n')
     header = file_contents[header_begin_idx:header_end_idx]
-
-    f.close()
 
     return header
 
@@ -46,8 +44,8 @@ def load_mclust_t(filename):
     # The format for a .t file according the the mclust docs is
     # header - beginning with %%BEGINHEADER and ending with %%ENDHEADER
     # uint64 - timestamp in tenths of ms (big endian)
-    f = open(filename, 'rb')
-    file_contents = f.read()
+    with open(filename, 'rb') as f:
+        file_contents = f.read()
 
     # Here we separate the mclust header from the timestamps (data).
     header_begin_idx = file_contents.find(b'%%BEGINHEADER')
@@ -65,8 +63,6 @@ def load_mclust_t(filename):
     # Spikes times are in timestamps (tenths of ms).
     # Let's convert the timestamps to seconds.
     spikes = spike_times / 1e4
-
-    f.close()
 
     return spikes
 

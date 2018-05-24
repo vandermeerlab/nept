@@ -87,12 +87,10 @@ def load_neuralynx_header(filename):
     header: byte str
 
     """
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # Neuralynx files have a 16kbyte header
-    header = f.read(16 * 2**10)
-
-    f.close()
+        # Neuralynx files have a 16kbyte header
+        header = f.read(16 * 2**10)
 
     return header
 
@@ -113,20 +111,20 @@ def load_ncs(filename):
 
     """
 
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # Neuralynx files have a 16kbyte header
-    header = f.read(16 * 2**10)
+        # Neuralynx files have a 16kbyte header
+        header = f.read(16 * 2**10)
 
-    # The format for a .ncs files according the the neuralynx docs is
-    # uint64 - timestamp in microseconds
-    # uint32 - channel number
-    # uint32 - sample freq
-    # uint32 - number of valid samples
-    # int16 x 512 - actual csc samples
-    dt = np.dtype([('time', '<Q'), ('channel', '<i'), ('freq', '<i'),
-                   ('valid', '<i'), ('csc', '<h', (512,))])
-    data = np.fromfile(f, dt)
+        # The format for a .ncs files according the the neuralynx docs is
+        # uint64 - timestamp in microseconds
+        # uint32 - channel number
+        # uint32 - sample freq
+        # uint32 - number of valid samples
+        # int16 x 512 - actual csc samples
+        dt = np.dtype([('time', '<Q'), ('channel', '<i'), ('freq', '<i'),
+                       ('valid', '<i'), ('csc', '<h', (512,))])
+        data = np.fromfile(f, dt)
 
     # unpack the csc matrix
     csc = data['csc'].reshape((data['csc'].size,))
@@ -162,8 +160,6 @@ def load_ncs(filename):
 
     cscs = csc * analog_to_digital
 
-    f.close()
-
     return cscs, times
 
 
@@ -181,29 +177,27 @@ def load_nev(filename):
 
     """
 
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # There's nothing useful in the header for .nev files, so skip past it
-    f.seek(2 ** 14)
+        # There's nothing useful in the header for .nev files, so skip past it
+        f.seek(2 ** 14)
 
-    # An event record is as follows:
-    # int16 - nstx - reserved
-    # int16 - npkt_id - id of the originating system
-    # int16 - npkt_data_size - this value should always be 2
-    # uint64 - timestamp, microseconds
-    # int16 - nevent_id - ID value for event
-    # int16 - nttl - decimal TTL value read from the TTL input port
-    # int16 - ncrc - record crc check, not used in consumer applications
-    # int16 - ndummy1 - reserved
-    # int16 - ndummy2 - reserved
-    # int32x8 - dnExtra - extra bit values for this event
-    # string(128) - event string
-    dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('id', '<h'),
-                   ('nttl', '<h'), ('filler2', '<h', 3), ('extra', '<i', 8),
-                   ('event_str', np.dtype('a128'))])
-    nev_data = np.fromfile(f, dt)
-
-    f.close()
+        # An event record is as follows:
+        # int16 - nstx - reserved
+        # int16 - npkt_id - id of the originating system
+        # int16 - npkt_data_size - this value should always be 2
+        # uint64 - timestamp, microseconds
+        # int16 - nevent_id - ID value for event
+        # int16 - nttl - decimal TTL value read from the TTL input port
+        # int16 - ncrc - record crc check, not used in consumer applications
+        # int16 - ndummy1 - reserved
+        # int16 - ndummy2 - reserved
+        # int32x8 - dnExtra - extra bit values for this event
+        # string(128) - event string
+        dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('id', '<h'),
+                       ('nttl', '<h'), ('filler2', '<h', 3), ('extra', '<i', 8),
+                       ('event_str', np.dtype('a128'))])
+        nev_data = np.fromfile(f, dt)
 
     return nev_data
 
@@ -228,35 +222,34 @@ def load_ntt(filename):
     timestamps, spikes, frequency = load_ntt('TT13.ntt')
 
     """
+    with open(filename, 'rb')as f:
 
-    f = open(filename, 'rb')
+        # A tetrode spike record is as folows:
+        # uint64 - timestamp                    bytes 0:8
+        # uint32 - acquisition entity number    bytes 8:12
+        # uint32 - classified cel number        bytes 12:16
+        # 8 * uint32- params                    bytes 16:48
+        # 32 * 4 * int16 - waveform points
+        # hence total record size is 2432 bits, 304 bytes
 
-    # A tetrode spike record is as folows:
-    # uint64 - timestamp                    bytes 0:8
-    # uint32 - acquisition entity number    bytes 8:12
-    # uint32 - classified cel number        bytes 12:16
-    # 8 * uint32- params                    bytes 16:48
-    # 32 * 4 * int16 - waveform points
-    # hence total record size is 2432 bits, 304 bytes
+        # header is 16kbyte, i.e. 16 * 2^10 = 2^14
+        header = f.read(16 * 2**10)
 
-    # header is 16kbyte, i.e. 16 * 2^10 = 2^14
-    header = f.read(16 * 2**10)
+        # Read the header and find the conversion factors / sampling frequency
+        analog_to_digital = None
+        frequency = None
 
-    # Read the header and find the conversion factors / sampling frequency
-    analog_to_digital = None
-    frequency = None
+        for line in header.split(b'\n'):
+            if line.strip().startswith(b'-ADBitVolts'):
+                analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
+            if line.strip().startswith(b'-SamplingFrequency'):
+                frequency = float(line.split(b' ')[1].decode())
 
-    for line in header.split(b'\n'):
-        if line.strip().startswith(b'-ADBitVolts'):
-            analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
-        if line.strip().startswith(b'-SamplingFrequency'):
-            frequency = float(line.split(b' ')[1].decode())
-
-    f.seek(2 ** 14)  # start of the spike, records
-    # Neuralynx write little endian for some dumb reason
-    dt = np.dtype([('time', '<Q'), ('filer', '<i', 10),
-                   ('spikes', np.dtype('<h'), (32, 4))])
-    data = np.fromfile(f, dt)
+        f.seek(2 ** 14)  # start of the spike, records
+        # Neuralynx write little endian for some dumb reason
+        dt = np.dtype([('time', '<Q'), ('filer', '<i', 10),
+                       ('spikes', np.dtype('<h'), (32, 4))])
+        data = np.fromfile(f, dt)
 
     if analog_to_digital is None:
         raise IOError("ADBitVolts not found in .ntt header for " + filename)
@@ -281,26 +274,26 @@ def load_nvt(filename):
         With time, x, and y as keys.
 
     """
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # Neuralynx files have a 16kbyte header
-    header = f.read(16 * 2**10)
+        # Neuralynx files have a 16kbyte header
+        header = f.read(16 * 2**10)
 
-    # The format for .nvt files according the the neuralynx docs is
-    # uint16 - beginning of the record
-    # uint16 - ID for the system
-    # uint16 - size of videorec in bytes
-    # uint64 - timestamp in microseconds
-    # uint32 x 400 - points with the color bitfield values
-    # int16 - unused
-    # int32 - extracted X location of target
-    # int32 - extracted Y location of target
-    # int32 - calculated head angle in degrees clockwise from the positive Y axis
-    # int32 x 50 - colored targets using the same bitfield format used to extract colors earlier
-    dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('points', '<i', 400),
-                   ('filler2', '<h'), ('x', '<i'), ('y', '<i'), ('head_angle', '<i'),
-                   ('targets', '<i', 50)])
-    data = np.fromfile(f, dt)
+        # The format for .nvt files according the the neuralynx docs is
+        # uint16 - beginning of the record
+        # uint16 - ID for the system
+        # uint16 - size of videorec in bytes
+        # uint64 - timestamp in microseconds
+        # uint32 x 400 - points with the color bitfield values
+        # int16 - unused
+        # int32 - extracted X location of target
+        # int32 - extracted Y location of target
+        # int32 - calculated head angle in degrees clockwise from the positive Y axis
+        # int32 x 50 - colored targets using the same bitfield format used to extract colors earlier
+        dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('points', '<i', 400),
+                       ('filler2', '<h'), ('x', '<i'), ('y', '<i'), ('head_angle', '<i'),
+                       ('targets', '<i', 50)])
+        data = np.fromfile(f, dt)
 
     nvt_data = dict()
     nvt_data['time'] = data['time'] * 1e-6

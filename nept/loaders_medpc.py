@@ -18,8 +18,8 @@ def read_file(filename):
     contents = []
     temp = []
 
-    file = open(filename, 'r')
-    lines = file.readlines()
+    with open(filename, 'r') as f:
+        lines = f.readlines()
 
     for line in lines:
         if line != '\n':
@@ -34,8 +34,6 @@ def read_file(filename):
 
     for i, content in enumerate(contents):
         contents[i] = ' '.join(content)
-
-    file.close()
 
     return contents
 
