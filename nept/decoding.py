@@ -108,6 +108,7 @@ def remove_teleports(position, speed_thresh, min_length):
     filtered_position : nept.Epoch
 
     """
+    # TODO: implement with run_threshold to simplify
     velocity = np.squeeze(position.speed().data)
 
     split_idx = np.where(velocity >= speed_thresh)[0]

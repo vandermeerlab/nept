@@ -352,20 +352,28 @@ def test_perievent_slice_2d():
     assert str(excinfo.value) == "AnalogSignal must be 1D."
 
 
-def test_speed_threshold_simple():
-    data = np.array([1., 1.2, 1.4, 8.6, 8.5, 8.4, 3.3, 3.4, 3.3, 1.2])
-    time = np.arange(0, 10)
-    position = nept.Position(data, time)
+def test_rest_threshold_simple():
+    times = np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
+    data = np.array([0.0, 0.5, 1.0, 0.7, 1.7, 2.0])
 
-    running = nept.speed_threshold(position, t_smooth=0.5, speed_limit=0.1)
+    position = nept.Position(data, times)
 
-    assert np.allclose(running.data, np.array([[1.2],
-                                               [1.4],
-                                               [8.6],
-                                               [3.3],
-                                               [3.4],
-                                               [3.3],
-                                               [1.2]]))
+    run_epoch = nept.rest_threshold(position, thresh=0.4)
+
+    assert np.allclose(run_epoch.starts, np.array([0., 3.]))
+    assert np.allclose(run_epoch.stops, np.array([1., 4.]))
+
+
+def test_run_threshold_simple():
+    times = np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
+    data = np.array([0.0, 0.5, 1.0, 0.7, 1.7, 2.0])
+
+    position = nept.Position(data, times)
+
+    run_epoch = nept.run_threshold(position, thresh=0.4)
+
+    assert np.allclose(run_epoch.starts, np.array([1., 4.]))
+    assert np.allclose(run_epoch.stops, np.array([3., 5.]))
 
 
 def test_gaussian_filter_unchanged():

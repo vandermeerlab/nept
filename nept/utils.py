@@ -331,22 +331,69 @@ def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
     return nept.AnalogSignal(data, time)
 
 
-def speed_threshold(position, t_smooth=0.5, speed_limit=0.4):
-    """Finds positions above a certain speed threshold
+def speed_threshold(position, thresh, direction):
+    """Finds the epochs where speed is greater or lesser than a threshold.
 
     Parameters
     ----------
-    position : nept.Position
-    t_smooth : float
-    speed_limit : float
+    position: nept.Position
+    thresh: float
+    direction: str
+        Must be "greater" or "lesser"
 
     Returns
     -------
-    position_run : nept.Position
+    nept.Epoch
     """
+    speed = position.speed()
+    if direction == "greater":
+        changes = np.diff(np.hstack(([0], (np.squeeze(speed.data) >= thresh).astype(int))))
+    elif direction == "lesser":
+        changes = np.diff(np.hstack(([0], (np.squeeze(speed.data) <= thresh).astype(int))))
+    else:
+        raise ValueError("Must be 'lesser' or 'greater'")
 
-    speed = position.speed(t_smooth)
-    run_idx = np.squeeze(speed.data) >= speed_limit
+    starts = np.where(changes == 1)[0]
+    stops = np.where(changes == -1)[0]
 
-    return position[run_idx]
+    if len(starts) != len(stops):
+        assert len(starts) - len(stops) == 1
+        stops = np.hstack((stops, position.n_samples - 1))
 
+    if starts[-1] == stops[-1]:
+        print("Last sample not included in speed thresholding")
+        starts = starts[:-1]
+        stops = stops[:-1]
+
+    data = np.vstack([position.time[starts], position.time[stops]]).T
+    return nept.Epoch(data)
+
+
+def run_threshold(position, thresh):
+    """Finds the epochs where speed is greater than (or equal to) a threshold.
+
+    Parameters
+    ----------
+    position: nept.Position
+    thresh: float
+
+    Returns
+    -------
+    nept.Epoch
+    """
+    return speed_threshold(position, thresh, direction="greater")
+
+
+def rest_threshold(position, thresh):
+    """Finds the epochs where speed is lesser than (or equal to) a threshold.
+
+    Parameters
+    ----------
+    position: nept.Position
+    thresh: float
+
+    Returns
+    -------
+    nept.Epoch
+    """
+    return speed_threshold(position, thresh, direction="lesser")
