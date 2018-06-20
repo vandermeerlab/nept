@@ -126,18 +126,15 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
     multi_starts = []
     multi_stops = []
 
-    n_neurons = len(spikes)
     for start, stop in zip(epochs.starts, epochs.stops):
-        involved = 0
-        for this_neuron in spikes:
-            if ((start <= this_neuron.time) & (this_neuron.time <= stop)).sum() >= 1:
-                involved += 1
-        if involved >= min_involved:
+        sliced_spikes = [spiketrain.time_slice(start, stop) for spiketrain in spikes]
+        n_spikes = np.asarray([len(spiketrain.time) for spiketrain in sliced_spikes])
+
+        n_active = len(n_spikes[n_spikes >= 1])
+
+        if n_active >= min_involved:
             multi_starts.append(start)
             multi_stops.append(stop)
-
-    multi_starts = np.array(multi_starts)
-    multi_stops = np.array(multi_stops)
 
     multi_epochs = nept.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
                                         np.array(multi_stops)[..., np.newaxis]]))
