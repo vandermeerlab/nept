@@ -358,7 +358,7 @@ def test_rest_threshold_simple():
 
     position = nept.Position(data, times)
 
-    run_epoch = nept.rest_threshold(position, thresh=0.4)
+    run_epoch = nept.rest_threshold(position, thresh=0.4, t_smooth=None)
 
     assert np.allclose(run_epoch.starts, np.array([0., 3.]))
     assert np.allclose(run_epoch.stops, np.array([1., 4.]))
@@ -370,7 +370,7 @@ def test_run_threshold_simple():
 
     position = nept.Position(data, times)
 
-    run_epoch = nept.run_threshold(position, thresh=0.4)
+    run_epoch = nept.run_threshold(position, thresh=0.4, t_smooth=None)
 
     assert np.allclose(run_epoch.starts, np.array([1., 4.]))
     assert np.allclose(run_epoch.stops, np.array([3., 5.]))

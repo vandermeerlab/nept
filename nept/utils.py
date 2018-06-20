@@ -331,7 +331,7 @@ def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
     return nept.AnalogSignal(data, time)
 
 
-def speed_threshold(position, thresh, direction):
+def speed_threshold(position, thresh, t_smooth, direction):
     """Finds the epochs where speed is greater or lesser than a threshold.
 
     Parameters
@@ -345,7 +345,7 @@ def speed_threshold(position, thresh, direction):
     -------
     nept.Epoch
     """
-    speed = position.speed()
+    speed = position.speed(t_smooth)
     if direction == "greater":
         changes = np.diff(np.hstack(([0], (np.squeeze(speed.data) >= thresh).astype(int))))
     elif direction == "lesser":
@@ -369,7 +369,7 @@ def speed_threshold(position, thresh, direction):
     return nept.Epoch(data)
 
 
-def run_threshold(position, thresh):
+def run_threshold(position, thresh, t_smooth):
     """Finds the epochs where speed is greater than (or equal to) a threshold.
 
     Parameters
@@ -381,10 +381,10 @@ def run_threshold(position, thresh):
     -------
     nept.Epoch
     """
-    return speed_threshold(position, thresh, direction="greater")
+    return speed_threshold(position, thresh, t_smooth, direction="greater")
 
 
-def rest_threshold(position, thresh):
+def rest_threshold(position, thresh, t_smooth):
     """Finds the epochs where speed is lesser than (or equal to) a threshold.
 
     Parameters
@@ -396,4 +396,4 @@ def rest_threshold(position, thresh):
     -------
     nept.Epoch
     """
-    return speed_threshold(position, thresh, direction="lesser")
+    return speed_threshold(position, thresh, t_smooth, direction="lesser")
