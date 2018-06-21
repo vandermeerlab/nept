@@ -61,6 +61,21 @@ def test_multi_in_epochs_one():
     assert np.allclose(multi_epochs.stops, np.array([2.]))
 
 
+def test_multi_in_epochs_edge():
+    epochs = nept.Epoch(np.array([[1.0, 4.0, 6.0], [2.0, 5.0, 7.0]]))
+
+    spikes = [nept.SpikeTrain(np.array([6.7])),
+              nept.SpikeTrain(np.array([2.0, 6.5])),
+              nept.SpikeTrain(np.array([2.0, 4.1])),
+              nept.SpikeTrain(np.array([2.0, 4.3]))]
+
+    min_involved = 3
+    multi_epochs = nept.find_multi_in_epochs(spikes, epochs, min_involved)
+
+    assert np.allclose(multi_epochs.starts, np.array([1.]))
+    assert np.allclose(multi_epochs.stops, np.array([2.]))
+
+
 def test_multi_in_epochs_mult():
     epochs = nept.Epoch(np.array([[1.0, 4.0, 6.0], [2.0, 5.0, 7.0]]))
 

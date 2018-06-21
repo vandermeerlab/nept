@@ -136,10 +136,8 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
             multi_starts.append(start)
             multi_stops.append(stop)
 
-    multi_epochs = nept.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
-                                        np.array(multi_stops)[..., np.newaxis]]))
-
-    return multi_epochs
+    return nept.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
+                                         np.array(multi_stops)[..., np.newaxis]]))
 
 
 def find_nearest_indices(array, vals):
