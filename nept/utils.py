@@ -268,7 +268,7 @@ def get_sort_idx(tuning_curves):
     return sorted_idx
 
 
-def get_xyedges(position, binsize=3):
+def get_xyedges(position, binsize):
     """Gets edges based on position min and max.
 
     Parameters
