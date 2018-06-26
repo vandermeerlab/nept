@@ -261,12 +261,13 @@ def load_ntt(filename):
     return data['time'], data['spikes'] * analog_to_digital, frequency
 
 
-def load_nvt(filename):
+def load_nvt(filename, remove_empty=True):
     """Loads a neuralynx .nvt file.
 
     Parameters
     ----------
     filename: str
+    remove_empty: bool
 
     Returns
     -------
@@ -303,6 +304,7 @@ def load_nvt(filename):
 
     empty_idx = (data['x'] == 0) & (data['y'] == 0)
     for key in nvt_data:
-        nvt_data[key] = nvt_data[key][~empty_idx]
+        if remove_empty:
+            nvt_data[key] = nvt_data[key][~empty_idx]
 
     return nvt_data
