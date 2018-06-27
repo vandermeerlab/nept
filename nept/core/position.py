@@ -120,6 +120,4 @@ class Position(AnalogSignal):
             filter_length = np.ceil(t_smooth / dt)
             speed = np.convolve(speed, np.ones(int(filter_length))/filter_length, 'same')
 
-        speed = speed * dt
-
         return AnalogSignal(speed, self.time)

@@ -147,6 +147,17 @@ def test_positon_speed_simple():
     assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
 
 
+def test_positon_speed_simple_false_smooth():
+    times = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+    data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
+
+    pos = nept.Position(data, times)
+    # No smoothing occurs when t_smooth == dt
+    speed = pos.speed(t_smooth=1.)
+
+    assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
+
+
 def test_position_speed_simple_smooth():
     times = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
     data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
@@ -155,30 +166,6 @@ def test_position_speed_simple_smooth():
     speed = pos.speed(t_smooth=2.)
 
     assert np.allclose(speed.data, np.array([[0.0], [0.25], [0.5], [0.4], [0.65]]))
-
-
-def test_position_speed_complex():
-    time = np.linspace(0, np.pi * 2, 201)
-    data = np.hstack((np.sin(time)))
-
-    position = nept.Position(data, time)
-    speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 0.015
-    run_position = position[run_idx]
-
-    assert np.allclose(len(run_position.x), 136)
-
-
-def test_position_speed_complex2():
-    time = np.linspace(0, np.pi * 2, 201)
-    data = np.hstack((np.sin(time)))
-
-    position = nept.Position(data, time)
-    speed = position.speed()
-    run_idx = np.squeeze(speed.data) >= 0.01
-    run_position = position[run_idx]
-
-    assert np.allclose(len(run_position.x), 160)
 
 
 def test_position_speed_unequal_time():
