@@ -127,3 +127,17 @@ def test_tuning_curve_2d_gaussian():
     tuning_curves = nept.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_std=0.4)
 
     assert np.allclose(tuning_curves[~np.isnan(tuning_curves)], np.array([3.0, 0.0, 0.0, 1.0]))
+
+
+def test_get_occupancy():
+    position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                   np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                        np.array([0., 1., 2., 3.]))
+
+    binsize = 2
+    xedges = np.arange(position.x.min(), position.x.max()+binsize, binsize)
+    yedges = np.arange(position.y.min(), position.y.max()+binsize, binsize)
+
+    occupancy = nept.get_occupancy(position, yedges, xedges)
+
+    assert np.allclose(occupancy, np.array([[0., 0., 1.], [0., 0., 1.], [1., 1., 0.]]))

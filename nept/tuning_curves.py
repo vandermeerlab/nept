@@ -84,6 +84,15 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
     return np.array(tc, dtype=float)
 
 
+def get_occupancy(position, yedges, xedges):
+    sampling_rate = np.median(np.diff(position.time))
+
+    position_2d, pos_xedges, pos_yedges = np.histogram2d(position.y, position.x, bins=[yedges, xedges])
+    position_2d *= sampling_rate
+
+    return position_2d
+
+
 def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussian_std=None):
     """Creates 2D tuning curves based on spikes and 2D position.
 
@@ -106,10 +115,7 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
         Where each inner array is the tuning curve for an individual neuron.
 
     """
-    sampling_rate = np.median(np.diff(position.time))
-
-    position_2d, pos_xedges, pos_yedges = np.histogram2d(position.y, position.x, bins=[yedges, xedges])
-    position_2d *= sampling_rate
+    position_2d = get_occupancy(position, yedges, xedges)
     shape = position_2d.shape
     occupied_idx = position_2d > occupied_thresh
 

@@ -26,6 +26,7 @@ from .place_fields import (find_fields,
                            get_single_field,
                            get_heatmaps)
 from .tuning_curves import (binned_position,
+                            get_occupancy,
                             tuning_curve_1d,
                             tuning_curve_2d)
 from .utils import (bin_spikes,
