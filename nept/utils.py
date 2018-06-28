@@ -321,7 +321,7 @@ def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
     data = np.zeros((len(time), len(events)))
     for i, event in enumerate(events):
         sliced = analogsignal.time_slice(event-t_before, event+t_after)
-        data[:,i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
+        data[:, i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
 
     return nept.AnalogSignal(data, time)
 
