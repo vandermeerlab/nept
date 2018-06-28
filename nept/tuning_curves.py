@@ -113,7 +113,7 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
     shape = position_2d.shape
     occupied_idx = position_2d > occupied_thresh
 
-    tuning_curves = np.zeros((len(spikes),) + shape)
+    tuning_curves = np.full(((len(spikes),) + shape), np.nan)
     for i, spiketrain in enumerate(spikes):
         f_xy = scipy.interpolate.interp1d(position.time, position.data.T, kind="nearest")
         spikes_xy = f_xy(spiketrain.time)

@@ -98,24 +98,24 @@ def test_linearize():
 
 
 def test_tuning_curve_2d():
-    pos = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
-                                  np.array([7, 5, 3, 1])[..., np.newaxis]]),
+    position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
+                                   np.array([7, 5, 3, 1])[..., np.newaxis]]),
                         np.array([0., 1., 2., 3.]))
 
     binsize = 2
-    xedges = np.arange(pos.x.min(), pos.x.max()+binsize, binsize)
-    yedges = np.arange(pos.y.min(), pos.y.max()+binsize, binsize)
+    xedges = np.arange(position.x.min(), position.x.max()+binsize, binsize)
+    yedges = np.arange(position.y.min(), position.y.max()+binsize, binsize)
 
     spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
-    tuning_curves = nept.tuning_curve_2d(pos, spikes, xedges, yedges)
+    tuning_curves = nept.tuning_curve_2d(position, spikes, xedges, yedges)
 
-    assert np.allclose(tuning_curves, [np.array([[0., 0., 3.], [0., 0., 0.], [1., 0., 0.]])])
+    assert np.allclose(tuning_curves[~np.isnan(tuning_curves)], np.array([3.0, 0.0, 1.0, 0.0]))
 
 
 def test_tuning_curve_2d_gaussian():
     position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
-                                       np.array([7, 5, 3, 1])[..., np.newaxis]]),
+                                        np.array([9, 5, 3, 1])[..., np.newaxis]]),
                              np.array([0., 1., 2., 3.]))
 
     binsize = 2
@@ -124,8 +124,6 @@ def test_tuning_curve_2d_gaussian():
 
     spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
-    tuning_curves = nept.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_std=1.4)
+    tuning_curves = nept.tuning_curve_2d(position, spikes, xedges, yedges, gaussian_std=0.4)
 
-    assert np.allclose(tuning_curves, [np.array([[[0.02983511, 0.50226235, 1.80353116],
-                                                  [0.1729374, 0.18497526, 0.50226235],
-                                                  [0.60142384, 0.1729374, 0.02983511]]])])
+    assert np.allclose(tuning_curves[~np.isnan(tuning_curves)], np.array([3.0, 0.0, 0.0, 1.0]))
