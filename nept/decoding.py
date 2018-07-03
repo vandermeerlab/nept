@@ -86,7 +86,8 @@ def decode_location(likelihood, pos_centers, time_centers):
     decoded_pos = np.empty((likelihood.shape[0], pos_centers.shape[1])) * np.nan
     decoded_pos[prob_rows] = prob_decoded
 
-    decoded_pos = np.squeeze(decoded_pos)
+    time_centers = time_centers[~np.isnan(decoded_pos).any(axis=1)]
+    decoded_pos = np.squeeze(decoded_pos[~np.isnan(decoded_pos).any(axis=1)])
 
     return nept.Position(decoded_pos, time_centers)
 

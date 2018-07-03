@@ -132,6 +132,19 @@ def test_decode_location_equal():
     assert np.allclose(decoded.time, np.array([0., 1., 2.]))
 
 
+def test_decode_location_with_nan():
+    likelihood = np.array([[np.nan, np.nan, np.nan],
+                           [0.4, 0.3, 0.3],
+                           [0.15, 0.15, 0.7]])
+
+    pos_centers = np.array([[1.], [2.], [3.]])
+    time_centers = np.array([0., 1., 2.])
+    decoded = nept.decode_location(likelihood, pos_centers, time_centers)
+
+    assert np.allclose(decoded.x, np.array([1., 3.]))
+    assert np.allclose(decoded.time, np.array([1., 2.]))
+
+
 def test_remove_teleports():
     speed_thresh = 2
     min_length = 3
