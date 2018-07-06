@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.signal
-from scipy.ndimage.filters import convolve1d
 import warnings
 
 import nept
@@ -43,13 +42,13 @@ def bin_spikes(spikes, time, dt, window=None, gaussian_std=None, normalized=True
 
     counts = np.zeros((len(spikes), len(bin_edges) - 1))
     for idx, spiketrain in enumerate(spikes):
-        counts[idx] = convolve1d(np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
-                                 square_filter)
+        counts[idx] = np.convolve(np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
+                                  square_filter, mode="same")
 
     if gaussian_std is not None:
         counts = gaussian_filter(counts, gaussian_std, dt=dt, normalized=normalized, axis=1)
 
-    return nept.AnalogSignal(counts.T, bin_edges[:-1])
+    return nept.AnalogSignal(counts, bin_edges[:-1])
 
 
 def cartesian(xcenters, ycenters):
@@ -211,7 +210,8 @@ def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1):
     if normalized:
         gaussian_filter /= np.sum(gaussian_filter)
 
-    return convolve1d(signal, gaussian_filter, axis=axis)
+    return np.apply_along_axis(
+        lambda v: np.convolve(v, gaussian_filter, mode="same"), axis=axis, arr=signal)
 
 
 def get_edges(time, binsize, lastbin=True):

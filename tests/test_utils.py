@@ -160,9 +160,9 @@ def test_bin_spikes_normalized():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
     time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2., gaussian_std=None)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2., gaussian_std=None, normalized=True)
 
-    assert np.allclose(counts.data, np.array([[1.], [1.], [1.25], [1.], [0.5], [0.75], [0.5]]))
+    assert np.allclose(counts.data, np.array([[0.25], [1.], [1.], [1.25], [1.], [0.5], [0.5]]))
 
 
 def test_bin_spikes_actual():
@@ -172,7 +172,7 @@ def test_bin_spikes_actual():
     counts = nept.bin_spikes(spikes, time, dt=0.5,
                              window=2., gaussian_std=None, normalized=False)
 
-    assert np.allclose(counts.data, np.array([[4.], [4.], [5.], [4.], [2.], [3.], [2.]]))
+    assert np.allclose(counts.data, np.array([[1.], [4.], [4.], [5.], [4.], [2.], [2.]]))
 
 
 def test_bin_spikes_gaussian():
@@ -182,9 +182,10 @@ def test_bin_spikes_gaussian():
     counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
                              gaussian_std=0.51, normalized=True)
 
-    assert np.allclose(counts.data, np.array([[1.01560105],
-                                              [1.057903],
-                                              [1.06661335],
+    assert np.allclose(counts.data, np.array([[0.40347865],
+                                              [0.77042907],
+                                              [1.00980573],
+                                              [1.06273102],
                                               [0.90701256],
                                               [0.65089043],
                                               [0.45510984],
@@ -193,14 +194,13 @@ def test_bin_spikes_gaussian():
                                               [0.07738638],
                                               [0.01560105],
                                               [0.00129411],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.]]))
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0]]))
 
 
 def test_bin_spikes_gaussian_even():
@@ -210,25 +210,25 @@ def test_bin_spikes_gaussian_even():
     counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
                              gaussian_std=0.5, normalized=True)
 
-    assert np.allclose(counts.data, np.array([[1.01460966],
-                                              [1.05829253],
-                                              [1.07054325],
+    assert np.allclose(counts.data, np.array([[0.40134569],
+                                              [0.77353559],
+                                              [1.0133553 ],
+                                              [1.06721847],
                                               [0.90916337],
                                               [0.64912917],
-                                              [0.4541006],
+                                              [0.45410060],
                                               [0.31272558],
                                               [0.18949094],
                                               [0.07622698],
                                               [0.01460966],
                                               [0.00110826],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.],
-                                              [0.]]))
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0],
+                                              [0.0]]))
 
 
 def test_bin_spikes_mult_neurons():
@@ -238,12 +238,12 @@ def test_bin_spikes_mult_neurons():
 
     counts = nept.bin_spikes(spikes, time, dt=0.5, window=2, gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[1., 1.],
-                                              [1., 1.],
+    assert np.allclose(counts.data, np.array([[0.25, 0.25],
+                                              [1.0, 1.0],
+                                              [1.0, 1.0],
                                               [1.25, 1.25],
-                                              [1., 1.],
+                                              [1.0, 1.0],
                                               [0.5, 0.5],
-                                              [0.75, 0.75],
                                               [0.5, 0.5]]))
 
 
@@ -252,15 +252,15 @@ def test_bin_spikes_mult_neurons_adjust_window():
               nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
     time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.2, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.5, gaussian_std=None)
 
-    assert np.allclose(counts.data, np.array([[1., 1.],
-                                              [1., 1.],
-                                              [1.25, 1.25],
-                                              [1., 1.],
-                                              [0.5, 0.5],
-                                              [0.75, 0.75],
-                                              [0.5, 0.5]]))
+    assert np.allclose(counts.data, np.array([[0.8, 0.8],
+                                              [0.8, 0.8],
+                                              [1.0, 1.0],
+                                              [1.0, 1.0],
+                                              [1.0, 1.0],
+                                              [0.4, 0.4],
+                                              [0.4, 0.4]]))
 
 
 def test_bin_spikes_no_window():

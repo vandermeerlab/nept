@@ -40,10 +40,10 @@ def test_tuning_curve_1d_gaussian():
 
     tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=1.5)
 
-    assert np.allclose(tuning, ([0.89349302, 0.10650698, 0.],
+    assert np.allclose(tuning, ([0.78698604, 0.10650698, 0.0],
                                 [0.10650698, 0.78698604, 0.10650698],
-                                [0., 0.05325349, 0.44674651],
-                                [0., 0.05325349, 0.44674651]))
+                                [0.0, 0.05325349, 0.39349302],
+                                [0.0, 0.05325349, 0.39349302]))
 
 
 def test_tuning_curve_1d_with_2d_position():
