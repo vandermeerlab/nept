@@ -147,6 +147,16 @@ def test_positon_speed_simple():
     assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
 
 
+def test_position_speed_simple_rest():
+    times = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+    data = np.array([0.0, 1.0, 1.0, 1.0, 0.0, 0.0])
+
+    pos = nept.Position(data, times)
+    speed = pos.speed(t_smooth=None)
+
+    assert np.allclose(speed.data, np.array([[0.0], [1.0], [0.0], [0.0], [1.0], [0.0]]))
+
+
 def test_positon_speed_simple_false_smooth():
     times = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
     data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
