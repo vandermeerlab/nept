@@ -2,6 +2,7 @@ import numpy as np
 from shapely.geometry import Point
 from nept.core.analogsignal import AnalogSignal
 from nept.core.epoch import Epoch
+from nept.utils import gaussian_filter
 
 
 class Position(AnalogSignal):
@@ -114,10 +115,8 @@ class Position(AnalogSignal):
         speed /= np.diff(self.time)
         speed = np.hstack(([0], speed))
 
-        dt = np.median(np.diff(self.time))
-
         if t_smooth is not None:
-            filter_length = np.ceil(t_smooth / dt)
-            speed = np.convolve(speed, np.ones(int(filter_length))/filter_length, 'same')
+            dt = np.median(np.diff(self.time))
+            speed = gaussian_filter(speed, std=t_smooth, dt=dt)
 
         return AnalogSignal(speed, self.time)

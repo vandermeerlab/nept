@@ -162,8 +162,8 @@ def test_positon_speed_simple_false_smooth():
     data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
 
     pos = nept.Position(data, times)
-    # No smoothing occurs when t_smooth == dt
-    speed = pos.speed(t_smooth=1.)
+    # No smoothing occurs when t_smooth > dt
+    speed = pos.speed(t_smooth=0.1)
 
     assert np.allclose(speed.data, np.array([[0.0], [0.5], [0.5], [0.3], [1.0]]))
 
@@ -173,9 +173,13 @@ def test_position_speed_simple_smooth():
     data = np.array([0.0, 0.5, 1.0, 0.7, 1.7])
 
     pos = nept.Position(data, times)
-    speed = pos.speed(t_smooth=2.)
+    speed = pos.speed(t_smooth=0.3)
 
-    assert np.allclose(speed.data, np.array([[0.0], [0.25], [0.5], [0.4], [0.65]]))
+    assert np.allclose(speed.data, np.array([[0.00191813],
+                                             [0.49808187],
+                                             [0.49923275],
+                                             [0.30345263],
+                                             [0.99347836]]))
 
 
 def test_position_speed_unequal_time():
