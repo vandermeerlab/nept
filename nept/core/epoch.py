@@ -116,6 +116,102 @@ class Epoch:
         new_stops = np.array(self.stops)
         return Epoch(new_starts, new_stops-new_starts)
 
+    def contains(self, value):
+        """Checks whether value is in any epoch.
+
+        Parameters
+        ----------
+        epochs: nept.Epoch
+        value: float or int
+
+        Returns
+        -------
+        boolean
+
+        """
+        for start, stop in zip(self.starts, self.stops):
+            if start <= value <= stop:
+                return True
+        return False
+
+    def excludes(self, epoch):
+        """Excludes the intersection between two sets of epochs.
+
+        Parameters
+        ----------
+        epoch : nept.Epoch
+
+        Returns
+        -------
+        without_intersect_epochs : nept.Epoch
+
+        """
+        if len(epoch.starts) == 0:
+            return Epoch(np.hstack([np.array(self.starts)[..., np.newaxis],
+                                    np.array(self.stops)[..., np.newaxis]]))
+
+        new_starts = []
+        new_stops = []
+        epoch_a = self.copy().merge()
+        epoch_b = epoch.copy().merge()
+
+        for aa in epoch_a.time:
+            aa = Epoch([[aa[0], aa[1]]])
+            for bb in epoch_b.time:
+                bb = Epoch([[bb[0], bb[1]]])
+                if not aa.overlaps(bb).isempty:
+                    if (aa.start <= bb.start < aa.stop) and (aa.start < bb.stop <= aa.stop):
+                        if aa.start != bb.start:
+                            new_starts.append(aa.start)
+                            new_stops.append(bb.start)
+                        new_starts.append(bb.stop)
+                        new_stops.append(aa.stop)
+                    elif (aa.start < bb.start <= aa.stop) and (aa.start < bb.stop >= aa.stop):
+                        new_starts.append(aa.start)
+                        new_stops.append(bb.start)
+                    elif (aa.start >= bb.start < aa.stop) and (aa.start <= bb.stop < aa.stop):
+                        new_starts.append(bb.stop)
+                        new_stops.append(aa.stop)
+                    elif (aa.start > bb.start < aa.stop) and (aa.start < bb.stop > aa.stop):
+                        continue
+                else:
+                    new_starts.append(aa.start)
+                    new_stops.append(aa.stop)
+
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
+
+    def expand(self, amount, direction='both'):
+        """Expands epoch by the given amount.
+
+        Parameters
+        ----------
+        amount : float
+            Amount (in time) to expand each epoch.
+        direction : str
+            Can be 'both', 'start', or 'stop'. This specifies
+            which direction to resize epoch.
+
+        Returns
+        -------
+        expanded_epochs : nept.Epoch
+
+        """
+        if direction == 'both':
+            resize_starts = self.time[:, 0] - amount
+            resize_stops = self.time[:, 1] + amount
+        elif direction == 'start':
+            resize_starts = self.time[:, 0] - amount
+            resize_stops = self.time[:, 1]
+        elif direction == 'stop':
+            resize_starts = self.time[:, 0]
+            resize_stops = self.time[:, 1] + amount
+        else:
+            raise ValueError("direction must be 'both', 'start', or 'stop'")
+
+        return Epoch(np.hstack((resize_starts[..., np.newaxis],
+                                resize_stops[..., np.newaxis])))
+
     def intersect(self, epoch):
         """Finds intersection between two sets of epochs.
 
@@ -154,8 +250,8 @@ class Epoch:
         return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
                                 np.array(new_stops)[..., np.newaxis]]))
 
-    def overlaps(self, epoch):
-        """Finds overlap between template epochs and epoch of interest.
+    def join(self, epoch):
+        """Combines two sets of epochs.
 
         Parameters
         ----------
@@ -163,37 +259,13 @@ class Epoch:
 
         Returns
         -------
-        overlaps_epochs : nept.Epoch
+        joined_epochs : nept.Epoch
 
         """
-        if len(self.starts) == 0 or len(epoch.starts) == 0:
-            return Epoch([], [])
+        join_starts = np.concatenate((self.starts, epoch.starts))
+        join_stops = np.concatenate((self.stops, epoch.stops))
 
-        new_starts = []
-        new_stops = []
-        template = self.copy().merge()
-        epoch_interest = epoch.copy().merge()
-
-        for aa in template.time:
-            for bb in epoch_interest.time:
-                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-
-        new_starts = np.unique(new_starts)
-        new_stops = np.unique(new_stops)
-
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return Epoch(join_starts, join_stops-join_starts)
 
     def merge(self, gap=0.0):
         """Merges epochs that are close or overlapping.
@@ -236,36 +308,46 @@ class Epoch:
 
         return Epoch(new_starts, new_stops-new_starts)
 
-    def expand(self, amount, direction='both'):
-        """Expands epoch by the given amount.
+    def overlaps(self, epoch):
+        """Finds overlap between template epochs and epoch of interest.
 
         Parameters
         ----------
-        amount : float
-            Amount (in time) to expand each epoch.
-        direction : str
-            Can be 'both', 'start', or 'stop'. This specifies
-            which direction to resize epoch.
+        epoch : nept.Epoch
 
         Returns
         -------
-        expanded_epochs : nept.Epoch
+        overlaps_epochs : nept.Epoch
 
         """
-        if direction == 'both':
-            resize_starts = self.time[:, 0] - amount
-            resize_stops = self.time[:, 1] + amount
-        elif direction == 'start':
-            resize_starts = self.time[:, 0] - amount
-            resize_stops = self.time[:, 1]
-        elif direction == 'stop':
-            resize_starts = self.time[:, 0]
-            resize_stops = self.time[:, 1] + amount
-        else:
-            raise ValueError("direction must be 'both', 'start', or 'stop'")
+        if len(self.starts) == 0 or len(epoch.starts) == 0:
+            return Epoch([], [])
 
-        return Epoch(np.hstack((resize_starts[..., np.newaxis],
-                                resize_stops[..., np.newaxis])))
+        new_starts = []
+        new_stops = []
+        template = self.copy().merge()
+        epoch_interest = epoch.copy().merge()
+
+        for aa in template.time:
+            for bb in epoch_interest.time:
+                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
+                    new_starts.append(bb[0])
+                    new_stops.append(bb[1])
+
+        new_starts = np.unique(new_starts)
+        new_stops = np.unique(new_stops)
+
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
 
     def shrink(self, amount, direction='both'):
         """Shrinks epoch by the given amount.
@@ -292,38 +374,3 @@ class Epoch:
             raise ValueError("shrink amount too large")
 
         return self.expand(-amount, direction)
-
-    def join(self, epoch):
-        """Combines two sets of epochs.
-
-        Parameters
-        ----------
-        epoch : nept.Epoch
-
-        Returns
-        -------
-        joined_epochs : nept.Epoch
-
-        """
-        join_starts = np.concatenate((self.starts, epoch.starts))
-        join_stops = np.concatenate((self.stops, epoch.stops))
-
-        return Epoch(join_starts, join_stops-join_starts)
-
-    def contains(self, value):
-        """Checks whether value is in any epoch.
-
-        Parameters
-        ----------
-        epochs: nept.Epoch
-        value: float or int
-
-        Returns
-        -------
-        boolean
-
-        """
-        for start, stop in zip(self.starts, self.stops):
-            if start <= value <= stop:
-                return True
-        return False

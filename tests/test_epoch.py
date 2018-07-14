@@ -137,7 +137,111 @@ def test_epoch_intersect_empty():
 
     intersects = epoch_1.intersect(epoch_2)
 
-    assert intersects.time.size == 0
+    assert intersects.isempty
+
+
+def test_exclude_case1():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[1.55, 1.8]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.8]))
+    assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
+
+
+def test_exclude_case2():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[1.2, 1.6]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.6]))
+    assert np.allclose(excludes.stops, np.array([1.0, 1.2, 2.0]))
+
+
+def test_exclude_case3():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[1.2, 1.3]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.3, 1.6]))
+    assert np.allclose(excludes.stops, np.array([1.0, 1.2, 1.5, 2.0]))
+
+
+def test_exclude_case4():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[1.1, 1.3]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.3, 1.6]))
+    assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
+
+
+def test_exclude_case5():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[0.9, 1.3]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.3, 1.6]))
+    assert np.allclose(excludes.stops, np.array([0.9, 1.5, 2.0]))
+
+
+def test_exclude_case6():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[2.1, 2.5]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.6]))
+    assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
+
+
+def test_exclude_empty():
+    times_1 = np.array([[0.0, 1.0],
+                        [1.1, 1.5],
+                        [1.6, 2.0]])
+    epoch_1 = nept.Epoch(times_1)
+
+    times_2 = np.array([[0.0, 2.5]])
+    epoch_2 = nept.Epoch(times_2)
+
+    excludes = epoch_1.excludes(epoch_2)
+
+    assert excludes.time.size == 0
 
 
 def test_epoch_overlaps_case2_bounds():
@@ -166,7 +270,7 @@ def test_epoch_overlaps_empty():
 
     overlaps = epoch_1.overlaps(epoch_2)
 
-    assert overlaps.time.size == 0
+    assert overlaps.isempty
 
 
 def test_epoch_intersect_case3():
