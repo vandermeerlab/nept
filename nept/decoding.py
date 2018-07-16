@@ -78,18 +78,16 @@ def decode_location(likelihood, pos_centers, time_centers):
         Estimate of decoded position.
 
     """
-    prob_rows = np.sum(np.isnan(likelihood), axis=1) < likelihood.shape[1]
-    max_decoded_idx = np.nanargmax(likelihood[prob_rows], axis=1)
+    keep_idx = np.sum(np.isnan(likelihood), axis=1) < likelihood.shape[1]
+    likelihood = likelihood[keep_idx]
 
-    prob_decoded = pos_centers[max_decoded_idx]
+    max_decoded_idx = np.nanargmax(likelihood, axis=1)
 
-    decoded_pos = np.empty((likelihood.shape[0], pos_centers.shape[1])) * np.nan
-    decoded_pos[prob_rows] = prob_decoded
+    decoded_data = pos_centers[max_decoded_idx]
 
-    time_centers = time_centers[~np.isnan(decoded_pos).any(axis=1)]
-    decoded_pos = np.squeeze(decoded_pos[~np.isnan(decoded_pos).any(axis=1)])
+    decoded_time = time_centers[keep_idx]
 
-    return nept.Position(decoded_pos, time_centers)
+    return nept.Position(decoded_data, decoded_time)
 
 
 def remove_teleports(position, speed_thresh, min_length):
