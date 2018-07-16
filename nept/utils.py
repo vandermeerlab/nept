@@ -177,10 +177,7 @@ def find_nearest_idx(array, val):
     return (np.abs(array-val)).argmin()
 
 
-n_stds = 3
-
-
-def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1):
+def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
     """Filters a signal with a gaussian kernel.
 
     Parameters
@@ -211,7 +208,7 @@ def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1):
         gaussian_filter /= np.sum(gaussian_filter)
 
     return np.apply_along_axis(
-        lambda v: np.convolve(v, gaussian_filter, mode="same"), axis=axis, arr=signal)
+        lambda v: scipy.signal.convolve(v, gaussian_filter, mode="same"), axis=axis, arr=signal)
 
 
 def get_edges(time, binsize, lastbin=True):
