@@ -36,6 +36,11 @@ class SpikeTrain:
     def __getitem__(self, idx):
         return SpikeTrain(self.time[idx], self.label)
 
+    @property
+    def n_spikes(self):
+        """(int) Number of samples."""
+        return self.time.size
+
     def time_slice(self, t_starts, t_stops):
         """Creates a new object corresponding to the time slice of
         the original between (and including) times t_start and t_stop. Setting

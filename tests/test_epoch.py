@@ -140,7 +140,7 @@ def test_epoch_intersect_empty():
     assert intersects.isempty
 
 
-def test_exclude_case1():
+def test_excludes_case1():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -155,7 +155,7 @@ def test_exclude_case1():
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
 
-def test_exclude_case2():
+def test_excludes_case2():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -170,7 +170,7 @@ def test_exclude_case2():
     assert np.allclose(excludes.stops, np.array([1.0, 1.2, 2.0]))
 
 
-def test_exclude_case3():
+def test_excludes_case3():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -185,7 +185,7 @@ def test_exclude_case3():
     assert np.allclose(excludes.stops, np.array([1.0, 1.2, 1.5, 2.0]))
 
 
-def test_exclude_case4():
+def test_excludes_case4():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -200,7 +200,7 @@ def test_exclude_case4():
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
 
-def test_exclude_case5():
+def test_excludes_case5():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -215,7 +215,7 @@ def test_exclude_case5():
     assert np.allclose(excludes.stops, np.array([0.9, 1.5, 2.0]))
 
 
-def test_exclude_case6():
+def test_excludes_case6():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -230,7 +230,7 @@ def test_exclude_case6():
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
 
-def test_exclude_empty():
+def test_excludes_empty():
     times_1 = np.array([[0.0, 1.0],
                         [1.1, 1.5],
                         [1.6, 2.0]])
@@ -651,7 +651,7 @@ def test_epoch_start_stop():
     assert np.allclose(epoch.stop, 1027.1)
 
 
-def test_epoch_contain_true():
+def test_epoch_contains_true():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
@@ -660,13 +660,22 @@ def test_epoch_contain_true():
     assert epoch.contains(0.5)
 
 
-def test_epoch_contain_not():
+def test_epoch_contains_not():
     times = np.array([[0.0, 1.0],
                       [0.9, 1.5],
                       [1.6, 2.0]])
     epoch = nept.Epoch(times)
 
     assert not epoch.contains(1.55)
+
+
+def test_epoch_contains_edge():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 2.0]])
+    epoch = nept.Epoch(times)
+
+    assert not epoch.contains(2.0, edge=False)
 
 
 def test_epoch_isempty():

@@ -124,3 +124,17 @@ def test_spiketrain_timeslice_uneven_startstop():
         sliced_spikes = spikes.time_slice(starts, stops)
 
     assert str(excinfo.value) == "must have same number of start and stop times"
+
+
+def test_spiketrain_n_spikes_simple():
+    spikes = [nept.SpikeTrain(np.array([1., 3., 5., 7., 9.])),
+              nept.SpikeTrain(np.array([1.3, 3.3, 5.3]))]
+
+    assert np.allclose(spikes[0].n_spikes, 5)
+    assert np.allclose(spikes[1].n_spikes, 3)
+
+
+def test_spiketrain_n_spikes_empty():
+    spikes = [nept.SpikeTrain(np.array([]))]
+
+    assert np.allclose(spikes[0].n_spikes, 0)

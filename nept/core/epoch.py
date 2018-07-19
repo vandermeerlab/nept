@@ -116,7 +116,7 @@ class Epoch:
         new_stops = np.array(self.stops)
         return Epoch(new_starts, new_stops-new_starts)
 
-    def contains(self, value):
+    def contains(self, value, edge=True):
         """Checks whether value is in any epoch.
 
         Parameters
@@ -130,8 +130,12 @@ class Epoch:
 
         """
         for start, stop in zip(self.starts, self.stops):
-            if start <= value <= stop:
-                return True
+            if edge:
+                if start <= value <= stop:
+                    return True
+            else:
+                if start < value < stop:
+                    return True
         return False
 
     def excludes(self, epoch):
@@ -160,19 +164,18 @@ class Epoch:
             for bb in epoch_b.time:
                 bb = Epoch([[bb[0], bb[1]]])
                 if not aa.overlaps(bb).isempty:
-                    if (aa.start <= bb.start < aa.stop) and (aa.start < bb.stop <= aa.stop):
-                        if aa.start != bb.start:
-                            new_starts.append(aa.start)
-                            new_stops.append(bb.start)
-                        new_starts.append(bb.stop)
-                        new_stops.append(aa.stop)
-                    elif (aa.start < bb.start <= aa.stop) and (aa.start < bb.stop >= aa.stop):
+                    if aa.contains(bb.start, edge=False) and aa.contains(bb.stop):
                         new_starts.append(aa.start)
                         new_stops.append(bb.start)
-                    elif (aa.start >= bb.start < aa.stop) and (aa.start <= bb.stop < aa.stop):
                         new_starts.append(bb.stop)
                         new_stops.append(aa.stop)
-                    elif (aa.start > bb.start < aa.stop) and (aa.start < bb.stop > aa.stop):
+                    elif aa.contains(bb.start, edge=False) and not aa.contains(bb.stop):
+                        new_starts.append(aa.start)
+                        new_stops.append(bb.start)
+                    elif not aa.contains(bb.start, edge=False) and aa.contains(bb.stop):
+                        new_starts.append(bb.stop)
+                        new_stops.append(aa.stop)
+                    elif bb.contains(aa.start, edge=False) and bb.contains(aa.stop):
                         continue
                 else:
                     new_starts.append(aa.start)
@@ -233,19 +236,21 @@ class Epoch:
         epoch_b = epoch.copy().merge()
 
         for aa in epoch_a.time:
+            aa = Epoch([[aa[0], aa[1]]])
             for bb in epoch_b.time:
-                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(aa[1])
-                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
-                    new_starts.append(aa[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
-                    new_starts.append(aa[0])
-                    new_stops.append(aa[1])
+                bb = Epoch([[bb[0], bb[1]]])
+                if bb.contains(aa.start) and bb.contains(aa.stop):
+                    new_starts.append(aa.start)
+                    new_stops.append(aa.stop)
+                elif aa.contains(bb.start) and aa.contains(bb.stop):
+                    new_starts.append(bb.start)
+                    new_stops.append(bb.stop)
+                elif aa.contains(bb.start, edge=False) and not aa.contains(bb.stop):
+                    new_starts.append(bb.start)
+                    new_stops.append(aa.stop)
+                elif not aa.contains(bb.start) and aa.contains(bb.stop, edge=False):
+                    new_starts.append(aa.start)
+                    new_stops.append(bb.stop)
 
         return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
                                 np.array(new_stops)[..., np.newaxis]]))
@@ -329,19 +334,13 @@ class Epoch:
         epoch_interest = epoch.copy().merge()
 
         for aa in template.time:
+            aa = Epoch([[aa[0], aa[1]]])
             for bb in epoch_interest.time:
-                if (aa[0] <= bb[0] < aa[1]) and (aa[0] < bb[1] <= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] < bb[0] < aa[1]) and (aa[0] < bb[1] > aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] > bb[0] < aa[1]) and (aa[0] < bb[1] < aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
-                elif (aa[0] >= bb[0] < aa[1]) and (aa[0] < bb[1] >= aa[1]):
-                    new_starts.append(bb[0])
-                    new_stops.append(bb[1])
+                bb = Epoch([[bb[0], bb[1]]])
+                if (aa.contains(bb.start) or aa.contains(bb.stop) or
+                    bb.contains(aa.start) or bb.contains(aa.stop)):
+                    new_starts.append(bb.start)
+                    new_stops.append(bb.stop)
 
         new_starts = np.unique(new_starts)
         new_stops = np.unique(new_stops)
