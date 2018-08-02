@@ -2,7 +2,7 @@ import numpy as np
 import nept
 
 
-def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes):
+def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes=1):
     """Computes the bayesian probability of location based on spike counts.
 
     Parameters
