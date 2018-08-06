@@ -273,3 +273,45 @@ def test_position_noy_setter():
         position.y = np.array([0.0, 1.0, 2.0, 3.0])
 
     assert str(excinfo.value) == "can't set 'y' of one-dimensional position"
+
+
+def test_position_combine():
+    position = nept.Position([[1, 1, 1], [2, 2, 2]], [0, 1, 2])
+    pos = nept.Position([[8, 3, 4], [6, 8, 4]], [0.5, 1, 2.5])
+
+    combined = position.combine(pos)
+
+    assert np.allclose(combined.time, np.array([0. , 0.5, 1. , 1. , 2. , 2.5]))
+    assert np.allclose(combined.x, np.array([1., 8., 1., 3., 1., 4.]))
+    assert np.allclose(combined.y, np.array([2., 6., 2., 8., 2., 4.]))
+
+
+def test_position_combine_wrong_dimension():
+    position = nept.Position([[1, 1, 1], [2, 2, 2]], [0, 1, 2])
+    pos = nept.Position([[8, 3, 4]], [0.5, 1, 2.5])
+
+    with pytest.raises(ValueError) as excinfo:
+        combined = position.combine(pos)
+
+    assert str(excinfo.value) == "'pos' must be 2 dimensions"
+
+
+def test_position_combine_wrong_dimension2():
+    position = nept.Position([[1, 1, 1]], [0, 1, 2])
+    pos = nept.Position([[8, 3, 4], [6, 8, 4]], [0.5, 1, 2.5])
+
+    with pytest.raises(ValueError) as excinfo:
+        combined = position.combine(pos)
+
+    assert str(excinfo.value) == "'pos' must be 1 dimensions"
+
+
+def test_position_combine_same_times():
+    position = nept.Position([[1, 1, 1], [2, 2, 2]], [0, 1, 2])
+    pos = nept.Position([[8, 3, 4], [6, 8, 4]], [0, 1, 2])
+
+    combined = position.combine(pos)
+
+    assert np.allclose(combined.time, np.array([0., 0., 1., 1., 2., 2.]))
+    assert np.allclose(combined.x, np.array([1., 8., 1., 3., 1., 4.]))
+    assert np.allclose(combined.y, np.array([2., 6., 2., 8., 2., 4.]))

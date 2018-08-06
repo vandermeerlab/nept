@@ -51,6 +51,28 @@ class Position(AnalogSignal):
             raise ValueError("can't set 'y' of one-dimensional position")
         self.data[:, 1] = val
 
+    def combine(self, pos):
+        """Return the combined position from this position to the given 'pos'.
+
+        Parameters
+        ----------
+        pos : nept.Position
+
+        Returns
+        -------
+        dist : nept.Position
+        """
+        if self.dimensions != pos.dimensions:
+            raise ValueError("'pos' must be %d dimensions" % self.dimensions)
+
+        times = np.append(self.time, pos.time)
+        sort_idx = np.argsort(times)
+
+        times = times[sort_idx]
+        data = np.concatenate((self.data, pos.data))[sort_idx]
+
+        return Position(data, times)
+
     def distance(self, pos):
         """Return the euclidean distance from this position to the given 'pos'.
 
