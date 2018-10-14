@@ -11,8 +11,8 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes=1):
         Where each inner array is the number of spikes (int) in each bin for an individual neuron.
     tuning_curves : np.array
         Where each inner array is the tuning curve (floats) for an individual neuron.
-    binsize : float
-        Size of the time bins.
+    binsize : float or np.array
+        Size of the time bins. If np.array, must be the same length as counts.
     min_neurons : int
         Mininum number of neurons active in a given bin.
     min_spikes : int
@@ -31,6 +31,12 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes=1):
     """
     n_time_bins = np.shape(counts.time)[0]
     n_position_bins = np.shape(tuning_curves)[1]
+
+    if not isinstance(binsize, float):
+        binsize = np.asarray(binsize)
+
+        if np.asarray(binsize).size != n_time_bins:
+            raise ValueError("binsize must be a float or the same length as counts.time.")
 
     likelihood = np.empty((n_time_bins, n_position_bins)) * np.nan
 
