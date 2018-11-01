@@ -6,7 +6,8 @@ from .core.position import Position
 from .core.spiketrain import SpikeTrain
 from .co_occurrence import spike_counts, get_tetrode_mask, compute_cooccur
 from .decoding import bayesian_prob, decode_location, remove_teleports
-from .lfp_filtering import (detect_swr_hilbert,
+from .lfp_filtering import (butter_bandpass,
+                            detect_swr_hilbert,
                             mean_coherence,
                             mean_coherencegram,
                             mean_csd,
