@@ -12,7 +12,7 @@ def test_swr():
 
     lfp = nept.LocalFieldPotential(data, time)
 
-    swrs = nept.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), power_thresh=0.5, z_thresh=0.4)
+    swrs = nept.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), z_thresh=0.4)
     assert swrs.start == 0.19950000000000001
     assert swrs.stop == 0.30049999999999999
 

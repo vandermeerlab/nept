@@ -33,7 +33,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh=0.02, min_length=0.01):
+def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, merge_thresh=0.02, min_length=0.01):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -83,36 +83,18 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, power_thresh=3, merge_thresh
     start_time = lfp.time[start_swr_idx]
     stop_time = lfp.time[stop_swr_idx]
 
-    # Merging ranges that are closer - in time - than the merge_threshold.
-    no_double = start_time[1:] - stop_time[:-1]
-    merge_idx = np.where(no_double < merge_thresh)[0]
-    start_merged = np.delete(start_time, merge_idx + 1)
-    stop_merged = np.delete(stop_time, merge_idx)
-    start_merged_idx = np.delete(start_swr_idx, merge_idx + 1)
-    stop_merged_idx = np.delete(stop_swr_idx, merge_idx)
+    # Removing doubles
+    start_times = start_time[(stop_time - start_time) != 0]
+    stop_times = stop_time[(stop_time - start_time) != 0]
 
-    # Removing ranges that are shorter - in time - than the min_length value.
-    swr_len = stop_merged - start_merged
-    short_idx = np.where(swr_len < min_length)[0]
-    start_merged = np.delete(start_merged, short_idx)
-    stop_merged = np.delete(stop_merged, short_idx)
-    start_merged_idx = np.delete(start_merged_idx, short_idx)
-    stop_merged_idx = np.delete(stop_merged_idx, short_idx)
+    swrs = nept.Epoch(np.array([start_times, stop_times]))
 
-    # Removing ranges that have powers less than the power_threshold if sufficiently different.
-    if power_thresh > z_thresh:
-        max_z = []
-        for start_idx, stop_idx in zip(start_merged_idx, stop_merged_idx):
-            max_z.append(np.max(zpower_lfp[start_idx:stop_idx]))
-        max_z = np.array(max_z)
+    # Merging epochs that are closer - in time - than the merge_threshold.
+    swrs = swrs.merge(gap=merge_thresh)
 
-        z_idx = np.where(max_z < power_thresh)[0]
-        start_merged = np.delete(start_merged, z_idx)
-        stop_merged = np.delete(stop_merged, z_idx)
-        start_merged_idx = np.delete(start_merged_idx, z_idx)
-        stop_merged_idx = np.delete(stop_merged_idx, z_idx)
-
-    swrs = nept.Epoch(np.array([start_merged, stop_merged]))
+    # Removing epochs that are shorter - in time - than the min_length value.
+    keep_indices = swrs.durations >= min_length
+    swrs = nept.Epoch([swrs.starts[keep_indices], swrs.stops[keep_indices]])
 
     return swrs
 
