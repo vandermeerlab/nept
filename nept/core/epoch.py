@@ -373,3 +373,31 @@ class Epoch:
             raise ValueError("shrink amount too large")
 
         return self.expand(-amount, direction)
+
+    def time_slice(self, t_start, t_stop):
+        """Creates a new object corresponding to the time slice of
+            the original between (and including) times t_start and t_stop.
+
+            Parameters
+            ----------
+            analogsignal : nept.Epoch
+            t_start : float
+            t_stop : float
+
+            Returns
+            -------
+            sliced_epoch : nept.Epoch
+            """
+        start_keeps = (self.starts >= t_start) & (self.starts < t_stop)
+        stop_keeps = (self.stops > t_start) & (self.stops <= t_stop)
+
+        starts = self.starts[start_keeps]
+        stops = self.stops[stop_keeps]
+
+        if self.contains(t_start):
+            starts = np.insert(starts, 0, t_start)
+
+        if self.contains(t_stop):
+            stops = np.append(stops, t_stop)
+
+        return nept.Epoch([starts, stops])

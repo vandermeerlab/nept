@@ -753,3 +753,15 @@ def test_epoch_using_iter():
 
     assert(this_instance.starts == np.array([0.0]))
     assert(this_instance.stops == np.array([1.0]))
+
+
+def test_epoch_time_slice_simple():
+    times = np.array([[0.0, 1.0],
+                      [0.9, 1.5],
+                      [1.6, 3.0]])
+
+    epoch = nept.Epoch(times)
+    sliced_epoch = epoch.time_slice(1, 2)
+
+    assert np.allclose(sliced_epoch.starts, np.array([1., 1.5]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.6, 2.]))

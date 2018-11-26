@@ -33,7 +33,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, merge_thresh=0.02, min_length=0.01):
+def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -45,14 +45,8 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, merge_thresh=0.02, min_lengt
         With format (lowcut, highcut).
         Typically (140.0, 250.0) for sharp-wave ripple detection.
     z_thres : int or float
-        The default is set to 3
-    power_thres : int or float
-        The default is set to 3
-    merge_thres : int or float
-        The default is set to 0.02
     min_length : float
         Any sequence less than this amount is not considered a sharp-wave ripple.
-        The default is set to 0.01.
 
     Returns
     -------
@@ -67,12 +61,12 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh=3, merge_thresh=0.02, min_lengt
     # Zero padding to nearest regular number to speed up fast fourier transforms (FFT) computed in the hilbert function.
     # Regular numbers are composites of the prime factors 2, 3, and 5.
     hilbert_n = next_regular(lfp.n_samples)
-    power_lfp = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
-    power_lfp = power_lfp[:lfp.n_samples]  # removing the zero padding now that the power is computed
-    zpower_lfp = scipy.stats.zscore(power_lfp)
+    power = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
+    power = power[:lfp.n_samples]  # removing the zero padding now that the power is computed
+    zpower = scipy.stats.zscore(power)
 
     # Finding locations where the power changes
-    detect = zpower_lfp > z_thresh
+    detect = zpower > z_thresh
     detect = np.hstack([0, detect, 0])  # pad to detect first or last element change
     signal_change = np.diff(detect.astype(int))
 
