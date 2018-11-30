@@ -8,6 +8,7 @@ from .co_occurrence import spike_counts, get_tetrode_mask, compute_cooccur
 from .decoding import bayesian_prob, decode_location, remove_teleports
 from .lfp_filtering import (butter_bandpass,
                             detect_swr_hilbert,
+                            get_epoch_from_zscored_thresh,
                             mean_coherence,
                             mean_coherencegram,
                             mean_csd,

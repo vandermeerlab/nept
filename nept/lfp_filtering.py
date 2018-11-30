@@ -63,25 +63,8 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     hilbert_n = next_regular(lfp.n_samples)
     power = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
     power = power[:lfp.n_samples]  # removing the zero padding now that the power is computed
-    zpower = scipy.stats.zscore(power)
 
-    # Finding locations where the power changes
-    detect = zpower > z_thresh
-    detect = np.hstack([0, detect, 0])  # pad to detect first or last element change
-    signal_change = np.diff(detect.astype(int))
-
-    start_swr_idx = np.where(signal_change == 1)[0]
-    stop_swr_idx = np.where(signal_change == -1)[0] - 1
-
-    # Getting times associated with these power changes
-    start_time = lfp.time[start_swr_idx]
-    stop_time = lfp.time[stop_swr_idx]
-
-    # Removing doubles
-    start_times = start_time[(stop_time - start_time) != 0]
-    stop_times = stop_time[(stop_time - start_time) != 0]
-
-    swrs = nept.Epoch(np.array([start_times, stop_times]))
+    swrs = get_epoch_from_zscored_thresh(power, lfp.time, thresh=z_thresh)
 
     # Merging epochs that are closer - in time - than the merge_threshold.
     swrs = swrs.merge(gap=merge_thresh)
@@ -91,6 +74,26 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     swrs = nept.Epoch([swrs.starts[keep_indices], swrs.stops[keep_indices]])
 
     return swrs
+
+
+def get_epoch_from_zscored_thresh(array, signal, thresh):
+    zscored = scipy.stats.zscore(array)
+
+    detect = zscored > thresh
+    detect = np.hstack([0, detect, 0])  # pad to detect first or last element change
+    signal_change = np.diff(detect.astype(int))
+
+    start_idx = np.where(signal_change == 1)[0]
+    stop_idx = np.where(signal_change == -1)[0] - 1
+
+    start_time = signal[start_idx]
+    stop_time = signal[stop_idx]
+
+    # Remove doubles
+    start_times = start_time[(stop_time - start_time) != 0]
+    stop_times = stop_time[(stop_time - start_time) != 0]
+
+    return nept.Epoch(np.array([start_times, stop_times]))
 
 
 def next_regular(target):
