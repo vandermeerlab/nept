@@ -763,5 +763,17 @@ def test_epoch_time_slice_simple():
     epoch = nept.Epoch(times)
     sliced_epoch = epoch.time_slice(1, 2)
 
-    assert np.allclose(sliced_epoch.starts, np.array([1., 1.5]))
-    assert np.allclose(sliced_epoch.stops, np.array([1.6, 2.]))
+    assert np.allclose(sliced_epoch.starts, np.array([1., 1.6]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.5, 2.]))
+
+
+def test_epoch_time_slice_overlap():
+    times = np.array([[0.0, 1.1],
+                      [0.9, 1.5],
+                      [1.6, 3.0]])
+
+    epoch = nept.Epoch(times)
+    sliced_epoch = epoch.time_slice(1, 2)
+
+    assert np.allclose(sliced_epoch.starts, np.array([1., 1., 1.6]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.1, 1.5, 2.]))

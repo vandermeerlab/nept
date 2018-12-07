@@ -388,16 +388,22 @@ class Epoch:
             -------
             sliced_epoch : nept.Epoch
             """
-        start_keeps = (self.starts >= t_start) & (self.starts < t_stop)
-        stop_keeps = (self.stops > t_start) & (self.stops <= t_stop)
+        new_starts = []
+        new_stops = []
 
-        starts = self.starts[start_keeps]
-        stops = self.stops[stop_keeps]
+        for start, stop in zip(self.starts, self.stops):
+            if (start >= t_start) & (start < t_stop):
+                new_starts.append(start)
+                if (stop > t_start) & (stop <= t_stop):
+                    new_stops.append(stop)
+                else:
+                    new_stops.append(t_stop)
+            if (stop > t_start) & (stop <= t_stop):
+                new_stops.append(stop)
+                if (start >= t_start) & (start < t_stop):
+                    new_starts.append(start)
+                else:
+                    new_starts.append(t_start)
 
-        if self.contains(t_start):
-            starts = np.insert(starts, 0, t_start)
-
-        if self.contains(t_stop):
-            stops = np.append(stops, t_stop)
-
-        return nept.Epoch([starts, stops])
+        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
+                                np.array(new_stops)[..., np.newaxis]]))
