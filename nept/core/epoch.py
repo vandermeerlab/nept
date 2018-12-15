@@ -392,15 +392,15 @@ class Epoch:
         new_stops = []
 
         for start, stop in zip(self.starts, self.stops):
-            if (start >= t_start) & (start < t_stop):
+            if (start >= t_start) and (start < t_stop):
                 new_starts.append(start)
-                if (stop > t_start) & (stop <= t_stop):
+                if (stop > t_start) and (stop <= t_stop):
                     new_stops.append(stop)
                 else:
                     new_stops.append(t_stop)
-            if (stop > t_start) & (stop <= t_stop):
+            elif (stop > t_start) and (stop <= t_stop):
                 new_stops.append(stop)
-                if (start >= t_start) & (start < t_stop):
+                if (start >= t_start) and (start < t_stop):
                     new_starts.append(start)
                 else:
                     new_starts.append(t_start)
