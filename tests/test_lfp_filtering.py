@@ -14,8 +14,9 @@ def test_swr():
 
     swrs = nept.detect_swr_hilbert(lfp, fs=2000, thresh=(140.0, 250.0), z_thresh=0.4,
                                    merge_thresh=0.02, min_length=0.01)
-    assert swrs.start == 0.19950000000000001
-    assert swrs.stop == 0.30049999999999999
+
+    assert np.allclose(swrs.start, 0.199)
+    assert np.allclose(swrs.stop, 0.301)
 
 
 def test_next_regular_basic():

@@ -33,7 +33,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
+def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, times_for_z=None):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -47,6 +47,8 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     z_thres : int or float
     min_length : float
         Any sequence less than this amount is not considered a sharp-wave ripple.
+    times_for_z : nept.Epoch or None
+        Portion of LFP used for z thresh.
 
     Returns
     -------
@@ -62,9 +64,11 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     # Regular numbers are composites of the prime factors 2, 3, and 5.
     hilbert_n = next_regular(lfp.n_samples)
     power = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
-    power = power[:lfp.n_samples]  # removing the zero padding now that the power is computed
 
-    swrs = get_epoch_from_zscored_thresh(power, lfp.time, thresh=z_thresh)
+    # removing the zero padding now that the power is computed
+    power_lfp = nept.AnalogSignal(power[:lfp.n_samples], lfp.time)
+
+    swrs = get_epoch_from_zscored_thresh(power_lfp, thresh=z_thresh, times_for_z=times_for_z)
 
     # Merging epochs that are closer - in time - than the merge_threshold.
     swrs = swrs.merge(gap=merge_thresh)
@@ -76,24 +80,32 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length):
     return swrs
 
 
-def get_epoch_from_zscored_thresh(array, signal, thresh):
-    zscored = scipy.stats.zscore(array)
+def get_epoch_from_zscored_thresh(power_lfp, thresh, times_for_z):
+    if times_for_z is not None:
+        # Apply zscore thresh to restricted data to find power thresh
+        sliced_power_lfp = power_lfp.time_slice(times_for_z.start, times_for_z.stop)
+        zpower = scipy.stats.zscore(np.squeeze(sliced_power_lfp.data))
 
-    detect = zscored > thresh
+        zthresh_idx = (np.abs(zpower - thresh)).argmin()
+        power_thresh = sliced_power_lfp.data[zthresh_idx][0]
+    else:
+        zpower = scipy.stats.zscore(np.squeeze(power_lfp.data))
+        zthresh_idx = (np.abs(zpower - thresh)).argmin()
+        power_thresh = power_lfp.data[zthresh_idx][0]
+
+    # Finding locations where the power changes
+    detect = np.squeeze(power_lfp.data) > power_thresh
     detect = np.hstack([0, detect, 0])  # pad to detect first or last element change
     signal_change = np.diff(detect.astype(int))
 
-    start_idx = np.where(signal_change == 1)[0]
-    stop_idx = np.where(signal_change == -1)[0] - 1
+    start_swr_idx = np.where(signal_change == 1)[0]
+    stop_swr_idx = np.where(signal_change == -1)[0] - 1
 
-    start_time = signal[start_idx]
-    stop_time = signal[stop_idx]
+    # Getting times associated with these power changes
+    start_time = power_lfp.time[start_swr_idx]
+    stop_time = power_lfp.time[stop_swr_idx]
 
-    # Remove doubles
-    start_times = start_time[(stop_time - start_time) != 0]
-    stop_times = stop_time[(stop_time - start_time) != 0]
-
-    return nept.Epoch(np.array([start_times, stop_times]))
+    return nept.Epoch(np.array([start_time, stop_time]))
 
 
 def next_regular(target):
