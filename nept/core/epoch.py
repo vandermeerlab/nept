@@ -7,66 +7,48 @@ class Epoch:
 
     Parameters
     ----------
-    time : np.array
-        If shape (n_epochs, 1) or (n_epochs,), the start time for each epoch.
-        If shape (n_epochs, 2), the start and stop times for each epoch.
-    duration : np.array or None, optional
-        The length of the epoch.
+    starts : np.array
+    stops : np.array
 
     Attributes
     ----------
-    time : np.array
-        The start and stop times for each epoch. With shape (n_epochs, 2).
+    starts : np.array
+        The start times for each epoch. With shape (n_epochs,).
+    stops : np.array
+        The stop times for each epoch. With shape (n_epochs,).
 
     """
-    def __init__(self, time, duration=None):
-        try:
-            time = np.squeeze(time).astype(float)
-        except ValueError as err:
-            raise ValueError("must have the same number of start and stop times").with_traceback(err.__traceback__)
+    def __init__(self, starts, stops):
+        starts = np.atleast_1d(np.squeeze(starts).astype(float))
+        stops = np.atleast_1d(np.squeeze(stops).astype(float))
 
-        if time.ndim == 0:
-            time = time[..., np.newaxis]
+        if starts.shape[0] != stops.shape[0]:
+            raise ValueError("must have the same number of start and stop times")
 
-        if duration is not None:
-            duration = np.squeeze(duration).astype(float)
-            if duration.ndim == 0:
-                duration = duration[..., np.newaxis]
+        if starts.ndim > 1 or stops.ndim > 1:
+            raise ValueError("time cannot have more than 1 dimension.")
 
-            if time.ndim == 2 and duration.ndim == 1:
-                raise ValueError("duration not allowed when using start and stop times")
-
-            if time.ndim == 1 and time.shape[0] != duration.shape[0]:
-                raise ValueError("must have same number of time and duration samples")
-
-            if time.ndim == 1 and duration.ndim == 1:
-                stop_epoch = time + duration
-                time = np.hstack((time[..., np.newaxis], stop_epoch[..., np.newaxis]))
-
-        if time.ndim == 1 and duration is None:
-            time = time[..., np.newaxis]
-
-        if time.ndim == 2 and time.shape[1] != 2:
-            time = np.hstack((time[0][..., np.newaxis], time[1][..., np.newaxis]))
-
-        if time.ndim > 2:
-            raise ValueError("time cannot have more than 2 dimensions")
-
-        if time.ndim == 2 and np.any(time[:, 1] - time[:, 0] <= 0):
+        if np.any(stops - starts <= 0):
             raise ValueError("start must be less than stop")
 
-        sort_idx = np.argsort(time[:, 0])
-        time = time[sort_idx]
+        sort_idx = np.argsort(starts)
+        starts = starts[sort_idx]
+        stops = stops[sort_idx]
 
-        self.time = time
+        self.starts = starts
+        self.stops = stops
 
     def __getitem__(self, idx):
-        return Epoch(np.hstack([np.array(self.starts[idx])[..., np.newaxis],
-                                np.array(self.stops[idx])[..., np.newaxis]]))
+        return Epoch(self.starts[idx], self.stops[idx])
 
     def __iter__(self):
-        for start, stop in self.time:
-            yield Epoch([start, stop])
+        for start, stop in zip(self.starts, self.stops):
+            yield Epoch(start, stop)
+
+    @property
+    def time(self):
+        """(np.array) The times of the epochs."""
+        return np.concatenate(np.array([self.starts, self.stops])[..., np.newaxis], axis=1)
 
     @property
     def centers(self):
@@ -76,7 +58,7 @@ class Epoch:
     @property
     def durations(self):
         """(np.array) The duration of each epoch."""
-        return self.time[:, 1] - self.time[:, 0]
+        return self.stops - self.starts
 
     @property
     def isempty(self):
@@ -87,34 +69,24 @@ class Epoch:
             return False
 
     @property
-    def starts(self):
-        """(np.array) The start of each epoch."""
-        return self.time[:, 0]
-
-    @property
     def start(self):
         """(np.array) The start of the first epoch."""
-        return self.time[:, 0][0]
-
-    @property
-    def stops(self):
-        """(np.array) The stop of each epoch."""
-        return self.time[:, 1]
+        return self.starts[0]
 
     @property
     def stop(self):
         """(np.array) The stop of the last epoch."""
-        return self.time[:, 1][-1]
+        return self.stops[-1]
 
     @property
     def n_epochs(self):
         """(int) The number of epochs."""
-        return len(self.time[:, 0])
+        return len(self.starts)
 
     def copy(self):
         new_starts = np.array(self.starts)
         new_stops = np.array(self.stops)
-        return Epoch(new_starts, new_stops-new_starts)
+        return Epoch(new_starts, new_stops)
 
     def contains(self, value, edge=True):
         """Checks whether value is in any epoch.
@@ -151,8 +123,7 @@ class Epoch:
 
         """
         if len(epoch.starts) == 0:
-            return Epoch(np.hstack([np.array(self.starts)[..., np.newaxis],
-                                    np.array(self.stops)[..., np.newaxis]]))
+            return Epoch(np.array(self.starts), np.array(self.stops))
 
         new_starts = []
         new_stops = []
@@ -160,9 +131,9 @@ class Epoch:
         epoch_b = epoch.copy().merge()
 
         for aa in epoch_a.time:
-            aa = Epoch([[aa[0], aa[1]]])
+            aa = Epoch(aa[0], aa[1])
             for bb in epoch_b.time:
-                bb = Epoch([[bb[0], bb[1]]])
+                bb = Epoch(bb[0], bb[1])
                 if not aa.overlaps(bb).isempty:
                     if aa.contains(bb.start, edge=False) and aa.contains(bb.stop):
                         new_starts.append(aa.start)
@@ -181,8 +152,7 @@ class Epoch:
                     new_starts.append(aa.start)
                     new_stops.append(aa.stop)
 
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return Epoch(np.array(new_starts), np.array(new_stops))
 
     def expand(self, amount, direction='both'):
         """Expands epoch by the given amount.
@@ -212,8 +182,7 @@ class Epoch:
         else:
             raise ValueError("direction must be 'both', 'start', or 'stop'")
 
-        return Epoch(np.hstack((resize_starts[..., np.newaxis],
-                                resize_stops[..., np.newaxis])))
+        return Epoch(resize_starts, resize_stops)
 
     def intersect(self, epoch):
         """Finds intersection between two sets of epochs.
@@ -236,9 +205,9 @@ class Epoch:
         epoch_b = epoch.copy().merge()
 
         for aa in epoch_a.time:
-            aa = Epoch([[aa[0], aa[1]]])
+            aa = Epoch(aa[0], aa[1])
             for bb in epoch_b.time:
-                bb = Epoch([[bb[0], bb[1]]])
+                bb = Epoch(bb[0], bb[1])
                 if bb.contains(aa.start) and bb.contains(aa.stop):
                     new_starts.append(aa.start)
                     new_stops.append(aa.stop)
@@ -252,8 +221,7 @@ class Epoch:
                     new_starts.append(aa.start)
                     new_stops.append(bb.stop)
 
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return Epoch(np.array(new_starts), np.array(new_stops))
 
     def join(self, epoch):
         """Combines two sets of epochs.
@@ -270,7 +238,7 @@ class Epoch:
         join_starts = np.concatenate((self.starts, epoch.starts))
         join_stops = np.concatenate((self.stops, epoch.stops))
 
-        return Epoch(join_starts, join_stops-join_starts)
+        return Epoch(join_starts, join_stops)
 
     def merge(self, gap=0.0):
         """Merges epochs that are close or overlapping.
@@ -311,7 +279,7 @@ class Epoch:
         new_starts = np.array(new_starts)
         new_stops = np.array(new_stops)
 
-        return Epoch(new_starts, new_stops-new_starts)
+        return Epoch(new_starts, new_stops)
 
     def overlaps(self, epoch):
         """Finds overlap between template epochs and epoch of interest.
@@ -334,9 +302,9 @@ class Epoch:
         epoch_interest = epoch.copy().merge()
 
         for aa in template.time:
-            aa = Epoch([[aa[0], aa[1]]])
+            aa = Epoch(aa[0], aa[1])
             for bb in epoch_interest.time:
-                bb = Epoch([[bb[0], bb[1]]])
+                bb = Epoch(bb[0], bb[1])
                 if (aa.contains(bb.start) or aa.contains(bb.stop) or
                     bb.contains(aa.start) or bb.contains(aa.stop)):
                     new_starts.append(bb.start)
@@ -345,8 +313,7 @@ class Epoch:
         new_starts = np.unique(new_starts)
         new_stops = np.unique(new_stops)
 
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return Epoch(np.array(new_starts), np.array(new_stops))
 
     def shrink(self, amount, direction='both'):
         """Shrinks epoch by the given amount.
@@ -405,5 +372,4 @@ class Epoch:
                 else:
                     new_starts.append(t_start)
 
-        return Epoch(np.hstack([np.array(new_starts)[..., np.newaxis],
-                                np.array(new_stops)[..., np.newaxis]]))
+        return Epoch(np.array(new_starts), np.array(new_stops))

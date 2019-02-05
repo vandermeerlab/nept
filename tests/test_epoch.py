@@ -5,29 +5,25 @@ import collections
 
 
 def test_epoch_duration():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.durations, np.array([1., 0.6, 0.4]))
 
 
 def test_epoch_stops():
-    start_times = np.array([[0.0],
-                            [0.9],
-                            [1.6]])
-    durations = np.array([1., 0.6, 0.4])
-    epoch = nept.Epoch(start_times, durations)
+    starts = np.array([[0.0], [0.9], [1.6]])
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
 
 def test_epoch_index():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
     sliced_epoch = epoch[:2]
 
     assert np.allclose(sliced_epoch.starts, np.array([0., 0.9]))
@@ -35,60 +31,59 @@ def test_epoch_index():
 
 
 def test_epoch_sort():
-    times = np.array([[1.6, 2.0],
-                      [0.0, 1.0],
-                      [0.9, 1.5]])
-    epoch = nept.Epoch(times)
+    starts = [1.6, 0.0, 0.9]
+    stops = [2.0, 1.0, 1.5]
+    epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.starts, np.array([0., 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
 
 def test_epoch_sortlist():
-    start_times = [0.9, 0.0, 1.6]
-    durations = [0.6, 1.0, 0.4]
-    epoch = nept.Epoch(start_times, durations)
+    starts = [0.9, 0.0, 1.6]
+    stops = [1.5, 1.0, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
 
 
 def test_epoch_reshape():
-    times = np.array([[0.0, 0.9, 1.6], [1.0, 1.5, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.time.shape, (3, 2))
 
 
 def test_epoch_centers():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.4],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.4, 2.0]
+    epoch = nept.Epoch(starts, stops)
     assert np.allclose(epoch.centers, np.array([0.5, 1.15, 1.8]))
 
 
 def test_epoch_too_many_parameters():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
+    starts = np.array([[0.0, 1.0],
+                       [0.9, 1.5],
+                       [1.6, 2.0]])
 
-    durations = np.array([1., 0.6, 0.4])
+    stops = np.array([1., 0.6, 0.4])
 
     with pytest.raises(ValueError) as excinfo:
-        epoch = nept.Epoch(times, durations)
+        epoch = nept.Epoch(starts, stops)
 
-    assert str(excinfo.value) == 'duration not allowed when using start and stop times'
+    assert str(excinfo.value) == 'time cannot have more than 1 dimension.'
 
 
 def test_epoch_intersect_case1():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.55, 1.8]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.55]
+    stops2 = [1.8]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     intersects = epoch_1.intersect(epoch_2)
 
@@ -97,13 +92,13 @@ def test_epoch_intersect_case1():
 
 
 def test_epoch_overlaps_case1_bounds():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.55, 1.8]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.55]
+    stops2 = [1.8]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     overlaps = epoch_1.overlaps(epoch_2)
 
@@ -112,13 +107,13 @@ def test_epoch_overlaps_case1_bounds():
 
 
 def test_epoch_intersect_case2():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.2, 1.6]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.2]
+    stops2 = [1.6]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     intersects = epoch_1.intersect(epoch_2)
 
@@ -127,13 +122,13 @@ def test_epoch_intersect_case2():
 
 
 def test_epoch_intersect_empty():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[], []])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = []
+    stops2 = []
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     intersects = epoch_1.intersect(epoch_2)
 
@@ -141,13 +136,13 @@ def test_epoch_intersect_empty():
 
 
 def test_excludes_case1():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.55, 1.8]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.55]
+    stops2 = [1.8]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -156,13 +151,13 @@ def test_excludes_case1():
 
 
 def test_excludes_case2():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.2, 1.6]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.2]
+    stops2 = [1.6]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -171,13 +166,13 @@ def test_excludes_case2():
 
 
 def test_excludes_case3():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.2, 1.3]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.2]
+    stops2 = [1.3]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -186,13 +181,13 @@ def test_excludes_case3():
 
 
 def test_excludes_case4():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.1, 1.3]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.1]
+    stops2 = [1.3]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -201,13 +196,13 @@ def test_excludes_case4():
 
 
 def test_excludes_case5():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[0.9, 1.3]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [0.9]
+    stops2 = [1.3]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -216,13 +211,13 @@ def test_excludes_case5():
 
 
 def test_excludes_case6():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[2.1, 2.5]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [2.1]
+    stops2 = [2.5]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -231,13 +226,13 @@ def test_excludes_case6():
 
 
 def test_excludes_empty():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[0.0, 2.5]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [0.0]
+    stops2 = [2.5]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     excludes = epoch_1.excludes(epoch_2)
 
@@ -245,13 +240,13 @@ def test_excludes_empty():
 
 
 def test_epoch_overlaps_case2_bounds():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.2, 1.6]])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = [1.2]
+    stops2 = [1.6]
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     overlaps = epoch_1.overlaps(epoch_2)
 
@@ -260,13 +255,13 @@ def test_epoch_overlaps_case2_bounds():
 
 
 def test_epoch_overlaps_empty():
-    times_1 = np.array([[0.0, 1.0],
-                        [1.1, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 1.1, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[], []])
-    epoch_2 = nept.Epoch(times_2)
+    starts2 = []
+    stops2 = []
+    epoch_2 = nept.Epoch(starts2, stops2)
 
     overlaps = epoch_1.overlaps(epoch_2)
 
@@ -274,11 +269,8 @@ def test_epoch_overlaps_empty():
 
 
 def test_epoch_intersect_case3():
-    times_a = np.array([[1.0, 2.0]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[0.0, 3.0]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([1.0], [2.0])
+    epoch_b = nept.Epoch([0.0], [3.0])
 
     intersects = epoch_a.intersect(epoch_b)
 
@@ -287,11 +279,8 @@ def test_epoch_intersect_case3():
 
 
 def test_epoch_overlaps_case3_bounds():
-    times_a = np.array([[1.0, 2.0]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[0.0, 3.0]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([0.0], [2.0])
+    epoch_b = nept.Epoch([0.0], [3.0])
 
     overlaps = epoch_a.overlaps(epoch_b)
 
@@ -300,11 +289,8 @@ def test_epoch_overlaps_case3_bounds():
 
 
 def test_epoch_intersect_case4():
-    times_a = np.array([[1.0, 2.0]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[1.1, 1.9]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([1.0], [2.0])
+    epoch_b = nept.Epoch([1.1], [1.9])
 
     intersects = epoch_a.intersect(epoch_b)
 
@@ -313,11 +299,8 @@ def test_epoch_intersect_case4():
 
 
 def test_epoch_overlaps_case4_bounds():
-    times_a = np.array([[1.0, 2.0]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[1.1, 1.9]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([1.0], [2.0])
+    epoch_b = nept.Epoch([1.1], [1.9])
 
     overlaps = epoch_a.overlaps(epoch_b)
 
@@ -326,11 +309,8 @@ def test_epoch_overlaps_case4_bounds():
 
 
 def test_epoch_intersect_case5():
-    times_a = np.array([[1.5, 2.5]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[1.5, 2.5]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([1.5], [2.5])
+    epoch_b = nept.Epoch([1.5], [2.5])
 
     intersects = epoch_a.intersect(epoch_b)
 
@@ -339,11 +319,8 @@ def test_epoch_intersect_case5():
 
 
 def test_epoch_overlaps_case5_bounds():
-    times_a = np.array([[1.5, 2.5]])
-    epoch_a = nept.Epoch(times_a)
-
-    times_b = np.array([[1.5, 2.5]])
-    epoch_b = nept.Epoch(times_b)
+    epoch_a = nept.Epoch([1.5], [2.5])
+    epoch_b = nept.Epoch([1.5], [2.5])
 
     overlaps = epoch_a.overlaps(epoch_b)
 
@@ -352,17 +329,13 @@ def test_epoch_overlaps_case5_bounds():
 
 
 def test_epoch_intersect_multiple():
-    times_a = np.array([[1.0, 2.0],
-                        [4.0, 5.0],
-                        [6.0, 7.0],
-                        [8.0, 9.0]])
-    epoch_a = nept.Epoch(times_a)
+    starts_a = [1.0, 4.0, 6.0, 8.0]
+    stops_a = [2.0, 5.0, 7.0, 9.0]
+    epoch_a = nept.Epoch(starts_a, stops_a)
 
-    times_b = np.array([[0.5, 1.7],
-                        [4.3, 5.0],
-                        [5.1, 7.2],
-                        [8.2, 8.4]])
-    epoch_b = nept.Epoch(times_b)
+    starts_b = [0.5, 4.3, 5.1, 8.2]
+    stops_b = [1.7, 5.0, 7.2, 8.4]
+    epoch_b = nept.Epoch(starts_b, stops_b)
 
     intersects = epoch_a.intersect(epoch_b)
 
@@ -371,17 +344,13 @@ def test_epoch_intersect_multiple():
 
 
 def test_epoch_overlaps_multiple_bounds():
-    times_a = np.array([[1.0, 2.0],
-                        [4.0, 5.0],
-                        [6.0, 7.0],
-                        [8.0, 9.0]])
-    epoch_a = nept.Epoch(times_a)
+    starts_a = [1.0, 4.0, 6.0, 8.0]
+    stops_a = [2.0, 5.0, 7.0, 9.0]
+    epoch_a = nept.Epoch(starts_a, stops_a)
 
-    times_b = np.array([[0.5, 1.7],
-                        [4.3, 5.0],
-                        [5.1, 7.2],
-                        [8.2, 8.4]])
-    epoch_b = nept.Epoch(times_b)
+    starts_b = [0.5, 4.3, 5.1, 8.2]
+    stops_b = [1.7, 5.0, 7.2, 8.4]
+    epoch_b = nept.Epoch(starts_b, stops_b)
 
     overlaps = epoch_a.overlaps(epoch_b)
 
@@ -390,17 +359,13 @@ def test_epoch_overlaps_multiple_bounds():
 
 
 def test_epoch_intersect_multiple2():
-    times_a = np.array([[1.0, 2.0],
-                        [4.0, 5.0],
-                        [6.0, 7.0],
-                        [8.0, 9.0]])
-    epoch_a = nept.Epoch(times_a)
+    starts_a = [1.0, 4.0, 6.0, 8.0]
+    stops_a = [2.0, 5.0, 7.0, 9.0]
+    epoch_a = nept.Epoch(starts_a, stops_a)
 
-    times_b = np.array([[1.0, 2.0],
-                        [4.0, 6.2],
-                        [5.9, 6.2],
-                        [7.8, 9.3]])
-    epoch_b = nept.Epoch(times_b)
+    starts_b = [1.0, 4.0, 5.9, 7.8]
+    stops_b = [2.0, 6.2, 6.2, 9.3]
+    epoch_b = nept.Epoch(starts_b, stops_b)
 
     intersects = epoch_a.intersect(epoch_b)
 
@@ -409,17 +374,13 @@ def test_epoch_intersect_multiple2():
 
 
 def test_epoch_overlaps_multiple2_bounds():
-    times_a = np.array([[0.0, 2.0],
-                        [4.0, 5.0],
-                        [6.0, 7.0],
-                        [8.0, 9.0]])
-    epoch_a = nept.Epoch(times_a)
+    starts_a = [0.0, 4.0, 6.0, 8.0]
+    stops_a = [2.0, 5.0, 7.0, 9.0]
+    epoch_a = nept.Epoch(starts_a, stops_a)
 
-    times_b = np.array([[1.0, 2.0],
-                        [4.0, 6.2],
-                        [5.9, 6.2],
-                        [7.8, 9.3]])
-    epoch_b = nept.Epoch(times_b)
+    starts_b = [1.0, 4.0, 5.9, 7.8]
+    stops_b = [2.0, 6.2, 6.2, 9.3]
+    epoch_b = nept.Epoch(starts_b, stops_b)
 
     overlaps = epoch_a.overlaps(epoch_b)
 
@@ -431,13 +392,11 @@ def test_epoch_overlaps_multiple2_bounds():
 
 
 def test_epoch_no_intersect():
-    times_1 = np.array([[0.0, 1.0],
-                        [0.9, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts1 = [0.0, 0.9, 1.6]
+    stops1 = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts1, stops1)
 
-    times_2 = np.array([[1.5, 1.6]])
-    epoch_2 = nept.Epoch(times_2)
+    epoch_2 = nept.Epoch([1.5], [1.6])
 
     intersects = epoch_1.intersect(epoch_2)
 
@@ -446,11 +405,9 @@ def test_epoch_no_intersect():
 
 
 def test_epoch_merge_overlap():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
     assert np.allclose(merged.starts, np.array([0., 1.6]))
@@ -458,11 +415,9 @@ def test_epoch_merge_overlap():
 
 
 def test_epoch_merge_with_gap():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge(gap=0.1)
     assert np.allclose(merged.starts, np.array([0.]))
@@ -470,11 +425,9 @@ def test_epoch_merge_with_gap():
 
 
 def test_epoch_merge_negative_gap():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
         merged = epoch.merge(gap=-0.1)
@@ -483,23 +436,22 @@ def test_epoch_merge_negative_gap():
 
 
 def test_epoch_merge_far_stop():
-    times = np.array([[0.0, 10.0],
-                      [1.0, 3.0],
-                      [2.0, 5.0],
-                      [11.0, 12.0]])
+    starts = [0.0, 1.0, 2.0, 11.0]
+    stops = [10.0, 3.0, 5.0, 12.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     merged = epoch.merge()
+
     assert np.allclose(merged.starts, np.array([0.0, 11.0]))
     assert np.allclose(merged.stops, np.array([10.0, 12.0]))
 
 
 def test_epoch_merge_no_overlap():
-    times = np.array([[1.1, 2.3],
-                      [3.5, 5.2],
-                      [11.1, 12.0]])
 
-    epoch = nept.Epoch(times)
+    starts = [1.1, 3.5, 11.1]
+    stops = [2.3, 5.2, 12.0]
+
+    epoch = nept.Epoch(starts, stops)
     merged = epoch.merge()
 
     assert np.allclose(merged.starts, np.array([1.1, 3.5, 11.1]))
@@ -507,11 +459,10 @@ def test_epoch_merge_no_overlap():
 
 
 def test_epoch_merge_no_overlap_gap():
-    times = np.array([[1.0, 2.5],
-                      [3.5, 5.0],
-                      [11.0, 12.0]])
+    starts = [1.0, 3.5, 11.0]
+    stops = [2.5, 5.0, 12.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     merged = epoch.merge(gap=0.2)
 
     assert np.allclose(merged.starts, np.array([1.0, 3.5, 11.0]))
@@ -519,12 +470,9 @@ def test_epoch_merge_no_overlap_gap():
 
 
 def test_epoch_merge_unordered_stops():
-    times = np.array([[-0.2, 0.8],
-                      [0., 0.8],
-                      [1., 3.6],
-                      [2.2, 3.]])
-
-    epoch = nept.Epoch(times)
+    starts = [-0.2, 0.0, 1.0, 2.2]
+    stops = [0.8, 0.8, 3.6, 3.0]
+    epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
     assert np.allclose(merged.starts, np.array([-0.2, 1.]))
@@ -532,23 +480,19 @@ def test_epoch_merge_unordered_stops():
 
 
 def test_epoch_merge_mult_unordered_stops():
-    times = np.array([[1., 3.],
-                      [3., 4.],
-                      [4., 8.],
-                      [6., 7.],
-                      [9., 10.]])
+    starts = [1.0, 3.0, 4.0, 6.0, 9.0]
+    stops = [3.0, 4.0, 8.0, 7.0,10.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     merged = epoch.merge()
 
     assert np.allclose(merged.starts, np.array([1., 9.]))
     assert np.allclose(merged.stops, np.array([8., 10.]))
 
 def test_epoch_expand_both():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     resized = epoch.expand(0.5)
 
@@ -557,10 +501,9 @@ def test_epoch_expand_both():
 
 
 def test_epoch_expand_start():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     resized = epoch.expand(0.5, direction='start')
 
@@ -569,10 +512,9 @@ def test_epoch_expand_start():
 
 
 def test_epoch_expand_stop():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     resized = epoch.expand(0.5, direction='stop')
 
@@ -581,10 +523,9 @@ def test_epoch_expand_stop():
 
 
 def test_epoch_expand_incorrect_direction_input():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
         resized = epoch.expand(0.5, direction='all')
@@ -593,10 +534,9 @@ def test_epoch_expand_incorrect_direction_input():
 
 
 def test_epoch_shrink():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     shrinked = epoch.shrink(0.1)
 
@@ -605,10 +545,9 @@ def test_epoch_shrink():
 
 
 def test_epoch_shrink_toobig_both():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
         shrinked = epoch.shrink(2.)
@@ -617,10 +556,9 @@ def test_epoch_shrink_toobig_both():
 
 
 def test_epoch_shrink_toobig_single():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
         shrinked = epoch.shrink(1., direction='start')
@@ -629,13 +567,11 @@ def test_epoch_shrink_toobig_single():
 
 
 def test_epoch_join():
-    times_1 = np.array([[0.0, 1.0],
-                        [0.9, 1.5],
-                        [1.6, 2.0]])
-    epoch_1 = nept.Epoch(times_1)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch_1 = nept.Epoch(starts, stops)
 
-    times_2 = np.array([[1.8, 2.5]])
-    epoch_2 = nept.Epoch(times_2)
+    epoch_2 = nept.Epoch([1.8], [2.5])
 
     union = epoch_1.join(epoch_2)
 
@@ -644,110 +580,92 @@ def test_epoch_join():
 
 
 def test_epoch_start_stop():
-    epoch = nept.Epoch(np.array([[721.9412, 900.0],
-                                [1000.0, 1027.1]]))
+    epoch = nept.Epoch([721.9412, 900.0], [1000.0, 1027.1])
 
     assert np.allclose(epoch.start, 721.9412)
     assert np.allclose(epoch.stop, 1027.1)
 
 
 def test_epoch_contains_true():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert epoch.contains(0.5)
 
 
 def test_epoch_contains_not():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert not epoch.contains(1.55)
 
 
 def test_epoch_contains_edge():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert not epoch.contains(2.0, edge=False)
 
 
 def test_epoch_isempty():
-    epoch = nept.Epoch([[], []])
+    epoch = nept.Epoch([], [])
 
     assert epoch.isempty
 
 
 def test_epoch_notempty():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
-    epoch = nept.Epoch(times)
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
     assert not epoch.isempty
 
 
-def test_epoch_incorrect_time_duration():
-    times = np.array([[0.0],
-                      [0.9],
-                      [1.6]])
-
-    with pytest.raises(ValueError) as excinfo:
-        epoch = nept.Epoch(times, duration=0.3)
-
-    assert str(excinfo.value) == "must have same number of time and duration samples"
-
-
 def test_epoch_ndim():
-    times = np.ones((2, 3, 4))
+    starts = np.ones((2, 3, 4))
+    stops = np.ones((2, 3, 4))*2
 
     with pytest.raises(ValueError) as excinfo:
-        epoch = nept.Epoch(times)
+        epoch = nept.Epoch(starts, stops)
 
-    assert str(excinfo.value) == "time cannot have more than 2 dimensions"
+    assert str(excinfo.value) == "time cannot have more than 1 dimension."
 
 
 def test_epoch_stop_before_start():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 0.2],
-                      [1.6, 2.0]])
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 0.2, 2.0]
 
     with pytest.raises(ValueError) as excinfo:
-        epoch = nept.Epoch(times)
+        epoch = nept.Epoch(starts, stops)
 
     assert str(excinfo.value) == "start must be less than stop"
 
 
 def test_epoch_mismatch_start_stop():
     with pytest.raises(ValueError) as excinfo:
-        nept.Epoch([[0.0, 1.0], [0.5]])
+        nept.Epoch([0.0, 1.0], [0.5])
 
     assert str(excinfo.value) == "must have the same number of start and stop times"
 
 
 def test_epoch_iter():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     epoch_iter = iter(epoch)
 
     assert isinstance(epoch_iter, collections.Iterable)
 
 
 def test_epoch_using_iter():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 2.0]])
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     epoch_iter = iter(epoch)
     this_instance = next(epoch_iter)
 
@@ -756,11 +674,10 @@ def test_epoch_using_iter():
 
 
 def test_epoch_time_slice_simple():
-    times = np.array([[0.0, 1.0],
-                      [0.9, 1.5],
-                      [1.6, 3.0]])
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.0, 1.5, 2.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     sliced_epoch = epoch.time_slice(1, 2)
 
     assert np.allclose(sliced_epoch.starts, np.array([1., 1.6]))
@@ -768,11 +685,10 @@ def test_epoch_time_slice_simple():
 
 
 def test_epoch_time_slice_overlap():
-    times = np.array([[0.0, 1.1],
-                      [0.9, 1.5],
-                      [1.6, 3.0]])
+    starts = [0.0, 0.9, 1.6]
+    stops = [1.1, 1.5, 3.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     sliced_epoch = epoch.time_slice(1, 2)
 
     assert np.allclose(sliced_epoch.starts, np.array([1., 1., 1.6]))
@@ -780,10 +696,10 @@ def test_epoch_time_slice_overlap():
 
 
 def test_epoch_time_slice_empty():
-    times = np.array([[0.9, 1.5],
-                      [1.6, 3.0]])
+    starts = [0.9, 1.6]
+    stops = [1.5, 3.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     sliced_epoch = epoch.time_slice(0.1, 0.5)
 
     assert np.allclose(sliced_epoch.starts, np.array([]))
@@ -791,10 +707,10 @@ def test_epoch_time_slice_empty():
 
 
 def test_epoch_time_slice_cutoff():
-    times = np.array([[0.9, 1.5],
-                      [1.6, 3.0]])
+    starts = [0.9, 1.5]
+    stops = [1.6, 3.0]
+    epoch = nept.Epoch(starts, stops)
 
-    epoch = nept.Epoch(times)
     sliced_epoch = epoch.time_slice(0.1, 1.0)
 
     assert np.allclose(sliced_epoch.starts, np.array([0.9]))

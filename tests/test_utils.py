@@ -47,7 +47,7 @@ def test_sort_idx1():
 
 
 def test_multi_in_epochs_one():
-    epochs = nept.Epoch(np.array([[1.0, 4.0, 6.0], [2.0, 5.0, 7.0]]))
+    epochs = nept.Epoch([1.0, 4.0, 6.0], [2.0, 5.0, 7.0])
 
     spikes = [nept.SpikeTrain(np.array([6.7])),
               nept.SpikeTrain(np.array([1.1, 6.5])),
@@ -62,7 +62,7 @@ def test_multi_in_epochs_one():
 
 
 def test_multi_in_epochs_edge():
-    epochs = nept.Epoch(np.array([[1.0, 4.0, 6.0], [2.0, 5.0, 7.0]]))
+    epochs = nept.Epoch([1.0, 4.0, 6.0], [2.0, 5.0, 7.0])
 
     spikes = [nept.SpikeTrain(np.array([6.7])),
               nept.SpikeTrain(np.array([2.0, 6.5])),
@@ -77,7 +77,7 @@ def test_multi_in_epochs_edge():
 
 
 def test_multi_in_epochs_mult():
-    epochs = nept.Epoch(np.array([[1.0, 4.0, 6.0], [2.0, 5.0, 7.0]]))
+    epochs = nept.Epoch([1.0, 4.0, 6.0], [2.0, 5.0, 7.0])
 
     spikes = [nept.SpikeTrain(np.array([1.1, 6.5])),
               nept.SpikeTrain(np.array([1.3, 4.1])),
@@ -91,7 +91,7 @@ def test_multi_in_epochs_mult():
 
 
 def test_multi_in_epoch_none():
-    epochs = nept.Epoch(np.array([[0.0], [1.0]]))
+    epochs = nept.Epoch([0.0], [1.0])
 
     spikes = [nept.SpikeTrain(np.array([1.1, 6.5])),
               nept.SpikeTrain(np.array([1.3, 4.1])),

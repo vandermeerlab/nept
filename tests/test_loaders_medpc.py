@@ -36,12 +36,12 @@ def assign_medpc_label(data):
     sound2_end = np.array(data[11])
 
     rats_data = dict()
-    rats_data['mags'] = nept.Epoch(mag_start, mag_end-mag_start)
-    rats_data['pellets'] = nept.Epoch(pel_start, pel_end-pel_start)
-    rats_data['lights1'] = nept.Epoch(light1_start, light1_end-light1_start)
-    rats_data['lights2'] = nept.Epoch(light2_start, light2_end-light2_start)
-    rats_data['sounds1'] = nept.Epoch(sound1_start, sound1_end-sound1_start)
-    rats_data['sounds2'] = nept.Epoch(sound2_start, sound2_end-sound2_start)
+    rats_data['mags'] = nept.Epoch(mag_start, mag_end)
+    rats_data['pellets'] = nept.Epoch(pel_start, pel_end)
+    rats_data['lights1'] = nept.Epoch(light1_start, light1_end)
+    rats_data['lights2'] = nept.Epoch(light2_start, light2_end)
+    rats_data['sounds1'] = nept.Epoch(sound1_start, sound1_end)
+    rats_data['sounds2'] = nept.Epoch(sound2_start, sound2_end)
 
     return rats_data
 

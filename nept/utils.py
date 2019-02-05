@@ -135,8 +135,7 @@ def find_multi_in_epochs(spikes, epochs, min_involved):
             multi_starts.append(start)
             multi_stops.append(stop)
 
-    return nept.Epoch(np.hstack([np.array(multi_starts)[..., np.newaxis],
-                                         np.array(multi_stops)[..., np.newaxis]]))
+    return nept.Epoch(np.array(multi_starts), np.array(multi_stops))
 
 
 def find_nearest_indices(array, vals):
@@ -357,8 +356,7 @@ def speed_threshold(position, thresh, t_smooth, direction):
         starts = starts[:-1]
         stops = stops[:-1]
 
-    data = np.vstack([position.time[starts], position.time[stops]]).T
-    return nept.Epoch(data)
+    return nept.Epoch(position.time[starts], position.time[stops])
 
 
 def run_threshold(position, thresh, t_smooth):

@@ -202,7 +202,7 @@ def test_position_empty_epoch_slice():
                      [4.0, 0.1]])
     position = nept.Position(data, times)
 
-    epochs = nept.Epoch([[], []])
+    epochs = nept.Epoch([], [])
 
     sliced_position = position[epochs]
 
@@ -217,7 +217,7 @@ def test_position_epoch_slice():
                      [4.0, 0.1]])
     position = nept.Position(data, times)
 
-    epochs = nept.Epoch([[1.8], [3.2]])
+    epochs = nept.Epoch([1.8], [3.2])
 
     sliced_position = position[epochs]
 
@@ -281,7 +281,7 @@ def test_position_combine():
 
     combined = position.combine(pos)
 
-    assert np.allclose(combined.time, np.array([0. , 0.5, 1. , 1. , 2. , 2.5]))
+    assert np.allclose(combined.time, np.array([0.0, 0.5, 1.0, 1.0, 2.0, 2.5]))
     assert np.allclose(combined.x, np.array([1., 8., 1., 3., 1., 4.]))
     assert np.allclose(combined.y, np.array([2., 6., 2., 8., 2., 4.]))
 

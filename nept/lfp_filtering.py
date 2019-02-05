@@ -75,7 +75,7 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, time
 
     # Removing epochs that are shorter - in time - than the min_length value.
     keep_indices = swrs.durations >= min_length
-    swrs = nept.Epoch([swrs.starts[keep_indices], swrs.stops[keep_indices]])
+    swrs = nept.Epoch(swrs.starts[keep_indices], swrs.stops[keep_indices])
 
     return swrs
 
@@ -99,13 +99,13 @@ def get_epoch_from_zscored_thresh(power_lfp, thresh, times_for_z):
     signal_change = np.diff(detect.astype(int))
 
     start_swr_idx = np.where(signal_change == 1)[0]
-    stop_swr_idx = np.where(signal_change == -1)[0] - 1
+    stop_swr_idx = np.where(signal_change == -1)[0]
 
     # Getting times associated with these power changes
     start_time = power_lfp.time[start_swr_idx]
     stop_time = power_lfp.time[stop_swr_idx]
 
-    return nept.Epoch(np.array([start_time, stop_time]))
+    return nept.Epoch(start_time, stop_time)
 
 
 def next_regular(target):

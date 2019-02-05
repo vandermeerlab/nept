@@ -4,7 +4,7 @@ import nept
 
 
 def test_spike_counts():
-    intervals = nept.Epoch(np.array([[2., 6.], [7., 10.]]))
+    intervals = nept.Epoch([2., 7.], [6., 10.])
 
     spikes = [nept.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
               nept.SpikeTrain(np.array([0., 3., 4., 8.]), 'test'),
@@ -18,7 +18,7 @@ def test_spike_counts():
 
 
 def test_spike_counts_window():
-    intervals = nept.Epoch(np.array([[2., 6.], [7., 10.]]))
+    intervals = nept.Epoch([2., 7.], [6., 10.])
 
     spikes = [nept.SpikeTrain(np.array([0., 3.4, 6., 8.]), 'test'),
               nept.SpikeTrain(np.array([0., 3.5, 6., 8.]), 'test'),
