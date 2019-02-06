@@ -149,8 +149,7 @@ def test_bin_spikes():
     spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
     spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
 
-    time = np.array([0, 2, 4, 6, 8, 10])
-    counts = nept.bin_spikes(spikes, time, dt=2.,
+    counts = nept.bin_spikes(spikes, 0.0, 10.0, dt=2.,
                              window=2., gaussian_std=None, normalized=False)
 
     assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.]]))
@@ -158,18 +157,16 @@ def test_bin_spikes():
 
 def test_bin_spikes_normalized():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2., gaussian_std=None, normalized=True)
+    counts = nept.bin_spikes(spikes, 0.0, 4.0, dt=0.5, window=2., gaussian_std=None, normalized=True)
 
     assert np.allclose(counts.data, np.array([[0.25], [1.], [1.], [1.25], [1.], [0.5], [0.5]]))
 
 
 def test_bin_spikes_actual():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5,
+    counts = nept.bin_spikes(spikes, 0.0, 4.0, dt=0.5,
                              window=2., gaussian_std=None, normalized=False)
 
     assert np.allclose(counts.data, np.array([[1.], [4.], [4.], [5.], [4.], [2.], [2.]]))
@@ -179,7 +176,7 @@ def test_bin_spikes_gaussian():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
     time = np.array([0., 10.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
+    counts = nept.bin_spikes(spikes, 0.0, 10.0, dt=0.5, window=2.,
                              gaussian_std=0.51, normalized=True)
 
     assert np.allclose(counts.data, np.array([[0.40347865],
@@ -205,9 +202,8 @@ def test_bin_spikes_gaussian():
 
 def test_bin_spikes_gaussian_even():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0., 10.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.,
+    counts = nept.bin_spikes(spikes, 0.0, 10.0, dt=0.5, window=2.,
                              gaussian_std=0.5, normalized=True)
 
     assert np.allclose(counts.data, np.array([[0.40134569],
@@ -234,9 +230,8 @@ def test_bin_spikes_gaussian_even():
 def test_bin_spikes_mult_neurons():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1]),
               nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, 0.0, 4.0, dt=0.5, window=2, gaussian_std=None)
 
     assert np.allclose(counts.data, np.array([[0.25, 0.25],
                                               [1.0, 1.0],
@@ -250,9 +245,8 @@ def test_bin_spikes_mult_neurons():
 def test_bin_spikes_mult_neurons_adjust_window():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1]),
               nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0., 4.])
 
-    counts = nept.bin_spikes(spikes, time, dt=0.5, window=2.5, gaussian_std=None)
+    counts = nept.bin_spikes(spikes, 0.0, 4.0, dt=0.5, window=2.5, gaussian_std=None)
 
     assert np.allclose(counts.data, np.array([[0.8, 0.8],
                                               [0.8, 0.8],
@@ -267,8 +261,7 @@ def test_bin_spikes_no_window():
     spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
     spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
 
-    time = np.array([0, 2, 4, 6, 8, 10])
-    counts = nept.bin_spikes(spikes, time, dt=4., gaussian_std=None, normalized=False)
+    counts = nept.bin_spikes(spikes, 0.0, 10.0, dt=4., gaussian_std=None, normalized=False)
 
     assert np.allclose(counts.data, np.array([[16.], [6.]]))
 
@@ -312,15 +305,13 @@ def test_consecutive_all_split():
 
 
 def test_get_edges_no_lastbin():
-    time = np.array([0., 4.1])
-    edges = nept.get_edges(time, binsize=0.5, lastbin=False)
+    edges = nept.get_edges(0.0, 4.1, binsize=0.5, lastbin=False)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4.]))
 
 
 def test_get_edges_simple():
-    time = np.array([0., 4.1])
-    edges = nept.get_edges(time, binsize=0.5)
+    edges = nept.get_edges(0.0, 4.1, binsize=0.5)
 
     assert np.allclose(edges, np.array([0., 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.1]))
 

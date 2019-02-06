@@ -5,14 +5,15 @@ import warnings
 import nept
 
 
-def bin_spikes(spikes, time, dt, window=None, gaussian_std=None, normalized=True):
+def bin_spikes(spikes, t_start, t_stop, dt, window=None, gaussian_std=None, normalized=True):
     """Bins spikes using a sliding window.
 
     Parameters
     ----------
     spikes: list
         Of nept.SpikeTrain
-    time: np.array
+    t_start: float
+    t_stop: float
     window: float or None
         Length of the sliding window, in seconds. If None, will default to dt.
     dt: float
@@ -27,7 +28,7 @@ def bin_spikes(spikes, time, dt, window=None, gaussian_std=None, normalized=True
     if window is None:
         window = dt
 
-    bin_edges = get_edges(time, dt, lastbin=False)
+    bin_edges = get_edges(t_start, t_stop, dt, lastbin=False)
 
     given_n_bins = window / dt
     n_bins = int(round(given_n_bins))
@@ -210,12 +211,13 @@ def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
         lambda v: scipy.signal.convolve(v, gaussian_filter, mode="same"), axis=axis, arr=signal)
 
 
-def get_edges(time, binsize, lastbin=True):
+def get_edges(t_start, t_stop, binsize, lastbin=True):
     """Finds edges based on linear time
 
     Parameters
     ----------
-    time : np.array
+    t_start : float
+    t_stop : float
     binsize : float
         This is the desired size of bin.
         Typically set around 0.020 to 0.040 seconds.
@@ -228,11 +230,11 @@ def get_edges(time, binsize, lastbin=True):
     edges : np.array
 
     """
-    edges = np.arange(time[0], time[-1], binsize)
+    edges = np.arange(t_start, t_stop, binsize)
 
     if lastbin:
-        if edges[-1] != time[-1]:
-            edges = np.hstack((edges, time[-1]))
+        if edges[-1] != t_stop:
+            edges = np.hstack((edges, t_stop))
 
     return edges
 
