@@ -28,7 +28,7 @@ def bin_spikes(spikes, t_start, t_stop, dt, lastbin=False, window=None, gaussian
     if window is None:
         window = dt
 
-    bin_edges = get_edges(t_start, t_stop, dt, lastbin)
+    bin_edges = get_edges(t_start, t_stop, dt, lastbin=lastbin)
 
     given_n_bins = window / dt
     n_bins = int(round(given_n_bins))

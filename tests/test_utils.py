@@ -150,7 +150,7 @@ def test_bin_spikes():
     spikes = [nept.SpikeTrain(np.sort(spikes), 'test')]
 
     counts = nept.bin_spikes(spikes, 0.0, 10.0, dt=2.,
-                             window=2., gaussian_std=None, normalized=False)
+                             window=2., gaussian_std=None, normalized=False, lastbin=False)
 
     assert np.allclose(counts.data, np.array([[9.], [7.], [5.], [1.]]))
 
