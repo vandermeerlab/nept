@@ -1,0 +1,11 @@
+global-include *.py
+
+include *.rst
+include *.txt
+include .coveragerc
+include tests/!roborats
+
+prune docs
+
+global-exclude *-checkpoint.ipynb
+global-exclude *.pyc *.pyo *.pyd

@@ -15,7 +15,7 @@ def read(*filenames, **kwargs):
 
 setup(
     name="nept",
-    version="0.1.0.dev0",
+    version="0.1.0",
     author="Emily Irvine",
     author_email="emilymirvine@gmail.com",
     packages=find_packages(),
