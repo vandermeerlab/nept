@@ -14,8 +14,6 @@
 nept: Neuroelectrophysiology tools
 **********************************
 
-Formerly ``vdmlab``, renamed to emphasize general abilities of this library.
-
 Getting started
 ===============
 
@@ -26,8 +24,8 @@ We recommend using a separate python environment.
 
 Open a **new** terminal, create and activate a new conda environment::
 
-  conda create -n yourenv python=3.5
-  activate yourenv [Windows] or source activate yourenv [Linux]
+  conda create -n yourenv python=3.6
+  activate yourenv [Windows] or source activate yourenv [Linux/Mac]
 
 Install package dependencies::
 
@@ -37,7 +35,7 @@ For Shapely, try::
 
   pip install shapely
 
-If that fails, in Windows, download the most recent wheel file 
+If that fails (usually in Windows) download the most recent wheel file 
 `here <http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely>`_.
 Once downloaded, install with wheel.
 
@@ -57,38 +55,8 @@ Clone nept from Github and use a developer installation::
 Documentation
 =============
 
-Users
------
-
 Check `GitHub Pages <https://vandermeerlab.github.io/nept/>`_
 for the latest version of the nept documentation.
-
-Developers
-----------
-
-Ensure you have sphinx, numpydic, and mock::
-
-  conda install ghp-import sphinx numpydoc sphinx_rtd_theme
-
-Install nbsphinx so notebooks in the documentations can be executed::
-  
-  pip install nbsphinx --user
-
-Build the latest version of the documentation using 
-in the nept directory prior to pushing it to Github::
-
-  sphinx-build docs docs/_build
-
-And push it to Github::
-
-  docs/update.sh
-
-Testing
-=======
-
-Run tests with `pytest <http://docs.pytest.org/en/latest/usage.html>`_.
-
-Check coverage with `codecov <https://codecov.io/gh/vandermeerlab/nept>`_.
 
 License
 =======
@@ -101,9 +69,11 @@ The file ``nept/neuralynx_loaders.py`` contains code from
 `nlxio <https://github.com/bwillers/nlxio>`_ by Bernard Willers, 
 used with permission. 
 
-Projects using nept
-===================
-
-`emi_shortcut <https://github.com/vandermeerlab/emi_shortcut>`_
+Example projects using nept in the vandermeer lab
+=================================================
 
 `emi_biconditional <https://github.com/vandermeerlab/emi_biconditional>`_
+
+`emi_experience <https://github.com/vandermeerlab/emi_experience>`_
+
+`emi_shortcut <https://github.com/vandermeerlab/emi_shortcut>`_
