@@ -2,8 +2,8 @@ nept Modules
 ============
 
 The nept modules are used for the analysis 
-of neural electrophysiological
-recording data and associated behaviors.
+of neural electrophysiological data 
+and associated behaviors.
 
 
 nept.co_occurrence module

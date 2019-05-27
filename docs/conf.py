@@ -59,7 +59,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'nept'
-copyright = '2016-2017, van der Meer lab'
+copyright = '2016-2019, van der Meer lab'
 author = 'van der Meer lab'
 
 # The version info for the project you're documenting, acts as replacement for

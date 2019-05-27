@@ -1,10 +1,10 @@
 nept
 ====
 
-nept is short for neuroelectrophysiology tools and is a library 
+nept is short for NeuroElectroPhysiology Tools and is a library 
 that we use in the `van der Meer lab <http://www.vandermeerlab.org/>`_
-at Dartmouth College for analyzing neural electrophysiological
-recording data and associated behaviors.
+at Dartmouth College for analyzing neural electrophysiological data 
+and associated behaviors.
 
 Documentation
 -------------
