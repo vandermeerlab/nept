@@ -10,5 +10,6 @@ dist
 .ipynb_checkpoints/
 .cache/
 .coverage
+.pytest_cache/
 htmlcov
 docs/tutorials/data/
