@@ -29,7 +29,7 @@ setup(
         "matplotlib"
     ],
     setup_requires=["numpy"],
-    tests_require=["pytest"],
+    tests_require=["pytest", "pytest-plt", "pytest-rng"],
     extras_require={
         'docs': ["sphinx", "numpydoc", "mock"],
     }

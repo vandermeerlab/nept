@@ -33,7 +33,7 @@ def butter_bandpass(signal, thresh, fs, order=4):
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, times_for_z=None):
+def detect_freq_thresh(lfp, fs, thresh, z_thresh, merge_thresh, min_length, times_for_z=None):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -52,10 +52,16 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, time
 
     Returns
     -------
-    swrs : nept.Epoch
+    epochs : nept.Epoch
         Containing nept.LocalFieldPotential for each SWR event
 
     """
+    if len(thresh) != 2:
+        raise ValueError("thresh must be a tuple with two floats")
+
+    if fs * 2 < thresh[-1]:
+        raise ValueError("fs must be greater than upper end of thresh")
+
     # Filtering signal with butterworth fitler
     filtered_butter = butter_bandpass(lfp.data, thresh, fs)
 
@@ -68,16 +74,26 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, time
     # removing the zero padding now that the power is computed
     power_lfp = nept.AnalogSignal(power[:lfp.n_samples], lfp.time)
 
-    swrs = get_epoch_from_zscored_thresh(power_lfp, thresh=z_thresh, times_for_z=times_for_z)
+    epochs = get_epoch_from_zscored_thresh(power_lfp, thresh=z_thresh, times_for_z=times_for_z)
 
     # Merging epochs that are closer - in time - than the merge_threshold.
-    swrs = swrs.merge(gap=merge_thresh)
+    epochs = epochs.merge(gap=merge_thresh)
 
     # Removing epochs that are shorter - in time - than the min_length value.
-    keep_indices = swrs.durations >= min_length
-    swrs = nept.Epoch(swrs.starts[keep_indices], swrs.stops[keep_indices])
+    keep_indices = epochs.durations >= min_length
+    epochs = nept.Epoch(epochs.starts[keep_indices], epochs.stops[keep_indices])
 
-    return swrs
+    return epochs
+
+
+def detect_swr_hilbert(lfp, fs, z_thresh, merge_thresh, min_length, times_for_z=None):
+    return detect_freq_thresh(lfp,
+                              fs,
+                              thresh=(140, 250),
+                              z_thresh=z_thresh,
+                              merge_thresh=merge_thresh,
+                              min_length=min_length,
+                              times_for_z=times_for_z)
 
 
 def get_epoch_from_zscored_thresh(power_lfp, thresh, times_for_z):
