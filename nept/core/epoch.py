@@ -259,6 +259,9 @@ class Epoch:
 
         epoch = self.copy()
 
+        if len(epoch.starts) == 0:
+            return epoch
+
         stops = epoch.stops[:-1] + gap
         starts = epoch.starts[1:]
         to_merge = (stops - starts) >= 0
