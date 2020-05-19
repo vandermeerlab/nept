@@ -126,12 +126,7 @@ def test_position_linearize():
     pos = nept.Position(data, times)
     line = LineString([(0.0, 0.0), (1.0, 1.0)])
 
-    zone_start = Point([1., 1.])
-    zone_stop = Point([9., 9.])
-    expand_by = 1
-    zone = nept.expand_line(zone_start, zone_stop, line, expand_by)
-
-    linear = pos.linearize(line, zone)
+    linear = pos.linearize(line)
 
     assert np.allclose(linear.x, np.array([0.35355339, 0.42426407, 1.41421356]))
     assert np.allclose(linear.time, np.array([1., 2., 3.]))

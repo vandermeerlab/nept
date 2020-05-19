@@ -84,14 +84,9 @@ def test_linearize():
     trajectory = [[0., 0.], [5., 5.], [10., 10.]]
     line = LineString(trajectory)
 
-    zone_start = Point([1., 1.])
-    zone_stop = Point([9., 9.])
-    expand_by = 1
-    zone = nept.expand_line(zone_start, zone_stop, line, expand_by)
-
     sliced_pos = pos[t_start:t_stop]
 
-    linear = sliced_pos.linearize(line, zone)
+    linear = sliced_pos.linearize(line)
 
     assert np.allclose(linear.x, np.array([2.82842712, 4.24264069, 5.65685425, 7.07106781]))
     assert np.allclose(linear.time, [1, 2, 3, 4])

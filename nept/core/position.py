@@ -96,13 +96,12 @@ class Position(AnalogSignal):
             dist += (self.data[:, idx] - pos.data[:, idx]) ** 2
         return np.sqrt(dist)
 
-    def linearize(self, ideal_path, zone):
+    def linearize(self, ideal_path):
         """Projects 2D positions into an 'ideal' linear trajectory.
 
         Parameters
         ----------
         ideal_path : shapely.LineString
-        zone : shapely.Polygon
 
         Returns
         -------
@@ -112,9 +111,7 @@ class Position(AnalogSignal):
         """
         zpos = []
         for point_x, point_y in zip(self.x, self.y):
-            point = Point([point_x, point_y])
-            if zone.contains(point):
-                zpos.append(ideal_path.project(Point(point_x, point_y)))
+            zpos.append(ideal_path.project(Point(point_x, point_y)))
         zpos = np.array(zpos)
 
         return Position(zpos, self.time)
