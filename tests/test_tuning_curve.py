@@ -11,7 +11,7 @@ def test_simple_tc():
               nept.SpikeTrain(np.array([1.5]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0., 0.], [0., 1., 0., 0.], [0., 0., 1., 0.]))
 
@@ -25,7 +25,7 @@ def test_simple_tc1():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 
@@ -38,7 +38,7 @@ def test_tuning_curve_1d_gaussian():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=1.5)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=1.5)
 
     assert np.allclose(tuning, ([0.78698604, 0.10650698, 0.0],
                                 [0.10650698, 0.78698604, 0.10650698],

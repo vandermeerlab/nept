@@ -23,16 +23,13 @@ def binned_position(position, binsize):
 
     pos_start = np.min(position.x)
     pos_stop = np.max(position.x)
-    edges = np.arange(pos_start, pos_stop, binsize)
+    leftover = (pos_stop - pos_start) % binsize
 
-    if edges[-1] < pos_stop:
-        edges = np.hstack([edges, pos_stop])
-
-    return edges
+    return np.arange(pos_start - leftover * 0.5, pos_stop + binsize, binsize)
 
 
 def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
-    """ Computes tuning curves for neurons relative to linear position.
+    """Computes tuning curves for neurons relative to linear position.
 
     Parameters
     ----------
@@ -46,7 +43,7 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
 
     Returns
     -------
-    out_tc : list of np.arrays
+    tuning_curves : list of np.arrays
         Where each inner array contains the tuning curves for an
         individual neuron.
 
@@ -70,18 +67,24 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
 
     tc = []
     for spiketrain in spikes:
-        f_xy = scipy.interpolate.interp1d(position.time, position.data.T, kind="nearest")
+        f_xy = scipy.interpolate.interp1d(
+            position.time, position.data.T, kind="nearest", fill_value="extrapolate"
+        )
         spikes_x = f_xy(spiketrain.time)
 
         spike_counts = np.histogram(spikes_x, bins=edges)[0]
 
-        firing_rate = np.zeros(len(edges)-1)
-        firing_rate[occupied_idx] = spike_counts[occupied_idx] / position_counts[occupied_idx]
+        firing_rate = np.zeros(len(edges) - 1)
+        firing_rate[occupied_idx] = (
+            spike_counts[occupied_idx] / position_counts[occupied_idx]
+        )
         if gaussian_std is not None:
             firing_rate = gaussian_filter(firing_rate, gaussian_std, dt=binsize)
         tc.append(firing_rate)
 
-    return np.array(tc, dtype=float)
+    tuning_curves = np.array(tc, dtype=float)
+
+    return tuning_curves, position_counts
 
 
 def get_occupancy(position, yedges, xedges):
