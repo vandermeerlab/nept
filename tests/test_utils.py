@@ -26,7 +26,8 @@ def test_sort_idx():
               nept.SpikeTrain(np.array([0.5]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    edges = nept.get_bin_edges(linear, binsize=3)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, edges, gaussian_std=None)
     sort_idx = nept.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 0, 2])
@@ -40,7 +41,8 @@ def test_sort_idx1():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([1.0]), 'test')]
 
-    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    edges = nept.get_bin_edges(linear, binsize=3)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, edges, gaussian_std=None)
     sort_idx = nept.get_sort_idx(tuning)
 
     assert np.allclose(sort_idx, [1, 3, 0, 2])

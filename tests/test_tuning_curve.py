@@ -11,7 +11,8 @@ def test_simple_tc():
               nept.SpikeTrain(np.array([1.5]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    edges = nept.get_bin_edges(linear, binsize=3)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, edges, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0., 0.], [0., 1., 0., 0.], [0., 0., 1., 0.]))
 
@@ -25,7 +26,8 @@ def test_simple_tc1():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=None)
+    edges = nept.get_bin_edges(linear, binsize=3)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, edges, gaussian_std=None)
 
     assert np.allclose(tuning, ([1., 0., 0.], [0., 1., 0.], [0., 0., 0.5], [0., 0., 0.5]))
 
@@ -38,7 +40,8 @@ def test_tuning_curve_1d_gaussian():
               nept.SpikeTrain(np.array([2.0]), 'test'),
               nept.SpikeTrain(np.array([2.5]), 'test')]
 
-    tuning, _ = nept.tuning_curve_1d(linear, spikes, binsize=3, gaussian_std=1.5)
+    edges = nept.get_bin_edges(linear, binsize=3)
+    tuning, _ = nept.tuning_curve_1d(linear, spikes, edges, gaussian_std=1.5)
 
     assert np.allclose(tuning, ([0.78698604, 0.10650698, 0.0],
                                 [0.10650698, 0.78698604, 0.10650698],
@@ -50,25 +53,22 @@ def test_tuning_curve_1d_with_2d_position():
     position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
                                         np.array([7, 5, 3, 1])[..., np.newaxis]]),
                              np.array([0., 1., 2., 3.]))
-
-    binsize = 2
-
     spikes = [nept.SpikeTrain(np.array([0., 3., 3., 3.]), 'test')]
 
     with pytest.raises(ValueError) as excinfo:
-        nept.tuning_curve_1d(position, spikes, binsize=binsize)
+        nept.tuning_curve_1d(position, spikes, edges=None)
 
     assert str(excinfo.value) == 'position must be linear'
 
 
-def test_binned_position_2d_position():
+def test_get_bin_edges_2d_position():
     position = nept.Position(np.hstack([np.array([2, 4, 6, 8])[..., np.newaxis],
                                         np.array([7, 5, 3, 1])[..., np.newaxis]]),
                              np.array([0., 1., 2., 3.]))
     binsize = 2
 
     with pytest.raises(ValueError) as excinfo:
-        nept.binned_position(position, binsize=binsize)
+        nept.get_bin_edges(position, binsize=binsize)
 
     assert str(excinfo.value) == 'position must be linear'
 

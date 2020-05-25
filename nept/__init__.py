@@ -27,7 +27,7 @@ from .loaders_neuralynx import (load_events,
 from .place_fields import (find_fields,
                            get_single_field,
                            get_heatmaps)
-from .tuning_curves import (binned_position,
+from .tuning_curves import (get_bin_edges,
                             get_occupancy,
                             tuning_curve_1d,
                             tuning_curve_2d)

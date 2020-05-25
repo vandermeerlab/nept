@@ -4,7 +4,7 @@ import scipy
 from .utils import find_nearest_idx, gaussian_filter
 
 
-def binned_position(position, binsize):
+def get_bin_edges(position, binsize):
     """Bins 1D position by the binsize.
 
     Parameters
@@ -28,7 +28,7 @@ def binned_position(position, binsize):
     return np.arange(pos_start - leftover * 0.5, pos_stop + binsize, binsize)
 
 
-def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
+def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
     """Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -37,7 +37,8 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
         Must be a linear position (1D).
     spikes : list
         Containing nept.SpikeTrain for each neuron.
-    binsize : int
+    edges : np.array
+        Edges for position bins. All bins must be the same size.
     gaussian_std : int or None
         No smoothing if None.
 
@@ -58,7 +59,8 @@ def tuning_curve_1d(position, spikes, binsize, gaussian_std=None):
 
     sampling_rate = np.median(np.diff(position.time))
 
-    edges = binned_position(position, binsize)
+    binsize = edges[1] - edges[0]
+    assert np.allclose(np.diff(edges), binsize), "All bins must be the same size"
 
     position_counts = np.histogram(position.x, bins=edges)[0]
     position_counts = position_counts.astype(float)
