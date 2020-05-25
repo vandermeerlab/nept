@@ -1,6 +1,7 @@
 import warnings
 import numpy as np
 import nept
+from nept.core.epoch import Epoch
 
 
 class AnalogSignal:
@@ -53,7 +54,12 @@ class AnalogSignal:
         self.time = time
 
     def __getitem__(self, idx):
-        return AnalogSignal(self.data[idx], self.time[idx])
+        if isinstance(idx, Epoch):
+            if idx.isempty:
+                return type(self)(np.array([[]]), np.array([]))
+            return self.time_slice(idx.starts, idx.stops)
+        else:
+            return type(self)(self.data[idx], self.time[idx])
 
     @property
     def dimensions(self):

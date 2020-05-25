@@ -20,14 +20,6 @@ class Position(AnalogSignal):
     time : np.array
         With shape (n_samples,).
     """
-    def __getitem__(self, idx):
-        if type(idx) == Epoch:
-            if idx.isempty:
-                return Position(np.array([[]]), np.array([]))
-            else:
-                return self.time_slice(idx.starts, idx.stops)
-        else:
-            return Position(self.data[idx], self.time[idx])
 
     @property
     def x(self):
