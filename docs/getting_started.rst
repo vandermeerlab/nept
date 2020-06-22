@@ -30,14 +30,9 @@ Once downloaded, install with wheel.
 Installation
 ------------
 
-Clone nept from Github and use a developer installation::
+Nept is available through pypi::
 
-  git clone https://github.com/vandermeerlab/nept.git
-
-Set up a developer installation::
-
-  cd nept
-  python setup.py develop
+  pip install nept
 
 All set! You're ready to start using the nept module.
 

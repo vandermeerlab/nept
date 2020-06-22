@@ -14,8 +14,6 @@
 nept: Neuroelectrophysiology tools
 **********************************
 
-Formerly ``vdmlab``, renamed to emphasize general abilities of this library.
-
 Getting started
 ===============
 
@@ -48,11 +46,9 @@ Once downloaded, install with wheel.
 Installation
 ============
 
-Clone nept from Github and use a developer installation::
+Nept is available through pypi and can be installed with::
 
-  git clone https://github.com/vandermeerlab/nept.git
-  cd nept
-  python setup.py develop
+  pip install nept
 
 Documentation
 =============
@@ -101,9 +97,11 @@ The file ``nept/neuralynx_loaders.py`` contains code from
 `nlxio <https://github.com/bwillers/nlxio>`_ by Bernard Willers, 
 used with permission. 
 
-Projects using nept
-===================
-
-`emi_shortcut <https://github.com/vandermeerlab/emi_shortcut>`_
+Example projects using nept
+===========================
 
 `emi_biconditional <https://github.com/vandermeerlab/emi_biconditional>`_
+
+`emi_experience <https://github.com/vandermeerlab/emi_experience>`_
+
+`emi_shortcut <https://github.com/vandermeerlab/emi_shortcut>`_
