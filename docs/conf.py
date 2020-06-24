@@ -39,6 +39,7 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx_rtd_theme',
     'numpydoc',
     'nbsphinx',
 ]
@@ -59,7 +60,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'nept'
-copyright = '2016-2017, van der Meer lab'
+copyright = '2015-2020, contributors'
 author = 'van der Meer lab'
 
 # The version info for the project you're documenting, acts as replacement for

@@ -38,4 +38,3 @@ nept tutorials
     Tutorial05_Tuning-curves-and-decoding
     Tutorial06_Pairwise-co-occurrence
     Tutorial07_Signal-interactions
-    Tutorial08_MedPC-behavior

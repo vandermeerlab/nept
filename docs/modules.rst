@@ -54,14 +54,6 @@ nept.loaders_neuralynx module
     :undoc-members:
     :show-inheritance:
 
-nept.medpc_core module
-----------------------
-
-.. automodule:: nept.medpc_core
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 nept.place_fields module
 ------------------------
 
