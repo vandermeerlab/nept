@@ -27,13 +27,17 @@ def butter_bandpass(signal, thresh, fs, order=4):
     signal = np.squeeze(signal)
     nyquist = 0.5 * fs
 
-    b, a = scipy.signal.butter(order, [thresh[0]/nyquist, thresh[1]/nyquist], btype='band')
+    b, a = scipy.signal.butter(
+        order, [thresh[0] / nyquist, thresh[1] / nyquist], btype="band"
+    )
     filtered_butter = scipy.signal.filtfilt(b, a, signal)
 
     return filtered_butter
 
 
-def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, times_for_z=None):
+def detect_swr_hilbert(
+    lfp, fs, thresh, z_thresh, merge_thresh, min_length, times_for_z=None
+):
     """Finds sharp-wave ripple (SWR) times and indices.
 
     Parameters
@@ -66,9 +70,11 @@ def detect_swr_hilbert(lfp, fs, thresh, z_thresh, merge_thresh, min_length, time
     power = np.abs(scipy.signal.hilbert(filtered_butter, N=hilbert_n))
 
     # removing the zero padding now that the power is computed
-    power_lfp = nept.AnalogSignal(power[:lfp.n_samples], lfp.time)
+    power_lfp = nept.AnalogSignal(power[: lfp.n_samples], lfp.time)
 
-    swrs = get_epoch_from_zscored_thresh(power_lfp, thresh=z_thresh, times_for_z=times_for_z)
+    swrs = get_epoch_from_zscored_thresh(
+        power_lfp, thresh=z_thresh, times_for_z=times_for_z
+    )
 
     # Merging epochs that are closer - in time - than the merge_threshold.
     swrs = swrs.merge(gap=merge_thresh)
@@ -133,10 +139,10 @@ def next_regular(target):
         return target
 
     # Quickly check if it's already a power of 2
-    if not (target & (target-1)):
+    if not (target & (target - 1)):
         return target
 
-    match = float('inf')  # Anything found will be smaller
+    match = float("inf")  # Anything found will be smaller
     p5 = 1
     while p5 < target:
         p35 = p5
@@ -146,7 +152,7 @@ def next_regular(target):
             quotient = -(-target // p35)
 
             # Quickly find next power of 2 >= quotient
-            p2 = 2**((quotient - 1).bit_length())
+            p2 = 2 ** ((quotient - 1).bit_length())
 
             N = p2 * p35
             if N == target:
@@ -177,7 +183,7 @@ def power_in_db(power):
     -------
     np.array
     """
-    return 10*np.log10(power)
+    return 10 * np.log10(power)
 
 
 def mean_psd(perievent_lfps, window, fs):
@@ -195,10 +201,11 @@ def mean_psd(perievent_lfps, window, fs):
     power : np.array
 
     """
-    power = np.zeros((window+1, perievent_lfps.dimensions))
+    power = np.zeros((window + 1, perievent_lfps.dimensions))
     for i, lfp in enumerate(perievent_lfps.data.T):
         power[:, i], freq = matplotlib.mlab.psd(
-            lfp, Fs=fs, NFFT=int(window*2), noverlap=int(window/2))
+            lfp, Fs=fs, NFFT=int(window * 2), noverlap=int(window / 2)
+        )
 
     return freq, np.mean(power, axis=1)
 
@@ -219,8 +226,13 @@ def mean_csd(perievent_lfp1, perievent_lfp2, window, fs):
     power : np.array
 
     """
-    freq, power = scipy.signal.csd(perievent_lfp1.data.T, perievent_lfp2.data.T,
-                                   fs=fs, nperseg=window, nfft=int(window*2))
+    freq, power = scipy.signal.csd(
+        perievent_lfp1.data.T,
+        perievent_lfp2.data.T,
+        fs=fs,
+        nperseg=window,
+        nfft=int(window * 2),
+    )
 
     return freq, np.mean(power, axis=0)
 
@@ -242,7 +254,12 @@ def mean_coherence(perievent_lfp1, perievent_lfp2, window, fs):
 
     """
     freq, coherence = scipy.signal.coherence(
-        perievent_lfp1.data.T, perievent_lfp2.data.T, fs=fs, nperseg=window, nfft=int(window*2))
+        perievent_lfp1.data.T,
+        perievent_lfp2.data.T,
+        fs=fs,
+        nperseg=window,
+        nfft=int(window * 2),
+    )
 
     return freq, np.mean(coherence, axis=0)
 
@@ -268,12 +285,12 @@ def mean_coherencegram(perievent_lfp1, perievent_lfp2, dt, window, fs, extend=0.
     coherencegram : np.array
 
     """
-    timebins = np.arange(perievent_lfp1.time[0], perievent_lfp1.time[-1]+dt, dt)
-    coherencegram = np.zeros((window+1, len(timebins)))
+    timebins = np.arange(perievent_lfp1.time[0], perievent_lfp1.time[-1] + dt, dt)
+    coherencegram = np.zeros((window + 1, len(timebins)))
 
     for i, (t_start, t_stop) in enumerate(zip(timebins[:-2], timebins[1:-1])):
-        lfp1 = perievent_lfp1.time_slice(t_start-extend, t_stop+extend)
-        lfp2 = perievent_lfp2.time_slice(t_start-extend, t_stop+extend)
+        lfp1 = perievent_lfp1.time_slice(t_start - extend, t_stop + extend)
+        lfp2 = perievent_lfp2.time_slice(t_start - extend, t_stop + extend)
         freq, coherencegram[:, i] = mean_coherence(lfp1, lfp2, window, fs)
 
     return timebins, freq, coherencegram

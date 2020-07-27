@@ -36,23 +36,31 @@ def bayesian_prob(counts, tuning_curves, binsize, min_neurons, min_spikes=1):
         binsize = np.asarray(binsize)
 
         if np.asarray(binsize).size != n_time_bins:
-            raise ValueError("binsize must be a float or the same length as counts.time.")
+            raise ValueError(
+                "binsize must be a float or the same length as counts.time."
+            )
 
     likelihood = np.empty((n_time_bins, n_position_bins)) * np.nan
 
     # Ignore warnings when inf created in this loop
-    error_settings = np.seterr(over='ignore')
+    error_settings = np.seterr(over="ignore")
     for idx in range(n_position_bins):
         valid_idx = tuning_curves[:, idx] > 1  # log of 1 or less is negative or invalid
         if np.any(valid_idx):
             # event_rate is the lambda in this poisson distribution
-            event_rate = tuning_curves[valid_idx, idx, np.newaxis].T ** counts.data[:, valid_idx]
+            event_rate = (
+                tuning_curves[valid_idx, idx, np.newaxis].T ** counts.data[:, valid_idx]
+            )
             prior = np.exp(-binsize * np.sum(tuning_curves[valid_idx, idx]))
 
             # Below is the same as
             # likelihood[:, idx] = np.prod(event_rate, axis=0) * prior * (1/n_position_bins)
             # only less likely to have floating point issues, though slower
-            likelihood[:, idx] = np.exp(np.sum(np.log(event_rate), axis=1)) * prior * (1/n_position_bins)
+            likelihood[:, idx] = (
+                np.exp(np.sum(np.log(event_rate), axis=1))
+                * prior
+                * (1 / n_position_bins)
+            )
     np.seterr(**error_settings)
 
     # Set any inf value to be largest float
@@ -117,12 +125,24 @@ def remove_teleports(position, speed_thresh, min_length):
     velocity = np.squeeze(position.speed().data)
 
     split_idx = np.where(velocity >= speed_thresh)[0]
-    keep_idx = [idx for idx in np.split(np.arange(position.n_samples), split_idx) if idx.size >= min_length]
+    keep_idx = [
+        idx
+        for idx in np.split(np.arange(position.n_samples), split_idx)
+        if idx.size >= min_length
+    ]
 
     if len(keep_idx) == 0:
         return nept.Epoch([], [])
 
-    starts = [position.time[idx_sequence[0]] for idx_sequence in keep_idx if len(idx_sequence) > 1]
-    stops = [position.time[idx_sequence[-1]] for idx_sequence in keep_idx if len(idx_sequence) > 1]
+    starts = [
+        position.time[idx_sequence[0]]
+        for idx_sequence in keep_idx
+        if len(idx_sequence) > 1
+    ]
+    stops = [
+        position.time[idx_sequence[-1]]
+        for idx_sequence in keep_idx
+        if len(idx_sequence) > 1
+    ]
 
     return nept.Epoch(starts, stops)

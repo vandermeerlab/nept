@@ -9,7 +9,7 @@ def test_epoch_duration():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
-    assert np.allclose(epoch.durations, np.array([1., 0.6, 0.4]))
+    assert np.allclose(epoch.durations, np.array([1.0, 0.6, 0.4]))
 
 
 def test_epoch_stops():
@@ -17,7 +17,7 @@ def test_epoch_stops():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
-    assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
+    assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
 
 def test_epoch_index():
@@ -26,8 +26,8 @@ def test_epoch_index():
     epoch = nept.Epoch(starts, stops)
     sliced_epoch = epoch[:2]
 
-    assert np.allclose(sliced_epoch.starts, np.array([0., 0.9]))
-    assert np.allclose(sliced_epoch.stops, np.array([1., 1.5]))
+    assert np.allclose(sliced_epoch.starts, np.array([0.0, 0.9]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.0, 1.5]))
 
 
 def test_epoch_sort():
@@ -35,8 +35,8 @@ def test_epoch_sort():
     stops = [2.0, 1.0, 1.5]
     epoch = nept.Epoch(starts, stops)
 
-    assert np.allclose(epoch.starts, np.array([0., 0.9, 1.6]))
-    assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
+    assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
+    assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
 
 def test_epoch_sortlist():
@@ -45,7 +45,7 @@ def test_epoch_sortlist():
     epoch = nept.Epoch(starts, stops)
 
     assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
-    assert np.allclose(epoch.stops, np.array([1., 1.5, 2.]))
+    assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
 
 def test_epoch_reshape():
@@ -64,16 +64,14 @@ def test_epoch_centers():
 
 
 def test_epoch_too_many_parameters():
-    starts = np.array([[0.0, 1.0],
-                       [0.9, 1.5],
-                       [1.6, 2.0]])
+    starts = np.array([[0.0, 1.0], [0.9, 1.5], [1.6, 2.0]])
 
-    stops = np.array([1., 0.6, 0.4])
+    stops = np.array([1.0, 0.6, 0.4])
 
     with pytest.raises(ValueError) as excinfo:
         epoch = nept.Epoch(starts, stops)
 
-    assert str(excinfo.value) == 'time cannot have more than 1 dimension.'
+    assert str(excinfo.value) == "time cannot have more than 1 dimension."
 
 
 def test_epoch_intersect_case1():
@@ -410,7 +408,7 @@ def test_epoch_merge_overlap():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
-    assert np.allclose(merged.starts, np.array([0., 1.6]))
+    assert np.allclose(merged.starts, np.array([0.0, 1.6]))
     assert np.allclose(merged.stops, np.array([1.5, 2.0]))
 
 
@@ -420,7 +418,7 @@ def test_epoch_merge_with_gap():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge(gap=0.1)
-    assert np.allclose(merged.starts, np.array([0.]))
+    assert np.allclose(merged.starts, np.array([0.0]))
     assert np.allclose(merged.stops, np.array([2.0]))
 
 
@@ -475,19 +473,20 @@ def test_epoch_merge_unordered_stops():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
-    assert np.allclose(merged.starts, np.array([-0.2, 1.]))
+    assert np.allclose(merged.starts, np.array([-0.2, 1.0]))
     assert np.allclose(merged.stops, np.array([0.8, 3.6]))
 
 
 def test_epoch_merge_mult_unordered_stops():
     starts = [1.0, 3.0, 4.0, 6.0, 9.0]
-    stops = [3.0, 4.0, 8.0, 7.0,10.0]
+    stops = [3.0, 4.0, 8.0, 7.0, 10.0]
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
 
-    assert np.allclose(merged.starts, np.array([1., 9.]))
-    assert np.allclose(merged.stops, np.array([8., 10.]))
+    assert np.allclose(merged.starts, np.array([1.0, 9.0]))
+    assert np.allclose(merged.stops, np.array([8.0, 10.0]))
+
 
 def test_epoch_expand_both():
     starts = [0.0, 0.9, 1.6]
@@ -505,7 +504,7 @@ def test_epoch_expand_start():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
-    resized = epoch.expand(0.5, direction='start')
+    resized = epoch.expand(0.5, direction="start")
 
     assert np.allclose(resized.starts, np.array([-0.5, 0.4, 1.1]))
     assert np.allclose(resized.stops, np.array([1.0, 1.5, 2.0]))
@@ -516,7 +515,7 @@ def test_epoch_expand_stop():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
-    resized = epoch.expand(0.5, direction='stop')
+    resized = epoch.expand(0.5, direction="stop")
 
     assert np.allclose(resized.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
@@ -528,7 +527,7 @@ def test_epoch_expand_incorrect_direction_input():
     epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
-        resized = epoch.expand(0.5, direction='all')
+        resized = epoch.expand(0.5, direction="all")
 
     assert str(excinfo.value) == "direction must be 'both', 'start', or 'stop'"
 
@@ -550,7 +549,7 @@ def test_epoch_shrink_toobig_both():
     epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
-        shrinked = epoch.shrink(2.)
+        shrinked = epoch.shrink(2.0)
 
     assert str(excinfo.value) == "shrink amount too large"
 
@@ -561,7 +560,7 @@ def test_epoch_shrink_toobig_single():
     epoch = nept.Epoch(starts, stops)
 
     with pytest.raises(ValueError) as excinfo:
-        shrinked = epoch.shrink(1., direction='start')
+        shrinked = epoch.shrink(1.0, direction="start")
 
     assert str(excinfo.value) == "shrink amount too large"
 
@@ -626,7 +625,7 @@ def test_epoch_notempty():
 
 def test_epoch_ndim():
     starts = np.ones((2, 3, 4))
-    stops = np.ones((2, 3, 4))*2
+    stops = np.ones((2, 3, 4)) * 2
 
     with pytest.raises(ValueError) as excinfo:
         epoch = nept.Epoch(starts, stops)
@@ -669,8 +668,8 @@ def test_epoch_using_iter():
     epoch_iter = iter(epoch)
     this_instance = next(epoch_iter)
 
-    assert(this_instance.starts == np.array([0.0]))
-    assert(this_instance.stops == np.array([1.0]))
+    assert this_instance.starts == np.array([0.0])
+    assert this_instance.stops == np.array([1.0])
 
 
 def test_epoch_time_slice_simple():
@@ -680,8 +679,8 @@ def test_epoch_time_slice_simple():
 
     sliced_epoch = epoch.time_slice(1, 2)
 
-    assert np.allclose(sliced_epoch.starts, np.array([1., 1.6]))
-    assert np.allclose(sliced_epoch.stops, np.array([1.5, 2.]))
+    assert np.allclose(sliced_epoch.starts, np.array([1.0, 1.6]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.5, 2.0]))
 
 
 def test_epoch_time_slice_overlap():
@@ -691,8 +690,8 @@ def test_epoch_time_slice_overlap():
 
     sliced_epoch = epoch.time_slice(1, 2)
 
-    assert np.allclose(sliced_epoch.starts, np.array([1., 1., 1.6]))
-    assert np.allclose(sliced_epoch.stops, np.array([1.1, 1.5, 2.]))
+    assert np.allclose(sliced_epoch.starts, np.array([1.0, 1.0, 1.6]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.1, 1.5, 2.0]))
 
 
 def test_epoch_time_slice_empty():

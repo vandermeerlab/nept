@@ -109,8 +109,8 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
     if not pos.dimensions == 2:
         raise ValueError("pos must be two-dimensional")
 
-    xedges = np.linspace(np.min(pos.x)-2, np.max(pos.x)+2, num_bins+1)
-    yedges = np.linspace(np.min(pos.y)-2, np.max(pos.y)+2, num_bins+1)
+    xedges = np.linspace(np.min(pos.x) - 2, np.max(pos.x) + 2, num_bins + 1)
+    yedges = np.linspace(np.min(pos.y) - 2, np.max(pos.y) + 2, num_bins + 1)
 
     heatmaps = dict()
     count = 1
@@ -121,8 +121,10 @@ def get_heatmaps(neuron_list, spikes, pos, num_bins=100):
             spike_idx = nept.find_nearest_idx(pos.time, spike)
             field_x.append(pos.x[spike_idx])
             field_y.append(pos.y[spike_idx])
-            heatmap, out_xedges, out_yedges = np.histogram2d(field_x, field_y, bins=[xedges, yedges])
+            heatmap, out_xedges, out_yedges = np.histogram2d(
+                field_x, field_y, bins=[xedges, yedges]
+            )
         heatmaps[neuron] = heatmap.T
-        print(str(neuron) + ' of ' + str(len(neuron_list)))
+        print(str(neuron) + " of " + str(len(neuron_list)))
         count += 1
     return heatmaps

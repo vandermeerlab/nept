@@ -6,9 +6,7 @@ import nept
 
 def test_position_xy():
     times = np.array([1.0, 2.0, 3.0])
-    data = np.array([[1.1, 3.1],
-                     [0.9, 2.0],
-                     [2.3, 1.4]])
+    data = np.array([[1.1, 3.1], [0.9, 2.0], [2.3, 1.4]])
 
     pos = nept.Position(data, times)
 
@@ -66,13 +64,9 @@ def test_position_distance_1d():
 
 def test_position_distance_2d():
     times = np.array([1.0, 2.0, 3.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1]])
     times2 = np.array([1.0, 2.0, 3.0])
-    data2 = np.array([[1.2, 3.3],
-                      [2.0, 2.6],
-                      [3.0, 1.1]])
+    data2 = np.array([[1.2, 3.3], [2.0, 2.6], [3.0, 1.1]])
 
     pos = nept.Position(data, times)
     other = nept.Position(data2, times2)
@@ -84,9 +78,7 @@ def test_position_distance_2d():
 
 def test_position_distance_dimensions():
     times = np.array([1.0, 2.0, 3.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1]])
     x = np.array([1.1, 0.9, 2.3])
 
     pos = nept.Position(data, times)
@@ -100,14 +92,9 @@ def test_position_distance_dimensions():
 
 def test_position_distance_diff_size():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     times2 = np.array([1.0, 2.0, 3.0])
-    data2 = np.array([[1.2, 3.3],
-                      [2.0, 2.6],
-                      [3.0, 1.1]])
+    data2 = np.array([[1.2, 3.3], [2.0, 2.6], [3.0, 1.1]])
 
     pos = nept.Position(data, times)
     other = nept.Position(data2, times2)
@@ -119,9 +106,7 @@ def test_position_distance_diff_size():
 
 def test_position_linearize():
     times = np.array([1.0, 2.0, 3.0])
-    data = np.array([[0.0, 0.5],
-                     [0.5, 0.1],
-                     [1.0, 1.2]])
+    data = np.array([[0.0, 0.5], [0.5, 0.1], [1.0, 1.2]])
 
     pos = nept.Position(data, times)
     line = LineString([(0.0, 0.0), (1.0, 1.0)])
@@ -129,7 +114,7 @@ def test_position_linearize():
     linear = pos.linearize(line)
 
     assert np.allclose(linear.x, np.array([0.35355339, 0.42426407, 1.41421356]))
-    assert np.allclose(linear.time, np.array([1., 2., 3.]))
+    assert np.allclose(linear.time, np.array([1.0, 2.0, 3.0]))
 
 
 def test_positon_speed_simple():
@@ -170,11 +155,12 @@ def test_position_speed_simple_smooth():
     pos = nept.Position(data, times)
     speed = pos.speed(t_smooth=0.3)
 
-    assert np.allclose(speed.data, np.array([[0.00191813],
-                                             [0.49808187],
-                                             [0.49923275],
-                                             [0.30345263],
-                                             [0.99347836]]))
+    assert np.allclose(
+        speed.data,
+        np.array(
+            [[0.00191813], [0.49808187], [0.49923275], [0.30345263], [0.99347836]]
+        ),
+    )
 
 
 def test_position_speed_unequal_time():
@@ -191,10 +177,7 @@ def test_position_speed_unequal_time():
 
 def test_position_empty_epoch_slice():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     position = nept.Position(data, times)
 
     epochs = nept.Epoch([], [])
@@ -206,26 +189,20 @@ def test_position_empty_epoch_slice():
 
 def test_position_epoch_slice():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     position = nept.Position(data, times)
 
     epochs = nept.Epoch([1.8], [3.2])
 
     sliced_position = position[epochs]
 
-    assert np.allclose(sliced_position.time, np.array([2., 3.]))
-    assert np.allclose(sliced_position.data, np.array([[2., 2.1], [3., 1.1]]))
+    assert np.allclose(sliced_position.time, np.array([2.0, 3.0]))
+    assert np.allclose(sliced_position.data, np.array([[2.0, 2.1], [3.0, 1.1]]))
 
 
 def test_position_x_setter_array():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     position = nept.Position(data, times)
     position.x = np.array([0.0, 1.0, 2.0, 3.0])
 
@@ -234,10 +211,7 @@ def test_position_x_setter_array():
 
 def test_position_x_setter_value():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     position = nept.Position(data, times)
     position.x = 3.3
 
@@ -246,10 +220,7 @@ def test_position_x_setter_value():
 
 def test_position_y_setter_array():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0, 3.1],
-                     [2.0, 2.1],
-                     [3.0, 1.1],
-                     [4.0, 0.1]])
+    data = np.array([[1.0, 3.1], [2.0, 2.1], [3.0, 1.1], [4.0, 0.1]])
     position = nept.Position(data, times)
     position.y = np.array([0.0, 1.0, 2.0, 3.0])
 
@@ -258,10 +229,7 @@ def test_position_y_setter_array():
 
 def test_position_noy_setter():
     times = np.array([1.0, 2.0, 3.0, 4.0])
-    data = np.array([[1.0],
-                     [2.0],
-                     [3.0],
-                     [4.0]])
+    data = np.array([[1.0], [2.0], [3.0], [4.0]])
     position = nept.Position(data, times)
 
     with pytest.raises(ValueError) as excinfo:
@@ -277,8 +245,8 @@ def test_position_combine():
     combined = position.combine(pos)
 
     assert np.allclose(combined.time, np.array([0.0, 0.5, 1.0, 1.0, 2.0, 2.5]))
-    assert np.allclose(combined.x, np.array([1., 8., 1., 3., 1., 4.]))
-    assert np.allclose(combined.y, np.array([2., 6., 2., 8., 2., 4.]))
+    assert np.allclose(combined.x, np.array([1.0, 8.0, 1.0, 3.0, 1.0, 4.0]))
+    assert np.allclose(combined.y, np.array([2.0, 6.0, 2.0, 8.0, 2.0, 4.0]))
 
 
 def test_position_combine_wrong_dimension():
@@ -307,6 +275,6 @@ def test_position_combine_same_times():
 
     combined = position.combine(pos)
 
-    assert np.allclose(combined.time, np.array([0., 0., 1., 1., 2., 2.]))
-    assert np.allclose(combined.x, np.array([1., 8., 1., 3., 1., 4.]))
-    assert np.allclose(combined.y, np.array([2., 6., 2., 8., 2., 4.]))
+    assert np.allclose(combined.time, np.array([0.0, 0.0, 1.0, 1.0, 2.0, 2.0]))
+    assert np.allclose(combined.x, np.array([1.0, 8.0, 1.0, 3.0, 1.0, 4.0]))
+    assert np.allclose(combined.y, np.array([2.0, 6.0, 2.0, 8.0, 2.0, 4.0]))

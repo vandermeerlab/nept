@@ -19,7 +19,7 @@ def test_localfieldpotential_too_many():
     with pytest.raises(ValueError) as excinfo:
         lfp = nept.LocalFieldPotential([data, other], times)
 
-    assert str(excinfo.value) == 'can only contain one LFP'
+    assert str(excinfo.value) == "can only contain one LFP"
 
 
 def test_localfieldpotential_slice():

@@ -18,6 +18,7 @@ class SpikeTrain:
         Information pertaining to the source of the spiketrain.
 
     """
+
     def __init__(self, time, label=None):
         time = np.squeeze(time).astype(float)
 
@@ -60,13 +61,17 @@ class SpikeTrain:
             t_starts = [t_starts]
 
         if any(element is None for element in t_starts):
-            t_starts = [min(self.time) if t_start is None else t_start for t_start in t_starts]
+            t_starts = [
+                min(self.time) if t_start is None else t_start for t_start in t_starts
+            ]
 
         if isinstance(t_stops, (int, float)) or t_stops is None:
             t_stops = [t_stops]
 
         if any(element is None for element in t_stops):
-            t_stops = [max(self.time) if t_start is None else t_start for t_start in t_stops]
+            t_stops = [
+                max(self.time) if t_start is None else t_start for t_start in t_stops
+            ]
 
         if len(t_starts) != len(t_stops):
             raise ValueError("must have same number of start and stop times")

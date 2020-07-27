@@ -23,15 +23,17 @@ def spike_counts(spikes, epochs, window=None):
 
     """
     if window is not None:
-        centers = epochs.centers-(window*0.5)
-        epochs = nept.Epoch(centers, np.array(centers)+window)
+        centers = epochs.centers - (window * 0.5)
+        epochs = nept.Epoch(centers, np.array(centers) + window)
 
     n_neurons = len(spikes)
     count_matrix = np.zeros((n_neurons, epochs.n_epochs))
 
     for i, (start, stop) in enumerate(zip(epochs.starts, epochs.stops)):
         for neuron in range(n_neurons):
-            count_matrix[neuron][i] = ((start <= spikes[neuron].time) & (spikes[neuron].time <= stop)).sum()
+            count_matrix[neuron][i] = (
+                (start <= spikes[neuron].time) & (spikes[neuron].time <= stop)
+            ).sum()
 
     return count_matrix
 
@@ -71,15 +73,15 @@ def compute_cooccur(count_matrix, tetrode_mask, num_shuffles=10000):
     """
     prob = dict()
     activity_matrix = bool_counts(count_matrix)
-    prob['active'] = prob_active_neuron(activity_matrix)
-    prob['expected'] = expected_cooccur(prob['active'], tetrode_mask)
-    prob['observed'] = observed_cooccur(activity_matrix, tetrode_mask)
-    prob['shuffle'] = shuffle_cooccur(activity_matrix, num_shuffles)
-    prob['zscore'] = zscore_cooccur(prob['observed'], prob['shuffle'])
+    prob["active"] = prob_active_neuron(activity_matrix)
+    prob["expected"] = expected_cooccur(prob["active"], tetrode_mask)
+    prob["observed"] = observed_cooccur(activity_matrix, tetrode_mask)
+    prob["shuffle"] = shuffle_cooccur(activity_matrix, num_shuffles)
+    prob["zscore"] = zscore_cooccur(prob["observed"], prob["shuffle"])
 
-    prob['expected'] = vector_from_array(prob['expected'])
-    prob['observed'] = vector_from_array(prob['observed'])
-    prob['zscore'] = vector_from_array(prob['zscore'])
+    prob["expected"] = vector_from_array(prob["expected"])
+    prob["observed"] = vector_from_array(prob["observed"])
+    prob["zscore"] = vector_from_array(prob["zscore"])
 
     return prob
 
@@ -104,7 +106,7 @@ def vector_from_array(array):
     """
     triangle_lower = np.tril_indices(array.shape[0], k=-1)
     flatten_idx = np.arange(array.size).reshape(array.shape)[triangle_lower]
-    triangle = np.unravel_index(flatten_idx, array.shape, order='F')
+    triangle = np.unravel_index(flatten_idx, array.shape, order="F")
 
     # triangle = np.triu_indices(array.size, k=1)
     # out = array[triangle]
@@ -132,6 +134,7 @@ def bool_counts(count_matrix, min_spikes=1):
     activity_matrix[count_matrix >= min_spikes] = 1
 
     return activity_matrix
+
 
 def prob_active_neuron(activity_matrix):
     """Get expected co-occurrence under independence assumption.
@@ -257,7 +260,8 @@ def zscore_cooccur(prob_observed, prob_shuffle):
         for j in range(num_neurons):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=RuntimeWarning)
-                prob_zscore[i][j] = (prob_observed[i][j] -
-                                     np.nanmean(np.squeeze(prob_shuffle[:, i, j]))) / np.nanstd(np.squeeze(prob_shuffle[:, i, j]))
+                prob_zscore[i][j] = (
+                    prob_observed[i][j] - np.nanmean(np.squeeze(prob_shuffle[:, i, j]))
+                ) / np.nanstd(np.squeeze(prob_shuffle[:, i, j]))
 
     return prob_zscore

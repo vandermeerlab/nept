@@ -18,12 +18,12 @@ def load_mclust_header(filename):
     # The format for a .t file according the the mclust docs is
     # header - beginning with %%BEGINHEADER and ending with %%ENDHEADER
     # uint64 - timestamp in tenths of ms
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         file_contents = f.read()
 
     # Here we separate the header from the timestamps (data).
-    header_begin_idx = file_contents.find(b'%%BEGINHEADER')
-    header_end_idx = file_contents.find(b'%%ENDHEADER') + len(b'%%ENDHEADER\n')
+    header_begin_idx = file_contents.find(b"%%BEGINHEADER")
+    header_end_idx = file_contents.find(b"%%ENDHEADER") + len(b"%%ENDHEADER\n")
     header = file_contents[header_begin_idx:header_end_idx]
 
     return header
@@ -44,16 +44,16 @@ def load_mclust_t(filename):
     # The format for a .t file according the the mclust docs is
     # header - beginning with %%BEGINHEADER and ending with %%ENDHEADER
     # uint64 - timestamp in tenths of ms (big endian)
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         file_contents = f.read()
 
     # Here we separate the mclust header from the timestamps (data).
-    header_begin_idx = file_contents.find(b'%%BEGINHEADER')
-    header_end_idx = file_contents.find(b'%%ENDHEADER') + len(b'%%ENDHEADER\n')
+    header_begin_idx = file_contents.find(b"%%BEGINHEADER")
+    header_end_idx = file_contents.find(b"%%ENDHEADER") + len(b"%%ENDHEADER\n")
     header = file_contents[header_begin_idx:header_end_idx]
 
     data = file_contents[header_end_idx:]
-    spike_times = np.fromstring(data, dtype=np.dtype('uint32').newbyteorder('>'))
+    spike_times = np.fromstring(data, dtype=np.dtype("uint32").newbyteorder(">"))
 
     # Since some .t files are in uint32 and others are in uint64,
     # we can load all as uint32 (L) but have to remove all the 0's
@@ -104,13 +104,17 @@ def load_spikes(filepath, load_questionable=True):
     for file in os.listdir(filepath):
         if file.endswith(".t"):
             label = file[18:20]
-            spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)), label)
+            spiketrain = get_spiketrain(
+                load_mclust_t(os.path.join(filepath, file)), label
+            )
             spikes.append(spiketrain)
 
         if load_questionable:
             if file.endswith("._t"):
                 label = file[18:20]
-                spiketrain = get_spiketrain(load_mclust_t(os.path.join(filepath, file)), label)
+                spiketrain = get_spiketrain(
+                    load_mclust_t(os.path.join(filepath, file)), label
+                )
                 spikes.append(spiketrain)
 
     return np.array(spikes)

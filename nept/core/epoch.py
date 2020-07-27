@@ -18,6 +18,7 @@ class Epoch:
         The stop times for each epoch. With shape (n_epochs,).
 
     """
+
     def __init__(self, starts, stops):
         starts = np.atleast_1d(np.squeeze(starts).astype(float))
         stops = np.atleast_1d(np.squeeze(stops).astype(float))
@@ -48,7 +49,9 @@ class Epoch:
     @property
     def time(self):
         """(np.array) The times of the epochs."""
-        return np.concatenate(np.array([self.starts, self.stops])[..., np.newaxis], axis=1)
+        return np.concatenate(
+            np.array([self.starts, self.stops])[..., np.newaxis], axis=1
+        )
 
     @property
     def centers(self):
@@ -154,7 +157,7 @@ class Epoch:
 
         return Epoch(np.array(new_starts), np.array(new_stops))
 
-    def expand(self, amount, direction='both'):
+    def expand(self, amount, direction="both"):
         """Expands epoch by the given amount.
 
         Parameters
@@ -170,13 +173,13 @@ class Epoch:
         expanded_epochs : nept.Epoch
 
         """
-        if direction == 'both':
+        if direction == "both":
             resize_starts = self.time[:, 0] - amount
             resize_stops = self.time[:, 1] + amount
-        elif direction == 'start':
+        elif direction == "start":
             resize_starts = self.time[:, 0] - amount
             resize_stops = self.time[:, 1]
-        elif direction == 'stop':
+        elif direction == "stop":
             resize_starts = self.time[:, 0]
             resize_stops = self.time[:, 1] + amount
         else:
@@ -275,7 +278,7 @@ class Epoch:
             next_stop = max(next_stop, this_stop)
             if not to_merge[i]:
                 new_stops.append(next_stop)
-                new_starts.append(epoch.starts[i+1])
+                new_starts.append(epoch.starts[i + 1])
 
         new_stops.append(max(epoch.stops))
 
@@ -308,8 +311,12 @@ class Epoch:
             aa = Epoch(aa[0], aa[1])
             for bb in epoch_interest.time:
                 bb = Epoch(bb[0], bb[1])
-                if (aa.contains(bb.start) or aa.contains(bb.stop) or
-                    bb.contains(aa.start) or bb.contains(aa.stop)):
+                if (
+                    aa.contains(bb.start)
+                    or aa.contains(bb.stop)
+                    or bb.contains(aa.start)
+                    or bb.contains(aa.stop)
+                ):
                     new_starts.append(bb.start)
                     new_stops.append(bb.stop)
 
@@ -318,7 +325,7 @@ class Epoch:
 
         return Epoch(np.array(new_starts), np.array(new_stops))
 
-    def shrink(self, amount, direction='both'):
+    def shrink(self, amount, direction="both"):
         """Shrinks epoch by the given amount.
 
         Parameters
@@ -335,11 +342,11 @@ class Epoch:
 
         """
         both_limit = min(self.durations / 2)
-        if amount > both_limit and direction == 'both':
+        if amount > both_limit and direction == "both":
             raise ValueError("shrink amount too large")
 
         single_limit = min(self.durations)
-        if amount > single_limit and direction != 'both':
+        if amount > single_limit and direction != "both":
             raise ValueError("shrink amount too large")
 
         return self.expand(-amount, direction)

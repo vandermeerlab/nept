@@ -16,6 +16,7 @@ class LocalFieldPotential(AnalogSignal):
     time : np.array
         With shape (n_samples,).
     """
+
     def __init__(self, data, time):
         super().__init__(data, time)
         if self.dimensions > 1:

@@ -5,7 +5,16 @@ import warnings
 import nept
 
 
-def bin_spikes(spikes, t_start, t_stop, dt, lastbin=False, window=None, gaussian_std=None, normalized=True):
+def bin_spikes(
+    spikes,
+    t_start,
+    t_stop,
+    dt,
+    lastbin=False,
+    window=None,
+    gaussian_std=None,
+    normalized=True,
+):
     """Bins spikes using a sliding window.
 
     Parameters
@@ -33,8 +42,10 @@ def bin_spikes(spikes, t_start, t_stop, dt, lastbin=False, window=None, gaussian
     given_n_bins = window / dt
     n_bins = int(round(given_n_bins))
     if abs(n_bins - given_n_bins) > 0.01:
-        warnings.warn("dt does not divide window evenly. "
-                      "Using window %g instead." % (n_bins*dt))
+        warnings.warn(
+            "dt does not divide window evenly. "
+            "Using window %g instead." % (n_bins * dt)
+        )
 
     if normalized:
         square_filter = np.ones(n_bins) * (1 / n_bins)
@@ -43,11 +54,16 @@ def bin_spikes(spikes, t_start, t_stop, dt, lastbin=False, window=None, gaussian
 
     counts = np.zeros((len(spikes), len(bin_edges) - 1))
     for idx, spiketrain in enumerate(spikes):
-        counts[idx] = np.convolve(np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
-                                  square_filter, mode="same")
+        counts[idx] = np.convolve(
+            np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
+            square_filter,
+            mode="same",
+        )
 
     if gaussian_std is not None:
-        counts = gaussian_filter(counts, gaussian_std, dt=dt, normalized=normalized, axis=1)
+        counts = gaussian_filter(
+            counts, gaussian_std, dt=dt, normalized=normalized, axis=1
+        )
 
     return nept.AnalogSignal(counts, bin_edges[:-1])
 
@@ -66,7 +82,9 @@ def cartesian(xcenters, ycenters):
         With shape(n_sample, 2).
 
     """
-    return np.transpose([np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))])
+    return np.transpose(
+        [np.tile(xcenters, len(ycenters)), np.repeat(ycenters, len(xcenters))]
+    )
 
 
 def consecutive(array, stepsize):
@@ -83,7 +101,7 @@ def consecutive(array, stepsize):
 
     """
 
-    return np.split(array, np.where(np.diff(array) > stepsize)[0]+1)
+    return np.split(array, np.where(np.diff(array) > stepsize)[0] + 1)
 
 
 def expand_line(start_pt, stop_pt, line, expand_by=6):
@@ -174,7 +192,7 @@ def find_nearest_idx(array, val):
     Index into array that is closest to val
 
     """
-    return (np.abs(array-val)).argmin()
+    return (np.abs(array - val)).argmin()
 
 
 def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
@@ -208,7 +226,10 @@ def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
         gaussian_filter /= np.sum(gaussian_filter)
 
     return np.apply_along_axis(
-        lambda v: scipy.signal.convolve(v, gaussian_filter, mode="same"), axis=axis, arr=signal)
+        lambda v: scipy.signal.convolve(v, gaussian_filter, mode="same"),
+        axis=axis,
+        arr=signal,
+    )
 
 
 def get_edges(t_start, t_stop, binsize, lastbin=True):
@@ -314,12 +335,12 @@ def perievent_slice(analogsignal, events, t_before, t_after, dt=None):
     if dt is None:
         dt = np.median(np.diff(analogsignal.time))
 
-    time = np.arange(-t_before, t_after+dt, dt)
+    time = np.arange(-t_before, t_after + dt, dt)
 
     data = np.zeros((len(time), len(events)))
     for i, event in enumerate(events):
-        sliced = analogsignal.time_slice(event-t_before, event+t_after)
-        data[:, i] = np.interp(time+event, sliced.time, np.squeeze(sliced.data))
+        sliced = analogsignal.time_slice(event - t_before, event + t_after)
+        data[:, i] = np.interp(time + event, sliced.time, np.squeeze(sliced.data))
 
     return nept.AnalogSignal(data, time)
 
@@ -340,9 +361,13 @@ def speed_threshold(position, thresh, t_smooth, direction):
     """
     speed = position.speed(t_smooth)
     if direction == "greater":
-        changes = np.diff(np.hstack(([0], (np.squeeze(speed.data) >= thresh).astype(int))))
+        changes = np.diff(
+            np.hstack(([0], (np.squeeze(speed.data) >= thresh).astype(int)))
+        )
     elif direction == "lesser":
-        changes = np.diff(np.hstack(([0], (np.squeeze(speed.data) <= thresh).astype(int))))
+        changes = np.diff(
+            np.hstack(([0], (np.squeeze(speed.data) <= thresh).astype(int)))
+        )
     else:
         raise ValueError("Must be 'lesser' or 'greater'")
 

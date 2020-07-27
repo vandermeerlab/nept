@@ -18,11 +18,11 @@ def read_file(filename):
     contents = []
     temp = []
 
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         lines = f.readlines()
 
     for line in lines:
-        if line != '\n':
+        if line != "\n":
             temp.append(line)
         else:
             if len(temp) > 0:
@@ -33,7 +33,7 @@ def read_file(filename):
         contents.append(temp)  # appends the last subject
 
     for i, content in enumerate(contents):
-        contents[i] = ' '.join(content)
+        contents[i] = " ".join(content)
 
     return contents
 
@@ -53,25 +53,29 @@ def get_data(contents):
     """
 
     header = {}
-    copy = contents.split('\n')
+    copy = contents.split("\n")
 
-    header_contents = dict(start_date='Start Date',
-                           end_date=' End Date',
-                           subject=' Subject',
-                           experiment=' Experiment',
-                           group=' Group',
-                           box=' Box',
-                           start_time=' Start Time',
-                           end_time=' End Time',
-                           program=' Program',
-                           msn=' MSN')
+    header_contents = dict(
+        start_date="Start Date",
+        end_date=" End Date",
+        subject=" Subject",
+        experiment=" Experiment",
+        group=" Group",
+        box=" Box",
+        start_time=" Start Time",
+        end_time=" End Time",
+        program=" Program",
+        msn=" MSN",
+    )
 
     for line in copy:
         for key in header_contents:
-            heading = line.split(':')
+            heading = line.split(":")
             if heading[0] == header_contents[key]:
-                if key == 'start_time' or key == 'end_time':
-                    header[key] = heading[1].lstrip() + ':' + heading[2] + ':' + heading[3]
+                if key == "start_time" or key == "end_time":
+                    header[key] = (
+                        heading[1].lstrip() + ":" + heading[2] + ":" + heading[3]
+                    )
                 else:
                     header[key] = heading[1].lstrip()
 
@@ -82,11 +86,13 @@ def get_data(contents):
 
     idx = []
     for i, val in enumerate(copy):
-        if val[0] in uppercase and val[1] == ':':
+        if val[0] in uppercase and val[1] == ":":
             idx.append(i)
 
     for i, j in zip(idx[:-1], idx[1:]):
-        data[copy[i].lower()[0]] = [timestamp for timestamp in copy[i+1:j] if timestamp[-1] != ':']
+        data[copy[i].lower()[0]] = [
+            timestamp for timestamp in copy[i + 1 : j] if timestamp[-1] != ":"
+        ]
 
     return header, data
 
@@ -110,12 +116,12 @@ def get_events(event_list):
     events = defaultdict(list)
 
     for event in active_events:
-        events[int(np.floor(event/10000))].append(event % 10000)
+        events[int(np.floor(event / 10000))].append(event % 10000)
 
     return events
 
 
-def get_subject(subject_content, data_key='b'):
+def get_subject(subject_content, data_key="b"):
     """Gets header and data from MedPC file for a single subject.
 
     Parameters
@@ -157,6 +163,6 @@ def load_medpc(filename, f_assign_label):
 
     for content in contents:
         (header, data) = get_subject(content)
-        rats_data[header['subject']] = f_assign_label(data)
+        rats_data[header["subject"]] = f_assign_label(data)
 
     return rats_data

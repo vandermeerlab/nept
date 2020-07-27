@@ -92,13 +92,17 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
 def get_occupancy(position, yedges, xedges):
     sampling_rate = np.median(np.diff(position.time))
 
-    position_2d, pos_xedges, pos_yedges = np.histogram2d(position.y, position.x, bins=[yedges, xedges])
+    position_2d, pos_xedges, pos_yedges = np.histogram2d(
+        position.y, position.x, bins=[yedges, xedges]
+    )
     position_2d *= sampling_rate
 
     return position_2d
 
 
-def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussian_std=None):
+def tuning_curve_2d(
+    position, spikes, xedges, yedges, occupied_thresh=0, gaussian_std=None
+):
     """Creates 2D tuning curves based on spikes and 2D position.
 
     Parameters
@@ -126,16 +130,26 @@ def tuning_curve_2d(position, spikes, xedges, yedges, occupied_thresh=0, gaussia
 
     tuning_curves = np.full(((len(spikes),) + shape), np.nan)
     for i, spiketrain in enumerate(spikes):
-        f_xy = scipy.interpolate.interp1d(position.time, position.data.T, kind="nearest")
+        f_xy = scipy.interpolate.interp1d(
+            position.time, position.data.T, kind="nearest"
+        )
         spikes_xy = f_xy(spiketrain.time)
 
-        spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(spikes_xy[1], spikes_xy[0], bins=[yedges, xedges])
-        tuning_curves[i, occupied_idx] = spikes_2d[occupied_idx] / position_2d[occupied_idx]
+        spikes_2d, spikes_xedges, spikes_yedges = np.histogram2d(
+            spikes_xy[1], spikes_xy[0], bins=[yedges, xedges]
+        )
+        tuning_curves[i, occupied_idx] = (
+            spikes_2d[occupied_idx] / position_2d[occupied_idx]
+        )
 
     if gaussian_std is not None:
         xbinsize = xedges[1] - xedges[0]
         ybinsize = yedges[1] - yedges[0]
-        tuning_curves = gaussian_filter(tuning_curves, gaussian_std, dt=xbinsize, axis=1)
-        tuning_curves = gaussian_filter(tuning_curves, gaussian_std, dt=ybinsize, axis=2)
+        tuning_curves = gaussian_filter(
+            tuning_curves, gaussian_std, dt=xbinsize, axis=1
+        )
+        tuning_curves = gaussian_filter(
+            tuning_curves, gaussian_std, dt=ybinsize, axis=2
+        )
 
     return tuning_curves

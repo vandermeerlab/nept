@@ -16,10 +16,13 @@ class Neurons:
     tuning_curves : list of np.array
 
     """
+
     def __init__(self, spikes, tuning_curves):
 
         if spikes.shape[0] != tuning_curves.shape[0]:
-            raise ValueError("spikes and tuning curves must have the same number of neurons")
+            raise ValueError(
+                "spikes and tuning curves must have the same number of neurons"
+            )
 
         self.spikes = spikes
         self.tuning_curves = tuning_curves
@@ -71,6 +74,8 @@ class Neurons:
         if isinstance(t_stops, (int, float)):
             t_stops = [t_stops]
 
-        sliced_spikes = [spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes]
+        sliced_spikes = [
+            spiketrain.time_slice(t_starts, t_stops) for spiketrain in self.spikes
+        ]
 
         return nept.Neurons(np.array(sliced_spikes), self.tuning_curves)

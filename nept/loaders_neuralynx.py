@@ -23,13 +23,13 @@ def load_events(filename, labels):
 
     idx = {key: [] for key in labels}
     for key in labels:
-        for i, event in enumerate(nev_data['event_str']):
+        for i, event in enumerate(nev_data["event_str"]):
             if event.decode() == labels[key]:
                 idx[key].append(i)
 
     timestamps = {label: [] for label in labels}
 
-    times = nev_data['time'].astype(float) * 1e-6
+    times = nev_data["time"].astype(float) * 1e-6
 
     for label in labels:
         timestamps[label] = times[idx[label]]
@@ -70,9 +70,13 @@ def load_position(filename, pxl_to_cm):
     """
     nvt_data = load_nvt(filename)
 
-    xy = np.hstack(np.array([nvt_data['x'] / pxl_to_cm[0], nvt_data['y'] / pxl_to_cm[1]])[..., np.newaxis])
+    xy = np.hstack(
+        np.array([nvt_data["x"] / pxl_to_cm[0], nvt_data["y"] / pxl_to_cm[1]])[
+            ..., np.newaxis
+        ]
+    )
 
-    return nept.Position(xy, nvt_data['time'])
+    return nept.Position(xy, nvt_data["time"])
 
 
 def load_neuralynx_header(filename):
@@ -87,10 +91,10 @@ def load_neuralynx_header(filename):
     header: byte str
 
     """
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
 
         # Neuralynx files have a 16kbyte header
-        header = f.read(16 * 2**10)
+        header = f.read(16 * 2 ** 10)
 
     return header
 
@@ -111,10 +115,10 @@ def load_ncs(filename):
 
     """
 
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
 
         # Neuralynx files have a 16kbyte header
-        header = f.read(16 * 2**10)
+        header = f.read(16 * 2 ** 10)
 
         # The format for a .ncs files according the the neuralynx docs is
         # uint64 - timestamp in microseconds
@@ -122,17 +126,24 @@ def load_ncs(filename):
         # uint32 - sample freq
         # uint32 - number of valid samples
         # int16 x 512 - actual csc samples
-        dt = np.dtype([('time', '<Q'), ('channel', '<i'), ('freq', '<i'),
-                       ('valid', '<i'), ('csc', '<h', (512,))])
+        dt = np.dtype(
+            [
+                ("time", "<Q"),
+                ("channel", "<i"),
+                ("freq", "<i"),
+                ("valid", "<i"),
+                ("csc", "<h", (512,)),
+            ]
+        )
         data = np.fromfile(f, dt)
 
     # unpack the csc matrix
-    csc = data['csc'].reshape((data['csc'].size,))
+    csc = data["csc"].reshape((data["csc"].size,))
 
-    data_times = data['time'] * 1e-6
+    data_times = data["time"] * 1e-6
 
     # find the frequency
-    frequency = np.unique(data['freq'])
+    frequency = np.unique(data["freq"])
     if len(frequency) > 1:
         raise IOError("only one frequency allowed")
     frequency = frequency[0]
@@ -142,18 +153,18 @@ def load_ncs(filename):
     # for each of the 512 data points. Sometimes a block will have fewer than 512 data entries,
     # number is set in data['valid'].
     this_idx = 0
-    n_block = 512.
-    offsets = np.arange(0, n_block / frequency, 1. / frequency)
+    n_block = 512.0
+    offsets = np.arange(0, n_block / frequency, 1.0 / frequency)
     times = np.zeros(csc.shape)
-    for i, (time, n_valid) in enumerate(zip(data_times, data['valid'])):
-        times[this_idx:this_idx + n_valid] = time + offsets[:n_valid]
+    for i, (time, n_valid) in enumerate(zip(data_times, data["valid"])):
+        times[this_idx : this_idx + n_valid] = time + offsets[:n_valid]
         this_idx += n_valid
 
-    # now find analog_to_digital conversion factor in the header
+        # now find analog_to_digital conversion factor in the header
         analog_to_digital = None
-    for line in header.split(b'\n'):
-        if line.strip().startswith(b'-ADBitVolts'):
-            analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
+    for line in header.split(b"\n"):
+        if line.strip().startswith(b"-ADBitVolts"):
+            analog_to_digital = np.array(float(line.split(b" ")[1].decode()))
 
     if analog_to_digital is None:
         raise IOError("ADBitVolts not found in .ncs header for " + filename)
@@ -177,7 +188,7 @@ def load_nev(filename):
 
     """
 
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
 
         # There's nothing useful in the header for .nev files, so skip past it
         f.seek(2 ** 14)
@@ -194,9 +205,17 @@ def load_nev(filename):
         # int16 - ndummy2 - reserved
         # int32x8 - dnExtra - extra bit values for this event
         # string(128) - event string
-        dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('id', '<h'),
-                       ('nttl', '<h'), ('filler2', '<h', 3), ('extra', '<i', 8),
-                       ('event_str', np.dtype('a128'))])
+        dt = np.dtype(
+            [
+                ("filler1", "<h", 3),
+                ("time", "<Q"),
+                ("id", "<h"),
+                ("nttl", "<h"),
+                ("filler2", "<h", 3),
+                ("extra", "<i", 8),
+                ("event_str", np.dtype("a128")),
+            ]
+        )
         nev_data = np.fromfile(f, dt)
 
     return nev_data
@@ -222,7 +241,7 @@ def load_ntt(filename):
     timestamps, spikes, frequency = load_ntt('TT13.ntt')
 
     """
-    with open(filename, 'rb')as f:
+    with open(filename, "rb") as f:
 
         # A tetrode spike record is as folows:
         # uint64 - timestamp                    bytes 0:8
@@ -233,22 +252,23 @@ def load_ntt(filename):
         # hence total record size is 2432 bits, 304 bytes
 
         # header is 16kbyte, i.e. 16 * 2^10 = 2^14
-        header = f.read(16 * 2**10)
+        header = f.read(16 * 2 ** 10)
 
         # Read the header and find the conversion factors / sampling frequency
         analog_to_digital = None
         frequency = None
 
-        for line in header.split(b'\n'):
-            if line.strip().startswith(b'-ADBitVolts'):
-                analog_to_digital = np.array(float(line.split(b' ')[1].decode()))
-            if line.strip().startswith(b'-SamplingFrequency'):
-                frequency = float(line.split(b' ')[1].decode())
+        for line in header.split(b"\n"):
+            if line.strip().startswith(b"-ADBitVolts"):
+                analog_to_digital = np.array(float(line.split(b" ")[1].decode()))
+            if line.strip().startswith(b"-SamplingFrequency"):
+                frequency = float(line.split(b" ")[1].decode())
 
         f.seek(2 ** 14)  # start of the spike, records
         # Neuralynx write little endian for some dumb reason
-        dt = np.dtype([('time', '<Q'), ('filer', '<i', 10),
-                       ('spikes', np.dtype('<h'), (32, 4))])
+        dt = np.dtype(
+            [("time", "<Q"), ("filer", "<i", 10), ("spikes", np.dtype("<h"), (32, 4))]
+        )
         data = np.fromfile(f, dt)
 
     if analog_to_digital is None:
@@ -258,7 +278,7 @@ def load_ntt(filename):
 
     f.close()
 
-    return data['time'], data['spikes'] * analog_to_digital, frequency
+    return data["time"], data["spikes"] * analog_to_digital, frequency
 
 
 def load_nvt(filename, remove_empty=True):
@@ -275,10 +295,10 @@ def load_nvt(filename, remove_empty=True):
         With time, x, and y as keys.
 
     """
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
 
         # Neuralynx files have a 16kbyte header
-        header = f.read(16 * 2**10)
+        header = f.read(16 * 2 ** 10)
 
         # The format for .nvt files according the the neuralynx docs is
         # uint16 - beginning of the record
@@ -291,18 +311,27 @@ def load_nvt(filename, remove_empty=True):
         # int32 - extracted Y location of target
         # int32 - calculated head angle in degrees clockwise from the positive Y axis
         # int32 x 50 - colored targets using the same bitfield format used to extract colors earlier
-        dt = np.dtype([('filler1', '<h', 3), ('time', '<Q'), ('points', '<i', 400),
-                       ('filler2', '<h'), ('x', '<i'), ('y', '<i'), ('head_angle', '<i'),
-                       ('targets', '<i', 50)])
+        dt = np.dtype(
+            [
+                ("filler1", "<h", 3),
+                ("time", "<Q"),
+                ("points", "<i", 400),
+                ("filler2", "<h"),
+                ("x", "<i"),
+                ("y", "<i"),
+                ("head_angle", "<i"),
+                ("targets", "<i", 50),
+            ]
+        )
         data = np.fromfile(f, dt)
 
     nvt_data = dict()
-    nvt_data['time'] = data['time'] * 1e-6
-    nvt_data['x'] = np.array(data['x'], dtype=float)
-    nvt_data['y'] = np.array(data['y'], dtype=float)
-    nvt_data['targets'] = np.array(data['targets'], dtype=float)
+    nvt_data["time"] = data["time"] * 1e-6
+    nvt_data["x"] = np.array(data["x"], dtype=float)
+    nvt_data["y"] = np.array(data["y"], dtype=float)
+    nvt_data["targets"] = np.array(data["targets"], dtype=float)
 
-    empty_idx = (data['x'] == 0) & (data['y'] == 0)
+    empty_idx = (data["x"] == 0) & (data["y"] == 0)
     for key in nvt_data:
         if remove_empty:
             nvt_data[key] = nvt_data[key][~empty_idx]
