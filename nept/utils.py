@@ -233,7 +233,7 @@ def get_edges(t_start, t_stop, binsize, lastbin=True):
     edges = np.arange(t_start, t_stop, binsize)
 
     if lastbin:
-        if edges[-1] != t_stop:
+        if edges[-1] < t_stop:
             edges = np.hstack((edges, t_stop))
 
     return edges
