@@ -454,10 +454,22 @@ def test_rest_threshold_simple():
 
     position = nept.Position(data, times)
 
-    run_epoch = nept.rest_threshold(position, thresh=0.4, t_smooth=None)
+    rest_epoch = nept.rest_threshold(position, thresh=0.4, t_smooth=None)
 
-    assert np.allclose(run_epoch.starts, np.array([0.0, 3.0]))
-    assert np.allclose(run_epoch.stops, np.array([1.0, 4.0]))
+    assert np.allclose(rest_epoch.starts, np.array([2.0, 4.0]))
+    assert np.allclose(rest_epoch.stops, np.array([3.0, 5.0]))
+
+
+def test_rest_threshold_gap():
+    times = np.array([0.5, 1.0, 1.5, 4.5, 5.0, 5.5, 6.0, 6.5, 9.0, 9.5, 10.0])
+    data = np.array([0.0, 0.5, 1.5, 10.0, 9.9, 9.8, 8.5, 7.0, 0.0, 0.5, 1.0])
+
+    position = nept.Position(data, times)
+
+    rest_epoch = nept.rest_threshold(position, thresh=0.4, t_smooth=None)
+
+    assert np.allclose(rest_epoch.starts, np.array([4.5]))
+    assert np.allclose(rest_epoch.stops, np.array([5.5]))
 
 
 def test_run_threshold_simple():
@@ -468,8 +480,20 @@ def test_run_threshold_simple():
 
     run_epoch = nept.run_threshold(position, thresh=0.4, t_smooth=None)
 
-    assert np.allclose(run_epoch.starts, np.array([1.0, 4.0]))
-    assert np.allclose(run_epoch.stops, np.array([3.0, 5.0]))
+    assert np.allclose(run_epoch.starts, np.array([0.0, 3.0]))
+    assert np.allclose(run_epoch.stops, np.array([2.0, 4.0]))
+
+
+def test_run_threshold_gap():
+    times = np.array([0.5, 1.0, 1.5, 4.5, 5.0, 5.5, 6.0, 6.5, 9.0, 9.5, 10.0])
+    data = np.array([0.0, 0.5, 1.5, 10.0, 9.9, 9.8, 8.5, 7.0, 0.0, 0.5, 1.0])
+
+    position = nept.Position(data, times)
+
+    run_epoch = nept.run_threshold(position, thresh=0.4, t_smooth=None)
+
+    assert np.allclose(run_epoch.starts, np.array([0.5, 5.5, 9.0]))
+    assert np.allclose(run_epoch.stops, np.array([1.5, 6.5, 10.0]))
 
 
 def test_gaussian_filter_unchanged():

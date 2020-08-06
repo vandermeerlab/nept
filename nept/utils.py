@@ -362,11 +362,11 @@ def speed_threshold(position, thresh, t_smooth, direction):
     speed = position.speed(t_smooth)
     if direction == "greater":
         changes = np.diff(
-            np.hstack(([0], (np.squeeze(speed.data) >= thresh).astype(int)))
+            np.hstack(((np.squeeze(speed.data) >= thresh).astype(int), [0]))
         )
     elif direction == "lesser":
         changes = np.diff(
-            np.hstack(([0], (np.squeeze(speed.data) <= thresh).astype(int)))
+            np.hstack(((np.squeeze(speed.data) <= thresh).astype(int), [0]))
         )
     else:
         raise ValueError("Must be 'lesser' or 'greater'")
@@ -374,16 +374,33 @@ def speed_threshold(position, thresh, t_smooth, direction):
     starts = np.where(changes == 1)[0]
     stops = np.where(changes == -1)[0]
 
+    if len(stops) == 0 and len(starts) == 0:
+        return nept.Epoch([], [])
+
+    if stops[0] == 0:
+        stops = stops[1:]
+
     if len(starts) != len(stops):
-        assert len(starts) - len(stops) == 1
-        stops = np.hstack((stops, position.n_samples - 1))
+        if len(starts) - len(stops) == 1:
+            stops = np.hstack((stops, position.n_samples - 1))
+        elif len(stops) - len(starts) == 1:
+            starts = np.hstack((0, starts))
+        assert len(starts) == len(stops)
 
     if starts[-1] == stops[-1]:
         print("Last sample not included in speed thresholding")
         starts = starts[:-1]
         stops = stops[:-1]
 
-    return nept.Epoch(position.time[starts], position.time[stops])
+    epoch = nept.Epoch(position.time[starts], position.time[stops])
+
+    # Find gaps and exclude them
+    t_diff = np.diff(position.time)
+    dt = np.median(t_diff)
+    gap_starts = np.where(t_diff >= dt * 5.0)[0]
+    non_gap_starts = np.hstack((position.time[0], position.time[gap_starts + 1]))
+    non_gap_stops = np.hstack((position.time[gap_starts], position.time[-1]))
+    return epoch.intersect(nept.Epoch(starts=non_gap_starts, stops=non_gap_stops))
 
 
 def run_threshold(position, thresh, t_smooth):

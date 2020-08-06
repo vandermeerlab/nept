@@ -29,7 +29,11 @@ class Epoch:
         if starts.ndim > 1 or stops.ndim > 1:
             raise ValueError("time cannot have more than 1 dimension.")
 
-        if np.any(stops - starts <= 0):
+        equal_idx = starts == stops
+        starts = starts[~equal_idx]
+        stops = stops[~equal_idx]
+
+        if np.any(stops - starts < 0):
             raise ValueError("start must be less than stop")
 
         sort_idx = np.argsort(starts)
