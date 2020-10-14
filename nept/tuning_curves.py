@@ -76,12 +76,13 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
 
         spike_counts = np.histogram(spikes_x, bins=edges)[0]
 
-        firing_rate = np.zeros(len(edges) - 1)
+        firing_rate = np.ones(len(edges) - 1) * np.nan
         firing_rate[occupied_idx] = (
             spike_counts[occupied_idx] / position_counts[occupied_idx]
         )
         if gaussian_std is not None:
             firing_rate = gaussian_filter(firing_rate, gaussian_std, dt=binsize)
+
         tc.append(firing_rate)
 
     tuning_curves = np.array(tc, dtype=float)

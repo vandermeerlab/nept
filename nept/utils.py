@@ -1,6 +1,7 @@
+import warnings
+
 import numpy as np
 import scipy.signal
-import warnings
 
 import nept
 
@@ -105,7 +106,7 @@ def consecutive(array, stepsize):
 
 
 def expand_line(start_pt, stop_pt, line, expand_by=6):
-    """ Creates buffer zone around a line.
+    """Creates buffer zone around a line.
 
     Parameters
     ----------
