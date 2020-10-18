@@ -1,7 +1,7 @@
 import numpy as np
 import scipy
 
-from .utils import find_nearest_idx, gaussian_filter
+from .utils import gaussian_filter
 
 
 def get_bin_edges(position, binsize):
@@ -28,7 +28,7 @@ def get_bin_edges(position, binsize):
     return np.arange(pos_start - leftover * 0.5, pos_stop + binsize, binsize)
 
 
-def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
+def tuning_curve_1d(position, spikes, edges, gaussian_std=None, min_occupancy=0):
     """Computes tuning curves for neurons relative to linear position.
 
     Parameters
@@ -62,10 +62,10 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
     binsize = edges[1] - edges[0]
     assert np.allclose(np.diff(edges), binsize), "All bins must be the same size"
 
-    position_counts = np.histogram(position.x, bins=edges)[0]
-    position_counts = position_counts.astype(float)
-    position_counts *= sampling_rate
-    occupied_idx = position_counts > 0
+    occupancy = np.histogram(position.x, bins=edges)[0].astype(float)
+    occupancy *= sampling_rate
+    occupied = occupancy > (np.median(occupancy[occupancy > 0]) * min_occupancy)
+    occupancy[~occupied] = np.nan
 
     tc = []
     for spiketrain in spikes:
@@ -77,9 +77,7 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
         spike_counts = np.histogram(spikes_x, bins=edges)[0]
 
         firing_rate = np.ones(len(edges) - 1) * np.nan
-        firing_rate[occupied_idx] = (
-            spike_counts[occupied_idx] / position_counts[occupied_idx]
-        )
+        firing_rate[occupied] = spike_counts[occupied] / occupancy[occupied]
         if gaussian_std is not None:
             firing_rate = gaussian_filter(firing_rate, gaussian_std, dt=binsize)
 
@@ -87,7 +85,7 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None):
 
     tuning_curves = np.array(tc, dtype=float)
 
-    return tuning_curves, position_counts
+    return tuning_curves, occupancy
 
 
 def get_occupancy(position, yedges, xedges):
