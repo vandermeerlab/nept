@@ -1,7 +1,7 @@
 import warnings
 
 import numpy as np
-import scipy.signal
+from astropy.convolution import Box1DKernel, Gaussian1DKernel, convolve
 
 import nept
 
@@ -14,7 +14,6 @@ def bin_spikes(
     lastbin=False,
     window=None,
     gaussian_std=None,
-    normalized=True,
 ):
     """Bins spikes using a sliding window.
 
@@ -28,7 +27,6 @@ def bin_spikes(
         Length of the sliding window, in seconds. If None, will default to dt.
     dt: float
     gaussian_std: float or None
-    normalized: boolean
 
     Returns
     -------
@@ -48,23 +46,15 @@ def bin_spikes(
             "Using window %g instead." % (n_bins * dt)
         )
 
-    if normalized:
-        square_filter = np.ones(n_bins) * (1 / n_bins)
-    else:
-        square_filter = np.ones(n_bins)
-
     counts = np.zeros((len(spikes), len(bin_edges) - 1))
     for idx, spiketrain in enumerate(spikes):
-        counts[idx] = np.convolve(
+        counts[idx] = convolve(
             np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
-            square_filter,
-            mode="same",
+            Box1DKernel(n_bins),
         )
 
     if gaussian_std is not None:
-        counts = gaussian_filter(
-            counts, gaussian_std, dt=dt, normalized=normalized, axis=1
-        )
+        counts = gaussian_filter(counts, gaussian_std, dt=dt, axis=1)
 
     return nept.AnalogSignal(counts, bin_edges[:-1])
 
@@ -196,7 +186,7 @@ def find_nearest_idx(array, val):
     return (np.abs(array - val)).argmin()
 
 
-def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
+def gaussian_filter(signal, std, dt=1.0, axis=-1, normalized=True, boundary="fill"):
     """Filters a signal with a gaussian kernel.
 
     Parameters
@@ -214,20 +204,8 @@ def gaussian_filter(signal, std, dt=1.0, normalized=True, axis=-1, n_stds=3):
     Filtered signal
 
     """
-    n_points = (n_stds * std * 2) / dt
-    n_points = int(round(n_points))
-    if n_points % 2 == 0:
-        n_points += 1
-    if n_points <= 1.0:
-        warnings.warn("std is too small for given dt. Signal is unchanged.")
-        return signal
-
-    gaussian_filter = scipy.signal.gaussian(n_points, std / dt)
-    if normalized:
-        gaussian_filter /= np.sum(gaussian_filter)
-
     return np.apply_along_axis(
-        lambda v: scipy.signal.convolve(v, gaussian_filter, mode="same"),
+        lambda v: convolve(v, Gaussian1DKernel(std / dt), boundary=boundary),
         axis=axis,
         arr=signal,
     )

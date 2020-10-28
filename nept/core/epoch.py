@@ -1,5 +1,5 @@
-import numpy as np
 import nept
+import numpy as np
 
 
 class Epoch:
@@ -357,18 +357,18 @@ class Epoch:
 
     def time_slice(self, t_start, t_stop):
         """Creates a new object corresponding to the time slice of
-            the original between (and including) times t_start and t_stop.
+        the original between (and including) times t_start and t_stop.
 
-            Parameters
-            ----------
-            analogsignal : nept.Epoch
-            t_start : float
-            t_stop : float
+        Parameters
+        ----------
+        analogsignal : nept.Epoch
+        t_start : float
+        t_stop : float
 
-            Returns
-            -------
-            sliced_epoch : nept.Epoch
-            """
+        Returns
+        -------
+        sliced_epoch : nept.Epoch
+        """
         new_starts = []
         new_stops = []
 

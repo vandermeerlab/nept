@@ -79,7 +79,9 @@ def tuning_curve_1d(position, spikes, edges, gaussian_std=None, min_occupancy=0)
         firing_rate = np.ones(len(edges) - 1) * np.nan
         firing_rate[occupied] = spike_counts[occupied] / occupancy[occupied]
         if gaussian_std is not None:
-            firing_rate = gaussian_filter(firing_rate, gaussian_std, dt=binsize)
+            firing_rate = gaussian_filter(
+                firing_rate, gaussian_std, dt=binsize, boundary="extend"
+            )
 
         tc.append(firing_rate)
 
@@ -144,6 +146,7 @@ def tuning_curve_2d(
     if gaussian_std is not None:
         xbinsize = xedges[1] - xedges[0]
         ybinsize = yedges[1] - yedges[0]
+        # TODO: use Gaussian2DKernel
         tuning_curves = gaussian_filter(
             tuning_curves, gaussian_std, dt=xbinsize, axis=1
         )

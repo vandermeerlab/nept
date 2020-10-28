@@ -1,7 +1,6 @@
+import nept
 import numpy as np
 import pytest
-import nept
-
 
 toy_array = np.array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
 
@@ -160,80 +159,58 @@ def test_get_xyedges_1d_position():
 
 
 def test_bin_spikes():
-    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
-    spikes = [nept.SpikeTrain(np.sort(spikes), "test")]
+    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
 
     counts = nept.bin_spikes(
         spikes,
         0.0,
-        10.0,
-        dt=2.0,
+        4.0,
+        dt=0.5,
         window=2.0,
         gaussian_std=None,
-        normalized=False,
-        lastbin=False,
-    )
-
-    assert np.allclose(counts.data, np.array([[9.0], [7.0], [5.0], [1.0]]))
-
-
-def test_bin_spikes_normalized():
-    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-
-    counts = nept.bin_spikes(
-        spikes, 0.0, 4.0, dt=0.5, window=2.0, gaussian_std=None, normalized=True
     )
 
     assert np.allclose(
-        counts.data, np.array([[0.25], [1.0], [1.0], [1.25], [1.0], [0.5], [0.5]])
-    )
-
-
-def test_bin_spikes_actual():
-    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-
-    counts = nept.bin_spikes(
-        spikes, 0.0, 4.0, dt=0.5, window=2.0, gaussian_std=None, normalized=False
-    )
-
-    assert np.allclose(
-        counts.data, np.array([[1.0], [4.0], [4.0], [5.0], [4.0], [2.0], [2.0]])
+        counts.data,
+        [[0.625], [1.0], [1.125], [1.125], [0.75], [0.5], [0.375]],
     )
 
 
 def test_bin_spikes_gaussian():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-    time = np.array([0.0, 10.0])
 
     counts = nept.bin_spikes(
-        spikes, 0.0, 10.0, dt=0.5, window=2.0, gaussian_std=0.51, normalized=True
+        spikes,
+        0.0,
+        10.0,
+        dt=0.5,
+        window=2.0,
+        gaussian_std=0.51,
     )
 
     assert np.allclose(
         counts.data,
-        np.array(
-            [
-                [0.40347865],
-                [0.77042907],
-                [1.00980573],
-                [1.06273102],
-                [0.90701256],
-                [0.65089043],
-                [0.45510984],
-                [0.31307944],
-                [0.18950878],
-                [0.07738638],
-                [0.01560105],
-                [0.00129411],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-            ]
-        ),
+        [
+            [5.56643201e-01],
+            [8.82737318e-01],
+            [1.03531768e00],
+            [9.84563945e-01],
+            [7.78806879e-01],
+            [5.52981161e-01],
+            [3.84158508e-01],
+            [2.51405526e-01],
+            [1.33534061e-01],
+            [4.65665762e-02],
+            [8.51168517e-03],
+            [6.91574971e-04],
+            [2.23758525e-05],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+        ],
     )
 
 
@@ -241,34 +218,37 @@ def test_bin_spikes_gaussian_even():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
 
     counts = nept.bin_spikes(
-        spikes, 0.0, 10.0, dt=0.5, window=2.0, gaussian_std=0.5, normalized=True
+        spikes,
+        0.0,
+        10.0,
+        dt=0.5,
+        window=2.0,
+        gaussian_std=0.5,
     )
 
     assert np.allclose(
         counts.data,
-        np.array(
-            [
-                [0.40134569],
-                [0.77353559],
-                [1.0133553],
-                [1.06721847],
-                [0.90916337],
-                [0.64912917],
-                [0.45410060],
-                [0.31272558],
-                [0.18949094],
-                [0.07622698],
-                [0.01460966],
-                [0.00110826],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-                [0.0],
-            ]
-        ),
+        [
+            [5.57137350e-01],
+            [8.86524329e-01],
+            [1.03950464e00],
+            [9.87959874e-01],
+            [7.79038092e-01],
+            [5.51601069e-01],
+            [3.83461026e-01],
+            [2.51191610e-01],
+            [1.32923772e-01],
+            [4.54730760e-02],
+            [7.90704282e-03],
+            [5.87440359e-04],
+            [1.67288281e-05],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+            [0.00000000e00],
+        ],
     )
 
 
@@ -282,17 +262,15 @@ def test_bin_spikes_mult_neurons():
 
     assert np.allclose(
         counts.data,
-        np.array(
-            [
-                [0.25, 0.25],
-                [1.0, 1.0],
-                [1.0, 1.0],
-                [1.25, 1.25],
-                [1.0, 1.0],
-                [0.5, 0.5],
-                [0.5, 0.5],
-            ]
-        ),
+        [
+            [0.625, 0.625],
+            [1.0, 1.0],
+            [1.125, 1.125],
+            [1.125, 1.125],
+            [0.75, 0.75],
+            [0.5, 0.5],
+            [0.375, 0.375],
+        ],
     )
 
 
@@ -318,17 +296,6 @@ def test_bin_spikes_mult_neurons_adjust_window():
             ]
         ),
     )
-
-
-def test_bin_spikes_no_window():
-    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
-    spikes = [nept.SpikeTrain(np.sort(spikes), "test")]
-
-    counts = nept.bin_spikes(
-        spikes, 0.0, 10.0, dt=4.0, gaussian_std=None, normalized=False
-    )
-
-    assert np.allclose(counts.data, np.array([[16.0], [6.0]]))
 
 
 def test_cartesian():

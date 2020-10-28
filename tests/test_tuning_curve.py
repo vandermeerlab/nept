@@ -1,7 +1,7 @@
+import nept
 import numpy as np
 import pytest
-from shapely.geometry import Point, LineString
-import nept
+from shapely.geometry import LineString, Point
 
 
 def test_simple_tc():
@@ -55,12 +55,12 @@ def test_tuning_curve_1d_gaussian():
 
     assert np.allclose(
         tuning,
-        (
-            [0.78698604, 0.10650698, 0.0],
-            [0.10650698, 0.78698604, 0.10650698],
-            [0.0, 0.05325349, 0.39349302],
-            [0.0, 0.05325349, 0.39349302],
-        ),
+        [
+            [8.93285363e-01, 1.06714637e-01, 2.63865083e-04],
+            [1.06450772e-01, 7.86570726e-01, 1.06450772e-01],
+            [1.31932541e-04, 5.33573185e-02, 4.46642681e-01],
+            [1.31932541e-04, 5.33573185e-02, 4.46642681e-01],
+        ],
     )
 
 
@@ -167,7 +167,13 @@ def test_tuning_curve_2d_gaussian():
     )
 
     assert np.allclose(
-        tuning_curves[~np.isnan(tuning_curves)], np.array([3.0, 0.0, 0.0, 1.0])
+        tuning_curves,
+        [
+            [0.00000000e00, 1.11797929e-05, 2.99995528e00],
+            [0.00000000e00, 4.16635211e-11, 1.11798345e-05],
+            [9.99992547e-01, 3.72662540e-06, 0.00000000e00],
+            [9.99988820e-01, 3.72661151e-06, 0.00000000e00],
+        ],
     )
 
 

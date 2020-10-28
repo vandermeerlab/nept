@@ -23,8 +23,10 @@ setup(
     url="https://github.com/vandermeerlab/nept",
     description="Neuroelectrophysiology tools",
     long_description=read("README.rst"),
-    install_requires=["numpy", "scipy", "shapely", "matplotlib"],
+    install_requires=["numpy", "scipy", "shapely", "matplotlib", "astropy"],
     setup_requires=["numpy"],
     tests_require=["pytest"],
-    extras_require={"docs": ["sphinx", "numpydoc", "mock"],},
+    extras_require={
+        "docs": ["sphinx", "numpydoc", "mock"],
+    },
 )
