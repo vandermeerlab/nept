@@ -14,6 +14,7 @@ def bin_spikes(
     lastbin=False,
     window=None,
     gaussian_std=None,
+    normalized=True,
 ):
     """Bins spikes using a sliding window.
 
@@ -27,6 +28,7 @@ def bin_spikes(
         Length of the sliding window, in seconds. If None, will default to dt.
     dt: float
     gaussian_std: float or None
+    normalized: boolean
 
     Returns
     -------
@@ -52,6 +54,8 @@ def bin_spikes(
             np.histogram(spiketrain.time, bins=bin_edges)[0].astype(float),
             Box1DKernel(n_bins),
         )
+        if not normalized:
+            counts[idx] *= n_bins
 
     if gaussian_std is not None:
         counts = gaussian_filter(counts, gaussian_std, dt=dt, axis=1)

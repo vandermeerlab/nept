@@ -159,33 +159,51 @@ def test_get_xyedges_1d_position():
 
 
 def test_bin_spikes():
-    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
-
-    counts = nept.bin_spikes(
-        spikes,
-        0.0,
-        4.0,
-        dt=0.5,
-        window=2.0,
-        gaussian_std=None,
-    )
-
-    assert np.allclose(
-        counts.data,
-        [[0.625], [1.0], [1.125], [1.125], [0.75], [0.5], [0.375]],
-    )
-
-
-def test_bin_spikes_gaussian():
-    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
+    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
+    spikes = [nept.SpikeTrain(np.sort(spikes), "test")]
 
     counts = nept.bin_spikes(
         spikes,
         0.0,
         10.0,
-        dt=0.5,
+        dt=2.0,
         window=2.0,
-        gaussian_std=0.51,
+        gaussian_std=None,
+        normalized=False,
+        lastbin=False,
+    )
+
+    assert np.allclose(counts.data, np.array([[9.0], [7.0], [5.0], [1.0]]))
+
+
+def test_bin_spikes_normalized():
+    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
+
+    counts = nept.bin_spikes(
+        spikes, 0.0, 4.0, dt=0.5, window=2.0, gaussian_std=None, normalized=True
+    )
+
+    assert np.allclose(
+        counts.data, [[0.625], [1.0], [1.125], [1.125], [0.75], [0.5], [0.375]]
+    )
+
+
+def test_bin_spikes_actual():
+    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
+
+    counts = nept.bin_spikes(
+        spikes, 0.0, 4.0, dt=0.5, window=2.0, gaussian_std=None, normalized=False
+    )
+
+    assert np.allclose(counts.data, [[2.5], [4.0], [4.5], [4.5], [3.0], [2.0], [1.5]])
+
+
+def test_bin_spikes_gaussian():
+    spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
+    time = np.array([0.0, 10.0])
+
+    counts = nept.bin_spikes(
+        spikes, 0.0, 10.0, dt=0.5, window=2.0, gaussian_std=0.51, normalized=True
     )
 
     assert np.allclose(
@@ -218,12 +236,7 @@ def test_bin_spikes_gaussian_even():
     spikes = [nept.SpikeTrain([0.8, 1.1, 1.2, 1.2, 2.1, 3.1])]
 
     counts = nept.bin_spikes(
-        spikes,
-        0.0,
-        10.0,
-        dt=0.5,
-        window=2.0,
-        gaussian_std=0.5,
+        spikes, 0.0, 10.0, dt=0.5, window=2.0, gaussian_std=0.5, normalized=True
     )
 
     assert np.allclose(
@@ -296,6 +309,17 @@ def test_bin_spikes_mult_neurons_adjust_window():
             ]
         ),
     )
+
+
+def test_bin_spikes_no_window():
+    spikes = np.hstack((np.arange(0, 10, 1.4), np.arange(0.2, 5, 0.3)))
+    spikes = [nept.SpikeTrain(np.sort(spikes), "test")]
+
+    counts = nept.bin_spikes(
+        spikes, 0.0, 10.0, dt=4.0, gaussian_std=None, normalized=False
+    )
+
+    assert np.allclose(counts.data, np.array([[16.0], [6.0]]))
 
 
 def test_cartesian():
