@@ -369,6 +369,11 @@ class Epoch:
         -------
         sliced_epoch : nept.Epoch
         """
+        if self.n_epochs == 1:
+            if t_start > self.stop or t_stop < self.start:
+                return Epoch([], [])
+            return Epoch([max(self.start, t_start)], [min(self.stop, t_stop)])
+
         new_starts = []
         new_stops = []
 

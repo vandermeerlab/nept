@@ -1,7 +1,8 @@
+import collections
+
+import nept
 import numpy as np
 import pytest
-import nept
-import collections
 
 
 def test_epoch_duration():
@@ -9,6 +10,7 @@ def test_epoch_duration():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
+    assert epoch.n_epochs == 3
     assert np.allclose(epoch.durations, np.array([1.0, 0.6, 0.4]))
 
 
@@ -17,6 +19,7 @@ def test_epoch_stops():
     stops = [1.0, 1.5, 2.0]
     epoch = nept.Epoch(starts, stops)
 
+    assert epoch.n_epochs == 3
     assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
 
@@ -26,6 +29,7 @@ def test_epoch_index():
     epoch = nept.Epoch(starts, stops)
     sliced_epoch = epoch[:2]
 
+    assert sliced_epoch.n_epochs == 2
     assert np.allclose(sliced_epoch.starts, np.array([0.0, 0.9]))
     assert np.allclose(sliced_epoch.stops, np.array([1.0, 1.5]))
 
@@ -35,6 +39,7 @@ def test_epoch_sort():
     stops = [2.0, 1.0, 1.5]
     epoch = nept.Epoch(starts, stops)
 
+    assert epoch.n_epochs == 3
     assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -44,6 +49,7 @@ def test_epoch_sortlist():
     stops = [1.5, 1.0, 2.0]
     epoch = nept.Epoch(starts, stops)
 
+    assert epoch.n_epochs == 3
     assert np.allclose(epoch.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(epoch.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -60,6 +66,8 @@ def test_epoch_centers():
     starts = [0.0, 0.9, 1.6]
     stops = [1.0, 1.4, 2.0]
     epoch = nept.Epoch(starts, stops)
+
+    assert epoch.n_epochs == 3
     assert np.allclose(epoch.centers, np.array([0.5, 1.15, 1.8]))
 
 
@@ -85,6 +93,7 @@ def test_epoch_intersect_case1():
 
     intersects = epoch_1.intersect(epoch_2)
 
+    assert intersects.n_epochs == 1
     assert np.allclose(intersects.starts, np.array([1.6]))
     assert np.allclose(intersects.stops, np.array([1.8]))
 
@@ -100,6 +109,7 @@ def test_epoch_overlaps_case1_bounds():
 
     overlaps = epoch_1.overlaps(epoch_2)
 
+    assert overlaps.n_epochs == 1
     assert np.allclose(overlaps.starts, np.array([1.55]))
     assert np.allclose(overlaps.stops, np.array([1.8]))
 
@@ -115,6 +125,7 @@ def test_epoch_intersect_case2():
 
     intersects = epoch_1.intersect(epoch_2)
 
+    assert intersects.n_epochs == 1
     assert np.allclose(intersects.starts, np.array([1.2]))
     assert np.allclose(intersects.stops, np.array([1.5]))
 
@@ -144,6 +155,7 @@ def test_excludes_case1():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 3
     assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.8]))
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -159,6 +171,7 @@ def test_excludes_case2():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 3
     assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.6]))
     assert np.allclose(excludes.stops, np.array([1.0, 1.2, 2.0]))
 
@@ -174,6 +187,7 @@ def test_excludes_case3():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 4
     assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.3, 1.6]))
     assert np.allclose(excludes.stops, np.array([1.0, 1.2, 1.5, 2.0]))
 
@@ -189,6 +203,7 @@ def test_excludes_case4():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 3
     assert np.allclose(excludes.starts, np.array([0.0, 1.3, 1.6]))
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -204,6 +219,7 @@ def test_excludes_case5():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 3
     assert np.allclose(excludes.starts, np.array([0.0, 1.3, 1.6]))
     assert np.allclose(excludes.stops, np.array([0.9, 1.5, 2.0]))
 
@@ -219,6 +235,7 @@ def test_excludes_case6():
 
     excludes = epoch_1.excludes(epoch_2)
 
+    assert excludes.n_epochs == 3
     assert np.allclose(excludes.starts, np.array([0.0, 1.1, 1.6]))
     assert np.allclose(excludes.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -248,6 +265,7 @@ def test_epoch_overlaps_case2_bounds():
 
     overlaps = epoch_1.overlaps(epoch_2)
 
+    assert overlaps.n_epochs == 1
     assert np.allclose(overlaps.starts, np.array([1.2]))
     assert np.allclose(overlaps.stops, np.array([1.6]))
 
@@ -272,6 +290,7 @@ def test_epoch_intersect_case3():
 
     intersects = epoch_a.intersect(epoch_b)
 
+    assert intersects.n_epochs == 1
     assert np.allclose(intersects.starts, np.array([1.0]))
     assert np.allclose(intersects.stops, np.array([2.0]))
 
@@ -282,6 +301,7 @@ def test_epoch_overlaps_case3_bounds():
 
     overlaps = epoch_a.overlaps(epoch_b)
 
+    assert overlaps.n_epochs == 1
     assert np.allclose(overlaps.starts, np.array([0.0]))
     assert np.allclose(overlaps.stops, np.array([3.0]))
 
@@ -292,6 +312,7 @@ def test_epoch_intersect_case4():
 
     intersects = epoch_a.intersect(epoch_b)
 
+    assert intersects.n_epochs == 1
     assert np.allclose(intersects.starts, np.array([1.1]))
     assert np.allclose(intersects.stops, np.array([1.9]))
 
@@ -302,6 +323,7 @@ def test_epoch_overlaps_case4_bounds():
 
     overlaps = epoch_a.overlaps(epoch_b)
 
+    assert overlaps.n_epochs == 1
     assert np.allclose(overlaps.starts, np.array([1.1]))
     assert np.allclose(overlaps.stops, np.array([1.9]))
 
@@ -312,6 +334,7 @@ def test_epoch_intersect_case5():
 
     intersects = epoch_a.intersect(epoch_b)
 
+    assert intersects.n_epochs == 1
     assert np.allclose(intersects.starts, np.array([1.5]))
     assert np.allclose(intersects.stops, np.array([2.5]))
 
@@ -322,6 +345,7 @@ def test_epoch_overlaps_case5_bounds():
 
     overlaps = epoch_a.overlaps(epoch_b)
 
+    assert overlaps.n_epochs == 1
     assert np.allclose(overlaps.starts, np.array([1.5]))
     assert np.allclose(overlaps.stops, np.array([2.5]))
 
@@ -337,6 +361,7 @@ def test_epoch_intersect_multiple():
 
     intersects = epoch_a.intersect(epoch_b)
 
+    assert intersects.n_epochs == 4
     assert np.allclose(intersects.starts, np.array([1.0, 4.3, 6.0, 8.2]))
     assert np.allclose(intersects.stops, np.array([1.7, 5.0, 7.0, 8.4]))
 
@@ -352,6 +377,7 @@ def test_epoch_overlaps_multiple_bounds():
 
     overlaps = epoch_a.overlaps(epoch_b)
 
+    assert overlaps.n_epochs == 4
     assert np.allclose(overlaps.starts, np.array([0.5, 4.3, 5.1, 8.2]))
     assert np.allclose(overlaps.stops, np.array([1.7, 5.0, 7.2, 8.4]))
 
@@ -367,6 +393,7 @@ def test_epoch_intersect_multiple2():
 
     intersects = epoch_a.intersect(epoch_b)
 
+    assert intersects.n_epochs == 4
     assert np.allclose(intersects.starts, np.array([1.0, 4.0, 6.0, 8.0]))
     assert np.allclose(intersects.stops, np.array([2.0, 5.0, 6.2, 9.0]))
 
@@ -385,6 +412,7 @@ def test_epoch_overlaps_multiple2_bounds():
     print(overlaps.starts)
     print(overlaps.stops)
 
+    assert overlaps.n_epochs == 3
     assert np.allclose(overlaps.starts, np.array([1.0, 4.0, 7.8]))
     assert np.allclose(overlaps.stops, np.array([2.0, 6.2, 9.3]))
 
@@ -398,6 +426,7 @@ def test_epoch_no_intersect():
 
     intersects = epoch_1.intersect(epoch_2)
 
+    assert intersects.n_epochs == 0
     assert np.allclose(intersects.starts, np.array([]))
     assert np.allclose(intersects.stops, np.array([]))
 
@@ -408,6 +437,8 @@ def test_epoch_merge_overlap():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
+
+    assert merged.n_epochs == 2
     assert np.allclose(merged.starts, np.array([0.0, 1.6]))
     assert np.allclose(merged.stops, np.array([1.5, 2.0]))
 
@@ -418,6 +449,8 @@ def test_epoch_merge_with_gap():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge(gap=0.1)
+
+    assert merged.n_epochs == 1
     assert np.allclose(merged.starts, np.array([0.0]))
     assert np.allclose(merged.stops, np.array([2.0]))
 
@@ -440,6 +473,7 @@ def test_epoch_merge_far_stop():
 
     merged = epoch.merge()
 
+    assert merged.n_epochs == 2
     assert np.allclose(merged.starts, np.array([0.0, 11.0]))
     assert np.allclose(merged.stops, np.array([10.0, 12.0]))
 
@@ -452,6 +486,7 @@ def test_epoch_merge_no_overlap():
     epoch = nept.Epoch(starts, stops)
     merged = epoch.merge()
 
+    assert merged.n_epochs == 3
     assert np.allclose(merged.starts, np.array([1.1, 3.5, 11.1]))
     assert np.allclose(merged.stops, np.array([2.3, 5.2, 12.0]))
 
@@ -463,6 +498,7 @@ def test_epoch_merge_no_overlap_gap():
 
     merged = epoch.merge(gap=0.2)
 
+    assert merged.n_epochs == 3
     assert np.allclose(merged.starts, np.array([1.0, 3.5, 11.0]))
     assert np.allclose(merged.stops, np.array([2.5, 5.0, 12.0]))
 
@@ -473,6 +509,8 @@ def test_epoch_merge_unordered_stops():
     epoch = nept.Epoch(starts, stops)
 
     merged = epoch.merge()
+
+    assert merged.n_epochs == 2
     assert np.allclose(merged.starts, np.array([-0.2, 1.0]))
     assert np.allclose(merged.stops, np.array([0.8, 3.6]))
 
@@ -484,6 +522,7 @@ def test_epoch_merge_mult_unordered_stops():
 
     merged = epoch.merge()
 
+    assert merged.n_epochs == 2
     assert np.allclose(merged.starts, np.array([1.0, 9.0]))
     assert np.allclose(merged.stops, np.array([8.0, 10.0]))
 
@@ -495,6 +534,7 @@ def test_epoch_expand_both():
 
     resized = epoch.expand(0.5)
 
+    assert resized.n_epochs == 3
     assert np.allclose(resized.starts, np.array([-0.5, 0.4, 1.1]))
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
 
@@ -506,6 +546,7 @@ def test_epoch_expand_start():
 
     resized = epoch.expand(0.5, direction="start")
 
+    assert resized.n_epochs == 3
     assert np.allclose(resized.starts, np.array([-0.5, 0.4, 1.1]))
     assert np.allclose(resized.stops, np.array([1.0, 1.5, 2.0]))
 
@@ -517,6 +558,7 @@ def test_epoch_expand_stop():
 
     resized = epoch.expand(0.5, direction="stop")
 
+    assert resized.n_epochs == 3
     assert np.allclose(resized.starts, np.array([0.0, 0.9, 1.6]))
     assert np.allclose(resized.stops, np.array([1.5, 2.0, 2.5]))
 
@@ -539,6 +581,7 @@ def test_epoch_shrink():
 
     shrinked = epoch.shrink(0.1)
 
+    assert shrinked.n_epochs == 3
     assert np.allclose(shrinked.starts, np.array([0.1, 1.0, 1.7]))
     assert np.allclose(shrinked.stops, np.array([0.9, 1.4, 1.9]))
 
@@ -574,6 +617,7 @@ def test_epoch_join():
 
     union = epoch_1.join(epoch_2)
 
+    assert union.n_epochs == 4
     assert np.allclose(union.starts, np.array([0.0, 0.9, 1.6, 1.8]))
     assert np.allclose(union.stops, np.array([1.0, 1.5, 2.0, 2.5]))
 
@@ -679,6 +723,7 @@ def test_epoch_time_slice_simple():
 
     sliced_epoch = epoch.time_slice(1, 2)
 
+    assert sliced_epoch.n_epochs == 2
     assert np.allclose(sliced_epoch.starts, np.array([1.0, 1.6]))
     assert np.allclose(sliced_epoch.stops, np.array([1.5, 2.0]))
 
@@ -690,6 +735,7 @@ def test_epoch_time_slice_overlap():
 
     sliced_epoch = epoch.time_slice(1, 2)
 
+    assert sliced_epoch.n_epochs == 3
     assert np.allclose(sliced_epoch.starts, np.array([1.0, 1.0, 1.6]))
     assert np.allclose(sliced_epoch.stops, np.array([1.1, 1.5, 2.0]))
 
@@ -701,6 +747,7 @@ def test_epoch_time_slice_empty():
 
     sliced_epoch = epoch.time_slice(0.1, 0.5)
 
+    assert sliced_epoch.n_epochs == 0
     assert np.allclose(sliced_epoch.starts, np.array([]))
     assert np.allclose(sliced_epoch.stops, np.array([]))
 
@@ -712,5 +759,17 @@ def test_epoch_time_slice_cutoff():
 
     sliced_epoch = epoch.time_slice(0.1, 1.0)
 
+    assert sliced_epoch.n_epochs == 1
     assert np.allclose(sliced_epoch.starts, np.array([0.9]))
     assert np.allclose(sliced_epoch.stops, np.array([1.0]))
+
+
+def test_epoch_time_slice_one_epoch():
+    epoch = nept.Epoch(starts=[1.0], stops=[2.0])
+
+    sliced_epoch = epoch.time_slice(1.1, 1.9)
+    print(sliced_epoch.starts, sliced_epoch.stops)
+
+    assert sliced_epoch.n_epochs == 1
+    assert np.allclose(sliced_epoch.starts, np.array([1.1]))
+    assert np.allclose(sliced_epoch.stops, np.array([1.9]))
